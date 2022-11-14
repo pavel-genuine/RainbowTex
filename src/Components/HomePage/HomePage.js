@@ -18,7 +18,7 @@ const HomePage = () => {
   console.log(updatedBanner,'banner');
 
   return (
-    <div className='bg-[#181818]'>
+    <div className='bg-[#181818] pt-'>
         <Banner updatedBanner={updatedBanner} ></Banner>
         <Categories handleBanner={handleBanner}></Categories>
         <Footer></Footer>

@@ -28,9 +28,9 @@ const Categories = ({ handleBanner }) => {
 
   return (
     <div className='mx-5'>
-      <h1 className='text-white font-semibold text-lg mx-5 my-2'>Award-Winning Films : </h1>
+      <h1 className='text-white font-semibold text-xl mx-5 mt-10 mb-4'>Award-Winning Films : </h1>
 
-      <div className='space-y-2'>
+      <div>
         <Marquee speed={30} pauseOnClick={true} pauseOnHover={true}>
 
           {
@@ -38,7 +38,7 @@ const Categories = ({ handleBanner }) => {
 
           }
         </Marquee>
-        <h1 className='text-white font-semibold text-lg mx-5'>Comedies : </h1>
+        <h1 className='text-white font-semibold text-xl mx-5 mt-10 mb-4'>Comedies : </h1>
 
         <Marquee speed={30} pauseOnClick={true} pauseOnHover={true} direction="right">
 
@@ -47,7 +47,7 @@ const Categories = ({ handleBanner }) => {
 
           }
         </Marquee>
-        <h1 className='text-white font-semibold text-lg mx-5'>Action & Adventure : </h1>
+        <h1 className='text-white font-semibold text-xl mx-5 mt-10 mb-4'>Action & Adventure : </h1>
 
         <Marquee speed={30} pauseOnClick={true} pauseOnHover={true}>
 
