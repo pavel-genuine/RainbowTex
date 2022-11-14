@@ -5,11 +5,11 @@ import { Link } from 'react-router-dom'
 
 const SideBar = () => {
     return (
-        <div className='border-r sticky left-[0%] top-[10%]  h-[90vh] w-[70%] pl-4 hidden md:block'>
-            <div className='flex flex-col space-y-[200%] '>
+        <div className='border-r sticky left-[0%] top-[10%]  h-[80vh] w-[70%] pl-4 hidden md:block '>
+            <div className='flex flex-col space-y-[250%] '>
                 <Link to='/'>
                     <p title='go to homepage' className='font-bold flex flex-col justify-center'>
-                        Brand
+                        Jucundu
                     </p>
                 </Link>
                 <div className='flex-flex-col ml-2 '>

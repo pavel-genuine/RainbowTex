@@ -30,7 +30,8 @@ const SignIn = () => {
 
 
     return (
-        <div className={`bg-cover flex flex-col min-h-screen justify-center items-center background`}>
+        <div style={{backgroundImage: `url(${'https://i.ibb.co/Zzn7dLW/BD-en-20221107-popsignuptwoweeks-perspective-alpha-website-large.jpg'})`}}
+         className={`bg-cover flex flex-col min-h-screen justify-center items-center `}>
             <div className="md:w-[30%] w-[100%] bg-black bg-opacity-70 shadow-xl mt-20 ">
                 <div className="card-body w-96 mx-auto py-20 ">
                     <h2 className="text-center text-white text-4xl mb-6 font-bold">Sign In</h2>

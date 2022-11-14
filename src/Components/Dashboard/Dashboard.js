@@ -6,9 +6,9 @@ import UserList from "./UserList";
 const Dashboard = () => {
 
     return (
-        <div className='py-16 relative '>
+        <div className='py-16 min-h-screen relative bg-slate-300'>
 
-            <div className='mx-auto  w-[100%]  md:grid grid-cols-12 '>
+            <div className='mx-auto w-[100%]  md:grid grid-cols-12 '>
                 <SideBar></SideBar>
                 <div className="sm:mx-24 lg:mx-5 col-span-10 w-[95%] px-[10%] md:w-[100%]">
 
@@ -19,7 +19,7 @@ const Dashboard = () => {
                     <div class="space-y-4 ">
                         <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
                         <div class="drawer-content">
-                            <h2 className="text-2xl text-[#e50914] font-bold  ">Welcome to Admin Dashboard</h2>
+                            <h2 className="text-2xl font-bold text-[navy] ">Welcome to Admin Dashboard</h2>
                         </div>
 
                        

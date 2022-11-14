@@ -22,9 +22,9 @@ const UserList = () => {
     return (
         <div className=''>
 
-            <p className='text-[#e50914] font-semibold my-2 text-xl underline underline-offset-2'> Users List</p>
+            <p className='font-semibold my-2 text-xl underline underline-offset-2 text-[navy]'> Users List</p>
             <div className='flex'>
-                {<p className='text-[#e50914] font-semibold my-2 text-lg'>Total Users: {`users.length`} </p>
+                {<p className='font-semibold my-2 text-lg text-[navy]'>Total Users: {`users.length`} </p>
                 }
                 {
                     <div className="flex -space-x-2 overflow-hidden mx-4 mb-4">

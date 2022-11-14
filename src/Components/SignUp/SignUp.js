@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { createUser } from "../api/api";
+import './SignUp.css'
 
 const SignUp = () => {
 
@@ -30,7 +31,8 @@ const SignUp = () => {
 
 
     return (
-        <div className={`bg-cover flex flex-col min-h-screen justify-center items-center`}>
+        <div  style={{backgroundImage: `url(${'https://i.ibb.co/Zzn7dLW/BD-en-20221107-popsignuptwoweeks-perspective-alpha-website-large.jpg'})`}}
+        className={`bg-cover  flex flex-col min-h-screen justify-center items-center`}>
             <div className="md:w-[30%] w-[100%] bg-black bg-opacity-70 shadow-xl mt-20 ">
                 <div className="card-body w-96 mx-auto py-20 ">
                     <h2 className="text-center text-white text-4xl mb-6 font-bold">Sign Up</h2>
@@ -51,7 +53,7 @@ const SignUp = () => {
 
                             <label className="label">
                                 {errors.name?.type === 'required' && <span className="label-text-alt text-[#e87c03]">{errors.name.message}</span>}
-\                            </label>
+                            </label>
                         </div>
                         <div className="form-control w-full max-w-xs">
                             <input
