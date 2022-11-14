@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SideBar from "./SideBar";
 import UserList from "./UserList";
 
 
 const Dashboard = () => {
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
 
     return (
         <div className='py-16 min-h-screen relative bg-slate-300'>

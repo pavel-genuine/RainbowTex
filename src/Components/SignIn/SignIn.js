@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { signInUser } from "../api/api";
 import { Link } from "react-router-dom";
@@ -11,6 +11,11 @@ const SignIn = () => {
 
     const [showPassword, setShowPassword] = useState(false)
     const [showBtn, setShowBtn] = useState(true)
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
+
 
     const handleShowPassword = () => {
         setShowPassword(true)

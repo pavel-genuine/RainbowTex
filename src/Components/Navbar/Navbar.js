@@ -79,7 +79,7 @@ const Navbar = () => {
     return (
         <div>
 
-            <div id='' className='nav  fixed text-white bg-black bg-opacity-60  backdrop-filter-none backdrop-blur-sm shadow z-100'>
+            <div className='nav  fixed text-white bg-[#181818] bg-opacity-60  backdrop-filter-none backdrop-blur-sm shadow z-100'>
                 <div class="lg:navbar lg:w-[100vw]  mx-auto ">
                     <div class="lg:navbar-start hidden md:block">
 
