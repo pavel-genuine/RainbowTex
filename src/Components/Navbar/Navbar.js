@@ -64,8 +64,7 @@ const Navbar = () => {
 
     const menuItems =
         <>
-            <CustomLink class="btn-ghost hover:rounded md:p-3 md:m-5" to='about-us'> About Us</CustomLink>
-            <CustomLink class="btn-ghost hover:rounded md:p-3 md:m-5" to='/contact-us'>Contact Us</CustomLink>
+            <CustomLink class="btn-ghost hover:rounded md:p-3 md:m-5" to='/'>Categories</CustomLink>
             {
                 <CustomLink class="btn-ghost hover:rounded md:p-3 md:m-5" to='/sign-up'>Sign Up</CustomLink>
 
@@ -83,9 +82,8 @@ const Navbar = () => {
                 <div class="lg:navbar lg:w-[100vw]  mx-auto ">
                     <div class="lg:navbar-start hidden md:block">
 
-
                         <Link to='/' class="btn btn-ghost normal-case text-xl "> 
-                        <img className='w-10' src="https://i.ibb.co/1TzJv01/Whats-App-Image-2022-11-14-at-00-04-14.jpg" alt="" />
+                        <img className='w-8' src="https://i.ibb.co/Ydm1GF4/1-2.png" alt="" />
                         </Link>
                     </div>
 

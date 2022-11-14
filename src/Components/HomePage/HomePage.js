@@ -6,22 +6,31 @@ import Categories from './Categories'
 const HomePage = () => {
 
   const [updatedBanner, setUpdatedBanner] = useState({})
-  
+
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
 
-  const handleBanner=(data)=>{
+  const handleBanner = (data) => {
     setUpdatedBanner(data)
   }
-// 
-  console.log(updatedBanner,'banner');
+  // 
+  console.log(updatedBanner, 'banner');
 
   return (
-    <div className='bg-[#181818] pt-'>
-        <Banner updatedBanner={updatedBanner} ></Banner>
-        <Categories handleBanner={handleBanner}></Categories>
+    <div>
+      <div className='bg-[#181818] pt-16 md:pt-0 box-border'>
+
+        <div>
+          <Banner updatedBanner={updatedBanner} ></Banner>
+        </div>
+
+        <div className=''>
+          <Categories handleBanner={handleBanner}></Categories>
+        </div>
         <Footer></Footer>
+      </div>
+    
     </div>
   )
 }

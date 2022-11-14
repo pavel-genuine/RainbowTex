@@ -19,7 +19,7 @@ const ContactUs = () => {
     return (
         <div className='min-h-screen pt-20 bg-[#181818] text-white'>
 
-            <div className='divide-y pt-10 px-20 space-y-10'>
+            <div className='divide-y pt-10 md:px-20 px-10 space-y-10'>
 
                 <h1 className='text-4xl font-bold'>Contact Customer Service</h1>
                 <div className='space-y-2 pt-5'>

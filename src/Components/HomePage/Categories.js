@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React, { useState } from 'react'
 import Marquee from "react-fast-marquee";
+import Footer from '../Footer/Footer';
 import SingleCategory from './SingleCategory';
 
 const Categories = ({ handleBanner }) => {
@@ -27,37 +28,126 @@ const Categories = ({ handleBanner }) => {
   }
 
   return (
-    <div className='mx-5'>
-      <h1 className='text-white font-semibold text-xl mx-5 mt-10 mb-4'>Award-Winning Films : </h1>
+    <div className='md:mx-2 mx-2 '>
 
-      <div>
-        <Marquee speed={30} pauseOnClick={true} pauseOnHover={true}>
+      <div className='relative'>
 
-          {
-            movies.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+        <div className='md:absolute top-[-7%]'>
+          <h1 className='text-white mx-2 font-semibold text-lg md:text-xl  mt-5 md:mt-10 mb-4'>Award-Winning Films : </h1>
 
-          }
-        </Marquee>
-        <h1 className='text-white font-semibold text-xl mx-5 mt-10 mb-4'>Comedies : </h1>
+          <Marquee speed={30} pauseOnClick={true} pauseOnHover={true} gradientWidth='0'>
 
-        <Marquee speed={30} pauseOnClick={true} pauseOnHover={true} direction="right">
+            {
+              movies.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
 
-        {
-            movies.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+            }
+          </Marquee>
+        </div>
 
-          }
-        </Marquee>
-        <h1 className='text-white font-semibold text-xl mx-5 mt-10 mb-4'>Action & Adventure : </h1>
 
-        <Marquee speed={30} pauseOnClick={true} pauseOnHover={true}>
+        <div className='md:pt-28 bg-[#181818]'>
 
-        {
-            movies.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+          <div >
+            <h1 className='text-white font-semibold text-lg mx-2 md:text-xl mt-5 md:mt-10 mb-4'>Comedies : </h1>
 
-          }
-        </Marquee>
+            <Marquee speed={30} pauseOnClick={true} pauseOnHover={true} direction="right" gradientWidth='0'>
+
+              {
+                movies.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+
+              }
+            </Marquee>
+          </div>
+          <div>
+            <h1 className='mx-2 text-white font-semibold text-lg md:text-xl md:mt-10 mt-5 mb-4'>Action & Adventure : </h1>
+
+            <Marquee speed={30} pauseOnClick={true} pauseOnHover={true} gradientWidth='0'>
+
+              {
+                movies.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+
+              }
+            </Marquee>
+          </div>
+          <div>
+            <h1 className='text-white font-semibold text-lg mx-2 md:text-xl mt-5 md:mt-10 mb-4'>Comedies : </h1>
+
+            <Marquee speed={30} pauseOnClick={true} pauseOnHover={true} direction="right" gradientWidth='0'>
+
+              {
+                movies.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+
+              }
+            </Marquee>
+          </div>
+          <div>
+            <h1 className='text-white font-semibold text-lg mx-2 md:text-xl mt-5 md:mt-10 mb-4'>Comedies : </h1>
+
+            <Marquee speed={30} pauseOnClick={true} pauseOnHover={true} direction="right" gradientWidth='0'>
+
+              {
+                movies.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+
+              }
+            </Marquee>
+          </div>
+          <div>
+            <h1 className='text-white font-semibold text-lg mx-2 md:text-xl mt-5 md:mt-10 mb-4'>Comedies : </h1>
+
+            <Marquee speed={30} pauseOnClick={true} pauseOnHover={true} direction="right" gradientWidth='0'>
+
+              {
+                movies.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+
+              }
+            </Marquee>
+          </div>
+          <div>
+            <h1 className='text-white font-semibold text-lg mx-2 md:text-xl mt-5 md:mt-10 mb-4'>Comedies : </h1>
+
+            <Marquee speed={30} pauseOnClick={true} pauseOnHover={true} direction="right" gradientWidth='0'>
+
+              {
+                movies.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+
+              }
+            </Marquee>
+          </div>
+          <div>
+            <h1 className='text-white font-semibold text-lg mx-2 md:text-xl mt-5 md:mt-10 mb-4'>Comedies : </h1>
+
+            <Marquee speed={30} pauseOnClick={true} pauseOnHover={true} direction="right" gradientWidth='0'>
+
+              {
+                movies.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+
+              }
+            </Marquee>
+          </div>
+          <div>
+            <h1 className='text-white font-semibold text-lg mx-2 md:text-xl mt-5 md:mt-10 mb-4'>Comedies : </h1>
+
+            <Marquee speed={30} pauseOnClick={true} pauseOnHover={true} direction="right" gradientWidth='0'>
+
+              {
+                movies.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+
+              }
+            </Marquee>
+          </div>
+          <div>
+            <h1 className='text-white font-semibold text-lg mx-2 md:text-xl mt-5 md:mt-10 mb-4'>Comedies : </h1>
+
+            <Marquee speed={30} pauseOnClick={true} pauseOnHover={true} direction="right" gradientWidth='0'>
+
+              {
+                movies.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+
+              }
+            </Marquee>
+          </div>
+        </div>
       </div>
-
     </div>
   )
 }

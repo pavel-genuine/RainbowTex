@@ -38,8 +38,8 @@ const UserList = () => {
                 </svg>}
             </div>
 
-
-            <table class="shadow-lg  mt-5">
+            <div class='overflow-x'>
+            <table class="shadow-lg table-auto overflow-x-scroll overflow-auto w-full mt-5">
                 <thead className='text-white'>
                 <tr>
                     <th class="bg-slate-700 border border-[brown] text-left px-8 py-4">Name</th>
@@ -115,7 +115,7 @@ const UserList = () => {
                 </tbody>
             </table>
         </div>
-
+        </div>
     )
 }
 

@@ -3,16 +3,16 @@ import "./Banner.css"
 
 const Banner = ({ updatedBanner }) => {
   return (
-    <div style={{backgroundImage: `url(${'https://img.freepik.com/free-vector/realistic-horizontal-cinema-movie-time-poster-with-3d-glasses-snacks-tickets-clapper-reel-blue-background-with-bokeh-vector-illustration_1284-77013.jpg?w=1380&t=st=1668365061~exp=1668365661~hmac=70f610ca22e1b138fe3bda7d9c9927de8eedb5821d51547272fbcf3bd121f371'
-        })`}} className="bg-cover h-[80vh] w-[96vw] mx-auto relative">
+    <div  className=" md:h-[85vh] h-[40vh]  w-[98vw] mx-auto relative">
+      <img className='md:h-[85vh] h-[40vh] w-[98vw] mx-auto' src={updatedBanner?.name ? updatedBanner?.img : 'https://occ-0-2482-2186.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABcaZlB5cBXaQovKzRNe3DLOD5xe5ug2Msp7y4SHAFXs8Uu-s9esOCD1X3jnbYZZ4Dm-tM-cOgWh1FDmFD0wIfIfbrkpJAoULvXWX.jpg?r=c9b%22'} alt="" />
+      <div className='absolute md:pt-28 p-5 md:pl-16 md:top-[0%] top-[0%] md:h-[85vh] h-[40vh] text-white bg-gradient-to-r from-black'>
+        <h1 className='md:text-4xl text-2xl font-semibold'>{updatedBanner?.name}</h1>
+        <p className='md:text-lg md:w-[55%] md:my-5 my-2'>{updatedBanner?.detail}</p>
 
-      <img className='h-[80vh] w-[96vw] mx-auto' src={updatedBanner && updatedBanner?.img} alt="" />
-      <div className='absolute top-[40%] left-[5%] text-white'>
-        <h1 className='text-4xl'>{updatedBanner?.name}</h1>
-        <p className='text-lg w-[70%] my-5'>{updatedBanner?.detail}</p>
-        <button className='px-4 py-3 font-semibold text-lg rounded w-full max-w-xs text-white bg-[#e50914] hover:bg-[#e50914] cursor-pointer mt-4 mb-2'>Subscribe Now</button>
+        {
+          updatedBanner?.detail && <button className='md:px- md:py-3 px-2 py-1 font-semibold md:text-lg rounded max-w-xs text-white bg-[#e50914] hover:bg-[#e50914] cursor-pointer mt-4 mb-2'>Subscribe Now</button>
+        }
       </div>
-
     </div>
   )
 }
