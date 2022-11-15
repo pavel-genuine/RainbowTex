@@ -7,6 +7,21 @@ import CustomLink from './CustomLink';
 
 const Navbar = () => {
 
+    const [background, setBackground] = useState(false)
+
+    const changeBackground = () => {
+
+        if (window.scrollY >= 80) {
+            setBackground(true)
+
+        } else {
+            setBackground(false)
+
+        }
+    }
+
+    window.addEventListener('scroll', changeBackground)
+
     const personalizeItems =
         <>
             {
@@ -78,12 +93,12 @@ const Navbar = () => {
     return (
         <div>
 
-            <div className='nav  fixed text-white bg-[#181818] bg-opacity-60  backdrop-filter-none backdrop-blur-sm shadow z-100'>
+            <div className={`nav h-[70px]  fixed text-white bg-[#181818] ${background ? 'bg-opacity-80':'bg-opacity-20 bg-gradient-to-b from-black '} backdrop-filter-none backdrop-blur-sm shadow z-100`}>
                 <div class="lg:navbar lg:w-[100vw]  mx-auto ">
                     <div class="lg:navbar-start hidden md:block">
 
                         <Link to='/' class="btn btn-ghost normal-case text-xl "> 
-                        <img className='w-8' src="https://i.ibb.co/Ydm1GF4/1-2.png" alt="" />
+                        <img className='w-40 ml-16 mt-2' src="https://i.ibb.co/Mnc17bk/1-22-removebg-preview.png" alt="" />
                         </Link>
                     </div>
 
@@ -110,22 +125,17 @@ const Navbar = () => {
 
 
                     <div class="navbar-center hidden lg:flex">
-                        <ul class="menu menu-horizontal mt-[.9%] mx-5 pb-[.6%]">
+                        <ul class="menu menu-horizontal mt-[3.25%] ml-40 pb-[.6%]">
                             {menuItems}
                         </ul>
                     </div>
-
-
 
                     <div class=" mr-10    hidden lg:block mb-[-1%]">
                         <div className='flex items-center pb-2'>
 
                             {
 
-
                                 <div class="dropdown dropdown-end ">
-
-
 
                                     <input type="checkbox" name="toggle" id="bigToggler" />
 
@@ -138,9 +148,6 @@ const Navbar = () => {
                                         </div>
                                     </label>
                                     <ul tabindex="0" id='profile' class=" bg-black border border-slate-600 space-y-4 divide divide-y mt-2  w-[350%] card card-compact  dropdown-content pl-4 pr-1 pt-4 pb-4 shadow-xl bg-opacity-60 rounded-box w-52">
-
-
-
                                         <div className='space-y-2 '>
                                             <Link to="/profile">
                                                 <li>

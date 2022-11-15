@@ -9,7 +9,7 @@ const SideBar = () => {
             <div className='flex flex-col space-y-[250%] '>
                 <Link to='/'>
                     <p title='go to homepage' className='font-bold flex flex-col justify-center'>
-                        Jucundu
+                        .
                     </p>
                 </Link>
                 <div className='flex-flex-col ml-2 '>

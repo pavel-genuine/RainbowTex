@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { createUser } from "../api/api";
+import { createUser, googleAuth } from "../api/api";
 import './SignUp.css'
 
 const SignUp = () => {
@@ -121,7 +121,7 @@ const SignUp = () => {
                         </form>
                         {/* <p><small>Don't have an account <Link className='text-primary' to="/sign_up">Create New Account</Link></small></p>
                 <div className="divider">OR</div> */}
-                        <button className=" px-4 py-3 font-bold rounded w-full max-w-xs  cursor-pointer mt-4 mb-2 space-x-2 flex items-center justify-center bg-white ">
+                        <button onClick={()=>googleAuth()} className=" px-4 py-3 font-bold rounded w-full max-w-xs  cursor-pointer mt-4 mb-2 space-x-2 flex items-center justify-center bg-white ">
                             <img src="https://www.100ms.live/_next/image?url=%2Fassets%2Fhero%2Fgoogle.svg&w=32&q=75" alt="" /> <span className="font-bold">Start with Google</span>
                         </button>
 
