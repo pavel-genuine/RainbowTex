@@ -1,19 +1,19 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { signInUser, userList } from "../api/api";
+import { createUser } from "../api/api";
 
-export const fetchUsers =createAsyncThunk("/userList/fetchUsers",
-async()=>{
-    const res =  await userList()  
+export const fetchUsers =createAsyncThunk("/signUp/fetchUsers",
+async(user)=>{
+    const res =  await createUser(user)  
     console.log('thunk',res.data);
     return  res.data
 })
 
-const usersSlice = createSlice({
-    name:'userList',
+const signUpSlice = createSlice({
+    name:'signUp',
     initialState:{
         isLoading:false,
-        userList:[],
+        signUp:[],
         error:null
     },
     extraReducers:(builder) =>{
@@ -23,16 +23,16 @@ const usersSlice = createSlice({
         });
         builder.addCase(fetchUsers.fulfilled,(state, action)=>{
             state.isLoading= false
-            state.userList=action.payload
+            state.signUp=action.payload
             state.error=null
         });
         builder.addCase(fetchUsers.rejected,(state,action)=>{
             state.isLoading= false
-            state.userList= []
+            state.signUp= []
             state.error=action.error.message
         })
 
     }
 })
 
-export default usersSlice.reducer
+export default signUpSlice.reducer

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ImageUploading from 'react-images-uploading';
-// import EditProfile from './EditProfile';
+import EditProfile from './EditProfile';
 import { Modal } from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
 import './profile.css'
@@ -175,7 +175,7 @@ const Profile = () => {
 
                         <img style={{ zIndex: '2' }} class="md:w-36 h-36 border border-[white] border-4 absolute bottom-[97%] right-[61%]  md:bottom-[95%] md:right-[81%]  rounded-full  "
                             src={
-                                'https://avatars.githubusercontent.com/u/4522103?v=4'} alt='' />
+                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb8Wygf4kyxHztYd0ep1BAq_ARXG9lxZsIosP60cyBiOSNLPRprFE126kSfSPhqNGcvNU&usqp=CAU'} alt='' />
 
                         {
                             <ImageUploading
@@ -213,12 +213,12 @@ const Profile = () => {
                         </svg> <span className='mx-1'>Edit Profile </span>
                         </button>
 
-                        {/* <Modal classNames={{
+                        <Modal classNames={{
                             overlay: 'customOverlay',
                             modal: 'customModal',
                         }} open={open} onClose={() => setOpen(false)}>
                             <EditProfile updatedProfile={updatedProfile}></EditProfile>
-                        </Modal> */}
+                        </Modal>
 
                         <div className='w-[98%]  mt-[-8%] md:mt-[-3%] overflow-x-auto'>
                             <p class=" ml-4 md:ml-5 md:mt-4 word-break md:text-2xl text-slate-200 text-lg leading-6 font-medium  rounded ">
@@ -247,22 +247,6 @@ const Profile = () => {
 
                                  
                                         </div>
-                                    </div>
-
-
-
-                                    <div className='px-4'>
-
-                                        <p className='text-white my-2'>Badges :</p>
-                                        <div className='flex '>
-                                            <img className='w-14' src="https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png" alt="" />
-                                            <img className='w-14' src="https://github.githubassets.com/images/modules/profile/achievements/yolo-default.png" alt="" />
-                                            <img className='w-14' src="https://raw.githubusercontent.com/Schweinepriester/github-profile-achievements/main/images/pair-extraordinaire-default.png" alt="" />
-                                            <img className='w-14' src="https://raw.githubusercontent.com/Schweinepriester/github-profile-achievements/main/images/quickdraw-default.png" alt="" />
-
-                                        </div>
-                                        <dd class="my-2 text-gray-300 "><a className='text-indigo-600 hover:text-indigo-500 font-semibold t mx-2 ' href="">Click to </a>know more about badges. </dd>
-
                                     </div>
 
                                     <div class="bg-slate-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

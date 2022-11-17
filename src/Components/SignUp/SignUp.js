@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { createUser, googleAuth } from "../api/api";
+import { fetchUsers } from "../reducers/signUpReducer";
 import './SignUp.css'
 
 const SignUp = () => {
@@ -27,21 +29,31 @@ const SignUp = () => {
         setShowBtn(true)
     }
 
+    const { isLoading, error, signUp } = useSelector(state => state?.signUp)
+
+    const dispatch = useDispatch()
+
+
     const onSubmit = async (data) => {
         const name = data?.name
         const email = data?.email
         const password = data?.password
-        const { data: res } = await createUser({ name, email, password })
-        console.log('res', res);
+        // const { data: res } = await createUser({ name, email, password })
+        // console.log('res', res);
+        const submit = dispatch(fetchUsers({name,email,password}))
+
+        console.log(submit,'submit');
+        return submit;
+       
 
     }
 
     return (
         <div style={{ backgroundImage: `url(${'https://i.ibb.co/WFbg3T0/background1-1.jpg'})` }}
-            className={`bg-cover min-h-screen `}>
+            className={` min-h-screen `}>
             <div className="w-[100%]  bg-black bg-opacity-50  flex flex-col justify-center items-center ">
                 <div className="md:w-[30%] w-[100%] bg-black bg-opacity-80 shadow-xl md:mt-28 ">
-                    <div className="card-body w-96 mx-auto py-20 ">
+                    <div className="card-body md:w-96 w-80 mx-auto py-20 ">
                         <h2 className="text-center text-white text-4xl mb-6 font-bold">Sign Up</h2>
                         <form onSubmit={handleSubmit(onSubmit)}>
 
@@ -117,7 +129,7 @@ const SignUp = () => {
                                     {errors.password?.type === 'minLength' && <span className="label-text-alt text-[#e87c03]">{errors.password.message}</span>}
                                 </label>
                             </div>
-                            <input className='px-4 py-3 font-bold rounded w-full max-w-xs text-white bg-[#e50914] hover:bg-[#e50914] cursor-pointer mt-4 mb-2' type="submit" value="Sign In" />
+                            <input className='px-4 py-3 font-bold rounded w-full max-w-xs text-white bg-[#e50914] hover:bg-[#e50914] cursor-pointer mt-4 mb-2' type="submit" value="Sign Up" />
                         </form>
                         {/* <p><small>Don't have an account <Link className='text-primary' to="/sign_up">Create New Account</Link></small></p>
                 <div className="divider">OR</div> */}
@@ -130,7 +142,7 @@ const SignUp = () => {
                 <div className="bg-black bg-opacity-90 w-[100%] md:mt-20 h-[30%]  py-10 text-[grey] ">
                     <div className="w-[80%] mx-auto">
                         <Link to={`/contact-us`}><span className="text-lg hover:underline mb-5">Questions? Contact us.</span></Link>
-                        <div className="grid grid-cols-3 space-y-3">
+                        <div className="grid grid-cols-3 md:space-y-3 mt-5">
                             <Link to={`/about-us`}><p className="hover:underline">About Us</p></Link>
                             <Link to={``}><p className="hover:underline">FAQ</p></Link>
                             <Link to={``}><p className="hover:underline">Terms of Use</p></Link>

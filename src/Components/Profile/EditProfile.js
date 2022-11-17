@@ -1,15 +1,11 @@
 import React, { useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query'
-import { useAuthState, useUpdateProfile } from 'react-firebase-hooks/auth';
-import auth from '../../firebase.init';
 import toast, { Toaster } from 'react-hot-toast';
 
 
 const EditProfile = ({ updatedProfile }) => {
-    const [user] = useAuthState(auth);
     const { register, formState: { errors }, handleSubmit } = useForm();
-    const [updateProfile, updating, updateError] = useUpdateProfile(auth);
 
 
     const onSubmit = async (data) => {
@@ -17,17 +13,14 @@ const EditProfile = ({ updatedProfile }) => {
         updatedProfile(data)
         console.log('dis', data?.displayName);
 
-        await updateProfile({ displayName: data.name });
-
-
-        const email = user?.email
-        await fetch(`https://coder-access-backend.onrender.com/profiles/${email}`, {
-            method: 'PUT',
-            headers: {
-                'content-type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        })
+        // const email = user?.email
+        // await fetch(`https://coder-access-backend.onrender.com/profiles/${email}`, {
+        //     method: 'PUT',
+        //     headers: {
+        //         'content-type': 'application/json',
+        //     },
+        //     body: JSON.stringify(data)
+        // })
 
         toast.success("Information Updated")
     }
@@ -81,20 +74,6 @@ const EditProfile = ({ updatedProfile }) => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="grid grid-cols-3 gap-6">
-                                            <div class="col-span-3 sm:col-span-3">
-                                                <label class="block text-sm font-medium "> GitHub User Name <span className='font-normal'>(just user name not url , like : 'pavel-genine')</span></label>
-                                                <div class="mt-1 flex rounded-md shadow-sm">
-
-                                                    <input style={{ backgroundColor: ' #919cb1', border: '#6b7280' }}
-                                                        type="text" class="p-2 focus:ring-primary focus:border-primary flex-1 block w-full  rounded-md sm:text-sm "
-                                                        placeholder="GitHub User Name "
-                                                        {...register("github")}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         <div>
                                             <label class="block text-sm font-medium"> Documment </label>
                                             <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
@@ -141,7 +120,7 @@ const EditProfile = ({ updatedProfile }) => {
                                                 <label for="first-name" class="block text-sm font-medium ">Name</label>
                                                 <input style={{ backgroundColor: ' #919cb1', border: '#6b7280' }} type="text" name="first-name" id="first-name"
                                                     autocomplete="given-name"
-                                                    value={user?.displayName} readOnly
+                                                    value={'displayName'} readOnly
                                                     class="p-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                                     {...register("displayName")} />
                                             </div>
@@ -156,10 +135,10 @@ const EditProfile = ({ updatedProfile }) => {
                                             <div class="col-span-6 sm:col-span-3">
                                                 <label for="country" class="block text-sm font-medium ">Country</label>
                                                 <select  {...register("country")} style={{ backgroundColor: ' #919cb1', border: '#6b7280' }} id="country" name="country" autocomplete="country-name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black">
+                                                    <option>USA</option>
                                                     <option>Bangladesh</option>
                                                     <option>Middle East</option>
                                                     <option>Europe</option>
-                                                    <option>USA</option>
                                                 </select>
                                             </div>
 

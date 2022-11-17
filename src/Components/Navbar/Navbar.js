@@ -32,7 +32,7 @@ const Navbar = () => {
                     <label tabindex="0" htmlFor="toggler" name="toggle" class="btn btn-ghost btn-circle avatar">
                         <div class="w-9 border border-[brown] rounded-full" >
                             {
-                                <img src="https://i.stack.imgur.com/frlIf.png" />
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb8Wygf4kyxHztYd0ep1BAq_ARXG9lxZsIosP60cyBiOSNLPRprFE126kSfSPhqNGcvNU&usqp=CAU" />
                             }
                         </div>
                     </label>
@@ -79,7 +79,37 @@ const Navbar = () => {
 
     const menuItems =
         <>
-            <CustomLink class="btn-ghost hover:rounded md:p-3 md:m-5" to='/'>Categories</CustomLink>
+            <div className=" flex w-[99%] mt-2 md:w-[76%] text-white relative md:hidden ">
+                <label tabindex="0" htmlFor='bigTogglerpro' class="">
+                    <div class="indicator cursor-pointer rounded-full felx justify-center items-center">
+                        <p class="btn-ghost hover:rounded font-bold md:p-3 md:m-5 mr-1" to='/'>Categories</p>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                        </svg>
+                    </div>
+                </label>
+                <input type="checkbox" name="" id="bigTogglerpro" />
+
+
+                <ul class="space-y-2 p-4 font-bold rounded-lg notificationpro text-black absolute left-[110%] md:left-[5%] top-[40%] bg-black text-[white]  bg-opacity-60 ">
+                    <CustomLink to={'/hollywood'} class="px-1 border-b-2 cursor-pointer active:text-white active:bg-[red]"><a>Hollywood</a></CustomLink>
+                    <CustomLink to={'/bollywood'} class="px-1 border-b-2 cursor-pointer active:text-white active:bg-[red]"><a>Bollywood</a></CustomLink>
+                    <CustomLink to={'/dhallywood'} class="px-1 border-b-2 cursor-pointer active:text-white active:bg-[red]"><a>Dhallywood</a></CustomLink>
+
+                </ul>
+            </div>
+            <div class="dropdown dropdown-hover hidden md:block">
+                <label tabindex="0" class="">
+                    <CustomLink class="btn-ghost hover:rounded md:p-3 md:m-5" to='/'>Categories</CustomLink>
+                </label>
+                <ul tabindex="0" class=" space-y-2 px-4 py-6 rounded-lg dropdown-content menu  ml-12 mt-4 shadow text-white bg-black bg-opacity-60 w-auto">
+                    <CustomLink to={'/hollywood'} class="px-1 border-b-2 cursor-pointer active:text-white active:bg-[red]"><a>Hollywood</a></CustomLink>
+                    <CustomLink to={'/bollywood'} class="px-1 border-b-2 cursor-pointer active:text-white active:bg-[red]"><a>Bollywood</a></CustomLink>
+                    <CustomLink to={'/dhallywood'} class="px-1 border-b-2 cursor-pointer active:text-white active:bg-[red]"><a>Dhallywood</a></CustomLink>
+
+                </ul>
+            </div>
             {
                 <CustomLink class="btn-ghost hover:rounded md:p-3 md:m-5" to='/sign-up'>Sign Up</CustomLink>
 
@@ -93,12 +123,12 @@ const Navbar = () => {
     return (
         <div>
 
-            <div className={`nav h-[70px]  fixed text-white bg-[#181818] ${background ? 'bg-opacity-80':'bg-opacity-20 bg-gradient-to-b from-black '} backdrop-filter-none backdrop-blur-sm shadow z-100`}>
+            <div className={`nav h-[70px]  fixed text-white bg-[#181818] ${background ? 'bg-opacity-80' : 'bg-opacity-20 bg-gradient-to-b from-black '} backdrop-filter-none backdrop-blur-sm shadow z-100`}>
                 <div class="lg:navbar lg:w-[100vw]  mx-auto ">
                     <div class="lg:navbar-start hidden md:block">
 
-                        <Link to='/' class="btn btn-ghost normal-case text-xl "> 
-                        <img className='w-40 ml-16 mt-2' src="https://i.ibb.co/Mnc17bk/1-22-removebg-preview.png" alt="" />
+                        <Link to='/' class=" normal-case text-xl ">
+                            <img className='md:w-40 ml-20 mt-2' src="https://i.ibb.co/Mnc17bk/1-22-removebg-preview.png" alt="" />
                         </Link>
                     </div>
 
@@ -113,10 +143,10 @@ const Navbar = () => {
                             <input type="checkbox" name="" id="menuToggler" />
 
 
-                            <ul tabindex="0" id="menuContent" class=" menu border border-slate-600 bg-black text-[white]  bg-opacity-60 menu menu-compact dropdown-content mt-3 p-4 shadow  rounded-box w-52">
+                            <div tabindex="0" id="menuContent" class=" menu border border-slate-600 bg-black text-[white]  bg-opacity-60 menu menu-compact dropdown-content mt-3 p-4 shadow  rounded-box w-36 space-y-2">
                                 {menuItems}
-                            </ul>
-                            <Link to='/' class="btn btn-ghost normal-case text-xl ">Jucundu</Link>
+                            </div>
+                            <Link to='/' class="btn btn-ghost normal-case text-3xl text-[#e50914] font-bold">Jucundu</Link>
 
                         </div>
                         {personalizeItems}
@@ -125,7 +155,7 @@ const Navbar = () => {
 
 
                     <div class="navbar-center hidden lg:flex">
-                        <ul class="menu menu-horizontal mt-[3.25%] ml-40 pb-[.6%]">
+                        <ul class="menu menu-horizontal mt-[4%] ml-40 pb-[.6%]">
                             {menuItems}
                         </ul>
                     </div>
@@ -135,7 +165,7 @@ const Navbar = () => {
 
                             {
 
-                                <div class="dropdown dropdown-end ">
+                                <div class="dropdown dropdown-end mt-3">
 
                                     <input type="checkbox" name="toggle" id="bigToggler" />
 
@@ -143,7 +173,7 @@ const Navbar = () => {
                                         <div class="w-9 border border-white rounded-full" >
                                             {
 
-                                                <img src="https://i.stack.imgur.com/frlIf.png" />
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb8Wygf4kyxHztYd0ep1BAq_ARXG9lxZsIosP60cyBiOSNLPRprFE126kSfSPhqNGcvNU&usqp=CAU" />
                                             }
                                         </div>
                                     </label>
@@ -155,7 +185,7 @@ const Navbar = () => {
                                                     {
 
                                                         <img className='w-14 border border-white  rounded-full'
-                                                            src="https://i.stack.imgur.com/frlIf.png" />
+                                                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb8Wygf4kyxHztYd0ep1BAq_ARXG9lxZsIosP60cyBiOSNLPRprFE126kSfSPhqNGcvNU&usqp=CAU" />
                                                     }
 
                                                 </li>

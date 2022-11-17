@@ -67,5 +67,49 @@
     display: block;
   
   }
+
+
+  .icons {
+    display: none;
+    
+}
+
+.promo:hover .icons {
+    display: block;
+
+}
+
+.icon {
+    background-color: white;
+    padding: 4px;
+    transform: scale(1.8);
+    cursor: pointer;
+}
+
+.icon:active{
+    transform:scale(1.6)
+}
+
+.icon:hover {
+    color: white;
+    background-color: red;
+}
+
+#bigTogglerpro{
+   display: none; 
+}
+
+.notificationpro{
+    display: none;
+}
+
+#bigTogglerpro:checked~.notificationpro{
+
+    display: block;
+
+  }
+
+ 
+
   
   

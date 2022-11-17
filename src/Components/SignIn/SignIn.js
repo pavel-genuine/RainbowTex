@@ -4,6 +4,9 @@ import { useForm } from "react-hook-form";
 import { googleAuth, signInUser } from "../api/api";
 import { Link } from "react-router-dom";
 import './SignIn.css'
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsers } from "../reducers/signUpReducer";
 
 const SignIn = () => {
 
@@ -26,11 +29,22 @@ const SignIn = () => {
         setShowBtn(true)
     }
 
+
+    const { isLoading, error, signIn } = useSelector(state => state?.signIn)
+
+    const dispatch = useDispatch()
+
     const onSubmit = async (data) => {
         const email = data?.email
         const password = data?.password
-        const { res } = await signInUser({ email, password })
-        console.log('res', res);
+
+        // const { data:res } = await axios.post(`https://jucundu-server.onrender.com/api/auth/login`, {email,password});
+        // console.log('res', res);
+
+        const submit = dispatch(fetchUsers({email,password}))
+        console.log(submit,'submit');
+        return submit;
+       
     }
 
 
@@ -39,7 +53,7 @@ const SignIn = () => {
             className={`bg-cover min-h-screen `}>
             <div className="w-[100%]  bg-black bg-opacity-50  flex flex-col justify-center items-center ">
                 <div className="md:w-[30%] w-[100%] bg-black bg-opacity-80 shadow-xl md:mt-28 ">
-                    <div className="card-body w-96 mx-auto py-20 ">
+                    <div className="card-body md:w-96 w-80  mx-auto py-20 ">
                         <h2 className="text-center text-white text-4xl mb-6 font-bold">Sign In</h2>
                         <form onSubmit={handleSubmit(onSubmit)}>
 
@@ -113,7 +127,7 @@ const SignIn = () => {
                 <div className="bg-black bg-opacity-90 w-[100%] md:mt-20 h-[30%]  py-10 text-[grey] ">
                     <div className="w-[80%] mx-auto">
                         <Link to={`/contact-us`}><span className="text-lg hover:underline mb-5">Questions? Contact us.</span></Link>
-                        <div className="grid grid-cols-3 space-y-3">
+                        <div className="grid grid-cols-3 md:space-y-3 mt-5">
                             <Link to={`/about-us`}><p className="hover:underline">About Us</p></Link>
                             <Link to={``}><p className="hover:underline">FAQ</p></Link>
                             <Link to={``}><p className="hover:underline">Terms of Use</p></Link>
