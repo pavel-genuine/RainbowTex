@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import './SignIn.css'
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers } from "../reducers/signUpReducer";
+import { fetchSignIn } from "../reducers/signInReducer";
 
 const SignIn = () => {
 
@@ -41,7 +41,7 @@ const SignIn = () => {
         // const { data:res } = await axios.post(`https://jucundu-server.onrender.com/api/auth/login`, {email,password});
         // console.log('res', res);
 
-        const submit = dispatch(fetchUsers({email,password}))
+        const submit = dispatch(fetchSignIn({email,password}))
         console.log(submit,'submit');
         return submit;
        
@@ -50,13 +50,12 @@ const SignIn = () => {
 
     return (
         <div style={{ backgroundImage: `url(${'https://i.ibb.co/WFbg3T0/background1-1.jpg'})` }}
-            className={`bg-cover min-h-screen `}>
+            className={` min-h-screen md:h-[120vh] h-[150vh] md:w-[100%] w-[150%] `}>
             <div className="w-[100%]  bg-black bg-opacity-50  flex flex-col justify-center items-center ">
-                <div className="md:w-[30%] w-[100%] bg-black bg-opacity-80 shadow-xl md:mt-28 ">
-                    <div className="card-body md:w-96 w-80  mx-auto py-20 ">
+                <div className="md:w-[30%] w-[100%] bg-black h-screen md:h-auto bg-opacity-80 shadow-xl md:mt-28 pt-40 md:py-10  ">
+                    <div className="card-body w-96 mx-auto my-auto  ">
                         <h2 className="text-center text-white text-4xl mb-6 font-bold">Sign In</h2>
                         <form onSubmit={handleSubmit(onSubmit)}>
-
                             <div className="form-control w-full max-w-xs">
                                 <input
                                     type="email"
@@ -114,17 +113,17 @@ const SignIn = () => {
                             </div>
 
 
-                            <input className='px-4 py-3 font-bold rounded w-full max-w-xs text-white bg-[#e50914] hover:bg-[#e50914] cursor-pointer mt-4 mb-2' type="submit" value="Sign In" />
+                            <input className='px-4 py-3 font-bold rounded w-full max-w-xs text-white bg-[#e50914]  cursor-pointer mt-4 mb-2' type="submit" value="Sign In" />
                         </form>
                         {/* <p><small>Don't have an account <Link className='text-primary' to="/sign_up">Create New Account</Link></small></p>
                     <div className="divider">OR</div> */}
-                        <button onClick={()=>googleAuth()} className=" px-4 py-3 font-bold rounded w-full max-w-xs  cursor-pointer mt-4 mb-2 space-x-2 flex items-center justify-center bg-white ">
+                        <button onClick={()=>googleAuth()} className=" px-4 py-3 font-bold rounded w-full max-w-xs  cursor-pointer mt-4 space-x-2 flex items-center justify-center bg-white ">
                             <img src="https://www.100ms.live/_next/image?url=%2Fassets%2Fhero%2Fgoogle.svg&w=32&q=75" alt="" /> <span className="font-bold">Start with Google</span>
                         </button>
 
                     </div>
                 </div>
-                <div className="bg-black bg-opacity-90 w-[100%] md:mt-20 h-[30%]  py-10 text-[grey] ">
+                <div className="bg-black bg-opacity-90 w-[100%] md:mt-20 h-[33%] md:h-auto  md:py-10 py-40 text-[grey] ">
                     <div className="w-[80%] mx-auto">
                         <Link to={`/contact-us`}><span className="text-lg hover:underline mb-5">Questions? Contact us.</span></Link>
                         <div className="grid grid-cols-3 md:space-y-3 mt-5">

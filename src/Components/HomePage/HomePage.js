@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Footer from '../Footer/Footer'
 import Banner from './Banner'
 import Categories from '../Categories/Categories'
-import Slick from './Slick'
 
 const HomePage = () => {
 
@@ -26,7 +25,7 @@ const HomePage = () => {
           <Banner updatedBanner={updatedBanner} ></Banner>
         </div>
 
-        <div className=''>
+        <div className='mt-20'>
           <Categories handleBanner={handleBanner}></Categories>
         </div>
 

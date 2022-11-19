@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
-import DropDown from "../DropDown";
 import SideBar from "../SideBar";
-import MovieList from "./MovieList";
-
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { movies } from "../../allMovies/allMovies";
 
 const DashboardHome = () => {
 
@@ -13,24 +12,61 @@ const DashboardHome = () => {
     return (
         <div className='py-16 min-h-screen relative bg-[#181818] text-slate-200'>
 
-            <div className='mx-auto w-[100%] pt-[.7%]  md:grid grid-cols-12 '>
-                <SideBar></SideBar>
-                <div className=" lg:mx-5 col-span-10 w-[100%] px-[5%] md:px-[10%] md:w-[100%]">
-                    <DropDown></DropDown>
+            <div className='mx-auto w-[100%] pt-[.7%] md:grid grid-cols-12  '>
+                <SideBar index={1} color={'[#e50914]'}></SideBar>
+                <div className=" lg:mx-5 col-span-10 w-[100%] px-[5%] mt-10 md:px-[10%] ">
+                    <div className="mx-[3%]">
+                    </div>
                     <div class="space-y-4 ">
                         <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
                         <div class="drawer-content">
 
-                            <h2 className="text-2xl font-bold ">Welcome to Admin Dashboard</h2>
+                            <h2 className="text-2xl font-bold mb-5 ">Welcome to Admin Dashboard</h2>
                         </div>
 
+                        <img src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb8Wygf4kyxHztYd0ep1BAq_ARXG9lxZsIosP60cyBiOSNLPRprFE126kSfSPhqNGcvNU&usqp=CAU"} alt="" />
+                        <h2 className="font-bold text-4xl">Admin</h2>
+                        <div className='md:flex items-center'>
+                            <p className='font-semibold my-5 bg-slate-600 px-3 py-2 md:mr-20 text-lg '>Total Movies Uploaded : {`movies.length`} </p>
+                            <p className='font-semibold my-5 bg-slate-600 px-3 py-2 text-lg '>Total Users : {`users.length`} </p>
+                        </div>
+                        
+                <div>
+               
+{/* 
+                <AreaChart
+                    width={1000}
+                    height={700}
+                    data={movies}
+                    margin={{
+                        top: 10,
+                        bottom: 10,
+                    }}
+                >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="likelihood" />
+                    <YAxis dataKey="intensity" />
+                    <Tooltip />
 
-                        <MovieList></MovieList>
+                    <Area type="monotone" dataKey="name" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
+                    <Area type="monotone" dataKey="rating" stackId="1" stroke="#8884d8" fill="#8884d8" />
 
+                    <Area type="monotone" dataKey="release" stackId="1" stroke="#ffc658" fill="#ffc658" />
+                    <Legend style={{ buttom: 0, right: 0 }} />
+
+                </AreaChart> */}
+            </div>
 
                     </div>
                 </div>
+
+
+
+
             </div>
+
+            
+
         </div>
     );
 };

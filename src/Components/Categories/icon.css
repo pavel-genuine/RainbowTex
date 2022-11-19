@@ -1,0 +1,22 @@
+.icons {
+    display: none;
+    
+}
+
+.promo:hover .icons {
+    display: block;
+
+}
+
+.icon {
+    color: white;
+    background-color: #e50914;
+    padding: 4px;
+    transform: scale(1.8);
+    cursor: pointer;
+}
+
+.icon:active{
+    transform:scale(1.6)
+}
+

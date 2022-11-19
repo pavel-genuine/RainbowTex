@@ -80,6 +80,7 @@ const Navbar = () => {
     const menuItems =
         <>
             <div className=" flex w-[99%] mt-2 md:w-[76%] text-white relative md:hidden ">
+
                 <label tabindex="0" htmlFor='bigTogglerpro' class="">
                     <div class="indicator cursor-pointer rounded-full felx justify-center items-center">
                         <p class="btn-ghost hover:rounded font-bold md:p-3 md:m-5 mr-1" to='/'>Categories</p>
@@ -92,23 +93,57 @@ const Navbar = () => {
                 <input type="checkbox" name="" id="bigTogglerpro" />
 
 
-                <ul class="space-y-2 p-4 font-bold rounded-lg notificationpro text-black absolute left-[110%] md:left-[5%] top-[40%] bg-black text-[white]  bg-opacity-60 ">
-                    <CustomLink to={'/hollywood'} class="px-1 border-b-2 cursor-pointer active:text-white active:bg-[red]"><a>Hollywood</a></CustomLink>
-                    <CustomLink to={'/bollywood'} class="px-1 border-b-2 cursor-pointer active:text-white active:bg-[red]"><a>Bollywood</a></CustomLink>
-                    <CustomLink to={'/dhallywood'} class="px-1 border-b-2 cursor-pointer active:text-white active:bg-[red]"><a>Dhallywood</a></CustomLink>
-
+                <ul class="space-y-2 p-4 font-bold rounded-lg notificationpro text-black absolute left-[80%] top-[100%] bg-black text-[white]  bg-opacity-60 ">
+                <div className='flex space-x-4'>
+                  <div className='space-y-2'>
+                    <CustomLink to={'/hollywood'} class="px-1 border-b-2 cursor-pointer "><a>Hollywood</a></CustomLink>
+                    <CustomLink to={'/bollywood'} class="px-1 border-b-2 cursor-pointer  "><a>Bollywood</a></CustomLink>
+                    <CustomLink to={'/dhallywood'} class="px-1 border-b-2 cursor-pointer "><a>Dhallywood</a></CustomLink>
+                    <CustomLink to={'/hollywood'} class="px-1 border-b-2 cursor-pointer "><a>Hollywood</a></CustomLink>
+                    <CustomLink to={'/bollywood'} class="px-1 border-b-2 cursor-pointer "><a>Bollywood</a></CustomLink>
+                    <CustomLink to={'/dhallywood'} class="px-1 border-b-2 cursor-pointer "><a>Dhallywood</a></CustomLink>
+                    <CustomLink to={'/hollywood'} class="px-1 border-b-2 cursor-pointer "><a>Hollywood</a></CustomLink>
+                    <CustomLink to={'/bollywood'} class="px-1 border-b-2 cursor-pointer "><a>Bollywood</a></CustomLink>
+                    </div>
+                    <div className='space-y-2'>
+                    <CustomLink to={'/hollywood'} class="px-1 border-b-2 cursor-pointer "><a>Hollywood</a></CustomLink>
+                    <CustomLink to={'/bollywood'} class="px-1 border-b-2 cursor-pointer  "><a>Bollywood</a></CustomLink>
+                    <CustomLink to={'/dhallywood'} class="px-1 border-b-2 cursor-pointer "><a>Dhallywood</a></CustomLink>
+                    <CustomLink to={'/hollywood'} class="px-1 border-b-2 cursor-pointer "><a>Hollywood</a></CustomLink>
+                    <CustomLink to={'/bollywood'} class="px-1 border-b-2 cursor-pointer "><a>Bollywood</a></CustomLink>
+                    <CustomLink to={'/dhallywood'} class="px-1 border-b-2 cursor-pointer "><a>Dhallywood</a></CustomLink>
+                    <CustomLink to={'/hollywood'} class="px-1 border-b-2 cursor-pointer "><a>Hollywood</a></CustomLink>
+                    </div>
+                  </div>
                 </ul>
             </div>
             <div class="dropdown dropdown-hover hidden md:block">
                 <label tabindex="0" class="">
                     <CustomLink class="btn-ghost hover:rounded md:p-3 md:m-5" to='/'>Categories</CustomLink>
                 </label>
-                <ul tabindex="0" class=" space-y-2 px-4 py-6 rounded-lg dropdown-content menu  ml-12 mt-4 shadow text-white bg-black bg-opacity-60 w-auto">
-                    <CustomLink to={'/hollywood'} class="px-1 border-b-2 cursor-pointer active:text-white active:bg-[red]"><a>Hollywood</a></CustomLink>
-                    <CustomLink to={'/bollywood'} class="px-1 border-b-2 cursor-pointer active:text-white active:bg-[red]"><a>Bollywood</a></CustomLink>
-                    <CustomLink to={'/dhallywood'} class="px-1 border-b-2 cursor-pointer active:text-white active:bg-[red]"><a>Dhallywood</a></CustomLink>
-
-                </ul>
+                <div tabindex="0" class="space-y-2 px-4 py-6 rounded-lg dropdown-content menu  ml-12 mt-3 shadow text-white bg-black bg-opacity-60 w-auto">
+                  <div className='flex space-x-10'>
+                  <div className='space-y-2'>
+                    <CustomLink to={'/hollywood'} class="px-1 border-b-2 cursor-pointer "><a>Hollywood</a></CustomLink>
+                    <CustomLink to={'/bollywood'} class="px-1 border-b-2 cursor-pointer  "><a>Bollywood</a></CustomLink>
+                    <CustomLink to={'/dhallywood'} class="px-1 border-b-2 cursor-pointer "><a>Dhallywood</a></CustomLink>
+                    <CustomLink to={'/hollywood'} class="px-1 border-b-2 cursor-pointer "><a>Hollywood</a></CustomLink>
+                    <CustomLink to={'/bollywood'} class="px-1 border-b-2 cursor-pointer "><a>Bollywood</a></CustomLink>
+                    <CustomLink to={'/dhallywood'} class="px-1 border-b-2 cursor-pointer "><a>Dhallywood</a></CustomLink>
+                    <CustomLink to={'/hollywood'} class="px-1 border-b-2 cursor-pointer "><a>Hollywood</a></CustomLink>
+                    <CustomLink to={'/bollywood'} class="px-1 border-b-2 cursor-pointer "><a>Bollywood</a></CustomLink>
+                    </div>
+                    <div className='space-y-2'>
+                    <CustomLink to={'/hollywood'} class="px-1 border-b-2 cursor-pointer "><a>Hollywood</a></CustomLink>
+                    <CustomLink to={'/bollywood'} class="px-1 border-b-2 cursor-pointer  "><a>Bollywood</a></CustomLink>
+                    <CustomLink to={'/dhallywood'} class="px-1 border-b-2 cursor-pointer "><a>Dhallywood</a></CustomLink>
+                    <CustomLink to={'/hollywood'} class="px-1 border-b-2 cursor-pointer "><a>Hollywood</a></CustomLink>
+                    <CustomLink to={'/bollywood'} class="px-1 border-b-2 cursor-pointer "><a>Bollywood</a></CustomLink>
+                    <CustomLink to={'/dhallywood'} class="px-1 border-b-2 cursor-pointer "><a>Dhallywood</a></CustomLink>
+                    <CustomLink to={'/hollywood'} class="px-1 border-b-2 cursor-pointer "><a>Hollywood</a></CustomLink>
+                    </div>
+                  </div>
+                </div>
             </div>
             {
                 <CustomLink class="btn-ghost hover:rounded md:p-3 md:m-5" to='/sign-up'>Sign Up</CustomLink>
@@ -143,8 +178,17 @@ const Navbar = () => {
                             <input type="checkbox" name="" id="menuToggler" />
 
 
-                            <div tabindex="0" id="menuContent" class=" menu border border-slate-600 bg-black text-[white]  bg-opacity-60 menu menu-compact dropdown-content mt-3 p-4 shadow  rounded-box w-36 space-y-2">
+                            <div tabindex="0" id="menuContent" class=" menu border border-slate-600 bg-black text-[white]  bg-opacity-60 menu menu-compact dropdown-content my-2 p-4 shadow  rounded-box w-36 space-y-2">
+                            
                                 {menuItems}
+                                <div className="form-control w-full max-w-xs">
+                                <input
+                                    type="text"
+                                    placeholder="Search"
+                                    className={`outline-0 px-2 py-1  w-full max-w-xs rounded-full bg-opacity-60 text-white bg-[grey] `}
+                                    // {...register("search")}
+                                />
+                            </div>
                             </div>
                             <Link to='/' class="btn btn-ghost normal-case text-3xl text-[#e50914] font-bold">Jucundu</Link>
 
@@ -152,10 +196,18 @@ const Navbar = () => {
                         {personalizeItems}
                     </div>
 
-
+                
+                    <div className="form-control w-full max-w-xs hidden mt-4  md:block">
+                                <input
+                                    type="text"
+                                    placeholder="Search movies"
+                                    className={`outline-0 px-4 py-2 ml-20 w-full max-w-xs rounded-full bg-opacity-80 text-white bg-[grey] `}
+                                    // {...register("search")}
+                                />
+                            </div>
 
                     <div class="navbar-center hidden lg:flex">
-                        <ul class="menu menu-horizontal mt-[4%] ml-40 pb-[.6%]">
+                        <ul class="menu menu-horizontal mt-[4%] ml-20 pb-[.6%]">
                             {menuItems}
                         </ul>
                     </div>

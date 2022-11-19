@@ -6,7 +6,6 @@ import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 import SideBar from '../SideBar';
 import VideoUploader from './VideoUploader';
-import DropDown from '../DropDown';
 
 const PublishPost = () => {
 
@@ -99,22 +98,22 @@ const PublishPost = () => {
         toast.success("Congratulation! Post Published")
     }
 
-
-
     return (
-        <div className=' relative bg-[#181818] text-slate-200 '>
+        <div className='bg-[#181818] text-slate-200 pt-[23.5%] md:pt-0   '>
             <Toaster></Toaster>
-
-            <div className='mx-auto pt-10 md:pt-0  w-[100%]  grid grid-cols-12 '>
-                <div className='ml-5 md:hidden'>
-                    <DropDown></DropDown>
+            <div className='md:hidden'>
+                <SideBar index={4} color={'[#e50914]'} className=''></SideBar>
+            </div>
+            <div className='mx-auto pt-[16.7%] md:pt-0  w-[100%]  grid grid-cols-12 '>
+                <div className='md:block hidden'>
+                    <SideBar index={4} color={'[#e50914]'} className=''></SideBar>
                 </div>
-                <SideBar className=''></SideBar>
-                <div className='col-span-10 pt-24 pb-10 mx-auto '>
-                    <h2 className="text-2xl font-bold ">Upload Your Movie</h2>
-                    <form onSubmit={handleSubmit(onSubmit)}>
 
-                        <div className="flex justify-between  mb-10 ">
+                <div className='col-span-10  pb-10 md:mx-auto  ml-7 md:pt-32 '>
+
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <h2 className="text-2xl font-bold ">Upload Your Movie</h2>
+                        <div className="flex justify-between my-10 ">
                             <h1 className="text-[brown] font-semibold">{user?.email}</h1>
                             <button type="submit" className=" btn hover:bg-[#e50914] bg-[brown] btn-xs ">
                                 Publish
@@ -180,44 +179,59 @@ const PublishPost = () => {
                             </div>
 
                             <div>
-                                <textarea
-                                    placeholder='Movie Title'
-                                    className='shadow-sm bg-[#181818] border-b-2 text-2xl font-blod focus:outline-none mt-8  mt-1 block w-full sm:text-md p-2'
-                                    name="" id="" cols="30" rows="2"
-                                    {...register("title")}>
-                                </textarea>
-
-                                <div className='flex'>
+                                <div className='grow-wrap'>
                                     <textarea
-                                        placeholder='Release Date'
-                                        className='shadow-sm bg-[#181818] border-b-2 text-lg font-blod focus:outline-none mt-20 px-2 mt-1 block w-full sm:text-md p-2'
+                                    style={{fontWeight:'bolder', fontSize:'20px'}}
+                                        placeholder='Movie Title'
+                                        className='shadow-sm bg-[#181818] border-b-2 text-2xl font-blod focus:outline-none mt-8  mt-1 block w-full sm:text-md p-2'
                                         name="" id="" cols="30" rows="2"
-                                        {...register("release")}>
-                                    </textarea>
-                                    <textarea
-                                        placeholder='Duration'
-                                        className='shadow-sm bg-[#181818] mx-10 border-b-2 text-lg font-blod focus:outline-none mt-20 px-2 mt-1 block w-full sm:text-md p-2'
-                                        name="" id="" cols="30" rows="2"
-                                        {...register("duration")}>
-                                    </textarea>
-                                    <textarea
-                                        placeholder='IMDb Rating'
-                                        className='shadow-sm bg-[#181818]  border-b-2 text-lg font-blod focus:outline-none mt-20 px-2 block w-full sm:text-md p-2'
-                                        name="" id="" cols="30" rows="2"
-                                        {...register("rating")}>
+                                        {...register("title")}>
                                     </textarea>
                                 </div>
 
-                                <textarea onKeyDown={(e) => { showOptions(e) }}
+                                <div className='flex'>
+                                    <div className='grow-wrap'>
+                                        <textarea
+                                        style={{fontWeight:'bold', fontSize:'15px'}}
+                                            placeholder='Release Date'
+                                            className='shadow-sm bg-[#181818] border-b-2 md:text-lg font-blod focus:outline-none mt-20 px-2 mt-1 block w-full sm:text-md p-2'
+                                            name="" id="" cols="30" rows="2"
+                                            {...register("release")}>
+                                        </textarea>
+                                    </div>
 
-                                    placeholder="Description..."
-                                    setValue={text}
-                                    id="blog" name="blog" rows="20"
-                                    className="bg-[#181818] shadow-sm border-none focus:outline-none pt-12 text-lg mt-1 block w-full  px-2 "
-                                    {...register("description")}>
+                                    <div className='grow-wrap mx-10'>
+                                        <textarea
+                                        style={{fontWeight:'bold', fontSize:'15px'}}
+                                            placeholder='Duration'
+                                            className='shadow-sm bg-[#181818]  border-b-2 md:text-lg font-blod focus:outline-none mt-20 px-2 mt-1 block w-full sm:text-md p-2'
+                                            name="" id="" cols="30" 
+                                            {...register("duration")}>
+                                        </textarea>
+                                    </div>
+
+                                    <div className='grow-wrap'>
+                                        <textarea
+                                        style={{fontWeight:'bold', fontSize:'15px'}}
+                                            placeholder='IMDb Rating'
+                                            className='shadow-sm bg-[#181818]  border-b-2 md:text-lg font-blod focus:outline-none mt-20 px-2 block w-full sm:text-md p-2'
+                                            name="" id="" cols="30"
+                                            {...register("rating")}>
+                                        </textarea>
+                                    </div>
+                                </div>
+                               
+                                <div  className='grow-wrap'>
+                                    <textarea 
+                                    style={{fontWeight:'bold', fontSize:'15px'}}
+                                        placeholder="Description..."
+                                        id="blog" name="blog" rows="4"
+                                        className="bg-[#181818] shadow-sm border-b-2 focus:outline-none mt-20 pt-12 text-lg mt-1 block w-full  px-2 "
+                                        {...register("description")}>
 
 
-                                </textarea>
+                                    </textarea>
+                                </div>
                             </div>
                         </div>
                     </form>

@@ -4,8 +4,10 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { createUser, googleAuth } from "../api/api";
-import { fetchUsers } from "../reducers/signUpReducer";
+import { fetchSignUp } from "../reducers/signUpReducer";
 import './SignUp.css'
+import toast, { Toaster } from 'react-hot-toast';
+
 
 const SignUp = () => {
 
@@ -40,20 +42,23 @@ const SignUp = () => {
         const password = data?.password
         // const { data: res } = await createUser({ name, email, password })
         // console.log('res', res);
-        const submit = dispatch(fetchUsers({name,email,password}))
+        const submit = dispatch(fetchSignUp({ name, email, password }))
 
-        console.log(submit,'submit');
+        console.log(submit, 'submit');
         return submit;
-       
+        toast.success("Congratulation! You've signed up, please verify you email.")
+
 
     }
 
     return (
         <div style={{ backgroundImage: `url(${'https://i.ibb.co/WFbg3T0/background1-1.jpg'})` }}
-            className={` min-h-screen `}>
-            <div className="w-[100%]  bg-black bg-opacity-50  flex flex-col justify-center items-center ">
-                <div className="md:w-[30%] w-[100%] bg-black bg-opacity-80 shadow-xl md:mt-28 ">
-                    <div className="card-body md:w-96 w-80 mx-auto py-20 ">
+            className={` min-h-screen md:h-[120vh] h-[150vh] md:w-[100%] w-[150%] `}>
+                        <Toaster></Toaster>
+
+            <div className="md:w-[100%] min-h-screen md:h-[120vh] h-[151vh]  bg-black bg-opacity-50  flex flex-col justify-center items-center ">
+                <div className="md:w-[30%] w-[100%] h-screen md:h-auto bg-black bg-opacity-80 shadow-xl md:mt-28 pt-16 md:py-5 ">
+                    <div className="card-body w-96 mx-auto py-10   ">
                         <h2 className="text-center text-white text-4xl mb-6 font-bold">Sign Up</h2>
                         <form onSubmit={handleSubmit(onSubmit)}>
 
@@ -129,18 +134,21 @@ const SignUp = () => {
                                     {errors.password?.type === 'minLength' && <span className="label-text-alt text-[#e87c03]">{errors.password.message}</span>}
                                 </label>
                             </div>
-                            <input className='px-4 py-3 font-bold rounded w-full max-w-xs text-white bg-[#e50914] hover:bg-[#e50914] cursor-pointer mt-4 mb-2' type="submit" value="Sign Up" />
+                            {/* <Link to="/"> */}
+                                <input className='px-4 py-3 font-bold rounded w-full max-w-xs text-white bg-[#e50914] hover:bg-[#e50914] cursor-pointer mt-4 mb-2' type="submit" value="Sign Up" />
+
+                            {/* </Link> */}
                         </form>
                         {/* <p><small>Don't have an account <Link className='text-primary' to="/sign_up">Create New Account</Link></small></p>
                 <div className="divider">OR</div> */}
-                        <button onClick={()=>googleAuth()} className=" px-4 py-3 font-bold rounded w-full max-w-xs  cursor-pointer mt-4 mb-2 space-x-2 flex items-center justify-center bg-white ">
+                        <button onClick={() => googleAuth()} className=" px-4 py-3 font-bold rounded w-full max-w-xs  cursor-pointer mt-4 mb-2 space-x-2 flex items-center justify-center bg-white ">
                             <img src="https://www.100ms.live/_next/image?url=%2Fassets%2Fhero%2Fgoogle.svg&w=32&q=75" alt="" /> <span className="font-bold">Start with Google</span>
                         </button>
 
                     </div>
                 </div>
-                <div className="bg-black bg-opacity-90 w-[100%] md:mt-20 h-[30%]  py-10 text-[grey] ">
-                    <div className="w-[80%] mx-auto">
+                <div className="bg-black bg-opacity-90 w-[100%] md:mt-20 h-[33%] md:h-auto  py-5 text-[grey] ">
+                    <div className="w-[80%] mx-auto mt-20 md:mt-auto">
                         <Link to={`/contact-us`}><span className="text-lg hover:underline mb-5">Questions? Contact us.</span></Link>
                         <div className="grid grid-cols-3 md:space-y-3 mt-5">
                             <Link to={`/about-us`}><p className="hover:underline">About Us</p></Link>
