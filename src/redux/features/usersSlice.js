@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { signInUser, userList } from "../api/api";
+import { signInUser, userList } from "../../api/api";
 
 export const fetchUsers =createAsyncThunk("/userList/fetchUsers",
 async()=>{

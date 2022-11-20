@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { signInUser } from '../api/api';
+import { signInUser } from '../Components/api/api';
 import userListReducer from '../reducers/usersReducer';
 import signUpReducer from '../reducers/signUpReducer';
 import signInReducer from '../reducers/signInReducer';

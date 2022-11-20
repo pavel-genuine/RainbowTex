@@ -99,17 +99,17 @@ const PublishPost = () => {
     }
 
     return (
-        <div className='bg-[#181818] text-slate-200 pt-[23.5%] md:pt-0   '>
+        <div className='bg-[#181818] text-slate-200 pt-[18.5%] md:pt-0   '>
             <Toaster></Toaster>
             <div className='md:hidden'>
                 <SideBar index={4} color={'[#e50914]'} className=''></SideBar>
             </div>
-            <div className='mx-auto pt-[16.7%] md:pt-0  w-[100%]  grid grid-cols-12 '>
+            <div className='mx-auto pt-[16.7%] md:pt-0  md:w-[100%] w-[90%] mx-auto  md:grid grid-cols-12 '>
                 <div className='md:block hidden'>
                     <SideBar index={4} color={'[#e50914]'} className=''></SideBar>
                 </div>
 
-                <div className='col-span-10  pb-10 md:mx-auto  ml-7 md:pt-32 '>
+                <div className='col-span-10  pb-10 mx-auto  md: md:pt-32 '>
 
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <h2 className="text-2xl font-bold ">Upload Your Movie</h2>
@@ -189,7 +189,7 @@ const PublishPost = () => {
                                     </textarea>
                                 </div>
 
-                                <div className='flex'>
+                                <div className='flex '>
                                     <div className='grow-wrap'>
                                         <textarea
                                         style={{fontWeight:'bold', fontSize:'15px'}}
@@ -200,7 +200,7 @@ const PublishPost = () => {
                                         </textarea>
                                     </div>
 
-                                    <div className='grow-wrap mx-10'>
+                                    <div className='grow-wrap md:mx-10 mx-2'>
                                         <textarea
                                         style={{fontWeight:'bold', fontSize:'15px'}}
                                             placeholder='Duration'

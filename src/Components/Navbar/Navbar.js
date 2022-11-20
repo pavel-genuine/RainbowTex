@@ -42,7 +42,7 @@ const Navbar = () => {
                             <Link to="/profile">
                                 <li>
                                     <img className='w-14 border border-[brown]  rounded-full'
-                                        src={"https://i.stack.imgur.com/frlIf.png"} />
+                                        src={"https://i.ibb.co/vj0Ctmj/user.png"} />
                                 </li>
                             </Link>
                             {/* <Link to="/profile">
@@ -197,7 +197,7 @@ const Navbar = () => {
                     </div>
 
                 
-                    <div className="form-control w-full max-w-xs hidden mt-4  md:block">
+                    <div className="form-control w-full max-w-xs hidden my-auto  md:block">
                                 <input
                                     type="text"
                                     placeholder="Search movies"
@@ -225,7 +225,7 @@ const Navbar = () => {
                                         <div class="w-9 border border-white rounded-full" >
                                             {
 
-                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb8Wygf4kyxHztYd0ep1BAq_ARXG9lxZsIosP60cyBiOSNLPRprFE126kSfSPhqNGcvNU&usqp=CAU" />
+                                                <img src="https://i.ibb.co/vj0Ctmj/user.png" />
                                             }
                                         </div>
                                     </label>
@@ -237,7 +237,7 @@ const Navbar = () => {
                                                     {
 
                                                         <img className='w-14 border border-white  rounded-full'
-                                                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb8Wygf4kyxHztYd0ep1BAq_ARXG9lxZsIosP60cyBiOSNLPRprFE126kSfSPhqNGcvNU&usqp=CAU" />
+                                                            src="https://i.ibb.co/vj0Ctmj/user.png" />
                                                     }
 
                                                 </li>

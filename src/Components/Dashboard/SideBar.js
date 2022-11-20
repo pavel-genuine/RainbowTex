@@ -44,7 +44,7 @@ const SideBar = ({ index, color }) => {
                 </div>
 
                 <Link to='/profile'>
-                    <img title='Go to profile' class="w-10 hidden md:block border border-lime-500 rounded-full" src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb8Wygf4kyxHztYd0ep1BAq_ARXG9lxZsIosP60cyBiOSNLPRprFE126kSfSPhqNGcvNU&usqp=CAU"} alt="" />
+                    <img title='Go to profile' class="w-10 hidden md:block border border-lime-500 rounded-full" src={"https://i.ibb.co/vj0Ctmj/user.png"} alt="" />
                 </Link>
 
             </div>

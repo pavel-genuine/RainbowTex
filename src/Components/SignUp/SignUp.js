@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { createUser, googleAuth } from "../api/api";
-import { fetchSignUp } from "../reducers/signUpReducer";
+import { createUser, googleAuth } from "../../api/api";
+import { fetchSignUp } from "../../redux/features/signUpSlice";
 import './SignUp.css'
 import toast, { Toaster } from 'react-hot-toast';
 

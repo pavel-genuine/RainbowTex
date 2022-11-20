@@ -1,12 +1,12 @@
 
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { googleAuth, signInUser } from "../api/api";
+import { googleAuth, signInUser } from "../../api/api";
 import { Link } from "react-router-dom";
 import './SignIn.css'
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSignIn } from "../reducers/signInReducer";
+import { fetchSignIn } from "../../redux/features/signInSlice";
 
 const SignIn = () => {
 
@@ -50,7 +50,7 @@ const SignIn = () => {
 
     return (
         <div style={{ backgroundImage: `url(${'https://i.ibb.co/WFbg3T0/background1-1.jpg'})` }}
-            className={` min-h-screen md:h-[120vh] h-[150vh] md:w-[100%] w-[150%] `}>
+            className={` min-h-screen bg-cover md:h-[120vh] h-[150vh] md:w-[100%] w-[150%] `}>
             <div className="w-[100%]  bg-black bg-opacity-50  flex flex-col justify-center items-center ">
                 <div className="md:w-[30%] w-[100%] bg-black h-screen md:h-auto bg-opacity-80 shadow-xl md:mt-28 pt-40 md:py-10  ">
                     <div className="card-body w-96 mx-auto my-auto  ">
