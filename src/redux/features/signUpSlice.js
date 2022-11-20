@@ -5,8 +5,8 @@ import { signUpUser } from "../../api/api";
 export const fetchSignUp =createAsyncThunk("/signUp/fetchUsers",
 async(user)=>{
     const res =  await signUpUser(user)  
-    console.log('thunk',res.data);
-    return  res.data
+    console.log('signUp thunk',res.data);
+    return  res?.data
 })
 
 const signUpSlice = createSlice({

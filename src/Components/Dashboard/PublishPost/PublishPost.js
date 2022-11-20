@@ -6,52 +6,28 @@ import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 import SideBar from '../SideBar';
 import VideoUploader from './VideoUploader';
+import { useDispatch, useSelector } from 'react-redux';
+import { createPost } from '../../../api/api';
 
 const PublishPost = () => {
 
     const { register, formState: { errors }, handleSubmit } = useForm();
 
-
-    const [options, setOptions] = useState(true)
-
-    const [text, setText] = useState(null)
-
-    const showOptions = (e) => {
-        if (e.keyCode == 13) {
-            setOptions(true)
-        }
-        else {
-            setOptions(false)
-        }
-
-    }
-
-
-    const [showMore, setShowMore] = useState(false)
-
-    const handleAutoHeight = (e) => {
-        e.target.style.height = 'inherit';
-        e.target.style.height = e.target.scrollHeight + `px`;
-    }
-    const email = 'xyz'
     const user = 'xyz'
     const profile = 'xyz'
 
-    const url = `http://localhost:5000/profiles/${email}`
+    
+    const { isLoading, error, post } = useSelector(state => state?.publishPost)
 
-    const fetcher = async () => {
-        const data = axios.get(url)
-        return (await data).data
-    }
+    const dispatch = useDispatch()
 
-
+ 
     const [coverPhoto, setCoverPhoto] = useState([]);
 
     const onChangeCover = (data) => {
 
         setCoverPhoto(data)
         const image = data[0].file
-
         console.log('cover', coverPhoto);
         console.log('onchange-img', image);
 
@@ -59,43 +35,48 @@ const PublishPost = () => {
 
     const onSubmit = async (data) => {
 
-        const image = coverPhoto[0]?.file
+        console.log(data,'post data');
 
-        console.log('img', image);
+        const submit = dispatch(createPost(data))
+        console.log(submit,'post');
+        return submit; 
+        // const image = coverPhoto[0]?.file
 
-        console.log('dis', data);
+        // console.log('img', image);
+
+        // console.log('dis', data);
 
 
-        const formData = new FormData()
-        formData.append("file", image)
-        formData.append("upload_preset", "ch77jcb5")
-        formData.append("cloud_name", "pavel-genuine")
-        const url = `https://api.cloudinary.com/v1_1/pavel-genuine/image/upload`
-        fetch(url,
-            {
-                method: "POST",
-                body: formData
+        // const formData = new FormData()
+        // formData.append("file", image)
+        // formData.append("upload_preset", "ch77jcb5")
+        // formData.append("cloud_name", "pavel-genuine")
+        // const url = `https://api.cloudinary.com/v1_1/pavel-genuine/image/upload`
+        // fetch(url,
+        //     {
+        //         method: "POST",
+        //         body: formData
 
-            })
-            .then(res => res.json())
-            .then(async result => {
-                console.log('imgbbCover', result)
-                const banner = result.url
-                const sendData = { blogger: user?.displayName, banner, title: data.title, body: data.body, profilePhoto: profile?.profilePhoto }
-                console.log('sendData', sendData);
+        //     })
+        //     .then(res => res.json())
+        //     .then(async result => {
+        //         console.log('imgbbCover', result)
+        //         const banner = result.url
+        //         const sendData = { blogger: user?.displayName, banner, title: data.title, body: data.body, profilePhoto: profile?.profilePhoto }
+        //         console.log('sendData', sendData);
 
-                await fetch(`http://localhost:5000/blogs`,
-                    {
-                        method: 'POST',
-                        headers: {
-                            'content-type': 'application/json',
-                        },
-                        body: JSON.stringify(sendData)
-                    })
+        //         await fetch(`http://localhost:5000/blogs`,
+        //             {
+        //                 method: 'POST',
+        //                 headers: {
+        //                     'content-type': 'application/json',
+        //                 },
+        //                 body: JSON.stringify(sendData)
+        //             })
 
-            })
+        //     })
 
-        toast.success("Congratulation! Post Published")
+        // toast.success("Congratulation! Post Published")
     }
 
     return (
@@ -189,7 +170,7 @@ const PublishPost = () => {
                                     </textarea>
                                 </div>
 
-                                <div className='flex '>
+                                {/* <div className='flex '>
                                     <div className='grow-wrap'>
                                         <textarea
                                         style={{fontWeight:'bold', fontSize:'15px'}}
@@ -219,7 +200,7 @@ const PublishPost = () => {
                                             {...register("rating")}>
                                         </textarea>
                                     </div>
-                                </div>
+                                </div> */}
                                
                                 <div  className='grow-wrap'>
                                     <textarea 

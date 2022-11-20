@@ -30,21 +30,14 @@ const SignIn = () => {
     }
 
 
-    const { isLoading, error, signIn } = useSelector(state => state?.signIn)
-
+    const res = useSelector(state => state?.signIn)
+    console.log(res, 'signin');
     const dispatch = useDispatch()
 
     const onSubmit = async (data) => {
-        const email = data?.email
-        const password = data?.password
-
-        // const { data:res } = await axios.post(`https://jucundu-server.onrender.com/api/auth/login`, {email,password});
-        // console.log('res', res);
-
-        const submit = dispatch(fetchSignIn({email,password}))
-        console.log(submit,'submit');
+        const submit = dispatch(fetchSignIn(data))
+        console.log(submit, 'submit');
         return submit;
-       
     }
 
 
@@ -117,7 +110,7 @@ const SignIn = () => {
                         </form>
                         {/* <p><small>Don't have an account <Link className='text-primary' to="/sign_up">Create New Account</Link></small></p>
                     <div className="divider">OR</div> */}
-                        <button onClick={()=>googleAuth()} className=" px-4 py-3 font-bold rounded w-full max-w-xs  cursor-pointer mt-4 space-x-2 flex items-center justify-center bg-white ">
+                        <button onClick={() => googleAuth()} className=" px-4 py-3 font-bold rounded w-full max-w-xs  cursor-pointer mt-4 space-x-2 flex items-center justify-center bg-white ">
                             <img src="https://www.100ms.live/_next/image?url=%2Fassets%2Fhero%2Fgoogle.svg&w=32&q=75" alt="" /> <span className="font-bold">Start with Google</span>
                         </button>
 

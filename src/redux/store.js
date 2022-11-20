@@ -1,13 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { signInUser } from '../Components/api/api';
-import userListReducer from '../reducers/usersReducer';
-import signUpReducer from '../reducers/signUpReducer';
-import signInReducer from '../reducers/signInReducer';
+import userListReducer from '../redux/features/usersSlice';
+import signUpReducer from '../redux/features/signUpSlice';
+import signInReducer from '../redux/features/signInSlice';
+import publishPostReducer from '../redux/features/postSlice';
 
 export const store = configureStore({
   reducer: {
     userList:userListReducer,
     signUp:signUpReducer,
-    signIn:signInUser,
+    signIn:signInReducer,
+    publishPost:publishPostReducer,
   },
 });

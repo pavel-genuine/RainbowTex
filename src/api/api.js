@@ -8,7 +8,6 @@ export const googleAuth = (user) => axios.get(`${base_url}/auth/google`);
 export const createPost = (post) => axios.post(`${base_url}/post`,post)
 export const uploadVideo = (video) =>axios.post(`${base_url}/post/upload_video`,video)
 export const getAllPosts =()=>axios.get(`${base_url}/post`)
-export const getAllPostsAdmin =()=>axios.get(`${base_url}/post/admin`)
 export const getSinglePost =(id)=>axios.het(`${base_url}/single/post/${id}`)
 export const deletePost =(id)=>axios.delete(`${base_url}/post/admin/${id}?removeMedia=true`)
 export const addPostToCategory=(data)=> axios.patch(`${base_url}/post/admin/add_post_to_category`,data)

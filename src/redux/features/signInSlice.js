@@ -5,9 +5,9 @@ import { signInUser} from "../../api/api";
 export const fetchSignIn =createAsyncThunk("/signIn/fetchUsers",
 async(user)=>{
     const res =  await signInUser(user)  
-    console.log('thunk',res?.data);
+    console.log('signIn thunk',res?.data);
     localStorage.setItem('loginToken',res?.data?.loginToken)
-    return  res.data
+    return  res?.data
 })
 
 const signInSlice = createSlice({
