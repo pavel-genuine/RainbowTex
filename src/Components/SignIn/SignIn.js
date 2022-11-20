@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import './SignIn.css'
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSignIn } from "../../redux/features/signInSlice";
+import { fetchSignIn } from "../../redux/features/authSection/signInSlice";
 
 const SignIn = () => {
 

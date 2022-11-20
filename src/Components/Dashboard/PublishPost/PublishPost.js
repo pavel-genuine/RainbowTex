@@ -7,7 +7,8 @@ import axios from 'axios';
 import SideBar from '../SideBar';
 import VideoUploader from './VideoUploader';
 import { useDispatch, useSelector } from 'react-redux';
-import { createPost } from '../../../api/api';
+import { publishPost } from '../../../redux/features/postSection/postSlice';
+
 
 const PublishPost = () => {
 
@@ -37,7 +38,7 @@ const PublishPost = () => {
 
         console.log(data,'post data');
 
-        const submit = dispatch(createPost(data))
+        const submit = dispatch(publishPost(data))
         console.log(submit,'post');
         return submit; 
         // const image = coverPhoto[0]?.file
@@ -170,7 +171,7 @@ const PublishPost = () => {
                                     </textarea>
                                 </div>
 
-                                {/* <div className='flex '>
+                                <div className='flex '>
                                     <div className='grow-wrap'>
                                         <textarea
                                         style={{fontWeight:'bold', fontSize:'15px'}}
@@ -200,7 +201,7 @@ const PublishPost = () => {
                                             {...register("rating")}>
                                         </textarea>
                                     </div>
-                                </div> */}
+                                </div>
                                
                                 <div  className='grow-wrap'>
                                     <textarea 

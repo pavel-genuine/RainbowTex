@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import userListReducer from '../redux/features/usersSlice';
-import signUpReducer from '../redux/features/signUpSlice';
-import signInReducer from '../redux/features/signInSlice';
-import publishPostReducer from '../redux/features/postSlice';
+import userListReducer from './features/usersSlice';
+import signUpReducer from './features/authSection/signUpSlice';
+import signInReducer from './features/authSection/signInSlice';
+import publishPostReducer from './features/postSection/postSlice';
 
 export const store = configureStore({
   reducer: {

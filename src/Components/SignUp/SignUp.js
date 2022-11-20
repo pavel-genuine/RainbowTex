@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { createUser, googleAuth } from "../../api/api";
-import { fetchSignUp } from "../../redux/features/signUpSlice";
+import { fetchSignUp } from "../../redux/features/authSection/signUpSlice";
 import './SignUp.css'
 import toast, { Toaster } from 'react-hot-toast';
 

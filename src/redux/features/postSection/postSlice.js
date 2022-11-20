@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createPost, deletePost, getAllPosts, getSinglePost, uploadVideo } from "../../api/api";
+import { createPost, deletePost, getAllPosts, getSinglePost} from "../../../api/api";
 
 //
 export const publishPost =createAsyncThunk("/post/publishPost",
@@ -30,13 +30,7 @@ async(id)=>{
     return res?.data;
 })
 
-//
-export const videoUpload =createAsyncThunk("/post/videoUpload",
-async(video)=>{
-    const res = await uploadVideo(video);
-    console.log('deletePost thunk',res?.data);
-    return res?.data;
-})
+
 
 const postSlice = createSlice({
     name:'post',

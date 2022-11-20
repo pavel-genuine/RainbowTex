@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addThumbnail, createPost, deletePost, getAllPosts, getSinglePost, removeThumbnail, uploadVideo } from "../../api/api";
+import { addThumbnail, removeThumbnail} from "../../../api/api";
 
 //
 export const thumbnailAdd =createAsyncThunk("/thumbnail/thumbnailAdd",

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addThumbnail, addVideoCoverPhoto, createPost, deletePost, getAllPosts, getSinglePost, removeThumbnail, removeVideoCoverPhoto, uploadVideo } from "../../api/api";
+import {  addVideoCoverPhoto, removeVideoCoverPhoto} from "../../../api/api";
 
 //add
 export const videoCoverAdd =createAsyncThunk("/videoCover/videoCoverAdd",
