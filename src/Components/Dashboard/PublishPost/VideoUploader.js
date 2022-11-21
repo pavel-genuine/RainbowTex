@@ -1,53 +1,65 @@
 import React, { useRef, useState } from 'react'
 import "video-react/dist/video-react.css";
 import axios, { CancelToken, isCancel } from "axios";
-// import { BigPlayButton, ControlBar, ForwardControl, Player, ReplayControl } from "video-react"
+import { BigPlayButton, ControlBar, ForwardControl, Player, ReplayControl } from "video-react"
 import { useDispatch, useSelector } from 'react-redux';
 import { videoUpload } from '../../../redux/features/postSection/postVideoSlice'
 
 const VideoUploader = (props) => {
     const inputRef = useRef();
     const [source, setSource] = useState();
+    const [fData, setFData] = useState();
     const [uploadPercentage, setUploadPercentage] = useState(0);
     const cancelFileUpload = useRef(null);
     const { isLoading, error, video } = useSelector(state => state?.postVideo)
+    
     const dispatch = useDispatch
 
     const handleFileChange = (event) => {
+
         const file = event.target.files[0];
         console.log(file, 'file');
 
         const formData = new FormData()
         formData.append("video", file)
 
+        console.log(formData.get("video"),'fdata')
+
+        setFData(formData)
+
         const url = URL.createObjectURL(file);
         setSource(url);
 
-        dispatch(videoUpload(formData))
-        props.handleVideoData(video)
+        console.log(url,'url');
 
-        const options = {
-            onUploadProgress: progressEvent => {
-                const { loaded, total } = progressEvent;
+        // const options = {
+        //     onUploadProgress: progressEvent => {
+        //         const { loaded, total } = progressEvent;
 
-                let percent = Math.floor((loaded * 100) / total);
+        //         let percent = Math.floor((loaded * 100) / total);
 
-                if (percent < 100) {
-                    setUploadPercentage(percent);
-                }
-            },
-            cancelToken: new CancelToken(
-                cancel => (cancelFileUpload.current = cancel)
-            )
-        };
+        //         if (percent < 100) {
+        //             setUploadPercentage(percent);
+        //         }
+        //     },
+        //     cancelToken: new CancelToken(
+        //         cancel => (cancelFileUpload.current = cancel)
+        //     )
+        // };
 
-        axios
-            .post(
-                video?.url,
-                formData,
-                options
-            )
+        // axios
+        //     .post(
+        //         video?.url,
+        //         formData,
+        //         options
+        //     )
     };
+
+    dispatch(videoUpload(fData))
+
+    console.log('video',video, error,'err',isLoading,'loading');
+
+    props.handleVideoData(video)
 
     const cancelUpload = () => {
         if (cancelFileUpload.current)
@@ -89,7 +101,7 @@ const VideoUploader = (props) => {
                     className="VideoInput_input hidden"
                     type="file"
                     onChange={handleFileChange}
-                    accept=".mov,.mp4"
+                    // accept=".mov"
                 />
 
                 <div class="mt-1 flex justify-center mb-8 items-center px-6 pt-5 pb-6 border-2 md:w-[27vw] w-[40vw] h-[150px] md:h-[270px] border-dashed rounded-md">
@@ -106,7 +118,7 @@ const VideoUploader = (props) => {
                 </div>
                 {source && (
                     <div className='absolute top-[-1%]'>
-                        {/* <Player className='rounded-lg'
+                        <Player className='rounded-lg'
                             playsInline
                             src={source}
                             fluid={false}
@@ -118,7 +130,7 @@ const VideoUploader = (props) => {
                                 <ReplayControl seconds={10} order={2.2} />
                                 <ForwardControl seconds={10} order={3.2} />
                             </ControlBar>
-                        </Player> */}
+                        </Player>
                     </div>
                 )}
             </div>

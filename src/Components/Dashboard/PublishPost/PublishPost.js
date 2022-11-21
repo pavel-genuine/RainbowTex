@@ -56,7 +56,6 @@ const PublishPost = () => {
 
     const onSubmit = async (data) => {
 
-        console.log(data, 'post data');
 
         const formData = new FormData();
         formData.append('title', data?.title);
@@ -99,9 +98,17 @@ const PublishPost = () => {
                         <h2 className="text-2xl font-bold ">Upload Your Movie</h2>
                         <div className="flex justify-between my-10 ">
                             <h1 className="text-[brown] font-semibold">{email}</h1>
+                           {/* { */}
+                            {/* videoUrl ?  */}
                             <button type="submit" className=" btn hover:bg-[#e50914] bg-[brown] btn-xs ">
-                                Publish
-                            </button>
+                            Publish
+                        </button>
+                        {/* :
+                         <button disabled type="submit" className="disabled:btn-error  disabled:btn-xs ">
+                         Publish
+                     </button> */}
+
+                           {/* } */}
                         </div>
                         <div className=''>
 
