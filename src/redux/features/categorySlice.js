@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createPost, deletePost, getAllPosts, getSinglePost} from "../../../api/api";
-import { createCategory, getAllCategories, updateCategory} from "../../api/api";
+import { createCategory, deleteCategory, getAllCategories, updateCategory} from "../../api/api";
 
 //
 export const categoryCreate =createAsyncThunk("/category/categoryCreate",
@@ -26,12 +25,10 @@ async(data)=>{
 //
 export const categoryDelete =createAsyncThunk("/category/categoryDelete",
 async(data)=>{
-    const res = await deletePost(data);
+    const res = await deleteCategory(data);
     console.log('deletePost thunk',res?.data);
     return res?.data;
 })
-
-
 
 const categorySlice = createSlice({
     name:'category',
