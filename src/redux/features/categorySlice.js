@@ -69,7 +69,8 @@ const categorySlice = createSlice({
             state.error=action.error.message
         })
 
-        // delete
+       
+          // update
         builder.addCase(categoryUpdate.pending,(state)=>{
             state.isLoading= true
         });
@@ -83,16 +84,17 @@ const categorySlice = createSlice({
             state.category= []
             state.error=action.error.message
         })
-        // update
-        builder.addCase(categoryUpdate.pending,(state)=>{
+      
+         // delete
+        builder.addCase(categoryDelete.pending,(state)=>{
             state.isLoading= true
         });
-        builder.addCase(categoryUpdate.fulfilled,(state, action)=>{
+        builder.addCase(categoryDelete.fulfilled,(state, action)=>{
             state.isLoading= false
             state.category=action.payload
             state.error=null
         });
-        builder.addCase(categoryUpdate.rejected,(state,action)=>{
+        builder.addCase(categoryDelete.rejected,(state,action)=>{
             state.isLoading= false
             state.category= []
             state.error=action.error.message

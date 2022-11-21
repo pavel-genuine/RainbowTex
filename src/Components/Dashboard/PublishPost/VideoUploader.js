@@ -1,24 +1,86 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import "video-react/dist/video-react.css";
+import axios, { CancelToken, isCancel } from "axios";
+// import { BigPlayButton, ControlBar, ForwardControl, Player, ReplayControl } from "video-react"
+import { useDispatch, useSelector } from 'react-redux';
+import { videoUpload } from '../../../redux/features/postSection/postVideoSlice'
 
-import { BigPlayButton, ControlBar, ForwardControl, Player, ReplayControl } from "video-react"
 const VideoUploader = (props) => {
-
-    const inputRef = React.useRef();
-
-    const [source, setSource] = React.useState();
+    const inputRef = useRef();
+    const [source, setSource] = useState();
+    const [uploadPercentage, setUploadPercentage] = useState(0);
+    const cancelFileUpload = useRef(null);
+    const { isLoading, error, video } = useSelector(state => state?.postVideo)
+    const dispatch = useDispatch
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
+        console.log(file, 'file');
+
+        const formData = new FormData()
+        formData.append("video", file)
+
         const url = URL.createObjectURL(file);
         setSource(url);
+
+        dispatch(videoUpload(formData))
+        props.handleVideoData(video)
+
+        const options = {
+            onUploadProgress: progressEvent => {
+                const { loaded, total } = progressEvent;
+
+                let percent = Math.floor((loaded * 100) / total);
+
+                if (percent < 100) {
+                    setUploadPercentage(percent);
+                }
+            },
+            cancelToken: new CancelToken(
+                cancel => (cancelFileUpload.current = cancel)
+            )
+        };
+
+        axios
+            .post(
+                video?.url,
+                formData,
+                options
+            )
+    };
+
+    const cancelUpload = () => {
+        if (cancelFileUpload.current)
+            cancelFileUpload.current("User has canceled the file upload.");
     };
 
     const handleChoose = (event) => {
         //   inputRef.current.click();
     };
+
     return (
         <div>
+            {/* <div className='flex justify-end mb-5'>
+                <progress class="progress progress-error " value="100" max="100"></progress>
+            </div> */}
+            {uploadPercentage > 0 && (
+                <div className="row mt-3">
+                    <div className="col pt-1">
+                        <progress
+                            value={uploadPercentage}
+                        // label={`${uploadPercentage}%`}
+                        />
+                    </div>
+                    <div className="col-auto">
+                        <span
+                            className="text-primary cursor-pointer"
+                            onClick={() => cancelUpload()}
+                        >
+                            Cancel
+                        </span>
+                    </div>
+                </div>
+            )}
 
             <div className="VideoInput relative">
                 <input
@@ -29,6 +91,7 @@ const VideoUploader = (props) => {
                     onChange={handleFileChange}
                     accept=".mov,.mp4"
                 />
+
                 <div class="mt-1 flex justify-center mb-8 items-center px-6 pt-5 pb-6 border-2 md:w-[27vw] w-[40vw] h-[150px] md:h-[270px] border-dashed rounded-md">
                     <div class="space-y-1 text-center">
                         <div class="flex text-sm text-gray-600">
@@ -43,7 +106,7 @@ const VideoUploader = (props) => {
                 </div>
                 {source && (
                     <div className='absolute top-[-1%]'>
-                        <Player className='rounded-lg'
+                        {/* <Player className='rounded-lg'
                             playsInline
                             src={source}
                             fluid={false}
@@ -55,7 +118,7 @@ const VideoUploader = (props) => {
                                 <ReplayControl seconds={10} order={2.2} />
                                 <ForwardControl seconds={10} order={3.2} />
                             </ControlBar>
-                        </Player>
+                        </Player> */}
                     </div>
                 )}
             </div>

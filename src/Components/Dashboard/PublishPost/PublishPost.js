@@ -8,22 +8,32 @@ import SideBar from '../SideBar';
 import VideoUploader from './VideoUploader';
 import { useDispatch, useSelector } from 'react-redux';
 import { publishPost } from '../../../redux/features/postSection/postSlice';
+import { videoCoverAdd } from '../../../redux/features/postSection/videoCoverSlice';
 
 
 const PublishPost = () => {
 
     const { register, formState: { errors }, handleSubmit } = useForm();
 
-    const user = 'xyz'
-    const profile = 'xyz'
+    const [videoUrl, setVideoUrl] = useState('')
+    const [videoKey, setVideoKey] = useState('')
+    const [videocover, setVideocover] = useState('')
+    const [thumbnail, setThumbnail] = useState('')
 
-    
+    const [coverPhoto, setCoverPhoto] = useState([]);
+
+    // const { thumbnail } = useSelector(state => state?.postThumbnail)
+    // const { videoCover } = useSelector(state => state?.postVideoCover)
+
     const { isLoading, error, post } = useSelector(state => state?.publishPost)
 
     const dispatch = useDispatch()
+    // dispatch(thumbnailAdd())
 
- 
-    const [coverPhoto, setCoverPhoto] = useState([]);
+    const handleVideoData = (video) => {
+        setVideoUrl(video.url)
+        setVideoKey(video.key)
+    }
 
     const onChangeCover = (data) => {
 
@@ -31,54 +41,46 @@ const PublishPost = () => {
         const image = data[0].file
         console.log('cover', coverPhoto);
         console.log('onchange-img', image);
+        setVideocover(image)
+
+    }
+    const onChangeThumbnail = (data) => {
+
+        // setCoverPhoto(data)
+        const image = data[0].file
+        // console.log('cover', coverPhoto);
+        console.log('onchange-img', image);
+        setThumbnail(image)
 
     }
 
     const onSubmit = async (data) => {
 
-        console.log(data,'post data');
+        console.log(data, 'post data');
 
-        const submit = dispatch(publishPost(data))
-        console.log(submit,'post');
-        return submit; 
-        // const image = coverPhoto[0]?.file
+        const formData = new FormData();
+        formData.append('title', data?.title);
+        formData.append('description', data?.description);
+        formData.append('category', 'id');
+        formData.append('tags', []);
+        formData.append('premium', data?.false);
+        formData.append('videoCover', videocover);
+        formData.append('thumbnail', thumbnail);
+        formData.append('imdbRating', data?.rating);
+        formData.append('trailerUrl', '');
+        formData.append('videos', [{key:videoKey,url:videoUrl}]);
+        formData.append('genre', data?.genre);
+        formData.append('isActive',data?.active);
 
-        // console.log('img', image);
+        const submit = dispatch(publishPost(formData))
 
-        // console.log('dis', data);
+        console.log(submit, 'post');
+        return submit;
 
 
-        // const formData = new FormData()
-        // formData.append("file", image)
-        // formData.append("upload_preset", "ch77jcb5")
-        // formData.append("cloud_name", "pavel-genuine")
-        // const url = `https://api.cloudinary.com/v1_1/pavel-genuine/image/upload`
-        // fetch(url,
-        //     {
-        //         method: "POST",
-        //         body: formData
-
-        //     })
-        //     .then(res => res.json())
-        //     .then(async result => {
-        //         console.log('imgbbCover', result)
-        //         const banner = result.url
-        //         const sendData = { blogger: user?.displayName, banner, title: data.title, body: data.body, profilePhoto: profile?.profilePhoto }
-        //         console.log('sendData', sendData);
-
-        //         await fetch(`http://localhost:5000/blogs`,
-        //             {
-        //                 method: 'POST',
-        //                 headers: {
-        //                     'content-type': 'application/json',
-        //                 },
-        //                 body: JSON.stringify(sendData)
-        //             })
-
-        //     })
-
-        // toast.success("Congratulation! Post Published")
+        toast.success("Congratulation! Post Published")
     }
+    const email = ''
 
     return (
         <div className='bg-[#181818] text-slate-200 pt-[18.5%] md:pt-0   '>
@@ -96,7 +98,7 @@ const PublishPost = () => {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <h2 className="text-2xl font-bold ">Upload Your Movie</h2>
                         <div className="flex justify-between my-10 ">
-                            <h1 className="text-[brown] font-semibold">{user?.email}</h1>
+                            <h1 className="text-[brown] font-semibold">{email}</h1>
                             <button type="submit" className=" btn hover:bg-[#e50914] bg-[brown] btn-xs ">
                                 Publish
                             </button>
@@ -105,7 +107,7 @@ const PublishPost = () => {
 
 
 
-                            <div className='flex'>
+                            <div className='flex justify-between'>
                                 <ImageUploading
                                     value={coverPhoto}
                                     onChange={onChangeCover}
@@ -155,15 +157,15 @@ const PublishPost = () => {
                                     )}
                                 </ImageUploading>
 
-                                <div className='ml-5 rounded-lg'>
-                                    <VideoUploader width={420} height={280} />
+                                <div className='rounded-lg'>
+                                    <VideoUploader width={420} height={280} handleVideoData={handleVideoData} />
                                 </div>
                             </div>
 
                             <div>
                                 <div className='grow-wrap'>
                                     <textarea
-                                    style={{fontWeight:'bolder', fontSize:'20px'}}
+                                        style={{ fontWeight: 'bolder', fontSize: '20px' }}
                                         placeholder='Movie Title'
                                         className='shadow-sm bg-[#181818] border-b-2 text-2xl font-blod focus:outline-none mt-8  mt-1 block w-full sm:text-md p-2'
                                         name="" id="" cols="30" rows="2"
@@ -174,7 +176,7 @@ const PublishPost = () => {
                                 <div className='flex '>
                                     <div className='grow-wrap'>
                                         <textarea
-                                        style={{fontWeight:'bold', fontSize:'15px'}}
+                                            style={{ fontWeight: 'bold', fontSize: '15px' }}
                                             placeholder='Release Date'
                                             className='shadow-sm bg-[#181818] border-b-2 md:text-lg font-blod focus:outline-none mt-20 px-2 mt-1 block w-full sm:text-md p-2'
                                             name="" id="" cols="30" rows="2"
@@ -184,17 +186,17 @@ const PublishPost = () => {
 
                                     <div className='grow-wrap md:mx-10 mx-2'>
                                         <textarea
-                                        style={{fontWeight:'bold', fontSize:'15px'}}
+                                            style={{ fontWeight: 'bold', fontSize: '15px' }}
                                             placeholder='Duration'
                                             className='shadow-sm bg-[#181818]  border-b-2 md:text-lg font-blod focus:outline-none mt-20 px-2 mt-1 block w-full sm:text-md p-2'
-                                            name="" id="" cols="30" 
+                                            name="" id="" cols="30"
                                             {...register("duration")}>
                                         </textarea>
                                     </div>
 
                                     <div className='grow-wrap'>
                                         <textarea
-                                        style={{fontWeight:'bold', fontSize:'15px'}}
+                                            style={{ fontWeight: 'bold', fontSize: '15px' }}
                                             placeholder='IMDb Rating'
                                             className='shadow-sm bg-[#181818]  border-b-2 md:text-lg font-blod focus:outline-none mt-20 px-2 block w-full sm:text-md p-2'
                                             name="" id="" cols="30"
@@ -202,10 +204,10 @@ const PublishPost = () => {
                                         </textarea>
                                     </div>
                                 </div>
-                               
-                                <div  className='grow-wrap'>
-                                    <textarea 
-                                    style={{fontWeight:'bold', fontSize:'15px'}}
+
+                                <div className='grow-wrap'>
+                                    <textarea
+                                        style={{ fontWeight: 'bold', fontSize: '15px' }}
                                         placeholder="Description..."
                                         id="blog" name="blog" rows="4"
                                         className="bg-[#181818] shadow-sm border-b-2 focus:outline-none mt-20 pt-12 text-lg mt-1 block w-full  px-2 "
@@ -217,10 +219,8 @@ const PublishPost = () => {
                             </div>
                         </div>
                     </form>
-
                 </div>
             </div>
-
         </div>
 
     );

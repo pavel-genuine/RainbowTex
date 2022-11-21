@@ -1,6 +1,8 @@
 import axios from 'axios';
 const base_url = 'https://jucundu-server.onrender.com/api';
 
+axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('loginToken')}`;
+
 //auth section
 export const signUpUser = (user) => axios.post(`${base_url}/auth/register`, user);
 export const signInUser = (user) => axios.post(`${base_url}/auth/login`, user);

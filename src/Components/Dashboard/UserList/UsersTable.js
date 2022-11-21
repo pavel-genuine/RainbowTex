@@ -10,7 +10,6 @@ const UsersTable = () => {
 
     useEffect(() => {
         dispatch(fetchUsers())
-
         console.log('userlist', userList);
         console.log('error', error);
     }, [])

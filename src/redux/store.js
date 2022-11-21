@@ -22,7 +22,5 @@ export const store = configureStore({
     postVideoCover:videoCoverReducer,
     postThumbnail:ThumbnailReducer,
     postText:PostTextReducer
-
-
   },
 });
