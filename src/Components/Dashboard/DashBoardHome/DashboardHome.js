@@ -2,8 +2,15 @@ import React, { useEffect } from "react";
 import SideBar from "../SideBar";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { movies } from "../../allMovies/allMovies";
+import useUserList from "../../Shared/useUserList";
+import usePosts from "../../Shared/usePosts";
 
 const DashboardHome = () => {
+
+    const {userList} =useUserList()
+    const {isLoading, error, posts }=usePosts()
+
+    console.log(userList,'useUsers');
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -27,8 +34,8 @@ const DashboardHome = () => {
                         <img className="w-40" src={"https://i.ibb.co/vj0Ctmj/user.png"} alt="" />
                         <h2 className="font-bold text-4xl">Admin</h2>
                         <div className='md:flex items-center'>
-                            <p className='font-semibold my-5 bg-slate-600 px-3 py-2 md:mr-20 text-lg '>Total Movies Uploaded : {`movies.length`} </p>
-                            <p className='font-semibold my-5 bg-slate-600 px-3 py-2 text-lg '>Total Users : {`users.length`} </p>
+                            <p className='font-semibold my-5 bg-slate-600 px-3 py-2 md:mr-20 text-lg '>Total Movies Uploaded : {posts?.length} </p>
+                            <p className='font-semibold my-5 bg-slate-600 px-3 py-2 text-lg '>Total Users : {userList?.length} </p>
                         </div>
                         
                 <div>

@@ -9,21 +9,21 @@ async(post)=>{
     return res?.data;
 })
 //
-export const allPosts =createAsyncThunk("/post/getAllPosts",
-async()=>{
-    const res = await getAllPosts();
-    console.log('getAllPosts thunk',res?.data);
-    return res?.data;
-})
+// export const allPosts =createAsyncThunk("/post/getAllPosts",
+// async()=>{
+//     const res = await getAllPosts();
+//     console.log('getAllPosts thunk',res?.data);
+//     return res?.data;
+// })
 //
-export const singlePost =createAsyncThunk("/post/singlePost",
+export const singlePostGet =createAsyncThunk("/post/singlePost",
 async(id)=>{
     const res = await getSinglePost(id);
     console.log('getSinglePost thunk',res?.data);
     return res?.data;
 })
 //
-export const postDelete =createAsyncThunk("/post/singlePost",
+export const postDelete =createAsyncThunk("/post/postDelete",
 async(id)=>{
     const res = await deletePost(id);
     console.log('deletePost thunk',res?.data);
@@ -56,16 +56,31 @@ const postSlice = createSlice({
             state.error=action.error.message
         })
 
-        //get
-        builder.addCase(allPosts.pending,(state)=>{
+        
+        // builder.addCase(allPosts.pending,(state)=>{
+        //     state.isLoading= true
+        // });
+        // builder.addCase(allPosts.fulfilled,(state, action)=>{
+        //     state.isLoading= false
+        //     state.post=action.payload
+        //     state.error=null
+        // });
+        // builder.addCase(allPosts.rejected,(state,action)=>{
+        //     state.isLoading= false
+        //     state.post= []
+        //     state.error=action.error.message
+        // })
+        
+        
+        builder.addCase(singlePostGet.pending,(state)=>{
             state.isLoading= true
         });
-        builder.addCase(allPosts.fulfilled,(state, action)=>{
+        builder.addCase(singlePostGet.fulfilled,(state, action)=>{
             state.isLoading= false
             state.post=action.payload
             state.error=null
         });
-        builder.addCase(allPosts.rejected,(state,action)=>{
+        builder.addCase(singlePostGet.rejected,(state,action)=>{
             state.isLoading= false
             state.post= []
             state.error=action.error.message
@@ -85,25 +100,6 @@ const postSlice = createSlice({
             state.post= []
             state.error=action.error.message
         })
-
-        //patch
-        // builder.addCase(videoUpload.pending,(state)=>{
-        //     state.isLoading= true
-        // });
-        // builder.addCase(videoUpload.fulfilled,(state, action)=>{
-        //     state.isLoading= false
-        //     state.post=action.payload
-        //     state.error=null
-        // });
-        // builder.addCase(videoUpload.rejected,(state,action)=>{
-        //     state.isLoading= false
-        //     state.post= []
-        //     state.error=action.error.message
-        // })
-
-        
-        
-
     }
 })
 

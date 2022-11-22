@@ -1,100 +1,100 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createCategory, deleteCategory, getAllCategories, updateCategory} from "../../api/api";
+import { addComment, approveComment, editComment, removeComment } from "../../api/api";
 
 //
-export const categoryCreate =createAsyncThunk("/category/categoryCreate",
+export const commentAdd =createAsyncThunk("/comment/commentAdd",
 async(data)=>{
-    const res = await createCategory(data);
+    const res = await addComment(data);
     console.log('categoryCreate thunk',res?.data);
     return res?.data;
 })
 //
-export const allCategoriesGet =createAsyncThunk("/category/allCategories",
-async()=>{
-    const res = await getAllCategories();
+export const commentApprove =createAsyncThunk("/comment/commentApprove",
+async(data)=>{
+    const res = await approveComment(data);
     console.log('allCategories thunk',res?.data);
     return res?.data;
 })
 //
-export const categoryUpdate =createAsyncThunk("/category/categoryUpdate",
+export const commentRemove =createAsyncThunk("/comment/commentRemove",
 async(data)=>{
-    const res = await updateCategory(data);
+    const res = await removeComment(data);
     console.log('categoryUpdate thunk',res?.data);
     return res?.data;
 })
 //
-export const categoryDelete =createAsyncThunk("/category/categoryDelete",
+export const commentEdit =createAsyncThunk("/comment/commentEdit",
 async(data)=>{
-    const res = await deleteCategory(data);
+    const res = await editComment(data);
     console.log('deletePost thunk',res?.data);
     return res?.data;
 })
 
-const categorySlice = createSlice({
+const commentSlice = createSlice({
     name:'category',
     initialState:{
         isLoading:false,
-        category:[],
+        comment:[],
         error:null
     },
     extraReducers:(builder) =>{
 
-        //post
-        builder.addCase(categoryCreate.pending,(state)=>{
+       
+        builder.addCase(commentAdd.pending,(state)=>{
             state.isLoading= true
         });
-        builder.addCase(categoryCreate.fulfilled,(state, action)=>{
+        builder.addCase(commentAdd.fulfilled,(state, action)=>{
             state.isLoading= false
             state.category=action.payload
             state.error=null
         });
-        builder.addCase(categoryCreate.rejected,(state,action)=>{
+        builder.addCase(commentAdd.rejected,(state,action)=>{
             state.isLoading= false
             state.category= []
             state.error=action.error.message
         })
 
-        //get
-        builder.addCase(allCategoriesGet.pending,(state)=>{
+        
+        builder.addCase(commentApprove.pending,(state)=>{
             state.isLoading= true
         });
-        builder.addCase(allCategoriesGet.fulfilled,(state, action)=>{
+        builder.addCase(commentApprove.fulfilled,(state, action)=>{
             state.isLoading= false
             state.category=action.payload
             state.error=null
         });
-        builder.addCase(allCategoriesGet.rejected,(state,action)=>{
+        builder.addCase(commentApprove.rejected,(state,action)=>{
             state.isLoading= false
             state.category= []
             state.error=action.error.message
         })
 
        
-          // update
-        builder.addCase(categoryUpdate.pending,(state)=>{
+       
+        builder.addCase(commentRemove.pending,(state)=>{
             state.isLoading= true
         });
-        builder.addCase(categoryUpdate.fulfilled,(state, action)=>{
+        builder.addCase(commentRemove.fulfilled,(state, action)=>{
             state.isLoading= false
             state.category=action.payload
             state.error=null
         });
-        builder.addCase(categoryUpdate.rejected,(state,action)=>{
+        builder.addCase(commentRemove.rejected,(state,action)=>{
             state.isLoading= false
             state.category= []
             state.error=action.error.message
         })
       
-         // delete
-        builder.addCase(categoryDelete.pending,(state)=>{
+      
+        builder.addCase(commentEdit.pending,(state)=>{
             state.isLoading= true
         });
-        builder.addCase(categoryDelete.fulfilled,(state, action)=>{
+        builder.addCase(commentEdit.fulfilled,(state, action)=>{
             state.isLoading= false
             state.category=action.payload
             state.error=null
         });
-        builder.addCase(categoryDelete.rejected,(state,action)=>{
+        builder.addCase(commentEdit.rejected,(state,action)=>{
             state.isLoading= false
             state.category= []
             state.error=action.error.message
@@ -103,4 +103,4 @@ const categorySlice = createSlice({
     }
 })
 
-export default categorySlice.reducer
+export default commentSlice.reducer

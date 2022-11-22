@@ -10,55 +10,60 @@ import { movies } from '../allMovies/allMovies';
 import { useForm } from 'react-hook-form';
 import Categories from '../Categories/Categories';
 import './movieDetail.css'
+import { singlePostGet } from '../../redux/features/postSection/postSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { commentAdd } from '../../redux/features/commentSlice';
 
 const MovieDetails = () => {
 
     const { register, formState: { errors }, handleSubmit } = useForm();
     const { id } = useParams()
+    const { isLoading, error, post:movie } = useSelector(state => state?.singlePost)
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(singlePostGet(id))
+        console.log('posts', movie);
+        console.log('error', error);
+
+    }, [])
+
+    console.log(movie,'movie');
 
     const [comment, setComment] = useState(false)
-    const [love, setLove] = useState(false)
-    let [count, setCount] = useState(false)
+    // const [love, setLove] = useState(false)
+    // let [count, setCount] = useState(false)
 
     useEffect(() => {
         window.scrollTo(0, 0)
     }, [])
 
 
-    const handleLove = () => {
-        setLove(true)
-        setCount(() => count++)
-        console.log(count, 'count');
-    }
+    // const handleLove = () => {
+    //     setLove(true)
+    //     setCount(() => count++)
+    //     console.log(count, 'count');
+    // }
 
     console.log(id, 'id');
-    const fetcher = async () => {
-        const data = axios.get('movie.json')
-        // console.log(data, 'data');
-        return (await data).data
-    }
-
-    console.log(movies, 'movie');
-
-    const movie = movies?.find(item => id == item?.id);
-    console.log(movie, 'movi');
-
+   
     const onSubmit = async (data) => {
         setComment(data?.comment)
+        dispatch(commentAdd(data))
     }
 
-    if (!movies.length) {
-        return <p>loading...</p>
+    if (isLoading) {
+        <p>loading...</p>
     }
 
-
-    return (
+   return (
         <div className='mx-auto bg-[#181818] text-slate-200'>
             <div className=" h-[40vh]  w-[98vw] mx-auto relative mb-40 md:mb-60">
-                <img className='md:h-[100vh] h-[40vh] w-[100vw] brightness-125 contrast-125' src={movie?.img} alt="" />
+                <img className='md:h-[100vh] h-[40vh] w-[100vw] brightness-125 contrast-125' src={'https://i.ibb.co/R6Y4CQ3/1-white-1.png' } alt="" />
                 <div className='absolute w-[98vw] md:pt-[13%] pt-[30%] md:pt-60 p-5 md:pl-28 md:top-[0%] top-[0%] md:h-[100vh] h-[40vh] text-white bg-gradient-to-t from-[#181818]'>
-                    <h1 className='md:text-6xl text-2xl font-semibold'>{movie?.name}</h1>
-                    <p className='md:text-lg md:w-[40%] md:my-5 my-2'>{movie?.detail}</p>
+                    <h1 className='md:text-6xl text-2xl font-semibold'>{movie?.title}</h1>
+                    <p className='md:text-lg md:w-[40%] md:my-5 my-2'>{movie?.description}</p>
 
                     <div className='flex space-x-10'>
                         {
@@ -69,16 +74,16 @@ const MovieDetails = () => {
                     </div>
                     <div className='md:flex items-center'>
 
-                        <p className='mb-3 mt-5'>
+                        <div className='mb-3 mt-5'>
                             <p className='text-[#e50914] text-2xl font-semibold'>Release Date  </p>
 
-                            <p className='text-2xl font-semibold'>{movie?.release}</p>
-                        </p>
+                            {/* <p className='text-2xl font-semibold'>{movie?.release}</p> */}
+                        </div>
 
-                        <p className='mt-3 md:ml-20'>
+                        <div className='mt-3 md:ml-20'>
                             <p className='text-[#e50914] text-2xl font-semibold'>IMDb Rating</p>
-                            <p className='text-2xl font-semibold'>{movie?.rating}</p>
-                        </p>
+                            <p className='text-2xl font-semibold'>{movie?.ratings}</p>
+                        </div>
                     </div>
 
                 </div>
@@ -89,12 +94,12 @@ const MovieDetails = () => {
             </div>
 
             <div className='md:mt-[32%] md:pl-16 pl-5 '>
-                <p className='text-2xl font-semibold'>Videos || {movie?.name}  </p>
+                <p className='text-2xl font-semibold'>Videos || {movie?.title}  </p>
 
                 <Player className='rounded-lg mt-5 mb-10'
                     playsInline
-                    poster={movie?.img}
-                    src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
+                    poster={movie?.thumbnail}
+                    src={movie?.trailerUrl?.url}
                     fluid={false}
                     width={'40%'}
                     height={400}
@@ -125,25 +130,25 @@ const MovieDetails = () => {
                     </svg>
 
                 </div>
-                <p className='py-5 '>
+                <div className='py-5 '>
                     <p className='text-[#e50914] text-2xl font-bold mb-3'>More Detail:  </p>
 
                     <div className='md:flex items-center'>
 
-                        <p className='mb-3 '>
+                        <div className='mb-3 '>
                             <p className='text-[#e50914] text-2xl font-semibold'>Cast  </p>
 
                             <p className=''>AAAAAAAAAAA</p>
-                        </p>
+                        </div>
 
-                        <p className='mb-3 md:ml-20'>
+                        <div className='mb-3 md:ml-20'>
                             <p className='text-[#e50914] text-2xl font-semibold'>Genres</p>
                             <p className=''>BBBBBBBBBBB</p>
-                        </p>
+                        </div>
                     </div>
 
                     <p className='text-lg font md:w-[60%] w-80  text-justify'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sunt ducimus libero, ut omnis beatae blanditiis minus. Consequuntur sint ipsam impedit dolor. Possimus officiis nihil, asperiores molestias saepe incidunt ea sequi?</p>
-                </p>
+                </div>
 
                 <div className=' md:w-96 w-80 '>
                     <form onSubmit={handleSubmit(onSubmit)}>
@@ -170,11 +175,11 @@ const MovieDetails = () => {
                     </form>
                     {
                         comment &&
-                        <p className='m-2 border-b'>
+                        <div className='m-2 border-b'>
                             <p className="font-medium flex items-center my-2"> <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.stack.imgur.com/frlIf.png" alt="" /> Name: </p>
 
                             {comment}
-                        </p>
+                        </div>
                     }
                 </div>
 

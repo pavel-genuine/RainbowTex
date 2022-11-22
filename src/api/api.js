@@ -1,5 +1,5 @@
 import axios from 'axios';
-const base_url = 'https://jucundu-server.onrender.com/api';
+export const base_url = 'https://jucundu-server.onrender.com/api';
 
 axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('loginToken')}`;
 
@@ -20,7 +20,7 @@ export const deleteCategory =(data)=>axios.delete(`${base_url}/category/`,data)
 export const createPost = (post) => axios.post(`${base_url}/post`,post)
 export const uploadVideo = (video) =>axios.post(`${base_url}/post/upload_video`,video)
 export const getAllPosts =()=>axios.get(`${base_url}/post`)
-export const getSinglePost =(id)=>axios.get(`${base_url}/single/post/${id}`)
+export const getSinglePost =(id)=>axios.get(`${base_url}/post/single/${id}`)
 export const deletePost =(id)=>axios.delete(`${base_url}/post/admin/${id}?removeMedia=true`)
 export const addPostToCategory=(data)=> axios.patch(`${base_url}/post/admin/add_post_to_category`,data)
 export const removeCategoryFromPost =(data) =>axios.patch(`${base_url}/post/admin/remove_category_from_post`,data)
@@ -32,3 +32,14 @@ export const updateNonMediaContent =(data)=>axios.patch(`${base_url}/post/admin/
 export const addVideo =(data)=>axios.patch(`${base_url}/post/admin/add_video`,data)
 export const addVideoCopy =(data)=>axios.patch(`${base_url}/post/admin/add_video`,data)
 export const removeVideos =(data)=>axios.patch(`${base_url}/admin/remove_videos`,data)
+
+//feaured section
+export const createfeatured = (post) => axios.post(`${base_url}/featured/add`,post)
+export const getAllFeatured =()=>axios.get(`${base_url}/featured`)
+
+
+// comment
+export const addComment =(data)=>axios.patch(`${base_url}/post/add_comment`,data)
+export const approveComment =(data)=>axios.patch(`${base_url}/post/approve_comment`,data)
+export const removeComment =(data)=>axios.patch(`${base_url}/post/remove_comment`,data)
+export const editComment =(data)=>axios.patch(`${base_url}/post/edit_comment`,data)

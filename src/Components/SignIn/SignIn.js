@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { googleAuth, signInUser } from "../../api/api";
+import { base_url, googleAuth, signInUser } from "../../api/api";
 import { Link } from "react-router-dom";
 import './SignIn.css'
 import axios from "axios";
@@ -14,6 +14,25 @@ const SignIn = () => {
 
     const [showPassword, setShowPassword] = useState(false)
     const [showBtn, setShowBtn] = useState(true)
+
+    const [stayLoggedIn, setStay] = useState(false);
+
+
+    const loginTokenControl = async () => {
+        const { data } = await axios.get(
+            `${base_url}/auth/google_login_token`
+        );
+        if (data) {
+            localStorage.setItem("loginToken", data?.loginToken);
+        } else {
+            console.error(
+                "Something went wrong couldn't make your request!Please try again later"
+            );
+        }
+        setStay(false); //to disappear the button
+    };
+
+
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -110,9 +129,63 @@ const SignIn = () => {
                         </form>
                         {/* <p><small>Don't have an account <Link className='text-primary' to="/sign_up">Create New Account</Link></small></p>
                     <div className="divider">OR</div> */}
-                        <button onClick={() => googleAuth()} className=" px-4 py-3 font-bold rounded w-full max-w-xs  cursor-pointer mt-4 space-x-2 flex items-center justify-center bg-white ">
+                        <label for="my-modal-4" onClick={async () => {
+                            const x = window.open(
+                                `${base_url}/auth/google`,
+                                "ModalPopUp",
+
+                                "toolbar=no," +
+
+                                "scrollbars=no," +
+
+                                "location=no," +
+
+                                "statusbar=no," +
+
+                                "menubar=no," +
+
+                                "resizable=0," +
+
+                                "width=500," +
+
+                                "height=600," +
+
+                                "left = 490," +
+
+                                "top=100"
+                            );
+                            setStay(true);
+                            x.focus();
+
+
+                        }}
+                            className=" px-4 py-3 font-bold rounded w-full max-w-xs  cursor-pointer mt-4 space-x-2 flex items-center justify-center bg-white ">
                             <img src="https://www.100ms.live/_next/image?url=%2Fassets%2Fhero%2Fgoogle.svg&w=32&q=75" alt="" /> <span className="font-bold">Start with Google</span>
-                        </button>
+                        </label>
+
+
+                        {/* {stayLoggedIn && (
+                            <button className="px-4 py-3 font-bold rounded w-full max-w-xs bg-white text-black  cursor-pointer mt-4 mb-2"
+                                onClick={loginTokenControl}>StayLoggedIn with google.</button>
+
+                        )} */}
+
+                        <div>
+                            <input type="checkbox" id="my-modal-4" class="modal-toggle" />
+                            <label for="my-modal-4" class="modal cursor-pointer">
+                            <label class="modal-box relative" for="">
+                                <div class="modal-action">
+                                    {stayLoggedIn && (
+                                        <label for="my-modal-4" className="px-4 py-3 font-bold rounded  bg-black text-white  cursor-pointer m-auto"
+                                            onClick={loginTokenControl}>Stay LoggedIn with google.</label>
+
+                                    )}
+                               
+                                </div>
+                            </label>
+                            </label>
+                        </div>
+
 
                     </div>
                 </div>

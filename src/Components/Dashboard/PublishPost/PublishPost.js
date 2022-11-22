@@ -9,14 +9,12 @@ import VideoUploader from './VideoUploader';
 import { useDispatch, useSelector } from 'react-redux';
 import { publishPost } from '../../../redux/features/postSection/postSlice';
 import { videoCoverAdd } from '../../../redux/features/postSection/videoCoverSlice';
+import { createPost } from '../../../api/api';
 
 
 const PublishPost = () => {
 
     const { register, formState: { errors }, handleSubmit } = useForm();
-
-    const [videoUrl, setVideoUrl] = useState('')
-    const [videoKey, setVideoKey] = useState('')
     const [videocover, setVideocover] = useState('')
     const [thumbnail, setThumbnail] = useState('')
 
@@ -24,17 +22,17 @@ const PublishPost = () => {
 
     // const { thumbnail } = useSelector(state => state?.postThumbnail)
     // const { videoCover } = useSelector(state => state?.postVideoCover)
-
+    const { video } = useSelector(state => state?.postVideo)
     const { isLoading, error, post } = useSelector(state => state?.publishPost)
+
+    console.log(video, 'vvedio');
+    console.log(video?.key, 'vvedio key');
+    console.log(video?.url, 'vvedio url');
 
     const dispatch = useDispatch()
     // dispatch(thumbnailAdd())
 
-    const handleVideoData = (video) => {
-        setVideoUrl(video.url)
-        setVideoKey(video.key)
-    }
-
+    // console.log(videoKey, 'key', videoUrl,'url');
     const onChangeCover = (data) => {
 
         setCoverPhoto(data)
@@ -56,30 +54,44 @@ const PublishPost = () => {
 
     const onSubmit = async (data) => {
 
-
         const formData = new FormData();
         formData.append('title', data?.title);
         formData.append('description', data?.description);
-        formData.append('category', 'id');
-        formData.append('tags', []);
-        formData.append('premium', data?.false);
-        formData.append('videoCover', videocover);
-        formData.append('thumbnail', thumbnail);
-        formData.append('imdbRating', data?.rating);
-        formData.append('trailerUrl', '');
-        formData.append('videos', [{key:videoKey,url:videoUrl}]);
-        formData.append('genre', data?.genre);
-        formData.append('isActive',data?.active);
+        // formData.append('category', 'id');
+        // formData.append('tags', []);
+        // formData.append('premium', data?.false);
+        // formData.append('videoCover', videocover);
+        // formData.append('thumbnail', thumbnail);
+        // formData.append('imdbRating', data?.rating);
+        // formData.append('trailerUrl', '');
+        formData.append('videos', [{ key: video?.key, url: video?.url }]);
+        // formData.append('genre', data?.genre);
+        // formData.append('isActive',data?.active);
 
-        const submit = dispatch(publishPost(formData))
+        // const submit = dispatch(publishPost(formData))
 
-        console.log(submit, 'post');
-        return submit;
+        // console.log(submit, 'submit');
+        // console.log(post, 'post');
 
+        // const submit = await createPost(formData)
+        const { data: res } = await axios.post(`https://jucundu-server.onrender.com/api/post`, formData,
+            {
+                headers:
+                {
+                    'Content-Type': 'multipart/form-data',
+        
+                    // Authorization: `Bearer ${localStorage.getItem('loginToken')}`
+                }
 
+            })
+
+        console.log(res, 'res formdata');
         toast.success("Congratulation! Post Published")
     }
     const email = ''
+    if (isLoading) {
+        <p>loading...</p>
+    }
 
     return (
         <div className='bg-[#181818] text-slate-200 pt-[18.5%] md:pt-0   '>
@@ -98,17 +110,17 @@ const PublishPost = () => {
                         <h2 className="text-2xl font-bold ">Upload Your Movie</h2>
                         <div className="flex justify-between my-10 ">
                             <h1 className="text-[brown] font-semibold">{email}</h1>
-                           {/* { */}
+                            {/* { */}
                             {/* videoUrl ?  */}
                             <button type="submit" className=" btn hover:bg-[#e50914] bg-[brown] btn-xs ">
-                            Publish
-                        </button>
-                        {/* :
+                                Publish
+                            </button>
+                            {/* :
                          <button disabled type="submit" className="disabled:btn-error  disabled:btn-xs ">
                          Publish
                      </button> */}
 
-                           {/* } */}
+                            {/* } */}
                         </div>
                         <div className=''>
 
@@ -165,7 +177,7 @@ const PublishPost = () => {
                                 </ImageUploading>
 
                                 <div className='rounded-lg'>
-                                    <VideoUploader width={420} height={280} handleVideoData={handleVideoData} />
+                                    <VideoUploader width={420} height={280}/>
                                 </div>
                             </div>
 

@@ -8,12 +8,11 @@ import { videoUpload } from '../../../redux/features/postSection/postVideoSlice'
 const VideoUploader = (props) => {
     const inputRef = useRef();
     const [source, setSource] = useState();
-    const [fData, setFData] = useState();
     const [uploadPercentage, setUploadPercentage] = useState(0);
     const cancelFileUpload = useRef(null);
     const { isLoading, error, video } = useSelector(state => state?.postVideo)
     
-    const dispatch = useDispatch
+    const dispatch = useDispatch()
 
     const handleFileChange = (event) => {
 
@@ -22,11 +21,8 @@ const VideoUploader = (props) => {
 
         const formData = new FormData()
         formData.append("video", file)
-
+        dispatch(videoUpload(formData))
         console.log(formData.get("video"),'fdata')
-
-        setFData(formData)
-
         const url = URL.createObjectURL(file);
         setSource(url);
 
@@ -55,11 +51,11 @@ const VideoUploader = (props) => {
         //     )
     };
 
-    dispatch(videoUpload(fData))
+    
 
-    console.log('video',video, error,'err',isLoading,'loading');
+    // console.log('video',video, error,'err',isLoading,'loading');
 
-    props.handleVideoData(video)
+
 
     const cancelUpload = () => {
         if (cancelFileUpload.current)
