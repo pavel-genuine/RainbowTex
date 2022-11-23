@@ -15,13 +15,10 @@ import { createPost } from '../../../api/api';
 const PublishPost = () => {
 
     const { register, formState: { errors }, handleSubmit } = useForm();
-    const [videocover, setVideocover] = useState('')
+    const [videocover, setVideocover] = useState()
     const [thumbnail, setThumbnail] = useState('')
 
     const [coverPhoto, setCoverPhoto] = useState([]);
-
-    // const { thumbnail } = useSelector(state => state?.postThumbnail)
-    // const { videoCover } = useSelector(state => state?.postVideoCover)
     const { video } = useSelector(state => state?.postVideo)
     const { isLoading, error, post } = useSelector(state => state?.publishPost)
 
@@ -34,13 +31,12 @@ const PublishPost = () => {
 
     // console.log(videoKey, 'key', videoUrl,'url');
     const onChangeCover = (data) => {
-
         setCoverPhoto(data)
         const image = data[0].file
-        console.log('cover', coverPhoto);
-        console.log('onchange-img', image);
-        setVideocover(image)
-
+        setVideocover(data[0].file)
+        console.log('img', image);
+        console.log('Videocover', videocover);
+        // console.log('coverphoto', coverPhoto);
     }
     const onChangeThumbnail = (data) => {
 
@@ -60,32 +56,34 @@ const PublishPost = () => {
         // formData.append('category', 'id');
         // formData.append('tags', []);
         // formData.append('premium', data?.false);
-        // formData.append('videoCover', videocover);
+        formData.append('videoCover', videocover);
         // formData.append('thumbnail', thumbnail);
         // formData.append('imdbRating', data?.rating);
         // formData.append('trailerUrl', '');
-        formData.append('videos', [{ key: video?.key, url: video?.url }]);
+
+
         // formData.append('genre', data?.genre);
         // formData.append('isActive',data?.active);
 
+        formData.append('videos[0][url]', video?.url);
+        formData.append('videos[0][key]', video?.key);
+
+
         // const submit = dispatch(publishPost(formData))
-
-        // console.log(submit, 'submit');
-        // console.log(post, 'post');
-
         // const submit = await createPost(formData)
         const { data: res } = await axios.post(`https://jucundu-server.onrender.com/api/post`, formData,
             {
                 headers:
                 {
                     'Content-Type': 'multipart/form-data',
-        
-                    // Authorization: `Bearer ${localStorage.getItem('loginToken')}`
+
+                    Authorization: `Bearer ${localStorage.getItem('loginToken')}`
                 }
 
             })
 
-        console.log(res, 'res formdata');
+        // console.log(res, 'res formdata');
+        // console.log(submit, 'submit');
         toast.success("Congratulation! Post Published")
     }
     const email = ''
@@ -177,7 +175,7 @@ const PublishPost = () => {
                                 </ImageUploading>
 
                                 <div className='rounded-lg'>
-                                    <VideoUploader width={420} height={280}/>
+                                    <VideoUploader width={420} height={280} />
                                 </div>
                             </div>
 

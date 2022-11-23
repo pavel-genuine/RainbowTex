@@ -15,8 +15,6 @@ const Categories = ({ handleBanner, quantity }) => {
 
   const {isLoading, error, posts }=usePosts()
 
-  console.log(posts,'posts');
-
   const settings = {
     // infinite: true,
     slidesToShow: 5,
@@ -82,7 +80,7 @@ const Categories = ({ handleBanner, quantity }) => {
               <Slider {...settings}>
 
                 {
-                  posts.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+                  posts.map((movie, index) => <SingleCategory key={movie?._id} movie={movie} detectClicked={detectClicked}></SingleCategory>)
 
                 }
               </Slider>

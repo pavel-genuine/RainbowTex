@@ -13,23 +13,27 @@ import './movieDetail.css'
 import { singlePostGet } from '../../redux/features/postSection/postSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { commentAdd } from '../../redux/features/commentSlice';
+import { base_url, getSinglePost } from '../../api/api';
 
 const MovieDetails = () => {
 
     const { register, formState: { errors }, handleSubmit } = useForm();
+
     const { id } = useParams()
-    const { isLoading, error, post:movie } = useSelector(state => state?.singlePost)
+
+    const { isLoading, error, post: movie } = useSelector(state => state?.singlePost)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
+
         dispatch(singlePostGet(id))
-        console.log('posts', movie);
-        console.log('error', error);
+    }
 
-    }, [])
+        , [])
 
-    console.log(movie,'movie');
+
+    // console.log(movie?.videos[0]?.url, 'video url');
 
     const [comment, setComment] = useState(false)
     // const [love, setLove] = useState(false)
@@ -46,31 +50,25 @@ const MovieDetails = () => {
     //     console.log(count, 'count');
     // }
 
-    console.log(id, 'id');
-   
     const onSubmit = async (data) => {
         setComment(data?.comment)
-        dispatch(commentAdd(data))
+        // dispatch(commentAdd(data))
     }
 
     if (isLoading) {
-        <p>loading...</p>
+        return <p>loading...</p>
     }
 
-   return (
+    return (
         <div className='mx-auto bg-[#181818] text-slate-200'>
             <div className=" h-[40vh]  w-[98vw] mx-auto relative mb-40 md:mb-60">
-                <img className='md:h-[100vh] h-[40vh] w-[100vw] brightness-125 contrast-125' src={'https://i.ibb.co/R6Y4CQ3/1-white-1.png' } alt="" />
+                <img className='md:h-[100vh] h-[40vh] w-[100vw] brightness-125 contrast-125' src={'https://i.ibb.co/R6Y4CQ3/1-white-1.png'} alt="" />
                 <div className='absolute w-[98vw] md:pt-[13%] pt-[30%] md:pt-60 p-5 md:pl-28 md:top-[0%] top-[0%] md:h-[100vh] h-[40vh] text-white bg-gradient-to-t from-[#181818]'>
                     <h1 className='md:text-6xl text-2xl font-semibold'>{movie?.title}</h1>
                     <p className='md:text-lg md:w-[40%] md:my-5 my-2'>{movie?.description}</p>
 
                     <div className='flex space-x-10'>
-                        {
-
-                            <button className='md:py-3 px-16 py-1 font-semibold md:text-lg rounded max-w-xs text-white bg-[#e50914] hover:bg-[brown] cursor-pointer mt-4 mb-2'>Join Now</button>
-                        }
-
+                        <button className='md:py-3 px-16 py-1 font-semibold md:text-lg rounded max-w-xs text-white bg-[#e50914] hover:bg-[brown] cursor-pointer mt-4 mb-2'>Join Now</button>
                     </div>
                     <div className='md:flex items-center'>
 
@@ -96,10 +94,11 @@ const MovieDetails = () => {
             <div className='md:mt-[32%] md:pl-16 pl-5 '>
                 <p className='text-2xl font-semibold'>Videos || {movie?.title}  </p>
 
-                <Player className='rounded-lg mt-5 mb-10'
+                <Player className='rounded-lg mt-5 mb-10 hidden md:block'
                     playsInline
-                    poster={movie?.thumbnail}
-                    src={movie?.trailerUrl?.url}
+                    // poster={movie?.thumbnail}
+                    src="https://jucundu.s3.eu-central-1.amazonaws.com/videos/dd0fff65-d687-47d4-99e5-417b5d468007-----ArjW4S9LRu89lBzgCvc1g.mp4"
+                    // src={`${videoUrl}`}
                     fluid={false}
                     width={'40%'}
                     height={400}
@@ -112,6 +111,16 @@ const MovieDetails = () => {
                         <PlaybackRateMenuButton rates={[5, 2, 1, 0.5, 0.1]} order={6.1} />
                     </ControlBar>
                 </Player>
+
+
+               {
+                // movie?.videos[0]?.url &&
+                <video className='md:hidde' width="320" height="240" controls>
+                {/* <source src="https://jucundu.s3.eu-central-1.amazonaws.com/videos/dd0fff65-d687-47d4-99e5-417b5d468007-----ArjW4S9LRu89lBzgCvc1g.mp4" /> */}
+                <source src={movie?.videos?.length >=0 && movie?.videos[0]?.url} />
+
+            </video>
+               }
                 <div className='flex'>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-[red] cursor-pointer">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
@@ -158,15 +167,15 @@ const MovieDetails = () => {
                                 <div>
                                     <p className="font-medium flex items-center"> <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.stack.imgur.com/frlIf.png" alt="" /> Name: </p>
 
-                                   <div className='grow-wrap'>
-                                   <textarea
-                                        placeholder="Comment"
-                                        id="text" name="text" 
-                                        // className="outline-0 pt-3 font-normal"
-                                        className=" outline-0 p-3 font-normal  bg-slate-800 bg-opacity-50 my-5 rounded-lg  block w-full"
-                                        {...register("comment")}>
-                                    </textarea>
-                                   </div>
+                                    <div className='grow-wrap'>
+                                        <textarea
+                                            placeholder="Comment"
+                                            id="text" name="text"
+                                            // className="outline-0 pt-3 font-normal"
+                                            className=" outline-0 p-3 font-normal  bg-slate-800 bg-opacity-50 my-5 rounded-lg  block w-full"
+                                            {...register("comment")}>
+                                        </textarea>
+                                    </div>
                                     <input className="btn btn-xs bg-[brown] border-0 text-white " type="submit" value="response" />
 
                                 </div>

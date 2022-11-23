@@ -12,8 +12,6 @@ const useAllFeatured = () => {
 
     useEffect(() => {
         dispatch(allfeaturedGet())
-        console.log('featured', featured);
-        console.log('error', error);
     }, [])
 
 

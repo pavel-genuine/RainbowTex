@@ -17,13 +17,18 @@ const VideoUploader = (props) => {
     const handleFileChange = (event) => {
 
         const file = event.target.files[0];
-        console.log(file, 'file');
+        console.log(file, 'video file');
 
         const formData = new FormData()
         formData.append("video", file)
         dispatch(videoUpload(formData))
         console.log(formData.get("video"),'fdata')
+       
         const url = URL.createObjectURL(file);
+
+        console.log(file,'file');
+        console.log(url,'url');
+
         setSource(url);
 
         console.log(url,'url');

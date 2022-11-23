@@ -10,8 +10,6 @@ const usePosts = () => {
 
     useEffect(() => {
         dispatch(fetchAllllPosts())
-        console.log('posts', posts);
-        console.log('error', error);
     }, [])
 
 

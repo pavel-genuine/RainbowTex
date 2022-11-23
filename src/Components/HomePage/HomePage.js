@@ -14,8 +14,6 @@ const HomePage = () => {
   const handleBanner = (data) => {
     setUpdatedBanner(data)
   }
-  // 
-  console.log(updatedBanner, 'banner');
 
   return (
     <div>
