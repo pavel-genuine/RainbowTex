@@ -1,24 +1,26 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
+import toast, { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { categoryCreate } from '../../../redux/features/categorySlice';
 
-const AddCategory = ({handleNewCate}) => {
+const AddCategory = ({ handleNewCate }) => {
     const { register, formState: { errors }, handleSubmit } = useForm();
-    const { category} = useSelector(state => state?.categoryCreate)
+    const { category } = useSelector(state => state?.categoryCreate)
 
     const dispatch = useDispatch()
 
     const onSubmit = async (data) => {
-        const submit =  dispatch(categoryCreate(data))
+        const submit = dispatch(categoryCreate(data))
         console.log(submit, 'submit');
         handleNewCate(data)
+        toast.success('New Category Added')
         return submit;
     }
 
     return (
         <div> <label for="my-modal-4" class="btn modal-button btn-sm">Add Category</label>
-
+            <Toaster></Toaster>
 
             <input type="checkbox" id="my-modal-4" class="modal-toggle" />
             <label for="my-modal-4" class="modal cursor-pointer">

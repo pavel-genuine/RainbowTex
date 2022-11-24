@@ -9,7 +9,7 @@ export const signInUser = (user) => axios.post(`${base_url}/auth/login`, user);
 export const googleAuth = () => axios.get(`${base_url}/auth/google`);
 export const logOut = () => axios.get(`${base_url}/auth/logout`,{
     headers:{
-        Authorization:`Bearer ${localStorage.getItem('loginToken')}`
+        Authorization:`Bearer ${localStorage.removeItem('loginToken')}`
     }
 });
 

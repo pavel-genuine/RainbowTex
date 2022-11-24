@@ -12,7 +12,7 @@ async(data)=>{
 export const allCategoriesGet =createAsyncThunk("/category/allCategories",
 async()=>{
     const res = await getAllCategories();
-    console.log('allCategories thunk',res?.data);
+    // console.log('allCategories thunk',res?.data);
     return res?.data;
 })
 
@@ -27,7 +27,7 @@ async(data)=>{
 export const categoryDelete =createAsyncThunk("/category/categoryDelete",
 async(data)=>{
     const res = await deleteCategory(data);
-    // console.log('deletePost thunk',res?.data);
+    console.log('deletePost thunk',res?.data);
     return res?.data;
 })
 

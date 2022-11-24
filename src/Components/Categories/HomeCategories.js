@@ -20,51 +20,48 @@ const HomeCategories = () => {
         // autoplaySpeed: 5000,
         cssEase: "linear",
         responsive: [
-          {
-            breakpoint: 1024,
-            settings: {
-              slidesToShow: 5,
-              slidesToScroll: 2,
-              // infinite: true,
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 5,
+                    slidesToScroll: 2,
+                    // infinite: true,
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                    initialSlide: 2
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1
+                }
             }
-          },
-          {
-            breakpoint: 600,
-            settings: {
-              slidesToShow: 2,
-              slidesToScroll: 1,
-              initialSlide: 2
-            }
-          },
-          {
-            breakpoint: 480,
-            settings: {
-              slidesToShow: 2,
-              slidesToScroll: 1
-            }
-          }
         ]
-      };
+    };
 
     const { category } = useHomeCategories()
-
-    console.log('home cates',category);
-
 
     return (
         <div>
             {category?.length &&
-                category?.map(cate =><div>
-                    <h1 className='text-white font-semibold text-lg md:text-xl mt-5 mx-2 md:mt-10 mb-4'>{cate?.categoryName} </h1>
-      
-                    <Slider {...settings}>
-      
-                      {
-                        cate?.posts?.map((movie, index) => <SinglePost key={index} movie={movie}></SinglePost>)
-      
-                      }
-                    </Slider>
-                  </div>)}
+                category?.map(cate => cate?.posts.length &&                     
+                    <div>
+                        <h1 className='text-white font-semibold text-lg md:text-xl mt-5 mx-2 md:mt-10 mb-4'>{cate?.categoryName} </h1>
+
+                        <Slider {...settings}>
+                            {
+                                cate?.posts?.map((movie) => <SinglePost key={movie?._id} movie={movie}></SinglePost>)
+                            }
+                        </Slider>
+                    </div>
+                )}
         </div>
     )
 }

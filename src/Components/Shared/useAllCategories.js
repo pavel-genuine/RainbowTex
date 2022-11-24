@@ -8,14 +8,10 @@ const useAllCategories = () => {
 
     const dispatch =useDispatch()
   
-            console.log('all cates array', category?.categories);
-
-
+    // console.log('all cates array', category?.categories);
+    
     useEffect(() => {
         dispatch(allCategoriesGet())        
-        // console.log('all cates array', category?.categories);
-        // console.log('all cates name', category?.categories[0]?.categoryName);
-        // console.log('error', error);
     }, [])
 
 

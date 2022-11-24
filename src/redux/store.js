@@ -21,6 +21,7 @@ import removeCommentReducer from './features/commentSlice'
 import editCommentReducer from './features/commentSlice'
 import addPostCategoryReducer from './features/postSection/postCategorySlice'
 import homeCategoriesReducer from './features/categorySection/homeCategories'
+import deleteCategoryReducer from './features/categorySlice'
 
 export const store = configureStore({
   reducer: {
@@ -45,7 +46,9 @@ export const store = configureStore({
     commentApproving:approveCommentReducer,
     commentRemoving:removeCommentReducer,
     commentEditing:editCommentReducer,
-    addPostCategory: addPostCategoryReducer
+    addPostCategory: addPostCategoryReducer,
+    categoryDeleting:deleteCategoryReducer
+
 
   },
 });
