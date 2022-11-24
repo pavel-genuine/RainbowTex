@@ -21,16 +21,16 @@ const Filter = () => {
     const dispatch = useDispatch()
 
     const handleDeleteCategory = async (data) => {
-        console.log('del cate',data);
-        // const confirmation = window.confirm('Are you sure to delete?');
-        // if (confirmation) {
-        // dispatch(categoryDelete({_id:data}))
-    
-        const res = await deleteCategory({_id:data})
-        console.log(res?.data, 'del data');
-        // }
+        console.log('del cate id', data);
+        const confirmation = window.confirm('Are you sure to delete?');
+        if (confirmation) {
+            // dispatch(categoryDelete({_id:data}))
+
+            const res = await deleteCategory({ _id: data })
+            console.log(res?.data, 'del data');
+        }
     }
- // await deleteCategory({_id:data})
+    // await deleteCategory({_id:data})
 
     const handleNewCate = (data) => {
         setAddedCate(() => data)
@@ -40,29 +40,24 @@ const Filter = () => {
     return (
         <div className='md:flex items-center my-5'>
 
-            <div class="dropdown dropdown-hover ">
-                <label tabindex="0" class="">
-                    <CustomLink class="btn-ghost rounded bg-slate-800 hover:bg-slate-600 p-2">Filter By Categories</CustomLink>
+            <div className="form-control  md:mb-3 ">
+                <label className="label">
+                    {/* <span className="label-text text-gray-600  ">Pick the category</span> */}
+                    {/* <span className="label-text-alt">Alt label</span> */}
                 </label>
-                <div tabindex="0" class="space-y-2 px-4 py-6 rounded-lg dropdown-content menu  ml-12 mt-2 shadow text-white bg-black bg-opacity-60 w-auto">
-                    <div>
+                <select className="select select-sm select-bordered bg-slate-400">
 
-                    </div>
-                    <ul className='md:grid grid-cols-2 md:w-[20vw]'>
-                        {
-                            category?.categories?.length > 0 &&
-                            category?.categories.map(item => {
-                                return <li><CustomLink class="border-b-2 cursor-pointer ">{item?.categoryName}</CustomLink></li>
-                            })
-                        }
-                        {newCate?.length && addedCate &&
-                            newCate?.map(item => {
-                                return <li><CustomLink class="border-b-2 cursor-pointer ">{item?.categoryName}</CustomLink></li>
-                            })
-                        }
-                    </ul>
-                </div>
+
+                    <option disabled selected>Filter ByCategory</option>
+                    {
+                        category?.categories?.length > 0 &&
+                        category?.categories?.map(item => {
+                            return <option value={item?._id} className='bg-[brown] hover:bg-[brown]'>{item?.categoryName}</option>
+                        })
+                    }
+                </select>
             </div>
+
             <div className="form-control w-full max-w-xs md:block">
                 <input
                     type="text"
@@ -72,11 +67,11 @@ const Filter = () => {
                 />
             </div>
 
-           <div className='md:mr-10 md:ml-28 my-5 md:my-0'>
-           <AddCategory handleNewCate={handleNewCate}></AddCategory>
-           </div>
-            
-            <div className="form-control w-full max-w-xs md:mb-3 ">
+            <div className='md:mr-16 md:ml-32 my-5 md:my-0'>
+                <AddCategory handleNewCate={handleNewCate}></AddCategory>
+            </div>
+
+            <div className="form-control  md:mb-3 ">
                 <label className="label">
                     {/* <span className="label-text text-gray-600  ">Pick the category</span> */}
                     {/* <span className="label-text-alt">Alt label</span> */}

@@ -67,7 +67,7 @@ const Navbar = () => {
                                     View Profile
                                 </Link>
                             </li>
-                            <li onClick={() => handleHideSearch()}>
+                            <li >
                                 <Link to='/dashboard' class="btn bg-[green] border-none text-[white] btn-xs">Dashboard</Link>
 
                             </li>
@@ -245,7 +245,7 @@ const Navbar = () => {
                                                 </Link>
 
                                             </li>
-                                            <li onClick={() => handleHideSearch()}>
+                                            <li>
                                                 {
                                                     <Link to='/dashboard' class="btn bg-[green] border-none text-[white] btn-xs">Dashboard</Link>
                                                 }

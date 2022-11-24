@@ -69,7 +69,7 @@ const MovieDetails = () => {
     return (
         <div className='mx-auto bg-[#181818] text-slate-200'>
             <div className=" h-[40vh]  w-[98vw] mx-auto relative mb-40 md:mb-60">
-                <img className='md:h-[100vh] h-[40vh] w-[100vw] brightness-125 contrast-125' src={'https://i.ibb.co/R6Y4CQ3/1-white-1.png'} alt="" />
+                <img className='md:h-[100vh] h-[40vh] w-[100vw] brightness-125 contrast-125' src={movie?.videoCover?.cdnUrl ? movie?.videoCover?.cdnUrl :'https://i.ibb.co/R6Y4CQ3/1-white-1.png'} alt="" />
                 <div className='absolute w-[98vw] md:pt-[13%] pt-[30%] md:pt-60 p-5 md:pl-28 md:top-[0%] top-[0%] md:h-[100vh] h-[40vh] text-white bg-gradient-to-t from-[#181818]'>
                     <h1 className='md:text-6xl text-2xl font-semibold'>{movie?.title}</h1>
                     <p className='md:text-lg md:w-[40%] md:my-5 my-2'>{movie?.description}</p>
@@ -103,7 +103,7 @@ const MovieDetails = () => {
 
                 <Player className='rounded-lg mt-5 mb-10 hidden md:block'
                     playsInline
-                    poster={movie?.thumbnail?.cdnUrl}
+                    poster={movie?.videoCover?.cdnUrl }
                     src={movie?.videos?.length && movie?.videos[0]?.url}
                     fluid={false}
                     width={'40%'}
@@ -207,7 +207,7 @@ const MovieDetails = () => {
                 </div>
 
             </div>
-            <Categories quantity={2}></Categories>
+            {/* <Categories quantity={2}></Categories> */}
             <Footer></Footer>
         </div>
     );
