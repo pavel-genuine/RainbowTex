@@ -10,11 +10,30 @@ import {
 import CustomLink from "../../Navbar/CustomLink";
 import useAllCategories from "../../Shared/useAllCategories";
 import AddCategory from "./AddCategory";
+import useHomeCategories from "../../Shared/hooks/useHomeCategories";
 
-const Filter = () => {
+const Filter = ({ filterHandler }) => {
     const [newCate, setNewCate] = useState({});
     const [addedCate, setAddedCate] = useState({});
     const [delCate, setDelCate] = useState({});
+    const [movies, setMovies] = useState([]);
+
+    const { category: homeCates } = useHomeCategories()
+
+
+    const handleFilterCate = (id) => {
+
+
+        console.log('filter id',id);
+        const singleCate = homeCates?.find(cate => cate?._id == id)
+      
+        setMovies(() => singleCate?.posts)
+
+        filterHandler(singleCate?.posts)
+        console.log(singleCate?.posts,'single posts');
+       
+
+    }
 
     let { error, category, isLoading } = useAllCategories();
 
@@ -22,7 +41,7 @@ const Filter = () => {
         (state) => state?.categoryDeleting
     );
 
-    let categories =category?.categories
+    let categories = category?.categories
 
     const dispatch = useDispatch();
 
@@ -58,8 +77,10 @@ const Filter = () => {
                     {/* <span className="label-text text-gray-600  ">Pick the category</span> */}
                     {/* <span className="label-text-alt">Alt label</span> */}
                 </label>
-                <select
-                   
+                <select  onChange={(e) => {
+                        handleFilterCate(e.target.value);
+                    }}
+
                     className="select select-sm select-bordered bg-slate-400 text-white"
                 >
                     <option disabled selected>
@@ -76,7 +97,7 @@ const Filter = () => {
                                 </option>
                             );
                         })}
-                        {category?.categories?.length > 0 && addedCate && newCate?.length>0 &&
+                    {category?.categories?.length > 0 && addedCate && newCate?.length > 0 &&
                         newCate?.map((item) => {
                             return (
                                 <option

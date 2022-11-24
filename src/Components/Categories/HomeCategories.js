@@ -47,7 +47,7 @@ const HomeCategories = () => {
     };
 
     const { category } = useHomeCategories()
-    console.log('home cate ll', category);
+    // console.log('home cate ll', category);
 
     return (
         <div>
