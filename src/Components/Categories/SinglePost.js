@@ -1,15 +1,32 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { categoryAdd } from '../../redux/features/postSection/postCategorySlice'
+import useAllCategories from '../Shared/useAllCategories'
 import './icon.css'
 
-const SingleCategory = ({ movie, detectClicked }) => {
+const SinglePost = ({movie}) => {
 
-    const handleClicked = () => {
-        detectClicked(movie)
-    }
+    // const handleClicked = () => {
+    //     detectClicked(movie)
+    // }
+    // const { postCategory} = useSelector(state => state?.addPostCategory)
+    // const dispatch = useDispatch()
+
+    // useEffect(()=>{
+
+    //     dispatch(categoryAdd({
+
+    //         postId:movie?._id,
+    //         categoryId:cateId,
+    //     }))
+    // },[])
+
+    // const movie =postCategory?.post
+    
 
     return (
-        <div onClick={handleClicked} className='promo relative cursor-pointer'>
+        <div  className='promo relative cursor-pointer'>
             <img className="promo md:w-[95%] w-[95%] mx-auto  border-white hover:opacity-70" src={movie?.thumbnail? movie?.thumbnail?.cdnUrl :'https://i.ibb.co/R6Y4CQ3/1-white-1.png' } alt="" />
 
             <div className=' left-[5%] text-white p-2'>
@@ -26,9 +43,8 @@ const SingleCategory = ({ movie, detectClicked }) => {
                 </h1>
 
 
-                {/* <p className='text-w-[70%] my-1'>{movie?.detail?.slice(0,50)}...</p> */}
             </div>
         </div>)
 }
 
-export default SingleCategory
+export default SinglePost

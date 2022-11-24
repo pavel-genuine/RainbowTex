@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { categoryCreate } from '../../../redux/features/categorySlice';
 
-const AddCategory = () => {
+const AddCategory = ({handleNewCate}) => {
     const { register, formState: { errors }, handleSubmit } = useForm();
     const { category} = useSelector(state => state?.categoryCreate)
 
@@ -12,6 +12,7 @@ const AddCategory = () => {
     const onSubmit = async (data) => {
         const submit =  dispatch(categoryCreate(data))
         console.log(submit, 'submit');
+        handleNewCate(data)
         return submit;
     }
 

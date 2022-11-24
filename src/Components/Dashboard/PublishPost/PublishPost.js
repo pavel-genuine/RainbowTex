@@ -10,40 +10,55 @@ import { useDispatch, useSelector } from 'react-redux';
 import { publishPost } from '../../../redux/features/postSection/postSlice';
 import { videoCoverAdd } from '../../../redux/features/postSection/videoCoverSlice';
 import { createPost } from '../../../api/api';
+import useAllCategories from '../../Shared/useAllCategories';
+import { categoryAdd } from '../../../redux/features/postSection/postCategorySlice';
 
 
 const PublishPost = () => {
 
     const { register, formState: { errors }, handleSubmit } = useForm();
+
+    const [selectedCate, setSelectedCate] = useState()
+    console.log('set selected cate',selectedCate);
+
+    const { category } = useAllCategories()
+
+    const [postData, setPostData] = useState({
+        videocover: null
+    });
+
     const [videocover, setVideocover] = useState()
     const [thumbnail, setThumbnail] = useState('')
 
     const [coverPhoto, setCoverPhoto] = useState([]);
     const { video } = useSelector(state => state?.postVideo)
     const { isLoading, error, post } = useSelector(state => state?.publishPost)
-
-    console.log(video, 'vvedio');
-    console.log(video?.key, 'vvedio key');
-    console.log(video?.url, 'vvedio url');
+    const {postCategory} = useSelector(state => state?.addPostCategory)
 
     const dispatch = useDispatch()
-    // dispatch(thumbnailAdd())
 
-    // console.log(videoKey, 'key', videoUrl,'url');
+    const handleSetCate=()=>{
+        const cate ={
+            postId:post?._id,
+            categoryId:selectedCate
+        }
+        console.log('set selected cate',selectedCate, post?._id);
+        // dispatch(categoryAdd(cate))
+
+        console.log('post cate',postCategory);
+    }
+
     const onChangeCover = (data) => {
         setCoverPhoto(data)
+
         const image = data[0].file
+
+        setPostData(() => ({ videocover: image }));
+
         setVideocover(data[0].file)
-        console.log('img', image);
-        console.log('Videocover', videocover);
-        // console.log('coverphoto', coverPhoto);
     }
     const onChangeThumbnail = (data) => {
-
-        // setCoverPhoto(data)
         const image = data[0].file
-        // console.log('cover', coverPhoto);
-        console.log('onchange-img', image);
         setThumbnail(image)
 
     }
@@ -53,10 +68,11 @@ const PublishPost = () => {
         const formData = new FormData();
         formData.append('title', data?.title);
         formData.append('description', data?.description);
-        // formData.append('category', 'id');
+        formData.append('category', selectedCate);
         // formData.append('tags', []);
         // formData.append('premium', data?.false);
-        formData.append('videoCover', videocover);
+        console.log('fdata cover file', coverPhoto);
+        formData.append('videocover', postData?.videocover);
         // formData.append('thumbnail', thumbnail);
         // formData.append('imdbRating', data?.rating);
         // formData.append('trailerUrl', '');
@@ -69,21 +85,10 @@ const PublishPost = () => {
         formData.append('videos[0][key]', video?.key);
 
 
-        // const submit = dispatch(publishPost(formData))
-        // const submit = await createPost(formData)
-        const { data: res } = await axios.post(`https://jucundu-server.onrender.com/api/post`, formData,
-            {
-                headers:
-                {
-                    'Content-Type': 'multipart/form-data',
+        const submit = dispatch(publishPost(formData))
 
-                    Authorization: `Bearer ${localStorage.getItem('loginToken')}`
-                }
-
-            })
-
-        // console.log(res, 'res formdata');
-        // console.log(submit, 'submit');
+        console.log('post',post);
+        
         toast.success("Congratulation! Post Published")
     }
     const email = ''
@@ -141,8 +146,8 @@ const PublishPost = () => {
                                             <div class="mt-1 flex justify-center mb-8 items-center px-6 pt-5 pb-6 border-2 md:w-[27vw] w-[40vw] h-[150px] md:h-[270px]  border-dashed rounded-md">
                                                 <div class="space-y-1 text-center">
                                                     <div class="flex text-sm text-gray-600">
-                                                        <label for="file-upload" class="relative cursor-pointer rounded-md font-medium hover:text-[brown] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                                            <svg onClick={onImageUpload} class="mx-auto h-12 w-12" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                        <label onClick={onImageUpload} for="file-upload" class="relative cursor-pointer rounded-md font-medium hover:text-[brown] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                            <svg class="mx-auto h-12 w-12" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                                                                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                                             </svg><span>Upload Banner</span>
                                                             <input style={{ backgroundColor: ' #919cb1', border: '#6b7280' }} class="sr-only" />
@@ -188,6 +193,25 @@ const PublishPost = () => {
                                         name="" id="" cols="30" rows="2"
                                         {...register("title")}>
                                     </textarea>
+                                </div>
+
+                                <div className='my-3'>
+                                    <div className="form-control w-full max-w-xs ">
+                                        <label className="label">
+                                            <span className="label-text text-gray-600  ">Pick the category</span>
+                                            {/* <span className="label-text-alt">Alt label</span> */}
+                                        </label>
+                                        <select onChange={(e) =>{ setSelectedCate(e.target.value)}} className="select select-bordered bg-slate-400">
+
+
+                                            <option disabled selected>Pick one</option>
+                                            {
+                                                category?.categories?.length > 0 &&
+                                                category?.categories?.map(item=>{
+                                                return <option value={item?._id}>{item?.categoryName}</option>})
+                                            }
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <div className='flex '>

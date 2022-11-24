@@ -1,17 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import SingleCategory from './SingleCategory';
+import SinglePost from './SinglePost';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { movies } from '../allMovies/allMovies';
 import usePosts from '../Shared/usePosts';
+import useAllCategories from '../Shared/useAllCategories';
+import HomeCategories from './HomeCategories';
+
 
 const Categories = ({ handleBanner, quantity }) => {
 
-  const [clickedPoster, setClickedPoster] = useState({})
 
+  const{category} =useAllCategories()
+
+  const [clickedPoster, setClickedPoster] = useState({})
 
   const {isLoading, error, posts }=usePosts()
 
@@ -68,9 +73,9 @@ const Categories = ({ handleBanner, quantity }) => {
 
   return (
     <div className='md:mx-1 mx-auto mt-10 z-10 '>
+      <HomeCategories></HomeCategories>
 
-      <div className=''>
-
+      {/* <div className=''>
         {quantity == 2 ?
           <div className='md:pt-0 bg-[#181818] px-5 md:px-0'>
 
@@ -80,7 +85,7 @@ const Categories = ({ handleBanner, quantity }) => {
               <Slider {...settings}>
 
                 {
-                  posts.map((movie, index) => <SingleCategory key={movie?._id} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+                  posts.map((movie, index) => <SinglePost key={index} movie={movie} detectClicked={detectClicked}></SinglePost>)
 
                 }
               </Slider>
@@ -91,7 +96,7 @@ const Categories = ({ handleBanner, quantity }) => {
               <Slider {...settings}>
 
                 {
-                  posts?.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+                  posts?.map((movie, index) => <SinglePost key={index} movie={movie} detectClicked={detectClicked}></SinglePost>)
 
                 }
               </Slider>
@@ -107,7 +112,7 @@ const Categories = ({ handleBanner, quantity }) => {
               <Slider {...settings}>
 
                 {
-                  posts?.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+                  posts?.map((movie, index) => <SinglePost key={index} movie={movie} detectClicked={detectClicked}></SinglePost>)
 
                 }
               </Slider>
@@ -119,7 +124,7 @@ const Categories = ({ handleBanner, quantity }) => {
               <Slider {...settings}>
 
                 {
-                  movies.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+                  movies.map((movie, index) => <SinglePost key={index} movie={movie} detectClicked={detectClicked}></SinglePost>)
 
                 }
               </Slider>
@@ -130,7 +135,7 @@ const Categories = ({ handleBanner, quantity }) => {
               <Slider {...settings}>
 
                 {
-                  movies.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+                  movies.map((movie, index) => <SinglePost key={index} movie={movie} detectClicked={detectClicked}></SinglePost>)
 
                 }
               </Slider>
@@ -141,7 +146,7 @@ const Categories = ({ handleBanner, quantity }) => {
               <Slider {...settings}>
 
                 {
-                  movies.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+                  movies.map((movie, index) => <SinglePost key={index} movie={movie} detectClicked={detectClicked}></SinglePost>)
 
                 }
               </Slider>
@@ -152,7 +157,7 @@ const Categories = ({ handleBanner, quantity }) => {
               <Slider {...settings}>
 
                 {
-                  movies.map((movie, index) => <SingleCategory key={index} movie={movie} detectClicked={detectClicked}></SingleCategory>)
+                  movies.map((movie, index) => <SinglePost key={index} movie={movie} detectClicked={detectClicked}></SinglePost>)
 
                 }
               </Slider>
@@ -160,7 +165,7 @@ const Categories = ({ handleBanner, quantity }) => {
 
           </div>
         }
-      </div>
+      </div> */}
     </div>
   )
 }

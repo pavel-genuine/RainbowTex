@@ -9,58 +9,42 @@ const VideoUploader = (props) => {
     const inputRef = useRef();
     const [source, setSource] = useState();
     const [uploadPercentage, setUploadPercentage] = useState(0);
+    const [progress, setProgress] = useState();
     const cancelFileUpload = useRef(null);
     const { isLoading, error, video } = useSelector(state => state?.postVideo)
-    
+
     const dispatch = useDispatch()
 
     const handleFileChange = (event) => {
-
         const file = event.target.files[0];
-        console.log(file, 'video file');
-
         const formData = new FormData()
         formData.append("video", file)
-        dispatch(videoUpload(formData))
-        console.log(formData.get("video"),'fdata')
-       
         const url = URL.createObjectURL(file);
-
-        console.log(file,'file');
-        console.log(url,'url');
-
         setSource(url);
+        const options = {
+            onUploadProgress: progressEvent => {
+                const { loaded, total } = progressEvent;
 
-        console.log(url,'url');
+                let percent = Math.floor((loaded * 100) / total);
 
-        // const options = {
-        //     onUploadProgress: progressEvent => {
-        //         const { loaded, total } = progressEvent;
+                if (percent < 100) {
+                    setUploadPercentage(percent);
+                }
+            },
+            cancelToken: new CancelToken(
+                cancel => (cancelFileUpload.current = cancel)
+            )
+        };
 
-        //         let percent = Math.floor((loaded * 100) / total);
+        dispatch(videoUpload(formData, options))
 
-        //         if (percent < 100) {
-        //             setUploadPercentage(percent);
-        //         }
-        //     },
-        //     cancelToken: new CancelToken(
-        //         cancel => (cancelFileUpload.current = cancel)
-        //     )
-        // };
-
-        // axios
-        //     .post(
-        //         video?.url,
-        //         formData,
-        //         options
-        //     )
+        if (video) {
+            setUploadPercentage(100);
+            setTimeout(() => {
+                setUploadPercentage(0);
+            }, 1000);
+        }
     };
-
-    
-
-    // console.log('video',video, error,'err',isLoading,'loading');
-
-
 
     const cancelUpload = () => {
         if (cancelFileUpload.current)
@@ -73,10 +57,19 @@ const VideoUploader = (props) => {
 
     return (
         <div>
-            {/* <div className='flex justify-end mb-5'>
-                <progress class="progress progress-error " value="100" max="100"></progress>
-            </div> */}
-            {uploadPercentage > 0 && (
+            {uploadPercentage > 0 &&
+                <div className='flex justify-end items-center mb-5'>
+                    <progress class="progress progress-error mr-2" value={uploadPercentage} max="100"></progress>
+                    <span
+                        className="text-[red] cursor-pointer"
+                        onClick={() => cancelUpload()}
+                    >
+                        X
+                    </span>
+                </div>
+            }
+
+            {/* {uploadPercentage > 0 && (
                 <div className="row mt-3">
                     <div className="col pt-1">
                         <progress
@@ -93,7 +86,7 @@ const VideoUploader = (props) => {
                         </span>
                     </div>
                 </div>
-            )}
+            )} */}
 
             <div className="VideoInput relative">
                 <input
@@ -102,7 +95,7 @@ const VideoUploader = (props) => {
                     className="VideoInput_input hidden"
                     type="file"
                     onChange={handleFileChange}
-                    // accept=".mov"
+                // accept=".mov"
                 />
 
                 <div class="mt-1 flex justify-center mb-8 items-center px-6 pt-5 pb-6 border-2 md:w-[27vw] w-[40vw] h-[150px] md:h-[270px] border-dashed rounded-md">

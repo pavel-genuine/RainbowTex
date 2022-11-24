@@ -19,6 +19,8 @@ import addCommentReducer from './features/commentSlice'
 import approveCommentReducer from './features/commentSlice'
 import removeCommentReducer from './features/commentSlice'
 import editCommentReducer from './features/commentSlice'
+import addPostCategoryReducer from './features/postSection/postCategorySlice'
+import homeCategoriesReducer from './features/categorySection/homeCategories'
 
 export const store = configureStore({
   reducer: {
@@ -26,12 +28,13 @@ export const store = configureStore({
     signUp:signUpReducer,
     signIn:signInReducer,
     allCategories:allCategoriesReducer,
+    homeCategories:homeCategoriesReducer,
     categoryCreate:createCategoryReducer,
     publishPost:publishPostReducer,
     allPosts:allPostReducer,
     singlePost:singlePostReducer,
     postVideo:postVideoReducer,
-    postCategor:PostCategoryReducer,
+    postCategory:PostCategoryReducer,
     postVideoCover:videoCoverReducer,
     postThumbnail:ThumbnailReducer,
     postText:PostTextReducer,
@@ -41,7 +44,8 @@ export const store = configureStore({
     commentAdding:addCommentReducer,
     commentApproving:approveCommentReducer,
     commentRemoving:removeCommentReducer,
-    commentEditing:editCommentReducer
+    commentEditing:editCommentReducer,
+    addPostCategory: addPostCategoryReducer
 
   },
 });

@@ -21,6 +21,17 @@ const SignUp = () => {
     }, [])
 
     const navigate = useNavigate();
+    const token =localStorage.getItem('loginToken')
+
+  useEffect(()=>{
+    if (token) {
+        toast.success('SignUp Successfull')
+        setTimeout(() => {
+            navigate('/');
+        }, 2000);
+        
+    }
+  },[])
 
     const handleShowPassword = () => {
         setShowPassword(true)

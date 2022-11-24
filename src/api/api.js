@@ -6,7 +6,12 @@ axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem(
 //auth section
 export const signUpUser = (user) => axios.post(`${base_url}/auth/register`, user);
 export const signInUser = (user) => axios.post(`${base_url}/auth/login`, user);
-export const googleAuth = (user) => axios.get(`${base_url}/auth/google`);
+export const googleAuth = () => axios.get(`${base_url}/auth/google`);
+export const logOut = () => axios.get(`${base_url}/auth/logout`,{
+    headers:{
+        Authorization:`Bearer ${localStorage.getItem('loginToken')}`
+    }
+});
 
 export const userList = () => axios.get(`${base_url}/admin/userlist`);
 
@@ -15,10 +20,11 @@ export const createCategory = (data) => axios.post(`${base_url}/category`,data)
 export const getAllCategories = () =>axios.get(`${base_url}/category`,)
 export const updateCategory =(data)=>axios.patch(`${base_url}/category`,data)
 export const deleteCategory =(data)=>axios.delete(`${base_url}/category/`,data)
+export const homeCategory =()=>axios.get(`${base_url}/category/all_category_posts`)
 
 //post section
 export const createPost = (post) => axios.post(`${base_url}/post`,post)
-export const uploadVideo = (video) =>axios.post(`${base_url}/post/upload_video`,video)
+export const uploadVideo = (video,options) =>axios.post(`${base_url}/post/upload_video`,video,options)
 export const getAllPosts =()=>axios.get(`${base_url}/post`)
 export const getSinglePost =(id)=>axios.get(`${base_url}/post/single/${id}`)
 export const deletePost =(id)=>axios.delete(`${base_url}/post/admin/${id}?removeMedia=true`)

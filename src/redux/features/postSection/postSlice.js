@@ -5,7 +5,7 @@ import { createPost, deletePost, getAllPosts, getSinglePost} from "../../../api/
 export const publishPost =createAsyncThunk("/post/publishPost",
 async(post)=>{
     const res = await createPost(post);
-    console.log('publishPost thunk',res?.data);
+    // console.log('publishPost thunk',res?.data);
     return res?.data;
 })
 //
@@ -19,14 +19,14 @@ async(post)=>{
 export const singlePostGet =createAsyncThunk("/post/singlePost",
 async(id)=>{
     const res = await getSinglePost(id);
-    console.log('getSinglePost thunk',res?.data);
+    // console.log('getSinglePost thunk',res?.data);
     return res?.data;
 })
 //
 export const postDelete =createAsyncThunk("/post/postDelete",
 async(id)=>{
     const res = await deletePost(id);
-    console.log('deletePost thunk',res?.data);
+    // console.log('deletePost thunk',res?.data);
     return res?.data;
 })
 

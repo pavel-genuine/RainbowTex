@@ -5,23 +5,23 @@ import { addPostToCategory, addThumbnail, removeCategoryFromPost, removeThumbnai
 export const categoryAdd =createAsyncThunk("/category/categoryAdd",
 async(data)=>{
     const res = await addPostToCategory(data);
-    console.log('categoryAdd thunk',res?.data);
+    // console.log('categoryAdd thunk',res?.data);
     return res?.data;
 })
 //
 export const categoryRemove =createAsyncThunk("/category/categoryRemove",
 async(data)=>{
     const res = await removeCategoryFromPost(data);
-    console.log('categoryRemove thunk',res?.data);
+    // console.log('categoryRemove thunk',res?.data);
     return res?.data;
 })
 
 
-const categorySlice = createSlice({
-    name:'category',
+const postCategorySlice = createSlice({
+    name:'postCategory',
     initialState:{
         isLoading:false,
-        category:[],
+        postCategory:[],
         error:null
     },
     extraReducers:(builder) =>{
@@ -60,4 +60,4 @@ const categorySlice = createSlice({
     }
 })
 
-export default categorySlice.reducer
+export default postCategorySlice.reducer

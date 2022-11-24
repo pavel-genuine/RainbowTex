@@ -5,14 +5,14 @@ import { addThumbnail, createfeatured, getAllFeatured, removeThumbnail} from "..
 export const addFeatured =createAsyncThunk("/featured/addFeatured",
 async(data)=>{
     const res = await createfeatured(data);
-    console.log('addFeatured thunk',res?.data);
+    // console.log('addFeatured thunk',res?.data);
     return res?.data;
 })
 //
 export const allfeaturedGet =createAsyncThunk("/Featured/allfeaturedGet",
 async()=>{
     const res = await getAllFeatured();
-    console.log('allfeaturedGet thunk',res?.data);
+    // console.log('allfeaturedGet thunk',res?.data);
     return res?.data;
 })
 

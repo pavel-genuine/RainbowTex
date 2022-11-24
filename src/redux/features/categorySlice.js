@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createCategory, deleteCategory, getAllCategories, updateCategory} from "../../api/api";
+import { createCategory, deleteCategory, getAllCategories, homeCategory, updateCategory} from "../../api/api";
 
 //
 export const categoryCreate =createAsyncThunk("/category/categoryCreate",
 async(data)=>{
     const res = await createCategory(data);
-    console.log('categoryCreate thunk',res?.data);
+    // console.log('categoryCreate thunk',res?.data);
     return res?.data;
 })
 //
@@ -15,18 +15,19 @@ async()=>{
     console.log('allCategories thunk',res?.data);
     return res?.data;
 })
+
 //
 export const categoryUpdate =createAsyncThunk("/category/categoryUpdate",
 async(data)=>{
     const res = await updateCategory(data);
-    console.log('categoryUpdate thunk',res?.data);
+    // console.log('categoryUpdate thunk',res?.data);
     return res?.data;
 })
 //
 export const categoryDelete =createAsyncThunk("/category/categoryDelete",
 async(data)=>{
     const res = await deleteCategory(data);
-    console.log('deletePost thunk',res?.data);
+    // console.log('deletePost thunk',res?.data);
     return res?.data;
 })
 
@@ -68,7 +69,6 @@ const categorySlice = createSlice({
             state.category= []
             state.error=action.error.message
         })
-
        
           // update
         builder.addCase(categoryUpdate.pending,(state)=>{

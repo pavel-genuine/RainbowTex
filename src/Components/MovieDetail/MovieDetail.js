@@ -22,20 +22,19 @@ const MovieDetails = () => {
     const { id } = useParams()
 
     const { isLoading, error, post: movie } = useSelector(state => state?.singlePost)
+    const { comment } = useSelector(state => state?.commentAdding)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
 
         dispatch(singlePostGet(id))
-    }
-
-        , [])
+    }, [])
 
 
     // console.log(movie?.videos[0]?.url, 'video url');
 
-    const [comment, setComment] = useState(false)
+    // const [comment, setComment] = useState(false)
     // const [love, setLove] = useState(false)
     // let [count, setCount] = useState(false)
 
@@ -51,8 +50,12 @@ const MovieDetails = () => {
     // }
 
     const onSubmit = async (data) => {
-        setComment(data?.comment)
-        // dispatch(commentAdd(data))
+        const newComment ={
+            postId:movie?.postId,
+            comment:data?.comment,
+            
+        }
+        dispatch(commentAdd(data))
     }
 
     if (isLoading) {
@@ -96,9 +99,8 @@ const MovieDetails = () => {
 
                 <Player className='rounded-lg mt-5 mb-10 hidden md:block'
                     playsInline
-                    // poster={movie?.thumbnail}
-                    src="https://jucundu.s3.eu-central-1.amazonaws.com/videos/dd0fff65-d687-47d4-99e5-417b5d468007-----ArjW4S9LRu89lBzgCvc1g.mp4"
-                    // src={`${videoUrl}`}
+                    poster={movie?.thumbnail?.cdnUrl}
+                    src={movie?.videos?.length && movie?.videos[0]?.url}
                     fluid={false}
                     width={'40%'}
                     height={400}
@@ -114,11 +116,8 @@ const MovieDetails = () => {
 
 
                {
-                // movie?.videos[0]?.url &&
-                <video className='md:hidde' width="320" height="240" controls>
-                {/* <source src="https://jucundu.s3.eu-central-1.amazonaws.com/videos/dd0fff65-d687-47d4-99e5-417b5d468007-----ArjW4S9LRu89lBzgCvc1g.mp4" /> */}
-                <source src={movie?.videos?.length >=0 && movie?.videos[0]?.url} />
-
+                <video className='md:hidden' width="320" height="240" controls>
+                <source src={movie?.videos?.length && movie?.videos[0]?.url} />
             </video>
                }
                 <div className='flex'>

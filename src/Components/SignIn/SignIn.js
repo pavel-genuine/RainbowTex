@@ -2,11 +2,12 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { base_url, googleAuth, signInUser } from "../../api/api";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import './SignIn.css'
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSignIn } from "../../redux/features/authSection/signInSlice";
+import toast, { Toaster } from "react-hot-toast";
 
 const SignIn = () => {
 
@@ -58,11 +59,25 @@ const SignIn = () => {
         console.log(submit, 'submit');
         return submit;
     }
+    const navigate = useNavigate();
+    const token =localStorage.getItem('loginToken')
 
+    const location = useLocation();
+    let from = location.state?.from?.pathname || "/";
+
+    useEffect(()=>{
+    if (token) {
+        toast.success('SignIn Successfull')
+        setTimeout(() => {
+            navigate(from, { replace: true });
+        }, 2000);
+        
+    }},[])
 
     return (
         <div style={{ backgroundImage: `url(${'https://i.ibb.co/WFbg3T0/background1-1.jpg'})` }}
             className={` min-h-screen bg-cover md:h-[120vh] h-[150vh] md:w-[100%] w-[150%] `}>
+            <Toaster></Toaster>
             <div className="w-[100%]  bg-black bg-opacity-50  flex flex-col justify-center items-center ">
                 <div className="md:w-[30%] w-[100%] bg-black h-screen md:h-auto bg-opacity-80 shadow-xl md:mt-28 pt-40 md:py-10  ">
                     <div className="card-body w-96 mx-auto my-auto  ">

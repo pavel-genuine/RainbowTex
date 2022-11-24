@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {  allCategoriesGet } from '../../redux/features/categorySlice'
-import { allfeaturedGet } from '../../redux/features/featuredPost/featuredPostSlice'
 
 const useAllCategories = () => {
 
@@ -9,11 +8,13 @@ const useAllCategories = () => {
 
     const dispatch =useDispatch()
   
-    // console.log(featured, 'banner feat');
+            console.log('all cates array', category?.categories);
+
 
     useEffect(() => {
-        dispatch(allCategoriesGet())
-        // console.log('featured', category);
+        dispatch(allCategoriesGet())        
+        // console.log('all cates array', category?.categories);
+        // console.log('all cates name', category?.categories[0]?.categoryName);
         // console.log('error', error);
     }, [])
 

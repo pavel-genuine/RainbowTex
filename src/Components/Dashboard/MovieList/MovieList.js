@@ -39,9 +39,8 @@ const MovieList = () => {
             dispatch(postDelete(id))
             setMovies(posts)
         }
-        console.log('post after', posts);
     }
-    console.log('post after2', posts);
+    
 
 
     return (
@@ -56,6 +55,7 @@ const MovieList = () => {
                         <div className=''>
                             <p className='font-semibold my-2 text-xl underline underline-offset-2 '> Movies List</p>
                             <Filter></Filter>
+
                             <p className='font-semibold my-5 bg-slate-600 px-3 py-2 md:mr-20 text-lg md:w-96 '>Total Movies Uploaded : {movies?.length} </p>
                             <div style={{ overflowX: 'auto' }}>
                                 <table class="shadow-lg table-auto overflow-x-scroll overflow-auto w-full mt-5">

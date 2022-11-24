@@ -5,7 +5,7 @@ import { getAllPosts } from "../../../api/api";
 export const fetchAllllPosts =createAsyncThunk("/posts/fetchAllllPosts",
 async()=>{
     const res = await getAllPosts();
-    console.log('AllPosts thunk',res?.data);
+    // console.log('AllPosts thunk',res?.data);
     return res?.data;
 })
 

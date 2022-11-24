@@ -6,14 +6,12 @@ import "./Banner.css"
 
 const Banner = ({ updatedBanner }) => {
 
-  const {error, featured, isLoading} =useAllFeatured()
-
-  // console.log(updatedBanner, 'banner');
+  const { error, featured, isLoading } = useAllFeatured()
 
   return (
     <div className="w-[98vw] mx-auto relative">
       <img className='md:h-[100vh] h-[40vh] w-[99vw] brightness-125 contrast-125' src={updatedBanner?.title ? updatedBanner?.thumbnail : 'https://occ-0-2482-2186.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABcaZlB5cBXaQovKzRNe3DLOD5xe5ug2Msp7y4SHAFXs8Uu-s9esOCD1X3jnbYZZ4Dm-tM-cOgWh1FDmFD0wIfIfbrkpJAoULvXWX.jpg?r=c9b%22'} alt="" />
-      
+
       <div className='absolute w-[98vw] md:top-[0%] top-[0%] md:h-[100vh] h-[40vh] text-white '>
         <div className='absolute w-[98vw] md:pt-[13%] pt-[30%] md:pt-60 p-5 md:pl-28 md:top-[0%] top-[0%] md:h-[100vh] h-[40vh] text-white bg-gradient-to-t from-[#181818]' >
           <h1 className='md:text-6xl text-2xl font-semibold'>{updatedBanner?.title}</h1>
@@ -38,15 +36,15 @@ const Banner = ({ updatedBanner }) => {
                 </button>
               </Link>
             }
-  
+
           </div>
-       
+
         </div>
         <div className='hidden md:blockh-[10vh] bg-opacity-90  bg-gradient-to-t from-[#181818] bg-[red] w-[98vw] ml-1'>
 
-</div>
+        </div>
       </div>
- 
+
     </div>
   )
 }

@@ -5,14 +5,14 @@ import {  addVideoCoverPhoto, removeVideoCoverPhoto} from "../../../api/api";
 export const videoCoverAdd =createAsyncThunk("/videoCover/videoCoverAdd",
 async(data)=>{
     const res = await addVideoCoverPhoto(data);
-    console.log('videoCoverAdd thunk',res?.data);
+    // console.log('videoCoverAdd thunk',res?.data);
     return res?.data;
 })
 //remove
 export const videoCoverRemove =createAsyncThunk("/videoCover/videoCoverRemove",
 async(data)=>{
     const res = await removeVideoCoverPhoto(data);
-    console.log('videoCoverRemove thunk',res?.data);
+    // console.log('videoCoverRemove thunk',res?.data);
     return res?.data;
 })
 
