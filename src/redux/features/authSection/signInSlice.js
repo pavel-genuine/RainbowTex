@@ -7,6 +7,8 @@ async(user)=>{
     const res =  await signInUser(user)  
     console.log('signIn thunk',res?.data);
     localStorage.setItem('loginToken',res?.data?.loginToken)
+    localStorage.setItem('userId',res?.data?._id)
+    localStorage.setItem('email',res?.data?.email)
     return  res?.data
 })
 

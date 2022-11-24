@@ -10,7 +10,7 @@ const HomeCategories = () => {
     const settings = {
         // infinite: true,
         slidesToShow: 5,
-        // slidesToScroll: 2,
+        slidesToScroll: 2,
         // accessibility:true,
         // arrows:true,
         swipeToSlide: true,

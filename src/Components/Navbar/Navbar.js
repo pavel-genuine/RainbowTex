@@ -30,6 +30,8 @@ const Navbar = () => {
         }
     }
 
+    const token =localStorage.getItem('loginToken')
+
     window.addEventListener('scroll', changeBackground)
 
     const personalizeItems =
@@ -119,7 +121,7 @@ const Navbar = () => {
                 <label tabindex="0" class="">
                     <CustomLink class="btn-ghost hover:rounded md:p-3 md:m-5" to='/'>Categories</CustomLink>
                 </label>
-                <div tabindex="0" class="space-y-2 px-4 py-6 rounded-lg dropdown-content menu  ml-12 mt-3 shadow text-white bg-black bg-opacity-60 w-auto">
+                <div tabindex="0" class="px-4 py-6 rounded-lg dropdown-content menu mt-3 shadow text-white bg-black bg-opacity-60 w-auto">
                 <ul className='md:grid grid-cols-2 md:w-[20vw]'>
                        {
                         category?.categories?.length > 0 &&
@@ -130,11 +132,11 @@ const Navbar = () => {
                     </ul>
                 </div>
             </div>
-            {
+            { !token &&
                 <CustomLink class="btn-ghost hover:rounded md:p-3 md:m-5" to='/sign-up'>Sign Up</CustomLink>
 
             }
-            {
+            {!token &&
                 <CustomLink class="btn-ghost hover:rounded md:p-3 md:m-5" to='/sign-in'>Sign In</CustomLink>
             }
         </>

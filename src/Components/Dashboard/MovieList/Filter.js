@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllCategories } from '../../../api/api'
+import { deleteCategory, getAllCategories } from '../../../api/api'
 import { categoryCreate, categoryDelete } from '../../../redux/features/categorySlice'
 import CustomLink from '../../Navbar/CustomLink'
 import useAllCategories from '../../Shared/useAllCategories'
@@ -20,13 +20,17 @@ const Filter = () => {
 
     const dispatch = useDispatch()
 
-    const handleDeleteCategory = (data) => {
+    const handleDeleteCategory = async (data) => {
         console.log('del cate',data);
-        const confirmation = window.confirm('Are you sure to delete?');
-        if (confirmation) {
-        dispatch(categoryDelete({"_id":data}))
-        }
+        // const confirmation = window.confirm('Are you sure to delete?');
+        // if (confirmation) {
+        // dispatch(categoryDelete({_id:data}))
+    
+        const res = await deleteCategory({_id:data})
+        console.log(res?.data, 'del data');
+        // }
     }
+ // await deleteCategory({_id:data})
 
     const handleNewCate = (data) => {
         setAddedCate(() => data)

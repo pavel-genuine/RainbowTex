@@ -19,7 +19,11 @@ export const userList = () => axios.get(`${base_url}/admin/userlist`);
 export const createCategory = (data) => axios.post(`${base_url}/category`,data)
 export const getAllCategories = () =>axios.get(`${base_url}/category`,)
 export const updateCategory =(data)=>axios.patch(`${base_url}/category`,data)
-export const deleteCategory =(data)=>axios.delete(`${base_url}/category/`,data)
+export const deleteCategory =(data)=>axios.delete(`${base_url}/category`,data,{
+    headers:{
+        Authorization:`Bearer ${localStorage.getItem('loginToken')}`
+    }
+})
 export const homeCategory =()=>axios.get(`${base_url}/category/all_category_posts`)
 
 //post section
