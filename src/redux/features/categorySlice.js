@@ -27,6 +27,7 @@ async(data)=>{
 export const categoryDelete =createAsyncThunk("/category/categoryDelete",
 async(data)=>{
     const res = await deleteCategory(data);
+    
     console.log('deletePost thunk',res?.data);
     return res?.data;
 })
