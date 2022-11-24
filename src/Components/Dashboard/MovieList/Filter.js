@@ -16,17 +16,20 @@ const Filter = () => {
     const [addedCate, setAddedCate] = useState({});
     const [delCate, setDelCate] = useState({});
 
-    const { error, category, isLoading } = useAllCategories();
+    let { error, category, isLoading } = useAllCategories();
 
     const { category: deletedCategory } = useSelector(
         (state) => state?.categoryDeleting
     );
+
+    let categories =category?.categories
 
     const dispatch = useDispatch();
 
     const handleDeleteCategory = async (_id) => {
         const confirmation = window.confirm('Are you sure to delete?');
         if (confirmation) {
+            categories = categories?.filter(item => item?._id != _id);
             dispatch(categoryDelete({ data: { _id } }))
         }
         // const res = await axios.delete(
@@ -57,7 +60,7 @@ const Filter = () => {
                 </label>
                 <select
                    
-                    className="select select-sm select-bordered bg-slate-400"
+                    className="select select-sm select-bordered bg-slate-400 text-white"
                 >
                     <option disabled selected>
                         Filter by Category
@@ -67,7 +70,18 @@ const Filter = () => {
                             return (
                                 <option
                                     value={item?._id}
-                                    className="bg-[brown] hover:bg-[brown]"
+                                    className=""
+                                >
+                                    {item?.categoryName}
+                                </option>
+                            );
+                        })}
+                        {category?.categories?.length > 0 && addedCate && newCate?.length>0 &&
+                        newCate?.map((item) => {
+                            return (
+                                <option
+                                    value={item?._id}
+                                    className=""
                                 >
                                     {item?.categoryName}
                                 </option>
@@ -88,7 +102,7 @@ const Filter = () => {
                 <AddCategory handleNewCate={handleNewCate}></AddCategory>
             </div>
 
-            <div className="form-control mb-3">
+            <div className="form-control mb-3 text-white">
                 <label className="label">
                     {/* <span className="label-text text-gray-600  ">Pick the category</span> */}
                     {/* <span className="label-text-alt">Alt label</span> */}
@@ -103,13 +117,13 @@ const Filter = () => {
                         Delete Category
                     </option>
                     {category?.categories?.length > 0 &&
-                        category?.categories?.map((item) => {
+                        [...category?.categories]?.map((item) => {
                             return (
                                 <option
                                     value={item?._id}
-                                    className="bg-[brown] hover:bg-[brown]"
+                                    className="bg-[brown] "
                                 >
-                                    {item?.categoryName}
+                                    {item?.categoryName} X
                                 </option>
                             );
                         })}

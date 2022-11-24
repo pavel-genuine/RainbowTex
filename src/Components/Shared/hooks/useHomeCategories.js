@@ -6,7 +6,6 @@ const useHomeCategories = (limit) => {
 
     const {error, category, isLoading} =useSelector(state=>state?.homeCategories)
     
-
     const dispatch =useDispatch()
 
     useEffect(() => {
