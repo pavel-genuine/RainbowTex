@@ -19,48 +19,47 @@ const PublishPost = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
 
     const [selectedCate, setSelectedCate] = useState()
-    console.log('set selected cate',selectedCate);
+    console.log('set selected cate', selectedCate);
 
     const { category } = useAllCategories()
 
     const [postData, setPostData] = useState({
-        videocover: null
+        videocover: null,
+        thumbnail :null
     });
 
     const [videocover, setVideocover] = useState()
+
+    const [coverPhoto, setCoverPhoto] = useState();
     const [thumbnail, setThumbnail] = useState('')
 
-    const [coverPhoto, setCoverPhoto] = useState([]);
     const { video } = useSelector(state => state?.postVideo)
     const { isLoading, error, post } = useSelector(state => state?.publishPost)
-    const {postCategory} = useSelector(state => state?.addPostCategory)
+    const { postCategory } = useSelector(state => state?.addPostCategory)
 
     const dispatch = useDispatch()
 
-    const handleSetCate=()=>{
-        const cate ={
-            postId:post?._id,
-            categoryId:selectedCate
+    const handleSetCate = () => {
+        const cate = {
+            postId: post?._id,
+            categoryId: selectedCate
         }
-        console.log('set selected cate',selectedCate, post?._id);
+        console.log('set selected cate', selectedCate, post?._id);
         // dispatch(categoryAdd(cate))
 
-        console.log('post cate',postCategory);
+        console.log('post cate', postCategory);
     }
 
     const onChangeCover = (data) => {
         setCoverPhoto(data)
-
         const image = data[0].file
-
-        setPostData(() => ({ videocover: image }));
-
-        setVideocover(data[0].file)
+        setPostData((items) => ({...items, videocover: image }));
     }
+
     const onChangeThumbnail = (data) => {
         const image = data[0].file
-        setThumbnail(image)
-
+        setThumbnail(data)
+        setPostData((items) => ({...items, thumbnail: image }));
     }
 
     const onSubmit = async (data) => {
@@ -73,7 +72,7 @@ const PublishPost = () => {
         // formData.append('premium', data?.false);
         console.log('fdata cover file', coverPhoto);
         formData.append('videocover', postData?.videocover);
-        // formData.append('thumbnail', thumbnail);
+        formData.append('thumbnail', postData?.thumbnail);
         // formData.append('imdbRating', data?.rating);
         // formData.append('trailerUrl', '');
 
@@ -87,8 +86,8 @@ const PublishPost = () => {
 
         const submit = dispatch(publishPost(formData))
 
-        console.log('post',post);
-        
+        console.log('post', post);
+
         toast.success("Congratulation! Post Published")
     }
     const email = ''
@@ -149,7 +148,7 @@ const PublishPost = () => {
                                                         <label onClick={onImageUpload} for="file-upload" class="relative cursor-pointer rounded-md font-medium hover:text-[brown] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                                             <svg class="mx-auto h-12 w-12" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                                                                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                            </svg><span>Upload Banner</span>
+                                                            </svg><span>Upload Video Cover</span>
                                                             <input style={{ backgroundColor: ' #919cb1', border: '#6b7280' }} class="sr-only" />
                                                         </label>
                                                     </div>
@@ -184,6 +183,81 @@ const PublishPost = () => {
                                 </div>
                             </div>
 
+
+
+
+                            <div className='flex justify-between'>
+                                <ImageUploading
+                                    value={thumbnail}
+                                    onChange={onChangeThumbnail}
+                                    dataURLKey="data_url"
+                                >
+                                    {({
+                                        imageList,
+                                        onImageUpload
+                                    }) => (
+
+
+                                        <div className="upload__image-wrapper relative">
+
+                                            <div class="mt-1 flex justify-center mb-8 items-center px-6 pt-5 pb-6 border-2 md:w-[14vw] w-[20vw] h-[80px] md:h-[150px]  border-dashed rounded-md">
+                                                <div class="space-y-1 text-center">
+                                                    <div class="flex text-sm text-gray-600">
+                                                        <label onClick={onImageUpload} for="file-upload" class="relative cursor-pointer rounded-md font-medium hover:text-[brown] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                            <svg class="mx-auto h-8 w-8" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                            </svg><span>Upload Thumbnail</span>
+                                                            <input style={{ backgroundColor: ' #919cb1', border: '#6b7280' }} class="sr-only" />
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {
+                                                imageList?.map((image, index) => (
+
+                                                    <div style={{
+                                                        zIndex: '1', backgroundColor: 'black', backgroundRepeat: 'no-repeat', backgroundAttachment: "",
+                                                        backgroundImage: `url(${image?.data_url})`
+                                                    }}
+                                                        class='bg-cover border-slate-600 border  md:w-[14vw] w-[20vw] h-[80px] md:h-[155px]  md:mx-auto absolute top-[0%] left-[0%]  shadow overflow-hidden rounded-lg' >
+
+                                                        <div class="px-4 py-5 sm:px-6  " >
+
+                                                            <p title='Change blog banner' onClick={onImageUpload} className='absolute top-[2%] right-[1%] md:top-[0%] md:right-[1%]  btn btn-xs my-3 '><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                            </svg></p>
+
+                                                        </div>
+                                                    </div>))
+                                            }
+
+                                        </div>
+                                    )}
+                                </ImageUploading>
+
+
+                                <div className='my-3'>
+                                    <div className="form-control w-full max-w-xs ">
+                                        <label className="label">
+                                            <span className="label-text text-gray-600  ">Pick the category</span>
+                                            {/* <span className="label-text-alt">Alt label</span> */}
+                                        </label>
+                                        <select onChange={(e) => { setSelectedCate(e.target.value) }} className="select select-bordered bg-slate-400">
+
+
+                                            <option disabled selected>Pick one</option>
+                                            {
+                                                category?.categories?.length > 0 &&
+                                                category?.categories?.map(item => {
+                                                    return <option value={item?._id}>{item?.categoryName}</option>
+                                                })
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div>
                                 <div className='grow-wrap'>
                                     <textarea
@@ -193,25 +267,6 @@ const PublishPost = () => {
                                         name="" id="" cols="30" rows="2"
                                         {...register("title")}>
                                     </textarea>
-                                </div>
-
-                                <div className='my-3'>
-                                    <div className="form-control w-full max-w-xs ">
-                                        <label className="label">
-                                            <span className="label-text text-gray-600  ">Pick the category</span>
-                                            {/* <span className="label-text-alt">Alt label</span> */}
-                                        </label>
-                                        <select onChange={(e) =>{ setSelectedCate(e.target.value)}} className="select select-bordered bg-slate-400">
-
-
-                                            <option disabled selected>Pick one</option>
-                                            {
-                                                category?.categories?.length > 0 &&
-                                                category?.categories?.map(item=>{
-                                                return <option value={item?._id}>{item?.categoryName}</option>})
-                                            }
-                                        </select>
-                                    </div>
                                 </div>
 
                                 <div className='flex '>
