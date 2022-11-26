@@ -70,9 +70,9 @@ const SignIn = () => {
         toast.success('SignIn Successfull')
         setTimeout(() => {
             navigate(from, { replace: true });
-        }, 2000);
+        }, 400);
         
-    }},[])
+    }},[token])
 
     return (
         <div style={{ backgroundImage: `url(${'https://i.ibb.co/WFbg3T0/background1-1.jpg'})` }}

@@ -3,12 +3,15 @@ import Footer from '../Footer/Footer'
 import Banner from './Banner'
 import Categories from '../Categories/Categories'
 
-const HomePage = () => {
+const HomePage = ({filteredCategory}) => {
+
 
   const [updatedBanner, setUpdatedBanner] = useState({})
 
   useEffect(() => {
     window.scrollTo(0, 0)
+
+
   }, [])
 
   const handleBanner = (data) => {
@@ -24,7 +27,7 @@ const HomePage = () => {
         </div>
 
         <div className='mt-20'>
-          <Categories handleBanner={handleBanner}></Categories>
+          <Categories filteredCategory={filteredCategory} handleBanner={handleBanner}></Categories>
         </div>
 
         <Footer></Footer>

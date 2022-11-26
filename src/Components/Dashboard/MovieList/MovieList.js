@@ -9,40 +9,36 @@ import EditPost from "./EditPost";
 import FeaturedBanner from "./FeaturedBanner";
 import Filter from "./Filter";
 
-
 const MovieList = () => {
 
-    const [isBanner, setIsBanner] = useState(false)
-    const [open, setOpen] = useState(false);
     const [filteredMovies, setfilteredMovies] = useState();
+    const [movies, setMovies] = useState([])
 
     const filterHandler = (data) => {
 
         setfilteredMovies(() => data)
 
-        console.log('filtered', data);
+        // console.log('filtered', data);
     }
     let { isLoading, error, posts } = usePosts()
 
     const { post } = useSelector(state => state?.deletePost)
-    const { featured } = useSelector(state => state?.addFeatured)
-
     const dispatch = useDispatch()
-    const [movies, setMovies] = useState([])
+   
 
     const addBanner = (data) => {
         dispatch(addFeatured(data))
     }
 
-
     useEffect(() => {
 
         window.scrollTo(0, 0)
         setMovies(posts)
-        console.log('filter movs',filteredMovies);
-        if (filteredMovies) {
-            console.log('filter movs inner',filteredMovies);
-            setMovies(()=>filteredMovies)
+        if (filteredMovies==1) {
+            setMovies(posts)
+        }
+        else if (filteredMovies?._id) {
+            setMovies(()=>filteredMovies?.posts)
         }
 
     }, [posts, filteredMovies])
@@ -50,13 +46,11 @@ const MovieList = () => {
     const handleDeleteOne = (id) => {
         const confirmation = window.confirm('Are you sure to delete?');
         if (confirmation) {
-            posts = posts?.filter(item => item?._id != id);
             dispatch(postDelete(id))
-            setMovies(posts)
+           const newMovies = movies?.filter(item => item?._id != id);
+            setMovies(newMovies)
         }
     }
-
-
 
     return (
         <div className='py-16 min-h-screen relative bg-[#181818] text-slate-200'>
@@ -90,7 +84,7 @@ const MovieList = () => {
                                         {
                                             
                                             movies?.map(movie =>{
-                                                return <tr>
+                                                return <tr key={movie?._id}>
                                                     <td class="border border-[#181818] px-8 py-4">{movie?.title}</td>
                                                     <td class="border border-[#181818] ">
                                                         <img className="w-36" src={movie?.thumbnail?.cdnUrl} alt="" />
@@ -130,7 +124,7 @@ const MovieList = () => {
 
                                                                 <input type="checkbox" id="my-modal-10" class="modal-toggle" />
                                                                 <label for="my-modal-10" class="modal cursor-pointer">
-                                                                    <label class="modal-box relative" for="">
+                                                                    <label class="modal-box relative w-11/12 max-w-5xl" for="">
                                                                         <EditPost></EditPost>
                                                                     </label>
                                                                 </label></div>

@@ -22,6 +22,7 @@ import editCommentReducer from './features/commentSlice'
 import addPostCategoryReducer from './features/postSection/postCategorySlice'
 import homeCategoriesReducer from './features/categorySection/homeCategories'
 import deleteCategoryReducer from './features/categorySlice'
+import addRatingReducer from './features/postSection/addRatingSlice'
 
 export const store = configureStore({
   reducer: {
@@ -41,13 +42,14 @@ export const store = configureStore({
     postText:PostTextReducer,
     deletePost:postDeleteReducer,
     allFeatured:getFeaturedReducer,
-    addFeatured:addFeaturedReducer,
+    featuredAdd:addFeaturedReducer,
     commentAdding:addCommentReducer,
     commentApproving:approveCommentReducer,
     commentRemoving:removeCommentReducer,
     commentEditing:editCommentReducer,
     addPostCategory: addPostCategoryReducer,
-    categoryDeleting:deleteCategoryReducer
+    categoryDeleting:deleteCategoryReducer,
+    ratingAdding:addRatingReducer
 
 
   },

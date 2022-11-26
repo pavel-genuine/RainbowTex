@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 // import toast from 'react-hot-toast';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
-import { Player, BigPlayButton, ControlBar, ReplayControl, ForwardControl, PlaybackRateMenuButton, LoadingSpinner } from 'video-react';
 import Footer from '../Footer/Footer';
 import { movies } from '../allMovies/allMovies';
 import { useForm } from 'react-hook-form';
@@ -14,41 +13,56 @@ import { singlePostGet } from '../../redux/features/postSection/postSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { commentAdd } from '../../redux/features/commentSlice';
 import { base_url, getSinglePost } from '../../api/api';
+import useAllCategories from '../Shared/useAllCategories';
+import useHomeCategories from '../Shared/hooks/useHomeCategories';
+import Slider from 'react-slick';
+import { settings } from '../Categories/slickSetting';
+import SinglePost from '../Categories/SinglePost';
+import { ratingAdd } from '../../redux/features/postSection/addRatingSlice';
 
 const MovieDetails = () => {
 
     const { register, formState: { errors }, handleSubmit } = useForm();
 
+    const [thisCate, setThisCate] = useState([])
+
     const { id } = useParams()
+
+    const { category } = useHomeCategories()
+    // console.log('cates', category);
 
     const { isLoading, error, post: movie } = useSelector(state => state?.singlePost)
     const { comment: newComment } = useSelector(state => state?.commentAdding)
+    const { rating } = useSelector(state => state?.ratingAdding)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
-
+        window.scrollTo(0, 0)
         dispatch(singlePostGet(id))
+        const singleCate = category?.find(cate => cate?._id == movie?.category)
+        setThisCate(singleCate?.posts)
+
     }, [])
 
 
-    console.log(movie, 'mov');
+    // console.log(movie, 'mov');
 
     const [comment, setComment] = useState(false)
-    // const [love, setLove] = useState(false)
+    const [ratings, setRatings] = useState(0)
     // let [count, setCount] = useState(false)
 
-    useEffect(() => {
-        window.scrollTo(0, 0)
-    }, [])
+    // console.log(ratings,'rat');
+
+    const handleRating = () => {
+
+        // dispatch(ratingAdd({
+        //     postId: movie?._id,
+        //     rating
+        // }))
+    }
 
 
-    // const handleLove = () => {
-    //     setLove(true)
-    //     setCount(() => count++)
-    //     console.log(count, 'count');
-    // }
-    localStorage.getItem('userId')
 
     const onSubmit = async (data) => {
 
@@ -69,7 +83,7 @@ const MovieDetails = () => {
     return (
         <div className='mx-auto bg-[#181818] text-slate-200'>
             <div className=" h-[40vh]  w-[98vw] mx-auto relative mb-40 md:mb-60">
-                <img className='md:h-[100vh] h-[40vh] w-[100vw] brightness-125 contrast-125' src={movie?.videoCover?.cdnUrl ? movie?.videoCover?.cdnUrl :'https://i.ibb.co/R6Y4CQ3/1-white-1.png'} alt="" />
+                <img className='md:h-[100vh] h-[40vh] w-[100vw] brightness-125 contrast-125' src={movie?.videoCover?.cdnUrl ? movie?.videoCover?.cdnUrl : 'https://i.ibb.co/R6Y4CQ3/1-white-1.png'} alt="" />
                 <div className='absolute w-[98vw] md:pt-[13%] pt-[30%] md:pt-60 p-5 md:pl-28 md:top-[0%] top-[0%] md:h-[100vh] h-[40vh] text-white bg-gradient-to-t from-[#181818]'>
                     <h1 className='md:text-6xl text-2xl font-semibold'>{movie?.title}</h1>
                     <p className='md:text-lg md:w-[40%] md:my-5 my-2'>{movie?.description}</p>
@@ -100,35 +114,16 @@ const MovieDetails = () => {
 
             <div className='md:mt-[32%] md:pl-16 pl-5 '>
                 <p className='text-2xl font-semibold'>Videos || {movie?.title}  </p>
-
-                <Player className='rounded-lg mt-5 mb-10 hidden md:block'
-                    playsInline
-                    poster={movie?.videoCover?.cdnUrl }
-                    src={movie?.videos?.length && movie?.videos[0]?.url}
-                    fluid={false}
-                    width={'40%'}
-                    height={400}
-                >
-                    <LoadingSpinner />
-                    <BigPlayButton position="center" />
-                    <ControlBar autoHide={false}>
-                        <ReplayControl seconds={10} order={2.2} />
-                        <ForwardControl seconds={10} order={3.2} />
-                        <PlaybackRateMenuButton rates={[5, 2, 1, 0.5, 0.1]} order={6.1} />
-                    </ControlBar>
-                </Player>
-
-
                 {
-                    <video className='md:hidden' width="320" height="240" controls>
+                    <video className='md:hidde md:w-[50%] w-[90%] rounded my-5' controls poster={movie?.videoCover?.cdnUrl} controlsList="nodownload">
                         <source src={movie?.videos?.length && movie?.videos[0]?.url} />
                     </video>
                 }
                 <div className='flex'>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-[red] cursor-pointer">
+                    <svg onClick={()=>setRatings(1)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-[red] cursor-pointer">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                     </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-[red] cursor-pointer">
+                    <svg onClick={()=>setRatings(2)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-[red] cursor-pointer">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-[red] cursor-pointer">
@@ -197,7 +192,7 @@ const MovieDetails = () => {
                     }
 
                     <div className='m-2 border-b'>
-                        <div className='my-3'>{movie?.comments?.map(item =><div> 
+                        <div className='my-3'>{movie?.comments?.map(item => <div>
                             <p className="font-medium flex items-center"> <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('email')} </p>
                             <p className='m-3 bg-slate-800 p-2 rounded'> {item?.comment}</p>
                         </div>)}</div>
@@ -207,9 +202,21 @@ const MovieDetails = () => {
                 </div>
 
             </div>
-            {/* <Categories quantity={2}></Categories> */}
-            <Footer></Footer>
+            {
+                thisCate?.length > 4 &&
+
+                <div className='my-10'>
+            <h1 className='text-xl my-5 mx-5'>Recommended Movies</h1>
+            <Slider {...settings}>
+                {
+                    thisCate?.map((movie) => <SinglePost key={movie?._id} movie={movie}></SinglePost>)
+                }
+            </Slider>
         </div>
+            }
+
+<Footer></Footer>
+        </div >
     );
 };
 

@@ -1,33 +1,91 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
+import Slider from 'react-slick';
 import useAllFeatured from '../Shared/useAllFeatured';
 import "./Banner.css"
 
 const Banner = ({ updatedBanner }) => {
 
+  const settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true
+        }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
+  };
+
   const { error, featured, isLoading } = useAllFeatured()
 
   return (
-    <div className="w-[98vw] mx-auto relative">
-      <img className='md:h-[100vh] h-[40vh] w-[99vw] brightness-125 contrast-125' src={updatedBanner?.title ? updatedBanner?.thumbnail : 'https://occ-0-2482-2186.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABcaZlB5cBXaQovKzRNe3DLOD5xe5ug2Msp7y4SHAFXs8Uu-s9esOCD1X3jnbYZZ4Dm-tM-cOgWh1FDmFD0wIfIfbrkpJAoULvXWX.jpg?r=c9b%22'} alt="" />
+    <div className="w-[95vw] mx-auto ">
+      {/* <img className='md:h-[100vh] h-[40vh] w-[99vw] brightness-125 contrast-125' src={updatedBanner?.title ? updatedBanner?.thumbnail : 'https://occ-0-2482-2186.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABcaZlB5cBXaQovKzRNe3DLOD5xe5ug2Msp7y4SHAFXs8Uu-s9esOCD1X3jnbYZZ4Dm-tM-cOgWh1FDmFD0wIfIfbrkpJAoULvXWX.jpg?r=c9b%22'} alt="" /> */}
+      {
 
-      <div className='absolute w-[98vw] md:top-[0%] top-[0%] md:h-[100vh] h-[40vh] text-white '>
+        !localStorage?.getItem('loginToken') && localStorage?.getItem('email') && <div className="toast z-20 toast-top toast-end pt-20">
+          <div className="alert alert-error text-white font-semibold">
+            <div>
+              <span>Please verify your email, else your signIn will be restricted !</span>
+            </div>
+          </div>
+        </div>
+
+      }
+
+
+      {
+
+        featured?.length &&
+
+        <Slider {...settings}>
+          {
+            featured?.map((movie) => <div>
+
+              <img className=' md:h-[95vh] w-[100%]' src={movie?.videoCover?.cdnUrl} alt="" />
+
+              <div className='absolute w-[98vw] md:top-[0%] top-[0%] md:h-[100vh] h-[40vh] text-white '>
         <div className='absolute w-[98vw] md:pt-[13%] pt-[30%] md:pt-60 p-5 md:pl-28 md:top-[0%] top-[0%] md:h-[100vh] h-[40vh] text-white bg-gradient-to-t from-[#181818]' >
-          <h1 className='md:text-6xl text-2xl font-semibold'>{updatedBanner?.title}</h1>
-          <p className='md:text-lg md:w-[40%]  md:my-5 my-2'>{updatedBanner?.description}</p>
+          <h1 className='md:text-6xl text-2xl font-semibold'>{movie?.title}</h1>
+          <p className='md:text-lg md:w-[40%]  md:my-5 my-2'>{movie?.description}</p>
 
           <div className='flex space-x-10'>
             {
-              updatedBanner?.description &&
+            
 
 
               <button className='md:py-3 px-2 py-1 font-semibold md:text-lg rounded max-w-xs text-white bg-[#e50914] hover:bg-[brown] cursor-pointer mt-4 mb-2'>Subscribe Now</button>
 
             }
             {
-              updatedBanner?.description &&
-              <Link to={`movie-detail/${updatedBanner?.id}`}>
+              
+              <Link to={`movie-detail/${movie?.postId}`}>
                 <button className='flex justify-center items-center md:py-3 px-4 py-1 font-semibold md:text-lg rounded max-w-xs text-white bg-[blue] hover:bg-[navy] cursor-pointer mt-4 mb-2'>Play Now
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ml-2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -40,10 +98,16 @@ const Banner = ({ updatedBanner }) => {
           </div>
 
         </div>
-        <div className='hidden md:blockh-[10vh] bg-opacity-90  bg-gradient-to-t from-[#181818] bg-[red] w-[98vw] ml-1'>
-
-        </div>
+       
       </div>
+
+            </div>)
+          }
+        </Slider>
+
+      }
+
+     
 
     </div>
   )

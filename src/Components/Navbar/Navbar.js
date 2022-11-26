@@ -6,12 +6,34 @@ import './Navbar.css'
 import CustomLink from './CustomLink';
 import useAllCategories from '../Shared/useAllCategories';
 import { logOut } from '../../api/api';
+import useHomeCategories from '../Shared/hooks/useHomeCategories';
 
-const Navbar = () => {
+const Navbar = ({ filterHandler }) => {
 
     const [background, setBackground] = useState(false)
 
     const [hideSearch, setHideSearch] = useState(false)
+    const [movies, setMovies] = useState([]);
+
+    const { category: homeCates } = useHomeCategories()
+
+    const token = localStorage.getItem('loginToken')
+    const logoutHandler = async () => {
+
+        await logOut()
+        localStorage?.removeItem('loginToken')
+        localStorage?.removeItem('email')
+        localStorage?.removeItem('userId')
+        window.location.reload();
+    }
+
+    const handleFilterCate = (id) => {
+
+
+        const singleCate = homeCates?.find(cate => cate?._id == id)
+
+        filterHandler(singleCate)
+    }
 
     const { error, category, isLoading } = useAllCategories()
 
@@ -30,25 +52,24 @@ const Navbar = () => {
         }
     }
 
-    const token =localStorage.getItem('loginToken')
 
     window.addEventListener('scroll', changeBackground)
 
     const personalizeItems =
         <>
-            {
-                <div class="dropdown dropdown-end ">
+            {token &&
+                <div className="dropdown dropdown-end ">
 
                     <input type="checkbox" name="toggle" id="toggler" />
 
-                    <label tabindex="0" htmlFor="toggler" name="toggle" class="btn btn-ghost btn-circle avatar">
-                        <div class="w-9 border border-[brown] rounded-full" >
+                    <label tabIndex="0" htmlFor="toggler" name="toggle" className="btn btn-ghost btn-circle avatar">
+                        <div className="w-9 border border-[brown] rounded-full" >
                             {
                                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb8Wygf4kyxHztYd0ep1BAq_ARXG9lxZsIosP60cyBiOSNLPRprFE126kSfSPhqNGcvNU&usqp=CAU" />
                             }
                         </div>
                     </label>
-                    <ul tabindex="0" id='profile' class="bg-black border border-slate-600 space-y-4 divide divide-y mt-2  w-[450%] card card-compact  dropdown-content pl-4 pr-1 pt-4 pb-4 shadow-xl  bg-opacity-60 rounded-box w-52">
+                    <ul tabIndex="0" id='profile' className="bg-black border border-slate-600 space-y-4 divide divide-y mt-2  w-[450%] card card-compact  dropdown-content pl-4 pr-1 pt-4 pb-4 shadow-xl  bg-opacity-60 rounded-box w-52">
 
                         <div className='space-y-2'>
                             <Link to="/profile">
@@ -63,12 +84,12 @@ const Navbar = () => {
                             {/* <li className='text-[white] text-sm  break-all'>{user.email}</li> */}
                             <li>
 
-                                <Link to='/profile' class="  btn bg-[brown] border-none text-[white] btn-xs mx-auto">
+                                <Link to='/profile' className="  btn bg-[brown] border-none text-[white] btn-xs mx-auto">
                                     View Profile
                                 </Link>
                             </li>
                             <li >
-                                <Link to='/dashboard' class="btn bg-[green] border-none text-[white] btn-xs">Dashboard</Link>
+                                <Link to='/dashboard' className="btn bg-[green] border-none text-[white] btn-xs">Dashboard</Link>
 
                             </li>
                         </div>
@@ -78,7 +99,7 @@ const Navbar = () => {
                         <div className='space-y-2 pt-4'>
 
                             <li><a className='btn btn-outline btn-xs text-[white]'>Settings</a></li>
-                            <li><button onClick={async()=>await logOut()} className='btn btn-xs'>Logout</button></li>
+                            <li><button onClick={ logoutHandler} className='btn btn-xs'>Logout</button></li>
 
                         </div>
 
@@ -93,51 +114,51 @@ const Navbar = () => {
         <>
             <div className=" flex w-[99%] mt-2 md:w-[76%] text-white relative md:hidden ">
 
-                <label tabindex="0" htmlFor='bigTogglerpro' class="">
-                    <div class="indicator cursor-pointer rounded-full felx justify-center items-center">
-                        <p class="btn-ghost hover:rounded font-bold md:p-3 md:m-5 mr-1" >Categories</p>
+                <label tabIndex="0" htmlFor='bigTogglerpro' className="">
+                    <div className="indicator cursor-pointer rounded-full felx justify-center items-center">
+                        <p className="btn-ghost hover:rounded font-bold md:p-3 md:m-5 mr-1" >Categories</p>
 
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
                         </svg>
                     </div>
                 </label>
                 <input type="checkbox" name="" id="bigTogglerpro" />
 
 
-                <ul class="space-y-2 p-4 font-bold rounded-lg notificationpro text-black absolute left-[80%] top-[100%] bg-black text-[white]  bg-opacity-60 ">
-                <ul className='md:grid grid-cols-2 md:w-[20vw]'>
-                       {
-                        category?.categories?.length > 0 &&
-                        category?.categories.map(item=>{ 
-                            return<li><CustomLink class="border-b-2 cursor-pointer ">{item?.categoryName}</CustomLink></li>
-                        })
-                       }                
+                <ul className="space-y-2 p-4 font-bold rounded-lg notificationpro text-black absolute left-[80%] top-[100%] bg-black text-[white]  bg-opacity-60 ">
+                    <ul className='md:grid grid-cols-2 md:w-[20vw]'>
+                        {
+                            category?.categories?.length > 0 &&
+                            category?.categories.map(item => {
+                                return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink className="border-b-2 cursor-pointer ">{item?.categoryName}</CustomLink></li>
+                            })
+                        }
                     </ul>
                 </ul>
             </div>
-            
-            <div class="dropdown dropdown-hover hidden md:block">
-                <label tabindex="0" class="">
-                    <CustomLink class="btn-ghost hover:rounded md:p-3 md:m-5" >Categories</CustomLink>
+
+            <div className="dropdown dropdown-hover hidden md:block relative">
+                <label tabIndex="0" className="">
+                    <CustomLink className="btn-ghost hover:rounded md:p-3 md:m-5" >Categories</CustomLink>
                 </label>
-                <div tabindex="0" class="px-4 py-6 rounded-lg dropdown-content menu mt-3 shadow text-white bg-black bg-opacity-60 w-auto">
-                <ul className='md:grid grid-cols-2 md:w-[20vw]'>
-                       {
-                        category?.categories?.length > 0 &&
-                        category?.categories.map(item=>{ 
-                            return<li><CustomLink class="border-b-2 cursor-pointer ">{item?.categoryName}</CustomLink></li>
-                        })
-                       }                
+                <div tabIndex="0" className="px-4 py-6 abolute right-[30%] rounded-lg dropdown-content menu mt-3 shadow text-white bg-black bg-opacity-60 w-auto">
+                    <ul className='md:grid grid-cols-2 md:w-[20vw]'>
+                        {
+                            category?.categories?.length > 0 &&
+                            category?.categories.map(item => {
+                                return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink className="border-b-2 cursor-pointer ">{item?.categoryName}</CustomLink></li>
+                            })
+                        }
                     </ul>
                 </div>
             </div>
-            { !token &&
-                <CustomLink class="btn-ghost hover:rounded md:p-3 md:m-5" to='/sign-up'>Sign Up</CustomLink>
+            {!token &&
+                <CustomLink className="btn-ghost hover:rounded md:p-3 md:m-5" to='/sign-up'>Sign Up</CustomLink>
 
             }
             {!token &&
-                <CustomLink class="btn-ghost hover:rounded md:p-3 md:m-5" to='/sign-in'>Sign In</CustomLink>
+                <CustomLink className="btn-ghost hover:rounded md:p-3 md:m-5" to='/sign-in'>Sign In</CustomLink>
             }
         </>
 
@@ -146,10 +167,9 @@ const Navbar = () => {
         <div>
 
             <div className={`nav h-[70px]  fixed text-white bg-[#181818] ${background ? 'bg-opacity-80' : 'bg-opacity-20 bg-gradient-to-b from-black '} backdrop-filter-none backdrop-blur-sm shadow z-100`}>
-                <div class="lg:navbar lg:w-[100vw]  mx-auto ">
-                    <div class="lg:navbar-start hidden md:block">
-
-                        <Link to='/' class=" normal-case text-xl ">
+                <div className="lg:navbar lg:w-[100vw]  mx-auto flex justify-around items-center">
+                    <div className="lg:navbar-start hidden md:block">
+                        <Link to='/' className=" normal-case text-xl ">
                             <img className='md:w-40 ml-20 mt-2' src="https://i.ibb.co/Mnc17bk/1-22-removebg-preview.png" alt="" />
                         </Link>
                     </div>
@@ -158,120 +178,122 @@ const Navbar = () => {
 
 
                     <div className='lg:hidden flex justify-between items-center p-2'>
-                        <div class="dropdown">
-                            <label htmlFor='menuToggler' tabindex="0" class="btn btn-ghost ">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
+                        <div className="dropdown">
+                            <label htmlFor='menuToggler' tabIndex="0" className="btn btn-ghost ">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
                             </label>
                             <input type="checkbox" name="" id="menuToggler" />
 
 
-                            <div tabindex="0" id="menuContent" class=" menu border border-slate-600 bg-black text-[white]  bg-opacity-60 menu menu-compact dropdown-content my-2 p-4 shadow  rounded-box w-36 space-y-2">
+                            <div tabIndex="0" id="menuContent" className=" menu border border-slate-600 bg-black text-[white]  bg-opacity-60 menu menu-compact dropdown-content my-2 p-4 shadow  rounded-box w-36 space-y-2">
 
                                 {menuItems}
-                               {
-                                !hideSearch &&  <div className="form-control w-full max-w-xs">
-                                <input
-                                    type="text"
-                                    placeholder="Search"
-                                    className={`outline-0 px-2 py-1  w-full max-w-xs rounded-full bg-opacity-60 text-white bg-[grey] `}
-                                // {...register("search")}
-                                />
+                                {
+                                    !hideSearch && <div className="form-control w-full max-w-xs">
+                                        <input
+                                            type="text"
+                                            placeholder="Search"
+                                            className={`outline-0 px-2 py-1  w-full max-w-xs rounded-full bg-opacity-60 text-white bg-[grey] `}
+                                        // {...register("search")}
+                                        />
+                                    </div>
+                                }
                             </div>
-                               }
-                            </div>
-                            <Link to='/' class="btn btn-ghost normal-case text-3xl text-[#e50914] font-bold">Jucundu</Link>
+                            <Link to='/' className="btn btn-ghost normal-case text-3xl text-[#e50914] font-bold">Jucundu</Link>
 
                         </div>
                         {personalizeItems}
                     </div>
 
 
-                    {
-                        !hideSearch && <div className="form-control w-full max-w-xs hidden my-auto  md:block">
-                            <input
-                                type="text"
-                                placeholder="Search movies"
-                                className={`outline-0 px-4 py-2 ml-20 w-full max-w-xs rounded-full bg-opacity-80 text-white bg-[grey] `}
-                            // {...register("search")}
-                            />
+                    <div>
+                        {
+                            !hideSearch && <div className="form-control w-full max-w-xs hidden my-auto  md:block">
+                                <input
+                                    type="text"
+                                    placeholder="Search movies"
+                                    className={`outline-0 px-4 py-2 ml-20 w-full max-w-xs rounded-full bg-opacity-80 text-white bg-[grey] `}
+                                // {...register("search")}
+                                />
+                            </div>
+                        }
+
+                        <div className="navbar-cente hidden lg:flex">
+                            <ul className="menu menu-horizontal mt-[4%] ml-20 pb-[.6%]">
+                                {menuItems}
+                            </ul>
                         </div>
-                    }
 
-                    <div class="navbar-center hidden lg:flex">
-                        <ul class="menu menu-horizontal mt-[4%] ml-20 pb-[.6%]">
-                            {menuItems}
-                        </ul>
-                    </div>
+                        <div className=" mr-10    hidden lg:block mb-[-1%]">
+                            <div className='flex items-center pb-2'>
 
-                    <div class=" mr-10    hidden lg:block mb-[-1%]">
-                        <div className='flex items-center pb-2'>
+                                {token &&
 
-                            {
+                                    <div className="dropdown dropdown-end mt-3">
 
-                                <div class="dropdown dropdown-end mt-3">
+                                        <input type="checkbox" name="toggle" id="bigToggler" />
 
-                                    <input type="checkbox" name="toggle" id="bigToggler" />
+                                        <label tabIndex="0" htmlFor="bigToggler" name="toggle" className="btn ml-4 btn-ghost btn-circle avatar">
+                                            <div className="w-9 border border-white rounded-full" >
+                                                {
 
-                                    <label tabindex="0" htmlFor="bigToggler" name="toggle" class="btn ml-4 btn-ghost btn-circle avatar">
-                                        <div class="w-9 border border-white rounded-full" >
-                                            {
+                                                    <img src="https://i.ibb.co/vj0Ctmj/user.png" />
+                                                }
+                                            </div>
+                                        </label>
+                                        <ul tabIndex="0" id='profile' className=" bg-black border border-slate-600 space-y-4 divide divide-y mt-2  w-[350%] card card-compact  dropdown-content pl-4 pr-1 pt-4 pb-4 shadow-xl bg-opacity-60 rounded-box w-52">
+                                            <div className='space-y-2 '>
+                                                <Link to="/profile">
+                                                    <li>
 
-                                                <img src="https://i.ibb.co/vj0Ctmj/user.png" />
-                                            }
-                                        </div>
-                                    </label>
-                                    <ul tabindex="0" id='profile' class=" bg-black border border-slate-600 space-y-4 divide divide-y mt-2  w-[350%] card card-compact  dropdown-content pl-4 pr-1 pt-4 pb-4 shadow-xl bg-opacity-60 rounded-box w-52">
-                                        <div className='space-y-2 '>
-                                            <Link to="/profile">
-                                                <li>
+                                                        {
 
-                                                    {
+                                                            <img className='w-14 border border-white  rounded-full'
+                                                                src="https://i.ibb.co/vj0Ctmj/user.png" />
+                                                        }
 
-                                                        <img className='w-14 border border-white  rounded-full'
-                                                            src="https://i.ibb.co/vj0Ctmj/user.png" />
-                                                    }
-
-                                                </li>
-                                            </Link>
-                                            {/* <Link to="/profile">
+                                                    </li>
+                                                </Link>
+                                                {/* <Link to="/profile">
                                                 <li className='font-semibold text-[white]  text-lg hover:text-[brown]  word-break'>{profile?.displayName ? profile?.displayName : user?.displayName}</li>
                                             </Link> */}
-                                            {/* <li className='text-[white] text-sm  break-all'>{user.email}</li> */}
+                                                {/* <li className='text-[white] text-sm  break-all'>{user.email}</li> */}
 
-                                            <li>
+                                                <li>
 
-                                                <Link to='/profile' class="  btn bg-[brown] border-none text-[white] btn-xs mx-auto">
-                                                    View Profile
+                                                    <Link to='/profile' className="  btn bg-[brown] border-none text-[white] btn-xs mx-auto">
+                                                        View Profile
+                                                    </Link>
+
+                                                </li>
+                                                <li>
+                                                    {
+                                                        <Link to='/dashboard' className="btn bg-[green] border-none text-[white] btn-xs">Dashboard</Link>
+                                                    }
+                                                </li>
+
+                                            </div>
+
+
+
+                                            <div className='space-y-2 pt-4'>
+
+                                                <li><a className='btn btn-outline btn-xs text-[white]'>Settings</a></li>
+                                                <Link to='/'>
+                                                    <li><button onClick={logoutHandler} className='btn btn-xs'>Logout</button></li>
                                                 </Link>
-
-                                            </li>
-                                            <li>
-                                                {
-                                                    <Link to='/dashboard' class="btn bg-[green] border-none text-[white] btn-xs">Dashboard</Link>
-                                                }
-                                            </li>
-
-                                        </div>
+                                            </div>
 
 
+                                        </ul>
+                                    </div>
 
-                                        <div className='space-y-2 pt-4'>
+                                }
 
-                                            <li><a className='btn btn-outline btn-xs text-[white]'>Settings</a></li>
-                                            <Link to='/'>
-                                                <li><button onClick={async()=>await logOut()} className='btn btn-xs'>Logout</button></li>
-                                            </Link>
-                                        </div>
+                            </div>
 
-
-                                    </ul>
-                                </div>
-
-                            }
 
                         </div>
-
-
                     </div>
 
                 </div>

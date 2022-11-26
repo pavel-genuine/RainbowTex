@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addFeatured } from '../../../redux/features/featuredPost/featuredPostSlice'
 import useAllFeatured from '../../Shared/useAllFeatured'
@@ -6,16 +6,10 @@ import useAllFeatured from '../../Shared/useAllFeatured'
 const FeaturedBanner = ({movie}) => {
 
     const [isBanner, setIsBanner] = useState(false)
-
-    const { featured } = useSelector(state => state?.addFeatured)
+    const { featured:addedFeature } = useSelector(state => state?.featuredAdd)
     const dispatch = useDispatch()
    
-
-    const {featured:allFeatured} =useAllFeatured()
-
-    const newFeatured = allFeatured?.find(item => item?.postId == movie?._id);
-    // console.log(allFeatured,'feat all');
-    // console.log(newFeatured,'new feat');
+    const  {error, featured, isLoading} =useAllFeatured()
 
     const addBanner = (data) => {
         dispatch(addFeatured(data))
@@ -23,9 +17,11 @@ const FeaturedBanner = ({movie}) => {
 
   return (
     <div>  {
-        isBanner || newFeatured ? 
+        isBanner || featured?.find(item => item?.postId == movie?._id)
+        ? 
         <input type="checkbox" class="toggle toggle-error " checked /> 
-        : <input
+        :
+         <input
             onClick={() => {
                 addBanner({
                     videoCover: {

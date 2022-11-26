@@ -1,15 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addThumbnail, createfeatured, getAllFeatured, removeThumbnail} from "../../../api/api";
+import {  createfeatured, getAllFeatured} from "../../../api/api";
 
 //
 export const addFeatured =createAsyncThunk("/featured/addFeatured",
 async(data)=>{
     const res = await createfeatured(data);
-    // console.log('addFeatured thunk',res?.data);
+    console.log('addFeatured thunk',res?.data);
     return res?.data;
 })
 //
-export const allfeaturedGet =createAsyncThunk("/Featured/allfeaturedGet",
+export const allfeaturedGet =createAsyncThunk("/featured/allfeaturedGet",
 async()=>{
     const res = await getAllFeatured();
     // console.log('allfeaturedGet thunk',res?.data);
@@ -26,7 +26,7 @@ const featuredPostSlice = createSlice({
     },
     extraReducers:(builder) =>{
 
-        //add thumbnail
+      
         builder.addCase(addFeatured.pending,(state)=>{
             state.isLoading= true
         });
@@ -41,7 +41,7 @@ const featuredPostSlice = createSlice({
             state.error=action.error.message
         })
 
-        //remove thumbnail
+
         builder.addCase(allfeaturedGet.pending,(state)=>{
             state.isLoading= true
         });
