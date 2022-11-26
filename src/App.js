@@ -13,15 +13,24 @@ import DashboardHome from "./Components/Dashboard/DashBoardHome/DashboardHome";
 import UserList from "./Components/Dashboard/UserList/UserList";
 import MovieList from "./Components/Dashboard/MovieList/MovieList";
 import MovieDetails from "./Components/MovieDetail/MovieDetail";
+import { useState } from "react";
 
 const queryClient = new QueryClient()
 function App() {
+
+  const [filteredCategory,setfilteredCategory]=useState()
+
+  const filterHandler=(data)=>{
+
+    setfilteredCategory(()=>data)
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
     <div>
-      <Navbar></Navbar>
+      <Navbar filterHandler={filterHandler}></Navbar>
        <Routes>
-          <Route path='/' element={<HomePage></HomePage>}></Route>
+          <Route path='/' element={<HomePage filteredCategory={filteredCategory}></HomePage>}></Route>
           <Route path='/contact-us' element={<ContactUs></ContactUs>}></Route>
           <Route path='/about-us' element={<AboutUs></AboutUs>}></Route>
           <Route path='/sign-in' element={<SignIn></SignIn>}></Route>

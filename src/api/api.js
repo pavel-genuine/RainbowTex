@@ -28,7 +28,7 @@ export const homeCategory =()=>axios.get(`${base_url}/category/all_category_post
 
 //post section
 export const createPost = (post) => axios.post(`${base_url}/post`,post)
-export const uploadVideo = (video,options) =>axios.post(`${base_url}/post/upload_video`,video,options)
+export const uploadVideo = (video) =>axios.post(`${base_url}/post/upload_video`,video)
 export const getAllPosts =()=>axios.get(`${base_url}/post`)
 export const getSinglePost =(id)=>axios.get(`${base_url}/post/single/${id}`)
 export const deletePost =(id)=>axios.delete(`${base_url}/post/admin/${id}?removeMedia=true`)
@@ -53,3 +53,6 @@ export const addComment =(data)=>axios.patch(`${base_url}/post/add_comment`,data
 export const approveComment =(data)=>axios.patch(`${base_url}/post/approve_comment`,data)
 export const removeComment =(data)=>axios.patch(`${base_url}/post/remove_comment`,data)
 export const editComment =(data)=>axios.patch(`${base_url}/post/edit_comment`,data)
+
+export const addRating =(data)=>axios.patch(`${base_url}/post/rating`,data)
+

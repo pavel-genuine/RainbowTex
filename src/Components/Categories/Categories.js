@@ -5,13 +5,12 @@ import SinglePost from './SinglePost';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { movies } from '../allMovies/allMovies';
 import usePosts from '../Shared/usePosts';
 import useAllCategories from '../Shared/useAllCategories';
 import HomeCategories from './HomeCategories';
 
 
-const Categories = ({ handleBanner, quantity }) => {
+const Categories = ({ handleBanner, filteredCategory }) => {
 
 
   const{category} =useAllCategories()
@@ -71,101 +70,11 @@ const Categories = ({ handleBanner, quantity }) => {
     return <p>Loading...</p>
   }
 
+
+
   return (
     <div className='md:mx-1 mx-auto mt-10 z-10 '>
-      <HomeCategories></HomeCategories>
-
-      {/* <div className=''>
-        {quantity == 2 ?
-          <div className='md:pt-0 bg-[#181818] px-5 md:px-0'>
-
-            <div >
-              <h1 className='text-white font-semibold text-lg md:text-xl mt-5 mx-2 md:mt-10 mb-4'>Comedies : </h1>
-
-              <Slider {...settings}>
-
-                {
-                  posts.map((movie, index) => <SinglePost key={index} movie={movie} detectClicked={detectClicked}></SinglePost>)
-
-                }
-              </Slider>
-            </div>
-            <div >
-              <h1 className='text-white font-semibold text-lg md:text-xl mt-5 mx-2 md:mt-10 mb-4'>Comedies : </h1>
-
-              <Slider {...settings}>
-
-                {
-                  posts?.map((movie, index) => <SinglePost key={index} movie={movie} detectClicked={detectClicked}></SinglePost>)
-
-                }
-              </Slider>
-            </div>
-
-
-          </div> :
-          <div className='md:pt-0 bg-[#181818] px-5 md:px-0'>
-
-            <div >
-              <h1 className='text-white font-semibold text-lg md:text-xl mt-5 md:mx-2 md:mt-10 mb-4 z-40'>Comedies : </h1>
-
-              <Slider {...settings}>
-
-                {
-                  posts?.map((movie, index) => <SinglePost key={index} movie={movie} detectClicked={detectClicked}></SinglePost>)
-
-                }
-              </Slider>
-
-            </div>
-            <div >
-              <h1 className='text-white font-semibold text-lg md:text-xl mt-5 mx-2 md:mt-10 mb-4'>Comedies : </h1>
-
-              <Slider {...settings}>
-
-                {
-                  movies.map((movie, index) => <SinglePost key={index} movie={movie} detectClicked={detectClicked}></SinglePost>)
-
-                }
-              </Slider>
-            </div>
-            <div >
-              <h1 className='text-white font-semibold text-lg md:text-xl mt-5 mx-2 md:mt-10 mb-4'>Comedies : </h1>
-
-              <Slider {...settings}>
-
-                {
-                  movies.map((movie, index) => <SinglePost key={index} movie={movie} detectClicked={detectClicked}></SinglePost>)
-
-                }
-              </Slider>
-            </div>
-            <div >
-              <h1 className='text-white font-semibold text-lg md:text-xl mt-5 mx-2 md:mt-10 mb-4'>Comedies : </h1>
-
-              <Slider {...settings}>
-
-                {
-                  movies.map((movie, index) => <SinglePost key={index} movie={movie} detectClicked={detectClicked}></SinglePost>)
-
-                }
-              </Slider>
-            </div>
-            <div >
-              <h1 className='text-white font-semibold text-lg md:text-xl mt-5 mx-2 md:mt-10 mb-4'>Comedies : </h1>
-
-              <Slider {...settings}>
-
-                {
-                  movies.map((movie, index) => <SinglePost key={index} movie={movie} detectClicked={detectClicked}></SinglePost>)
-
-                }
-              </Slider>
-            </div>
-
-          </div>
-        }
-      </div> */}
+      <HomeCategories filteredCategory={filteredCategory}></HomeCategories>
     </div>
   )
 }

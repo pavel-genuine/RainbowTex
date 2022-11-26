@@ -23,16 +23,7 @@ const SignUp = () => {
     const navigate = useNavigate();
     const token =localStorage.getItem('loginToken')
 
-  useEffect(()=>{
-    if (token) {
-        toast.success('SignUp Successfull')
-        setTimeout(() => {
-            navigate('/');
-        }, 2000);
-        
-    }
-  },[])
-
+  
     const handleShowPassword = () => {
         setShowPassword(true)
         setShowBtn(false)
@@ -55,9 +46,15 @@ const SignUp = () => {
         // console.log('res', res);
         const submit = dispatch(fetchSignUp({ name, email, password }))
 
+        setTimeout(() => {
+            toast.success("Congratulation! You've signed up, please verify you email.")
+        }, 1000);
+        setTimeout(() => {
+            navigate('/');
+        }, 2000);
+
         console.log(submit, 'submit');
         return submit;
-        toast.success("Congratulation! You've signed up, please verify you email.")
 
 
     }

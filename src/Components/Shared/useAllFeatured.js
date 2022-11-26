@@ -8,11 +8,16 @@ const useAllFeatured = () => {
 
     const dispatch =useDispatch()
   
-    // console.log(featured, 'banner feat');
+   
 
     useEffect(() => {
         dispatch(allfeaturedGet())
+
     }, [])
+
+    //  console.log(featured, 'banner feat');
+
+   
 
 
   return (

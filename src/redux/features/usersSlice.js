@@ -5,7 +5,7 @@ import { signInUser, userList } from "../../api/api";
 export const fetchUsers =createAsyncThunk("/userList/fetchUsers",
 async()=>{
     const res =  await userList()  
-    console.log('userslist thunk',res.data);
+    // console.log('userslist thunk',res.data);
     return  res.data
 })
 

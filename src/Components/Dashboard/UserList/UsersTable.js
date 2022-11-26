@@ -25,7 +25,7 @@ const UsersTable = () => {
                         <th class=" border border-[#181818] text-left px-8 py-4">Email</th>
                         <th class=" border border-[#181818] text-left px-8 py-4">Subscription Plan</th>
                         <th class=" border border-[#181818] text-left px-8 py-4">Subscribed At</th>
-                        <th class=" border border-[#181818] text-left px-8 py-4">Action</th>
+                        {/* <th class=" border border-[#181818] text-left px-8 py-4">Action</th> */}
                     </tr>
                 </thead>
                 <tbody className='bg-[#26282b]'>
@@ -35,7 +35,7 @@ const UsersTable = () => {
                             <td class="border border-[#181818] px-8 py-4">{user?.email}</td>
                             <td class="border border-[#181818] px-8 py-4">{user?.subscription_plan}</td>
                             <td class="border border-[#181818] px-8 py-4">{user?.updatedAt}</td>
-                            <td class="border border-[#181818] px-8 py-4 ">
+                            {/* <td class="border border-[#181818] px-8 py-4 ">
                                 <p className='flex'>
                                     <span title='edit'>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-10 cursor-pointer text-[blue]">
@@ -49,7 +49,7 @@ const UsersTable = () => {
                                     </span>
                                 </p>
     
-                            </td>
+                            </td> */}
                         </tr>)
                     }
                     {/* <tr>

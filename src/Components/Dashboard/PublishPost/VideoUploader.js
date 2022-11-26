@@ -1,7 +1,5 @@
 import React, { useRef, useState } from 'react'
-import "video-react/dist/video-react.css";
 import axios, { CancelToken, isCancel } from "axios";
-import { BigPlayButton, ControlBar, ForwardControl, Player, ReplayControl } from "video-react"
 import { useDispatch, useSelector } from 'react-redux';
 import { videoUpload } from '../../../redux/features/postSection/postVideoSlice'
 
@@ -20,6 +18,7 @@ const VideoUploader = (props) => {
         const formData = new FormData()
         formData.append("video", file)
         const url = URL.createObjectURL(file);
+
         setSource(url);
         const options = {
             onUploadProgress: progressEvent => {
@@ -36,7 +35,10 @@ const VideoUploader = (props) => {
             )
         };
 
-        dispatch(videoUpload(formData, options))
+        const sub =dispatch(videoUpload(formData))
+
+        console.log(video,'video');
+        console.log(sub,'video sub');
 
         if (video) {
             setUploadPercentage(100);
@@ -44,7 +46,11 @@ const VideoUploader = (props) => {
                 setUploadPercentage(0);
             }, 1000);
         }
+
+     
     };
+
+    // console.log(video,'vido');
 
     const cancelUpload = () => {
         if (cancelFileUpload.current)
@@ -57,7 +63,7 @@ const VideoUploader = (props) => {
 
     return (
         <div>
-            {uploadPercentage > 0 &&
+            {/* {uploadPercentage > 0 &&
                 <div className='flex justify-end items-center mb-5'>
                     <progress class="progress progress-error mr-2" value={uploadPercentage} max="100"></progress>
                     <span
@@ -67,26 +73,7 @@ const VideoUploader = (props) => {
                         X
                     </span>
                 </div>
-            }
-
-            {/* {uploadPercentage > 0 && (
-                <div className="row mt-3">
-                    <div className="col pt-1">
-                        <progress
-                            value={uploadPercentage}
-                        // label={`${uploadPercentage}%`}
-                        />
-                    </div>
-                    <div className="col-auto">
-                        <span
-                            className="text-primary cursor-pointer"
-                            onClick={() => cancelUpload()}
-                        >
-                            Cancel
-                        </span>
-                    </div>
-                </div>
-            )} */}
+            } */}
 
             <div className="VideoInput relative">
                 <input
@@ -95,10 +82,11 @@ const VideoUploader = (props) => {
                     className="VideoInput_input hidden"
                     type="file"
                     onChange={handleFileChange}
-                // accept=".mov"
                 />
 
-                <div class="mt-1 flex justify-center mb-8 items-center px-6 pt-5 pb-6 border-2 md:w-[27vw] w-[40vw] h-[150px] md:h-[270px] border-dashed rounded-md">
+                <div class="mt-1 flex justify-center mb-8 items-center px-6 pt-5 pb-6  md:w-[27vw] w-[40vw] h-[150px] md:h-[270px] order-2 border-dashed rounded-md">
+                    
+                    
                     <div class="space-y-1 text-center">
                         <div class="flex text-sm text-gray-600">
                             <label for="file-upload" class="relative cursor-pointer rounded-md font-medium hover:text-[brown] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
@@ -111,20 +99,22 @@ const VideoUploader = (props) => {
                     </div>
                 </div>
                 {source && (
-                    <div className='absolute top-[-1%]'>
-                        <Player className='rounded-lg'
-                            playsInline
-                            src={source}
-                            fluid={false}
-                            width={props?.width}
-                            height={props?.height}
-                        >
-                            <BigPlayButton position="center" />
-                            <ControlBar autoHide={false}>
-                                <ReplayControl seconds={10} order={2.2} />
-                                <ForwardControl seconds={10} order={3.2} />
-                            </ControlBar>
-                        </Player>
+                    
+                    <div className='absolute top-[0%] '>
+                        {uploadPercentage > 0 &&
+                <div className='flex justify-end items-center mb-5'>
+                    <progress class="progress progress-error mr-2" value={uploadPercentage} max="100"></progress>
+                    <span
+                        className="text-[red] cursor-pointer"
+                        onClick={() => cancelUpload()}
+                    >
+                        X
+                    </span>
+                </div>
+            }
+                        <video className=' rounded cursor-pointer md:w-[30vw] w-[40vw] h-[170px] md:h-[270px] ' controls poster={props?.poster} controlsList="nodownload">
+                            <source src={source} />
+                        </video>
                     </div>
                 )}
             </div>
