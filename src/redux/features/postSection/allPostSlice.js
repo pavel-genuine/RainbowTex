@@ -3,8 +3,8 @@ import { getAllPosts } from "../../../api/api";
 
 
 export const fetchAllllPosts =createAsyncThunk("/posts/fetchAllllPosts",
-async()=>{
-    const res = await getAllPosts();
+async(page)=>{
+    const res = await getAllPosts(page);
     // console.log('AllPosts thunk',res?.data);
     return res?.data;
 })

@@ -6,9 +6,11 @@ import { videoUpload } from '../../../redux/features/postSection/postVideoSlice'
 const VideoUploader = (props) => {
     const inputRef = useRef();
     const [source, setSource] = useState();
-    const [uploadPercentage, setUploadPercentage] = useState(0);
+
     const [progress, setProgress] = useState();
+    const [erro, setError] = useState();
     const cancelFileUpload = useRef(null);
+    
     const { isLoading, error, video } = useSelector(state => state?.postVideo)
 
     const dispatch = useDispatch()
@@ -20,34 +22,28 @@ const VideoUploader = (props) => {
         const url = URL.createObjectURL(file);
 
         setSource(url);
-        const options = {
-            onUploadProgress: progressEvent => {
-                const { loaded, total } = progressEvent;
+       
+        // dispatch(videoUpload(formData, {
+        //     headers: {
+        //       "Content-Type": "multipart/form-data",
+        //     },
+        //     onUploadProgress: data => {
+        //       //Set the progress value to show the progress bar
+        //       setProgress(Math.round((100 * data.loaded) / data.total))
+        //     },
+        //   })
+        //   .catch(error => {
+        //     const { code } = error?.response?.data
+        //     switch (code) {
+        //       case "FILE_MISSING":
+        //         setError("Please select a file before uploading!")
+        //         break
+        //       default:
+        //         setError("Sorry! Something went wrong. Please try again later")
+        //         break
+        //     }
+        //   }))
 
-                let percent = Math.floor((loaded * 100) / total);
-
-                if (percent < 100) {
-                    setUploadPercentage(percent);
-                }
-            },
-            cancelToken: new CancelToken(
-                cancel => (cancelFileUpload.current = cancel)
-            )
-        };
-
-        const sub =dispatch(videoUpload(formData))
-
-        console.log(video,'video');
-        console.log(sub,'video sub');
-
-        if (video) {
-            setUploadPercentage(100);
-            setTimeout(() => {
-                setUploadPercentage(0);
-            }, 1000);
-        }
-
-     
     };
 
     // console.log(video,'vido');
@@ -63,9 +59,10 @@ const VideoUploader = (props) => {
 
     return (
         <div>
-            {/* {uploadPercentage > 0 &&
-                <div className='flex justify-end items-center mb-5'>
-                    <progress class="progress progress-error mr-2" value={uploadPercentage} max="100"></progress>
+            {!progress > 0 &&
+                <div>
+                    <div className='flex justify-end items-center '>
+                    <progress class="progress progress-error mr-2" value={progress} max="100"></progress>
                     <span
                         className="text-[red] cursor-pointer"
                         onClick={() => cancelUpload()}
@@ -73,7 +70,10 @@ const VideoUploader = (props) => {
                         X
                     </span>
                 </div>
-            } */}
+                <label>{progress}% uploaded</label>
+                </div>
+                
+            }
 
             <div className="VideoInput relative">
                 <input
@@ -84,9 +84,9 @@ const VideoUploader = (props) => {
                     onChange={handleFileChange}
                 />
 
-                <div class="mt-1 flex justify-center mb-8 items-center px-6 pt-5 pb-6  md:w-[27vw] w-[40vw] h-[150px] md:h-[270px] order-2 border-dashed rounded-md">
-                    
-                    
+                <div class="flex justify-center  items-center  border-2 px-6 pt-5 pb-6 md:w-[18vw] w-[90vw] h-[270px]  md:h-[200px] order-2 border-dashed rounded-md">
+
+
                     <div class="space-y-1 text-center">
                         <div class="flex text-sm text-gray-600">
                             <label for="file-upload" class="relative cursor-pointer rounded-md font-medium hover:text-[brown] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
@@ -98,25 +98,22 @@ const VideoUploader = (props) => {
                         </div>
                     </div>
                 </div>
+               <div>
+               {/* {
+                    !video?.url && source &&  <button type="submit" className=" btn hover:bg-[#e50914] bg-[brown] btn-xs">
+                   please wait, video uploading...<progress label={`ww`} className="progress w-56 progress-info"></progress>
+                </button> 
+                } */}
                 {source && (
-                    
-                    <div className='absolute top-[0%] '>
-                        {uploadPercentage > 0 &&
-                <div className='flex justify-end items-center mb-5'>
-                    <progress class="progress progress-error mr-2" value={uploadPercentage} max="100"></progress>
-                    <span
-                        className="text-[red] cursor-pointer"
-                        onClick={() => cancelUpload()}
-                    >
-                        X
-                    </span>
-                </div>
-            }
-                        <video className=' rounded cursor-pointer md:w-[30vw] w-[40vw] h-[170px] md:h-[270px] ' controls poster={props?.poster} controlsList="nodownload">
+
+                    <div className='absolute md:top-[-30%] top-[0]'>
+                       
+                        <video className=' rounded cursor-pointer md:w-[30vw] w-[90vw] h-[270px] md:h-[270px] ' controls poster={props?.poster} controlsList="nodownload">
                             <source src={source} />
                         </video>
                     </div>
                 )}
+               </div>
             </div>
         </div>
     )

@@ -7,12 +7,14 @@ import CustomLink from './CustomLink';
 import useAllCategories from '../Shared/useAllCategories';
 import { logOut } from '../../api/api';
 import useHomeCategories from '../Shared/hooks/useHomeCategories';
+import { useForm } from 'react-hook-form';
 
-const Navbar = ({ filterHandler }) => {
+const Navbar = ({ filterHandler, searchHandler }) => {
+    const { register, formState: { errors }, handleSubmit } = useForm();
 
     const [background, setBackground] = useState(false)
 
-    const [hideSearch, setHideSearch] = useState(false)
+
     const [movies, setMovies] = useState([]);
 
     const { category: homeCates } = useHomeCategories()
@@ -37,8 +39,12 @@ const Navbar = ({ filterHandler }) => {
 
     const { error, category, isLoading } = useAllCategories()
 
-    const handleHideSearch = () => {
-        setHideSearch(true)
+    const onSubmit = (data) => {
+
+        const searchText = data?.search?.toLowerCase()
+        console.log('text nav', searchText);
+        searchHandler(searchText)
+
     }
 
     const changeBackground = () => {
@@ -89,8 +95,11 @@ const Navbar = ({ filterHandler }) => {
                                 </Link>
                             </li>
                             <li >
-                                <Link to='/dashboard' className="btn bg-[green] border-none text-[white] btn-xs">Dashboard</Link>
-
+                                {
+                                    localStorage.getItem('isAdmin') &&
+                                    <Link to='/dashboard' className="btn bg-[green] border-none text-[white] btn-xs">Dashboard</Link>
+    
+                                }
                             </li>
                         </div>
 
@@ -99,7 +108,7 @@ const Navbar = ({ filterHandler }) => {
                         <div className='space-y-2 pt-4'>
 
                             <li><a className='btn btn-outline btn-xs text-[white]'>Settings</a></li>
-                            <li><button onClick={ logoutHandler} className='btn btn-xs'>Logout</button></li>
+                            <li><button onClick={logoutHandler} className='btn btn-xs'>Logout</button></li>
 
                         </div>
 
@@ -167,7 +176,7 @@ const Navbar = ({ filterHandler }) => {
         <div>
 
             <div className={`nav h-[70px]  fixed text-white bg-[#181818] ${background ? 'bg-opacity-80' : 'bg-opacity-20 bg-gradient-to-b from-black '} backdrop-filter-none backdrop-blur-sm shadow z-100`}>
-                <div className="lg:navbar lg:w-[100vw]  mx-auto flex justify-around items-center">
+                <div className="lg:navbar lg:w-[100vw]  mx-auto flex md:justify-around justify-between items-center">
                     <div className="lg:navbar-start hidden md:block">
                         <Link to='/' className=" normal-case text-xl ">
                             <img className='md:w-40 ml-20 mt-2' src="https://i.ibb.co/Mnc17bk/1-22-removebg-preview.png" alt="" />
@@ -189,12 +198,12 @@ const Navbar = ({ filterHandler }) => {
 
                                 {menuItems}
                                 {
-                                    !hideSearch && <div className="form-control w-full max-w-xs">
+                                    <div className="form-control w-full max-w-xs">
                                         <input
                                             type="text"
                                             placeholder="Search"
                                             className={`outline-0 px-2 py-1  w-full max-w-xs rounded-full bg-opacity-60 text-white bg-[grey] `}
-                                        // {...register("search")}
+                                            {...register("search")}
                                         />
                                     </div>
                                 }
@@ -206,16 +215,21 @@ const Navbar = ({ filterHandler }) => {
                     </div>
 
 
-                    <div>
+                    <div className='space-x-3'>
                         {
-                            !hideSearch && <div className="form-control w-full max-w-xs hidden my-auto  md:block">
-                                <input
-                                    type="text"
-                                    placeholder="Search movies"
-                                    className={`outline-0 px-4 py-2 ml-20 w-full max-w-xs rounded-full bg-opacity-80 text-white bg-[grey] `}
-                                // {...register("search")}
-                                />
-                            </div>
+                            <form className='hidden md:block' onSubmit={handleSubmit(onSubmit)}>
+                                <div className="flex w-[125%]">
+                                    <input
+                                        type="text"
+                                        placeholder="Search movies"
+                                        className={`outline-0 px-4 py-2 mt-10 md:mt-0 md:ml-20 w-full max-w-xs rounded-full bg-opacity-80 text-white bg-[grey] `}
+                                        {...register("search")}
+                                    />
+                                    <input className='hidden bg-opacity-80 text-slate-400 bg-[grey] py-2 px-2 cursor-pointer border-l rounded-r-full pr-4' type="submit" value="Search" />
+
+                                </div>
+                            </form>
+
                         }
 
                         <div className="navbar-cente hidden lg:flex">
@@ -267,7 +281,7 @@ const Navbar = ({ filterHandler }) => {
 
                                                 </li>
                                                 <li>
-                                                    {
+                                                    { localStorage.getItem('isAdmin') &&
                                                         <Link to='/dashboard' className="btn bg-[green] border-none text-[white] btn-xs">Dashboard</Link>
                                                     }
                                                 </li>

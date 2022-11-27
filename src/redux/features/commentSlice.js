@@ -12,26 +12,26 @@ async(data)=>{
 export const commentApprove =createAsyncThunk("/comment/commentApprove",
 async(data)=>{
     const res = await approveComment(data);
-    console.log('allCategories thunk',res?.data);
+    console.log(' thunk',res?.data);
     return res?.data;
 })
 //
 export const commentRemove =createAsyncThunk("/comment/commentRemove",
 async(data)=>{
     const res = await removeComment(data);
-    console.log('categoryUpdate thunk',res?.data);
+    console.log(' thunk',res?.data);
     return res?.data;
 })
 //
 export const commentEdit =createAsyncThunk("/comment/commentEdit",
 async(data)=>{
     const res = await editComment(data);
-    console.log('deletePost thunk',res?.data);
+    console.log('edit commt thunk',res?.data);
     return res?.data;
 })
 
 const commentSlice = createSlice({
-    name:'category',
+    name:'comment',
     initialState:{
         isLoading:false,
         comment:[],
@@ -45,12 +45,12 @@ const commentSlice = createSlice({
         });
         builder.addCase(commentAdd.fulfilled,(state, action)=>{
             state.isLoading= false
-            state.category=action.payload
+            state.comment=action.payload
             state.error=null
         });
         builder.addCase(commentAdd.rejected,(state,action)=>{
             state.isLoading= false
-            state.category= []
+            state.comment= []
             state.error=action.error.message
         })
 
@@ -60,12 +60,12 @@ const commentSlice = createSlice({
         });
         builder.addCase(commentApprove.fulfilled,(state, action)=>{
             state.isLoading= false
-            state.category=action.payload
+            state.comment=action.payload
             state.error=null
         });
         builder.addCase(commentApprove.rejected,(state,action)=>{
             state.isLoading= false
-            state.category= []
+            state.comment= []
             state.error=action.error.message
         })
 
@@ -76,12 +76,12 @@ const commentSlice = createSlice({
         });
         builder.addCase(commentRemove.fulfilled,(state, action)=>{
             state.isLoading= false
-            state.category=action.payload
+            state.comment=action.payload
             state.error=null
         });
         builder.addCase(commentRemove.rejected,(state,action)=>{
             state.isLoading= false
-            state.category= []
+            state.comment= []
             state.error=action.error.message
         })
       
@@ -91,12 +91,12 @@ const commentSlice = createSlice({
         });
         builder.addCase(commentEdit.fulfilled,(state, action)=>{
             state.isLoading= false
-            state.category=action.payload
+            state.comment=action.payload
             state.error=null
         });
         builder.addCase(commentEdit.rejected,(state,action)=>{
             state.isLoading= false
-            state.category= []
+            state.comment= []
             state.error=action.error.message
         })
  

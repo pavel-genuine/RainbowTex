@@ -3,7 +3,7 @@ import Footer from '../Footer/Footer'
 import Banner from './Banner'
 import Categories from '../Categories/Categories'
 
-const HomePage = ({filteredCategory}) => {
+const HomePage = ({filteredCategory,searchText}) => {
 
 
   const [updatedBanner, setUpdatedBanner] = useState({})
@@ -27,7 +27,7 @@ const HomePage = ({filteredCategory}) => {
         </div>
 
         <div className='mt-20'>
-          <Categories filteredCategory={filteredCategory} handleBanner={handleBanner}></Categories>
+          <Categories searchText={searchText} filteredCategory={filteredCategory} handleBanner={handleBanner}></Categories>
         </div>
 
         <Footer></Footer>

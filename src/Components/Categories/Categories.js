@@ -10,7 +10,7 @@ import useAllCategories from '../Shared/useAllCategories';
 import HomeCategories from './HomeCategories';
 
 
-const Categories = ({ handleBanner, filteredCategory }) => {
+const Categories = ({ handleBanner, filteredCategory,searchText }) => {
 
 
   const{category} =useAllCategories()
@@ -74,7 +74,7 @@ const Categories = ({ handleBanner, filteredCategory }) => {
 
   return (
     <div className='md:mx-1 mx-auto mt-10 z-10 '>
-      <HomeCategories filteredCategory={filteredCategory}></HomeCategories>
+      <HomeCategories searchText={searchText} filteredCategory={filteredCategory}></HomeCategories>
     </div>
   )
 }

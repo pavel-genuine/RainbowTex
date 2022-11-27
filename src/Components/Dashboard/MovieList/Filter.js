@@ -11,17 +11,26 @@ import CustomLink from "../../Navbar/CustomLink";
 import useAllCategories from "../../Shared/useAllCategories";
 import AddCategory from "./AddCategory";
 import useHomeCategories from "../../Shared/hooks/useHomeCategories";
+import { useForm } from "react-hook-form";
 
-const Filter = ({ filterHandler }) => {
-
+const Filter = ({ filterHandler,searchHandler }) => {
+    const { register, formState: { errors }, handleSubmit } = useForm();
     const [addedCate, setAddedCate] = useState('');
     const [myCategories, setMycategories] = useState([])
     const [allMovies, setAllMovies] = useState()
 
     const { category: homeCates } = useHomeCategories()
 
+    const onSubmit = (data) => {
+
+        const searchText =data?.search?.toLowerCase()
+        console.log('text',searchText);
+        searchHandler(searchText)
+
+    }
+
     const handleFilterCate = (id) => {
-        if (id==1) {
+        if (id == 1) {
             filterHandler(1)
         }
         const singleCate = homeCates?.find(cate => cate?._id == id)
@@ -64,15 +73,15 @@ const Filter = ({ filterHandler }) => {
             <div className="dropdown dropdown-hover">
                 <label tabIndex={0} className="btn btn-sm m-1">Filter By Category</label>
                 <ul tabIndex={0} className="dropdown-content menu p-2 rounded w-[30vw] bg-slate-800 grid grid-cols-2 gap-4 bg-opacity-90 md:ml-20 p-3">
-                { <li onClick={() => handleFilterCate(1)} className="bg-[brown] cursor-pointer bg-opacity-90 my-2 px-2 py-1 rounded ">
-                        {'Al Movies'}
+                    {<li onClick={() => handleFilterCate(1)} className="bg-[brown] cursor-pointer bg-opacity-90 my-2 px-2 py-1 rounded ">
+                        {'All Movies'}
 
                     </li>}
                     {myCategories?.map(item => <li onClick={() => handleFilterCate(item?._id)} className="bg-[brown] cursor-pointer bg-opacity-90 my-2 px-2 py-1 rounded ">
                         {item?.categoryName}
 
                     </li>)}
-                    { addedCate && <li className="bg-[brown] cursor-pointer bg-opacity-90 my-2 px-2 py-1 rounded ">
+                    {addedCate && <li className="bg-[brown] cursor-pointer bg-opacity-90 my-2 px-2 py-1 rounded ">
                         {addedCate}
 
                     </li>}
@@ -81,12 +90,18 @@ const Filter = ({ filterHandler }) => {
 
 
             <div className="form-control w-full max-w-xs md:block">
-                <input
-                    type="text"
-                    placeholder="Search movies"
-                    className={`outline-0 px-4 py-2 mt-10 md:mt-0 md:ml-20 w-full max-w-xs rounded-full bg-opacity-80 text-white bg-[grey] `}
-                // {...register("search")}
-                />
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="flex">
+                        <input
+                            type="text"
+                            placeholder="Search movies"
+                            className={`outline-0 px-4 py-2 mt-10 md:mt-0 md:ml-20 w-full max-w-xs rounded-full bg-opacity-80 text-white bg-[grey] `}
+                            {...register("search")}
+                        />
+                        <input className='hidden bg-opacity-80 text-slate-400 bg-[grey] py-2 px-2 cursor-pointer border-l rounded-r-full pr-4' type="submit" value="Search" />
+
+                    </div>
+                </form>
             </div>
 
 

@@ -11,9 +11,14 @@ const Banner = ({ updatedBanner }) => {
     dots: true,
     infinite: false,
     speed: 500,
+    autoplay: true,
+    infinite: true,
     slidesToShow: 1,
     slidesToScroll: 1,
     initialSlide: 0,
+    speed: 3000,
+    autoplaySpeed: 3000,
+    arrows:false,
     responsive: [
       {
         breakpoint: 1024,
@@ -45,7 +50,7 @@ const Banner = ({ updatedBanner }) => {
   const { error, featured, isLoading } = useAllFeatured()
 
   return (
-    <div className="w-[95vw] mx-auto ">
+    <div className="w-[98vw] mx-auto ">
       {/* <img className='md:h-[100vh] h-[40vh] w-[99vw] brightness-125 contrast-125' src={updatedBanner?.title ? updatedBanner?.thumbnail : 'https://occ-0-2482-2186.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABcaZlB5cBXaQovKzRNe3DLOD5xe5ug2Msp7y4SHAFXs8Uu-s9esOCD1X3jnbYZZ4Dm-tM-cOgWh1FDmFD0wIfIfbrkpJAoULvXWX.jpg?r=c9b%22'} alt="" /> */}
       {
 
@@ -56,7 +61,6 @@ const Banner = ({ updatedBanner }) => {
             </div>
           </div>
         </div>
-
       }
 
 

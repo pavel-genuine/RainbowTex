@@ -142,8 +142,7 @@ const SignIn = () => {
 
                             <input className='px-4 py-3 font-bold rounded w-full max-w-xs text-white bg-[#e50914]  cursor-pointer mt-4 mb-2' type="submit" value="Sign In" />
                         </form>
-                        {/* <p><small>Don't have an account <Link className='text-primary' to="/sign_up">Create New Account</Link></small></p>
-                    <div className="divider">OR</div> */}
+              
                         <label for="my-modal-4" onClick={async () => {
                             const x = window.open(
                                 `${base_url}/auth/google`,
@@ -178,20 +177,13 @@ const SignIn = () => {
                             <img src="https://www.100ms.live/_next/image?url=%2Fassets%2Fhero%2Fgoogle.svg&w=32&q=75" alt="" /> <span className="font-bold">Start with Google</span>
                         </label>
 
-
-                        {/* {stayLoggedIn && (
-                            <button className="px-4 py-3 font-bold rounded w-full max-w-xs bg-white text-black  cursor-pointer mt-4 mb-2"
-                                onClick={loginTokenControl}>StayLoggedIn with google.</button>
-
-                        )} */}
-
                         <div>
                             <input type="checkbox" id="my-modal-4" class="modal-toggle" />
                             <label for="my-modal-4" class="modal cursor-pointer">
-                            <label class="modal-box relative" for="">
+                            <label class="modal-box relative bg-slate-800 h-[40vh] flex justify-center items-center" for="">
                                 <div class="modal-action">
                                     {stayLoggedIn && (
-                                        <label for="my-modal-4" className="px-4 py-3 font-bold rounded  bg-black text-white  cursor-pointer m-auto"
+                                        <label for="my-modal-4" className="px-4 py-3 font-bold rounded mb-10  bg-[brown] text-white  cursor-pointer m-auto"
                                             onClick={loginTokenControl}>Stay LoggedIn with google.</label>
 
                                     )}
@@ -204,6 +196,7 @@ const SignIn = () => {
 
                     </div>
                 </div>
+                
                 <div className="bg-black bg-opacity-90 w-[100%] md:mt-20 h-[33%] md:h-auto  md:py-10 py-40 text-[grey] ">
                     <div className="w-[80%] mx-auto">
                         <Link to={`/contact-us`}><span className="text-lg hover:underline mb-5">Questions? Contact us.</span></Link>

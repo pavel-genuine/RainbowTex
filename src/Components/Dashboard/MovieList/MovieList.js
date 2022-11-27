@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-responsive-modal";
+import { getToallPostsNumber } from "../../../api/api";
 import { addFeatured } from "../../../redux/features/featuredPost/featuredPostSlice";
 import { postDelete } from "../../../redux/features/postSection/postSlice";
 import usePosts from "../../Shared/usePosts";
@@ -13,6 +14,10 @@ const MovieList = () => {
 
     const [filteredMovies, setfilteredMovies] = useState();
     const [movies, setMovies] = useState([])
+    const [searchText, setSearchText] = useState('')
+    const [postsNumber, setpostsNumber] = useState(0)
+    const [pageCount, setPageCount] = useState(1)
+    const [page, setPage] = useState(1)
 
     const filterHandler = (data) => {
 
@@ -20,34 +25,64 @@ const MovieList = () => {
 
         // console.log('filtered', data);
     }
-    let { isLoading, error, posts } = usePosts()
+    let { isLoading, error, posts } = usePosts(page)
 
     const { post } = useSelector(state => state?.deletePost)
     const dispatch = useDispatch()
-   
+
 
     const addBanner = (data) => {
         dispatch(addFeatured(data))
     }
 
+    const searchHandler = (data) => {
+        setSearchText(() => data)
+
+    }
+
     useEffect(() => {
 
+        const fetchPostsNumber = async () => {
+            const { data } = await getToallPostsNumber()
+
+            const totalPosts =data?.totalNumberOfPosts
+            setpostsNumber(() =>totalPosts )
+            console.log('res',data?.totalNumberOfPosts);
+            console.log('post',postsNumber);
+        }
+        
+
+        fetchPostsNumber()
+
+        setPageCount(()=>Math.ceil(postsNumber/20))
+
         window.scrollTo(0, 0)
+
         setMovies(posts)
-        if (filteredMovies==1) {
+
+        if (filteredMovies == 1) {
             setMovies(posts)
         }
         else if (filteredMovies?._id) {
-            setMovies(()=>filteredMovies?.posts)
+            setMovies(() => filteredMovies?.posts)
         }
 
-    }, [posts, filteredMovies])
+        if (searchText) {
+
+            const searchResult =movies?.filter(movie=>movie?.title?.toLowerCase()?.includes(searchText))
+            
+            setMovies(searchResult)
+
+            // console.log(searchResult,'ressss');
+        }
+
+    }, [posts, filteredMovies,searchText])
 
     const handleDeleteOne = (id) => {
         const confirmation = window.confirm('Are you sure to delete?');
         if (confirmation) {
             dispatch(postDelete(id))
-           const newMovies = movies?.filter(item => item?._id != id);
+            const newMovies = movies?.filter(item => item?._id != id);
             setMovies(newMovies)
         }
     }
@@ -63,7 +98,7 @@ const MovieList = () => {
                         <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
                         <div className=''>
                             <p className='font-semibold my-2 text-xl underline underline-offset-2 '> Movies List</p>
-                            <Filter filterHandler={filterHandler}></Filter>
+                            <Filter filterHandler={filterHandler} searchHandler={searchHandler}></Filter>
 
                             <p className='font-semibold my-5 bg-slate-600 px-3 py-2 md:mr-20 text-lg md:w-96 '>Total Movies Uploaded : {movies?.length} </p>
                             <div style={{ overflowX: 'auto' }}>
@@ -82,8 +117,8 @@ const MovieList = () => {
                                     </thead>
                                     <tbody className='bg-[#26282b]'>
                                         {
-                                            
-                                            movies?.map(movie =>{
+
+                                            movies?.map(movie => {
                                                 return <tr key={movie?._id}>
                                                     <td class="border border-[#181818] px-8 py-4">{movie?.title}</td>
                                                     <td class="border border-[#181818] ">
@@ -106,7 +141,7 @@ const MovieList = () => {
                                                                 {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-10 cursor-pointer text-[blue]">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                                             </svg> */}
-                                                                <label for="my-modal-10" class=" modal-button "> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-10 cursor-pointer text-[blue]">
+                                                                <label for="my-modal-10" class=" modal-button  "> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-10 cursor-pointer text-[blue]">
                                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                                                 </svg></label>
                                                             </span>
@@ -124,7 +159,7 @@ const MovieList = () => {
 
                                                                 <input type="checkbox" id="my-modal-10" class="modal-toggle" />
                                                                 <label for="my-modal-10" class="modal cursor-pointer">
-                                                                    <label class="modal-box relative w-11/12 max-w-5xl" for="">
+                                                                    <label class="modal-box relative w-11/12 max-w-5xl bg-slate-800" for="">
                                                                         <EditPost></EditPost>
                                                                     </label>
                                                                 </label></div>
@@ -138,7 +173,8 @@ const MovieList = () => {
                                                         </p>
 
                                                     </td>
-                                                </tr>})
+                                                </tr>
+                                            })
                                         }
                                     </tbody>
                                 </table>
@@ -147,8 +183,16 @@ const MovieList = () => {
 
 
                     </div>
+                
+                  <div className="flex justify-center my-10 mx-auto">
+                    {
+                        [...Array(pageCount).keys()].map(number=> <button  onClick={()=>setPage(number)} className={`btn btn-sm mx-2 text-center border ${page==number?'bg-[brown]':''}`}>{number+1}</button>)
+                    }
+                  </div>
                 </div>
+              
             </div>
+           
         </div>
     );
 };

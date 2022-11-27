@@ -16,7 +16,12 @@ const FeaturedBanner = ({movie}) => {
     }
 
   return (
-    <div>  {
+    <div> 
+
+{
+    featured?.length ? 
+    <div>
+         {
         isBanner || featured?.find(item => item?.postId == movie?._id)
         ? 
         <input type="checkbox" class="toggle toggle-error " checked /> 
@@ -38,7 +43,14 @@ const FeaturedBanner = ({movie}) => {
             }}
             type="checkbox" class="toggle toggle-error " />
 
-    }</div>
+    }
+    </div>
+    :
+    <input type="checkbox" class="toggle toggle-error "/>
+
+}
+
+    </div>
   )
 }
 

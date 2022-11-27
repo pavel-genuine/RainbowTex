@@ -18,19 +18,24 @@ import { useState } from "react";
 const queryClient = new QueryClient()
 function App() {
 
-  const [filteredCategory,setfilteredCategory]=useState()
+  const [filteredCategory, setfilteredCategory] = useState()
+  const [searchText, setSearchText] = useState('')
 
-  const filterHandler=(data)=>{
+  const filterHandler = (data) => {
 
-    setfilteredCategory(()=>data)
+    setfilteredCategory(() => data)
+  }
+  const searchHandler = (data) => {
+    setSearchText(() => data)
+
   }
 
   return (
     <QueryClientProvider client={queryClient}>
-    <div>
-      <Navbar filterHandler={filterHandler}></Navbar>
-       <Routes>
-          <Route path='/' element={<HomePage filteredCategory={filteredCategory}></HomePage>}></Route>
+      <div>
+        <Navbar filterHandler={filterHandler} searchHandler={searchHandler}></Navbar>
+        <Routes>
+          <Route path='/' element={<HomePage searchText={searchText} filteredCategory={filteredCategory}></HomePage>}></Route>
           <Route path='/contact-us' element={<ContactUs></ContactUs>}></Route>
           <Route path='/about-us' element={<AboutUs></AboutUs>}></Route>
           <Route path='/sign-in' element={<SignIn></SignIn>}></Route>
@@ -41,8 +46,8 @@ function App() {
           <Route path='/dashboard/publish-post' element={<PublishPost></PublishPost>}></Route>
           <Route path='/profile' element={<Profile></Profile>}></Route>
           <Route path='/movie-detail/:id' element={<MovieDetails></MovieDetails>}></Route>
-     </Routes>
-    </div>
+        </Routes>
+      </div>
     </QueryClientProvider>
   );
 }

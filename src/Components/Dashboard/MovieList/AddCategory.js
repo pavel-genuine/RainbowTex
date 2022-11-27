@@ -16,7 +16,11 @@ const AddCategory = ({ handleNewCate }) => {
         console.log(data?.categoryName,'data');
         handleNewCate(data?.categoryName)
         toast.success('New Category Added')
-        return submit;
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
+
+        return 
     }
 
     return (
