@@ -25,7 +25,7 @@ const MovieList = () => {
 
         // console.log('filtered', data);
     }
-    let { isLoading, error, posts } = usePosts(page)
+    let { isLoading, error, posts } = usePosts('page',page)
 
     const { post } = useSelector(state => state?.deletePost)
     const dispatch = useDispatch()
@@ -47,8 +47,8 @@ const MovieList = () => {
 
             const totalPosts =data?.totalNumberOfPosts
             setpostsNumber(() =>totalPosts )
-            console.log('res',data?.totalNumberOfPosts);
-            console.log('post',postsNumber);
+            // console.log('res',data?.totalNumberOfPosts);
+            // console.log('post',postsNumber);
         }
         
 

@@ -1,11 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import useUserList from '../../Shared/useUserList';
 
 const UsersTable = () => {
 
-    const {userList} =useUserList()
+    const [postsNumber, setpostsNumber] = useState(0)
+    const [pageCount, setPageCount] = useState(1)
+    const [page, setPage] = useState(1)
 
-    console.log(userList,'useUsers');
+    const { userList } = useUserList()
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+
+        const fetchPostsNumber = async () => {
+            // const { data } = await getToallPostsNumber()
+
+            // const totalPosts =data?.totalNumberOfPosts
+            // setpostsNumber(() =>totalPosts )
+            // console.log('res',data?.totalNumberOfPosts);
+            // console.log('post',postsNumber);
+        }
+
+
+        fetchPostsNumber()
+
+        // setPageCount(()=>Math.ceil(postsNumber/20))
+    }, [])
 
     // if (isLoading) {
     //     return <p>Loading...</p>
@@ -14,28 +34,28 @@ const UsersTable = () => {
     return (
         <div className=''>
 
-        <p className='font-semibold my-2 text-xl underline underline-offset-2 '> Users List</p>
-        <p className='font-semibold my-10 bg-slate-600 px-3 md:w-[25%]  py-2 text-lg  '>Total Users : {userList.length} </p>
+            <p className='font-semibold my-2 text-xl underline underline-offset-2 '> Users List</p>
+            <p className='font-semibold my-10 bg-slate-600 px-3 md:w-[25%]  py-2 text-lg  '>Total Users : {userList.length} </p>
 
-        <div style={{ overflowX: 'auto' }}>
-            <table class="shadow-lg table-auto overflow-x-scroll overflow-auto w-full">
-                <thead className='text-white'>
-                    <tr className='bg-[brown]'>
-                        <th class=" border border-[#181818] text-left px-8 py-4">Name</th>
-                        <th class=" border border-[#181818] text-left px-8 py-4">Email</th>
-                        <th class=" border border-[#181818] text-left px-8 py-4">Subscription Plan</th>
-                        <th class=" border border-[#181818] text-left px-8 py-4">Subscribed At</th>
-                        {/* <th class=" border border-[#181818] text-left px-8 py-4">Action</th> */}
-                    </tr>
-                </thead>
-                <tbody className='bg-[#26282b]'>
-                    {
-                        userList.map(user=><tr>
-                            <td class="border border-[#181818] px-8 py-4">{user?.name}</td>
-                            <td class="border border-[#181818] px-8 py-4">{user?.email}</td>
-                            <td class="border border-[#181818] px-8 py-4">{user?.subscription_plan}</td>
-                            <td class="border border-[#181818] px-8 py-4">{user?.updatedAt}</td>
-                            {/* <td class="border border-[#181818] px-8 py-4 ">
+            <div style={{ overflowX: 'auto' }}>
+                <table class="shadow-lg table-auto overflow-x-scroll overflow-auto w-full">
+                    <thead className='text-white'>
+                        <tr className='bg-[brown]'>
+                            <th class=" border border-[#181818] text-left px-8 py-4">Name</th>
+                            <th class=" border border-[#181818] text-left px-8 py-4">Email</th>
+                            <th class=" border border-[#181818] text-left px-8 py-4">Subscription Plan</th>
+                            <th class=" border border-[#181818] text-left px-8 py-4">Subscribed At</th>
+                            {/* <th class=" border border-[#181818] text-left px-8 py-4">Action</th> */}
+                        </tr>
+                    </thead>
+                    <tbody className='bg-[#26282b]'>
+                        {
+                            userList.map(user => <tr>
+                                <td class="border border-[#181818] px-8 py-4">{user?.name}</td>
+                                <td class="border border-[#181818] px-8 py-4">{user?.email}</td>
+                                <td class="border border-[#181818] px-8 py-4">{user?.subscription_plan}</td>
+                                <td class="border border-[#181818] px-8 py-4">{user?.updatedAt}</td>
+                                {/* <td class="border border-[#181818] px-8 py-4 ">
                                 <p className='flex'>
                                     <span title='edit'>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-10 cursor-pointer text-[blue]">
@@ -50,9 +70,9 @@ const UsersTable = () => {
                                 </p>
     
                             </td> */}
-                        </tr>)
-                    }
-                    {/* <tr>
+                            </tr>)
+                        }
+                        {/* <tr>
                         <td class="border border-[#181818] px-8 py-4">BBBBB</td>
                         <td class="border border-[#181818] px-8 py-4">Email2</td>
                         <td class="border border-[#181818] px-8 py-4">paid</td>
@@ -72,7 +92,7 @@ const UsersTable = () => {
                             </p>
                         </td>
                     </tr> */}
-                    {/* <tr>
+                        {/* <tr>
                         <td class="border border-[#181818] px-8 py-4">XXXX</td>
                         <td class="border border-[#181818] px-8 py-4">Email3</td>
                         <td class="border border-[#181818] px-8 py-4">trial</td>
@@ -93,10 +113,18 @@ const UsersTable = () => {
 
                         </td>
                     </tr> */}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <div className="flex justify-center my-10 mx-auto">
+                    {
+                        [...Array(5).keys()].map(number => <button className={`btn btn-sm mx-2 text-center border ${1 == 1 ? 'bg-[brown]' : ''}`}>{number + 1}</button>)
+                    }
+                </div>
+            </div>
         </div>
-    </div>
     )
 }
 

@@ -14,21 +14,23 @@ const HomeCategories = ({ filteredCategory, searchText }) => {
     const { category } = useHomeCategories()
     // let { isLoading, error, posts } = usePosts()
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     // console.log(category, 'posts');
+        // console.log(category, 'posts');
 
-    //     if (searchText) {
+        if (searchText) {
 
-    //         const searchResult =posts?.filter(movie=>movie?.title?.toLowerCase()?.includes(searchText))
+            // const searchResult =posts?.filter(movie=>movie?.title?.toLowerCase()?.includes(searchText))
 
-    //         setMovies(searchResult)
+            // setMovies(searchResult)
 
-    //         console.log(searchResult, 'ressss');
-    //         console.log(movies, 'ressss mmmm');
-    //     }
+            // console.log(searchResult, 'ressss');
+            // console.log(movies, 'ressss mmmm');
+        }
 
-    // }, [category,searchText])
+    }, [])
+
+    // console.log(category,'cates');
 
 
     return (

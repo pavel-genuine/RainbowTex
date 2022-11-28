@@ -5,8 +5,12 @@ import UsersTable from "./UsersTable";
 
 const UserList = () => {
 
+ 
+
     useEffect(() => {
         window.scrollTo(0, 0)
+
+       
     }, [])
 
     return (
@@ -19,9 +23,8 @@ const UserList = () => {
                 <div className=" lg:mx-5 col-span-10 w-[100%] px-[5%] md:px-[10%] md:w-[100%]">
 
                     <div class="mt-14 ">
-                        
-                        <UsersTable></UsersTable>
 
+                        <UsersTable></UsersTable>
 
                     </div>
                 </div>

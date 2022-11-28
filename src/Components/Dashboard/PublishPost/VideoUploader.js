@@ -63,12 +63,12 @@ const VideoUploader = (props) => {
                 <div>
                     <div className='flex justify-end items-center '>
                     <progress class="progress progress-error mr-2" value={progress} max="100"></progress>
-                    <span
+                    {/* <span
                         className="text-[red] cursor-pointer"
                         onClick={() => cancelUpload()}
                     >
                         X
-                    </span>
+                    </span> */}
                 </div>
                 <label>{progress}% uploaded</label>
                 </div>

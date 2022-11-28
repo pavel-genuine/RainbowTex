@@ -56,7 +56,7 @@ const SignIn = () => {
 
     const onSubmit = async (data) => {
         const submit = dispatch(fetchSignIn(data))
-        console.log(submit, 'submit');
+        // console.log(submit, 'submit');
         return submit;
     }
     const navigate = useNavigate();
@@ -67,10 +67,17 @@ const SignIn = () => {
 
     useEffect(()=>{
     if (token) {
-        toast.success('SignIn Successfull')
+        setTimeout(() => {
+            toast.success('SignIn Successfull')
+        }, 500);
+       
         setTimeout(() => {
             navigate(from, { replace: true });
-        }, 400);
+        }, 1000);
+
+        setTimeout(() => {
+            window?.location.reload()
+        }, 1500);
         
     }},[token])
 

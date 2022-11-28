@@ -1,6 +1,6 @@
 // import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 // import { useQuery } from '@tanstack/react-query';
 import './Navbar.css'
 import CustomLink from './CustomLink';
@@ -11,14 +11,10 @@ import { useForm } from 'react-hook-form';
 
 const Navbar = ({ filterHandler, searchHandler }) => {
     const { register, formState: { errors }, handleSubmit } = useForm();
-
     const [background, setBackground] = useState(false)
-
-
-    const [movies, setMovies] = useState([]);
+    const [modifiedNav, setModifiedNav] = useState(false)
 
     const { category: homeCates } = useHomeCategories()
-
     const token = localStorage.getItem('loginToken')
     const logoutHandler = async () => {
 
@@ -39,12 +35,16 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
     const { error, category, isLoading } = useAllCategories()
 
+    const navigate = useNavigate()
+
     const onSubmit = (data) => {
 
         const searchText = data?.search?.toLowerCase()
         console.log('text nav', searchText);
+        console.log('text nav type', typeof(searchText));
         searchHandler(searchText)
-
+        // navigate('/post-search')
+        return
     }
 
     const changeBackground = () => {
@@ -57,6 +57,9 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
         }
     }
+
+
+
 
 
     window.addEventListener('scroll', changeBackground)
@@ -97,8 +100,8 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                             <li >
                                 {
                                     localStorage.getItem('isAdmin') &&
-                                    <Link to='/dashboard' className="btn bg-[green] border-none text-[white] btn-xs">Dashboard</Link>
-    
+                                    <Link onClick={() => setModifiedNav(true)} to='/dashboard' className="btn bg-[green] border-none text-[white] btn-xs">Dashboard</Link>
+
                                 }
                             </li>
                         </div>
@@ -125,8 +128,10 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
                 <label tabIndex="0" htmlFor='bigTogglerpro' className="">
                     <div className="indicator cursor-pointer rounded-full felx justify-center items-center">
-                        <p className="btn-ghost hover:rounded font-bold md:p-3 md:m-5 mr-1" >Categories</p>
+                        {modifiedNav &&
+                            <p className="btn-ghost hover:rounded font-bold md:p-3 md:m-5 mr-1" >Categories</p>
 
+                        }
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
                         </svg>
@@ -137,6 +142,8 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
                 <ul className="space-y-2 p-4 font-bold rounded-lg notificationpro text-black absolute left-[80%] top-[100%] bg-black text-[white]  bg-opacity-60 ">
                     <ul className='md:grid grid-cols-2 md:w-[20vw]'>
+                        {<CustomLink to={`/post-search`} className="border-b-2 ml-4 mt-4 cursor-pointer ">
+                            All Movies</CustomLink>}
                         {
                             category?.categories?.length > 0 &&
                             category?.categories.map(item => {
@@ -148,37 +155,45 @@ const Navbar = ({ filterHandler, searchHandler }) => {
             </div>
 
             <div className="dropdown dropdown-hover hidden md:block relative">
-                <label tabIndex="0" className="">
-                    <CustomLink className="btn-ghost hover:rounded md:p-3 md:m-5" >Categories</CustomLink>
-                </label>
+                {!modifiedNav &&
+                    <label tabIndex="0" className="">
+                        <CustomLink className="btn-ghost hover:rounded md:p-3 md:m-5" >Categories</CustomLink>
+                    </label>
+                }
                 <div tabIndex="0" className="px-4 py-6 abolute right-[30%] rounded-lg dropdown-content menu mt-3 shadow text-white bg-black bg-opacity-60 w-auto">
-                    <ul className='md:grid grid-cols-2 md:w-[20vw]'>
+
+                    {<CustomLink to={`/post-search`} className="border-b-2 ml-4 mt-4 cursor-pointer ">
+                        All Movies</CustomLink>}
+                    <ul className='md:grid grid-cols-2 md:w-[20vw] mt-4'>
+
                         {
                             category?.categories?.length > 0 &&
                             category?.categories.map(item => {
                                 return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink className="border-b-2 cursor-pointer ">{item?.categoryName}</CustomLink></li>
                             })
                         }
+
                     </ul>
+
                 </div>
             </div>
             {!token &&
-                <CustomLink className="btn-ghost hover:rounded md:p-3 md:m-5" to='/sign-up'>Sign Up</CustomLink>
+                <CustomLink onClick={() => setModifiedNav(true)} className="btn-ghost hover:rounded md:p-3 md:m-5" to='/sign-up'>Sign Up</CustomLink>
 
             }
             {!token &&
-                <CustomLink className="btn-ghost hover:rounded md:p-3 md:m-5" to='/sign-in'>Sign In</CustomLink>
+                <CustomLink onClick={() => setModifiedNav(true)} className="btn-ghost hover:rounded md:p-3 md:m-5" to='/sign-in'>Sign In</CustomLink>
             }
         </>
 
 
     return (
-        <div>
+        <div >
 
             <div className={`nav h-[70px]  fixed text-white bg-[#181818] ${background ? 'bg-opacity-80' : 'bg-opacity-20 bg-gradient-to-b from-black '} backdrop-filter-none backdrop-blur-sm shadow z-100`}>
                 <div className="lg:navbar lg:w-[100vw]  mx-auto flex md:justify-around justify-between items-center">
                     <div className="lg:navbar-start hidden md:block">
-                        <Link to='/' className=" normal-case text-xl ">
+                        <Link onClick={() => setModifiedNav(false)} to='/' className=" normal-case text-xl ">
                             <img className='md:w-40 ml-20 mt-2' src="https://i.ibb.co/Mnc17bk/1-22-removebg-preview.png" alt="" />
                         </Link>
                     </div>
@@ -197,9 +212,10 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                             <div tabIndex="0" id="menuContent" className=" menu border border-slate-600 bg-black text-[white]  bg-opacity-60 menu menu-compact dropdown-content my-2 p-4 shadow  rounded-box w-36 space-y-2">
 
                                 {menuItems}
-                                {
+                                {!modifiedNav &&
                                     <div className="form-control w-full max-w-xs">
                                         <input
+                                        onFocus={()=>navigate('/post-search')}
                                             type="text"
                                             placeholder="Search"
                                             className={`outline-0 px-2 py-1  w-full max-w-xs rounded-full bg-opacity-60 text-white bg-[grey] `}
@@ -216,11 +232,12 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
 
                     <div className='space-x-3'>
-                        {
-                            <form className='hidden md:block' onSubmit={handleSubmit(onSubmit)}>
+                        {!modifiedNav &&
+                            <form className={`hidden md:block `} onSubmit={handleSubmit(onSubmit)}>
                                 <div className="flex w-[125%]">
                                     <input
                                         type="text"
+                                        onFocus={()=>navigate('/post-search')}
                                         placeholder="Search movies"
                                         className={`outline-0 px-4 py-2 mt-10 md:mt-0 md:ml-20 w-full max-w-xs rounded-full bg-opacity-80 text-white bg-[grey] `}
                                         {...register("search")}
@@ -257,7 +274,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                                         </label>
                                         <ul tabIndex="0" id='profile' className=" bg-black border border-slate-600 space-y-4 divide divide-y mt-2  w-[350%] card card-compact  dropdown-content pl-4 pr-1 pt-4 pb-4 shadow-xl bg-opacity-60 rounded-box w-52">
                                             <div className='space-y-2 '>
-                                                <Link to="/profile">
+                                                <Link onClick={() => setModifiedNav(false)} to="/profile">
                                                     <li>
 
                                                         {
@@ -275,14 +292,14 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
                                                 <li>
 
-                                                    <Link to='/profile' className="  btn bg-[brown] border-none text-[white] btn-xs mx-auto">
+                                                    <Link onClick={() => setModifiedNav(false)} to='/profile' className="  btn bg-[brown] border-none text-[white] btn-xs mx-auto">
                                                         View Profile
                                                     </Link>
 
                                                 </li>
                                                 <li>
-                                                    { localStorage.getItem('isAdmin') &&
-                                                        <Link to='/dashboard' className="btn bg-[green] border-none text-[white] btn-xs">Dashboard</Link>
+                                                    {localStorage.getItem('isAdmin') &&
+                                                        <Link onClick={() => setModifiedNav(true)} to='/dashboard' className="btn bg-[green] border-none text-[white] btn-xs">Dashboard</Link>
                                                     }
                                                 </li>
 

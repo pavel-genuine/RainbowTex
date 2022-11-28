@@ -69,9 +69,14 @@ const SignUp = () => {
         }, 1000);
         setTimeout(() => {
             navigate('/');
+        }, 1500);
+
+        setTimeout(() => {
+            window?.location.reload()
         }, 2000);
 
-        console.log(submit, 'submit');
+       
+
         return submit;
 
 
