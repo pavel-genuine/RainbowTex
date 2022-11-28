@@ -44,7 +44,7 @@ const SingleMovieCard = ({ movie }) => {
                         </div>
 
                         <div className="flex-none w-full mt-2 font-normal mt-5">
-                            <Link> <button className='btn btn-xs border-none bg-[brown]'>Detail</button>
+                            <Link to={`/movie-detail/${movie?._id}`}><button className='btn btn-xs border-none bg-[brown]'>Detail</button>
                             </Link>
                         </div>
                     </dl>

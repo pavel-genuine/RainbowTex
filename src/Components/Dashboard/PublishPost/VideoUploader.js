@@ -104,12 +104,12 @@ const VideoUploader = (props) => {
                    please wait, video uploading...<progress label={`ww`} className="progress w-56 progress-info"></progress>
                 </button> 
                 } */}
-                {source && (
+                {source|| video?.url && (
 
                     <div className='absolute md:top-[-30%] top-[0]'>
                        
                         <video className=' rounded cursor-pointer md:w-[30vw] w-[90vw] h-[270px] md:h-[270px] ' controls poster={props?.poster} controlsList="nodownload">
-                            <source src={source} />
+                            <source src={source?source:video?.url} />
                         </video>
                     </div>
                 )}

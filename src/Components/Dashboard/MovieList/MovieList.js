@@ -1,7 +1,8 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-responsive-modal";
-import { getToallPostsNumber } from "../../../api/api";
+import { base_url, getToallPostsNumber } from "../../../api/api";
 import { addFeatured } from "../../../redux/features/featuredPost/featuredPostSlice";
 import { postDelete } from "../../../redux/features/postSection/postSlice";
 import usePosts from "../../Shared/usePosts";
@@ -25,7 +26,7 @@ const MovieList = () => {
 
         // console.log('filtered', data);
     }
-    let { isLoading, error, posts } = usePosts('page',page)
+    let { isLoading, error, posts } = usePosts(page)
 
     const { post } = useSelector(state => state?.deletePost)
     const dispatch = useDispatch()
@@ -40,7 +41,16 @@ const MovieList = () => {
 
     }
 
+    // console.log('page',page);
+
     useEffect(() => {
+
+        // const fetchPosts =async()=>{
+        //     const {data} = await axios.get(`${base_url}/post?page=2`)
+        //     console.log('posts paginate',data);
+        // }
+
+        // fetchPosts()
 
         const fetchPostsNumber = async () => {
             const { data } = await getToallPostsNumber()
@@ -56,8 +66,6 @@ const MovieList = () => {
 
         setPageCount(()=>Math.ceil(postsNumber/20))
 
-        window.scrollTo(0, 0)
-
         setMovies(posts)
 
         if (filteredMovies == 1) {
@@ -69,14 +77,14 @@ const MovieList = () => {
 
         if (searchText) {
 
-            const searchResult =movies?.filter(movie=>movie?.title?.toLowerCase()?.includes(searchText))
+            const searchResult =posts?.filter(movie=>movie?.title?.toLowerCase()?.includes(searchText))
             
             setMovies(searchResult)
 
             // console.log(searchResult,'ressss');
         }
 
-    }, [posts, filteredMovies,searchText])
+    }, [posts, filteredMovies,searchText,page])
 
     const handleDeleteOne = (id) => {
         const confirmation = window.confirm('Are you sure to delete?');
@@ -186,7 +194,7 @@ const MovieList = () => {
                 
                   <div className="flex justify-center my-10 mx-auto">
                     {
-                        [...Array(pageCount).keys()].map(number=> <button  onClick={()=>setPage(number)} className={`btn btn-sm mx-2 text-center border ${page==number?'bg-[brown]':''}`}>{number+1}</button>)
+                        [...Array(pageCount).keys()].map(number=> <button  onClick={()=>setPage(number+1)} className={`btn btn-sm mx-2 text-center border ${page==number+1?'bg-[brown]':''}`}>{number+1}</button>)
                     }
                   </div>
                 </div>
