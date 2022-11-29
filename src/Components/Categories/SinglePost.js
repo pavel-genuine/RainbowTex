@@ -7,26 +7,11 @@ import './icon.css'
 
 const SinglePost = ({movie}) => {
 
-    // const handleClicked = () => {
-    //     detectClicked(movie)
-    // }
-    // const { postCategory} = useSelector(state => state?.addPostCategory)
-    // const dispatch = useDispatch()
-
-    // useEffect(()=>{
-
-    //     dispatch(categoryAdd({
-
-    //         postId:movie?._id,
-    //         categoryId:cateId,
-    //     }))
-    // },[])
-
-    // const movie =postCategory?.post
+   
     
 
     return (
-        <Link to={`/movie-detail/${movie?._id}`}>
+      
         <div  className='promo relative cursor-pointer'>
             <img className="promo  w-[95%] mx-auto  border-white hover:opacity-70" src={movie?.thumbnail? movie?.thumbnail?.cdnUrl :'https://i.ibb.co/R6Y4CQ3/1-white-1.png' } alt="" />
 
@@ -46,7 +31,8 @@ const SinglePost = ({movie}) => {
 
             </div>
         </div>
-        </Link>)
+ 
+        )
 }
 
 export default SinglePost

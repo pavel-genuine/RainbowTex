@@ -26,20 +26,21 @@ function App() {
 
     setfilteredCategory(() => data)
   }
+
+  console.log('filter',filteredCategory);
   const searchHandler = (data) => {
     setSearchText(() => data)
 
   }
 
-  console.log('sss',searchText);
 
   return (
     <QueryClientProvider client={queryClient}>
       <div>
         <Navbar filterHandler={filterHandler} searchHandler={searchHandler}></Navbar>
         <Routes>
-          <Route path='/' element={<HomePage searchText={searchText} filteredCategory={filteredCategory}></HomePage>}></Route>
-          <Route path='/post-search' element={<PostSearch searchText={searchText}></PostSearch>}></Route>
+          <Route path='/' element={<HomePage filteredCategory={filteredCategory}></HomePage>}></Route>
+          <Route path='/post-search' element={<PostSearch searchText={searchText} filteredCategoryId={filteredCategory?._id}></PostSearch>}></Route>
           <Route path='/contact-us' element={<ContactUs></ContactUs>}></Route>
           <Route path='/about-us' element={<AboutUs></AboutUs>}></Route>
           <Route path='/sign-in' element={<SignIn></SignIn>}></Route>

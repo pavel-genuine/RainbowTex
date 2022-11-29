@@ -1,20 +1,34 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import SideBar from "../SideBar";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { movies } from "../../allMovies/allMovies";
-import useUserList from "../../Shared/useUserList";
-import usePosts from "../../Shared/usePosts";
+import { getTotalPostsNumber, getTotalUsersNumber } from "../../../api/api";
 
 const DashboardHome = () => {
 
-    const {userList} =useUserList()
-    const {isLoading, error, posts }=usePosts()
-
-    console.log(userList,'useUsers');
+    const [postsNumber,setPostsNumber] =useState(0)
+    const [usersNumber,setUsersNumber] =useState(0)
 
     useEffect(() => {
         window.scrollTo(0, 0)
-    }, [])
+
+        const fetchPostsNumber = async () => {
+            const { data } = await getTotalPostsNumber()
+
+            const totalPosts =data?.totalNumberOfPosts
+            setPostsNumber(() =>totalPosts )
+            // console.log('res',data?.totalNumberOfPosts);
+            // console.log('post',postsNumber);
+        }
+        fetchPostsNumber()
+        const fetchUsersNumber = async () => {
+            const { data } = await getTotalUsersNumber()
+
+            setUsersNumber(() =>data )
+            
+        }
+        fetchUsersNumber()
+
+    }, [postsNumber,usersNumber])
 
     return (
         <div className='py-16 min-h-screen relative bg-[#181818] text-slate-200'>
@@ -34,8 +48,8 @@ const DashboardHome = () => {
                         <img className="w-40" src={"https://i.ibb.co/vj0Ctmj/user.png"} alt="" />
                         <h2 className="font-bold text-4xl">Admin</h2>
                         <div className='md:flex items-center'>
-                            <p className='font-semibold my-5 bg-slate-600 px-3 py-2 md:mr-20 text-lg '>Total Movies Uploaded : {posts?.length} </p>
-                            <p className='font-semibold my-5 bg-slate-600 px-3 py-2 text-lg '>Total Users : {userList?.length} </p>
+                            <p className='font-semibold my-5 bg-slate-600 px-3 py-2 md:mr-20 text-lg '>Total Movies Uploaded : {postsNumber} </p>
+                            <p className='font-semibold my-5 bg-slate-600 px-3 py-2 text-lg '>Total Users : {usersNumber} </p>
                         </div>
                         
                 <div>

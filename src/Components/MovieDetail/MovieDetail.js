@@ -24,7 +24,7 @@ const MovieDetails = () => {
     const [thisRating, setthisRating] = useState(0)
     const [remainingCommennts, setRemainingCommennts] = useState([])
     const [commentId, setCommentId] = useState()
-   
+
     const { id } = useParams()
 
     const { category } = useHomeCategories()
@@ -32,6 +32,7 @@ const MovieDetails = () => {
 
 
     const { isLoading, error, post: movie } = useSelector(state => state?.singlePost)
+
     const { comment: newComment } = useSelector(state => state?.commentAdding)
     const { comment: approvedComment } = useSelector(state => state?.commentApproving)
     const { comment: removedComment } = useSelector(state => state?.commentRemoving)
@@ -56,7 +57,7 @@ const MovieDetails = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0)
-       
+
 
         dispatch(singlePostGet(id))
         const singleCate = category?.find(cate => cate?._id == movie?.category)
@@ -78,10 +79,13 @@ const MovieDetails = () => {
         const newComment = {
             postId: movie?._id,
             comment: data?.comment,
-            userName: localStorage.getItem('email'),
             userId: localStorage.getItem('userId')
         }
         dispatch(commentAdd(newComment))
+
+        setTimeout(() => {
+            window.location.reload()
+        }, 200);
     }
 
     const handleEditComment = (id) => {
@@ -98,22 +102,28 @@ const MovieDetails = () => {
         const editedComment = {
             postId: movie?._id,
             commentId: commentId,
-            editedComment: data?.comment
+            editedComment: data?.commentEdit,
+            userId: localStorage.getItem('userId')
         }
         dispatch(commentEdit(editedComment))
 
-        const updatedComments = movie?.comments?.filter(item => item?._id != commentId);
         // const updatedComments = movie?.comments?.filter(item => item?._id != commentId);
 
-        const updatedComment = movie?.comments?.find(item => item?._id == commentId);
 
-        setRemainingCommennts(() => [...updatedComments, updatedComment])
+        // const updatedComment = movie?.comments?.find(item => item?._id == commentId);
 
-        console.log(data, 'ddd');
-        console.log(editedComment, 'eeeeeddd');
 
+
+        // setRemainingCommennts(() => [...updatedComments, updatedComment])
 
         toast.success('Comment edited')
+
+         setTimeout(() => {
+            window.location.reload()
+        }, 200);
+
+
+
 
     }
 
@@ -124,24 +134,33 @@ const MovieDetails = () => {
             commentId: id
         }
 
-        if (movie?.comments?.length == 1) {
-            dispatch(commentRemove(data))
-            setRemainingCommennts(() => [{ comment: null, _id: id }])
-            return setTimeout(() => {
-                window.location.reload()
-            }, 200);
-        }
+        // if (remainingCommennts.length == 1) {
+        //     dispatch(commentRemove(data))
+        //     // // setRemainingCommennts(() => [{ comment: null, _id: id }])
+        //     return setTimeout(() => {
+        //         window.location.reload()
+        //     }, 200);
+        // }
+
+        dispatch(commentRemove(data))
+
+        setTimeout(() => {
+            window.location.reload()
+        }, 200);
 
         const updatedComments = movie?.comments?.filter(item => item?._id != id);
 
         setRemainingCommennts(() => updatedComments)
 
-        dispatch(commentRemove(data))
-
         toast.success('Comment deleted')
 
-        console.log(remainingCommennts, 'rrr');
-        console.log(movie?.comments?.length, 'lll');
+        
+
+
+
+
+        // console.log(remainingCommennts, 'rrr');
+        // console.log(movie?.comments?.length, 'lll');
 
     }
 
@@ -184,7 +203,7 @@ const MovieDetails = () => {
 
                 <p className='text-2xl font-semibold'>Videos || {movie?.title}  </p>
                 {
-                    <video className='md:hidde md:w-[50%] w-[90%] rounded my-5' controls poster={movie?.videoCover?.cdnUrl} controlsList="nodownload">
+                    <video className=' md:w-[50%] w-[90%] rounded my-5' controls poster={movie?.videoCover?.cdnUrl} controlsList="nodownload">
                         <source src={movie?.videos?.length && movie?.videos[0]?.url} />
                     </video>
                 }
@@ -192,28 +211,28 @@ const MovieDetails = () => {
                 <div onMouseLeave={() => setRatingsHover(0)} className='flex my-5'>
                     <h1 className='text-lg mr-4'>Give Your Rating :</h1>
                     <span title='rating-1'>
-                        <svg onClick={(rating) => handleRating(1)} onMouseOver={() => setRatingsHover(1)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class={`w-6 h-6 cursor-pointer ${ratingsHover >= 1 ? 'text-[red]' : ''}`}>
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                        <svg onClick={(rating) => handleRating(1)} onMouseOver={() => setRatingsHover(1)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer ${ratingsHover >= 1 ? 'text-[red]' : ''}`}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                         </svg>
                     </span>
                     <span title='rating-2'>
-                        <svg onClick={(rating) => handleRating(2)} onMouseOver={() => setRatingsHover(2)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class={`w-6 h-6 cursor-pointer ${ratingsHover >= 2 ? 'text-[red]' : ''}`}>
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                        <svg onClick={(rating) => handleRating(2)} onMouseOver={() => setRatingsHover(2)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer ${ratingsHover >= 2 ? 'text-[red]' : ''}`}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                         </svg>
                     </span>
                     <span title='rating-3'>
-                        <svg onClick={(rating) => handleRating(3)} onMouseOver={() => setRatingsHover(3)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class={`w-6 h-6 cursor-pointer ${ratingsHover >= 3 ? 'text-[red]' : ''}`}>
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                        <svg onClick={(rating) => handleRating(3)} onMouseOver={() => setRatingsHover(3)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer ${ratingsHover >= 3 ? 'text-[red]' : ''}`}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                         </svg>
                     </span>
                     <span title='rating-4'>
-                        <svg onClick={() => handleRating(4)} onMouseOver={() => setRatingsHover(4)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class={`w-6 h-6 cursor-pointer ${ratingsHover >= 4 ? 'text-[red]' : ''}`}>
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                        <svg onClick={() => handleRating(4)} onMouseOver={() => setRatingsHover(4)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer ${ratingsHover >= 4 ? 'text-[red]' : ''}`}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                         </svg>
                     </span>
                     <span title='rating-5'>
-                        <svg onClick={(rating) => handleRating(5)} onMouseOver={() => setRatingsHover(5)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class={`w-6 h-6 cursor-pointer ${ratingsHover >= 5 ? 'text-[red]' : ''}`}>
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                        <svg onClick={(rating) => handleRating(5)} onMouseOver={() => setRatingsHover(5)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer ${ratingsHover >= 5 ? 'text-[red]' : ''}`}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                         </svg>
                     </span>
                 </div>
@@ -234,8 +253,8 @@ const MovieDetails = () => {
                         }
 
                         <span title='' className='mx-2'>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="#e50914" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class={`w-6 h-6 cursor-pointer text-[#e50914]`}>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="#e50914" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[#e50914]`}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                             </svg>
                         </span>
                     </div>
@@ -247,261 +266,267 @@ const MovieDetails = () => {
                             movie?.ratings?.length + 1} ratings</p>
                 </div>
 
-                <div className='py-5 '>
-                    <p className='text-[#e50914] text-2xl font-bold mb-3'>More Detail:  </p>
 
-                    <div className='md:flex items-center'>
+                <div className='w-[40%]'>
+                    <div className='py-5 '>
+                        <p className='text-[#e50914] text-2xl font-bold mb-3'>More Detail:  </p>
 
-                        <div className='mb-3 '>
-                            <p className='text-[#e50914] text-2xl font-semibold'>Cast  </p>
+                        <div className=''>
 
-                            <p className=''>AAAAAAAAAAA</p>
+                            <div className='mb-3 '>
+                                <p className='text-[#e50914] text-2xl font-semibold'>Tags  </p>
+
+                                {
+                                    movie?.tags?.map((tag,i)=><span key={i}>{tag}</span>)
+                                }
+                            </div>
+
+                            <div className='my-3'>
+                                <p className='text-[#e50914] text-2xl font-semibold'>Genres</p>
+                                <p className=''>{movie?.genre}</p>
+                            </div>
                         </div>
+                        <p className='text-[#e50914] text-2xl font-semibold'>Description</p>
 
-                        <div className='mb-3 md:ml-20'>
-                            <p className='text-[#e50914] text-2xl font-semibold'>Genres</p>
-                            <p className=''>BBBBBBBBBBB</p>
-                        </div>
+                        <p className='text-lg font md:w-[80%] w-60 text-justify'>{movie?.description}</p>
                     </div>
 
-                    <p className='text-lg font md:w-[60%] w-80  text-justify'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sunt ducimus libero, ut omnis beatae blanditiis minus. Consequuntur sint ipsam impedit dolor. Possimus officiis nihil, asperiores molestias saepe incidunt ea sequi?</p>
-                </div>
+                    <div className=' md:w-96 w-40 '>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <div className="pt-10 space-y-2 pb-5 ">
+                                <header className="font-semibold text-xl mb-5">Comment here</header>
+                                <div className="comments-container  border-y  py-4">
+                                    <div>
+                                        <p className="font-medium flex items-center"> <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('email')} </p>
 
-                <div className=' md:w-96 w-80 '>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="pt-10 space-y-2 pb-5 ">
-                            <header className="font-semibold text-xl mb-5">Comment here</header>
-                            <div className="comments-container  border-y  py-4">
-                                <div>
-                                    <p className="font-medium flex items-center"> <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('email')} </p>
-
-                                    <div className='grow-wrap'>
-                                        <textarea
-                                            required
-                                            placeholder="Comment"
-                                            id="text"
-                                            minlength="2"
-                                            // className="outline-0 pt-3 font-normal"
-                                            className=" outline-0 p-3 font-normal  bg-slate-700 bg-opacity-50 my-5 rounded-lg  block w-full"
-                                            {...register("comment")}>
-                                        </textarea>
-                                        {/* {errors.comment && errors.comment.type === "required" && <span>This is required</span>}
-                                        {errors.comment && errors.comment.type === "minLength" && <span>minimum 2 characters</span>} */}
-                                    </div>
-
-                                    <input className="btn btn-xs bg-[brown] border-0 text-white " type="submit" value="response" />
-
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
-
-                    {
-                        comment &&
-                        <div className='my-3 m-2'>
-                            <p className="font-medium flex items-center">
-                                <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('email')} </p>
-
-                            <div className='flex items-center'>
-                                <p className='m-3 bg-slate-800 p-2 rounded'> {comment}</p>
-                                <div className="dropdown dropdown-hover">
-                                    <label tabIndex={0} className=" m-1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                                    </svg>
-                                    </label>
-                                    <ul tabIndex={0} className="dropdown-content menu p-2 shadow  rounded-box  bg-slate-600">
-                                        <li ><a>Edit<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                        </svg>
-
-                                        </a></li>
-                                        <li><a>Delete <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                        </svg>
-                                        </a></li>
-
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    }
-
-
-                    {
-                        remainingCommennts?.length > 0 &&
-                        <div className='m-2 border-b'>
-                            <div className='my-3'>{remainingCommennts?.map(item => <div>
-                                <p className="font-medium flex items-center">
-                                    <img className={`w-8 h-8 rounded-full mr-2 border border-[brown]`} src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('email')} </p>
-                                <div className='flex items-center'>
-                                    <p className='m-3 bg-slate-800 p-2 rounded'> {item?.comment}
-                                    </p>
-
-
-                                    <div className="modal" id="my-modal-2">
-                                        <div className="modal-box bg-slate-800 bg-opacity-90  flex flex-col items-center justify-center">
-                                            <div>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-[brown]">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                </svg>
-                                            </div>
-
-                                            <h3 className="font-bold text-lg">Are you sure, you want to delete this?</h3>
-                                            <div className="modal-action">
-                                                <a onClick={(id) => handleRemoveComment(item?._id)} href="#" className="btn mx-4"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                                </svg>
-
-                                                </a>
-                                                <a href="#" className="btn"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <input type="checkbox" id="my-modal-4" className="modal-toggle" />
-                                    <label htmlFor="my-modal-4" className="modal cursor-pointer">
-                                        <label className="modal-box relative bg-slate-800" htmlFor="">
-                                            <h3 className="text-lg font-bold">Congratulations random Internet user!</h3>
-                                            <p className="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!</p>
-                                        </label>
-                                    </label>
-
-                                    {
-
-                                        localStorage?.getItem('userId') == item?.userId &&
-
-                                        <div className="dropdown dropdown-hover">
-                                            <label tabIndex={0} className=" m-1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                                            </svg>
-                                            </label>
-                                            <ul tabIndex={0} className="dropdown-content menu p-2 shadow  rounded-box  bg-slate-600">
-                                                <li ><label htmlFor="my-modal-4">Edit<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                </svg>
-                                                </label>
-                                                </li>
-
-
-                                                <li><a href="#my-modal-2">Delete <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                </svg>
-                                                </a>
-                                                </li>
-
-                                            </ul>
+                                        <div className='grow-wrap'>
+                                            <textarea
+                                                required
+                                                placeholder="Comment"
+                                                id="text"
+                                                minLength="2"
+                                                // className="outline-0 pt-3 font-normal"
+                                                className=" outline-0 p-3 font-normal  bg-slate-700 bg-opacity-50 md:my-5 rounded-lg  block md:w-full w-60"
+                                                {...register("comment")}>
+                                            </textarea>
+                                            {/* {errors.comment && errors.comment.type === "required" && <span>This is required</span>}
+                    {errors.comment && errors.comment.type === "minLength" && <span>minimum 2 characters</span>} */}
                                         </div>
 
-                                    }
+                                        <input className="btn btn-xs bg-[brown] border-0 text-white " type="submit" value="response" />
+
+                                    </div>
                                 </div>
-                            </div>)}
                             </div>
-                        </div>
+                        </form>
 
-                    }
-                    {
-                        movie?.comments?.length > 0 && !remainingCommennts?.length > 0 &&
 
-                        <div className='m-2 border-b'>
-                            <div className='my-3'>{movie?.comments?.map(item => <div>
+                        {
+                            comment &&
+                            <div className='my-3 md:m-2'>
                                 <p className="font-medium flex items-center">
                                     <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('email')} </p>
+
                                 <div className='flex items-center'>
-                                    <p className='m-3 bg-slate-800 p-2 rounded'> {item?.comment}
-                                    </p>
-                                    <div className="modal" id="my-modal-2">
-                                        <div className="modal-box bg-slate-800 bg-opacity-90  flex flex-col items-center justify-center">
-                                            <div>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-[brown]">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                </svg>
-                                            </div>
+                                    <p className='md:m-3 bg-slate-800 p-2 rounded'> {comment}</p>
+                                    <div className="dropdown dropdown-hover">
+                                        <label tabIndex={0} className=" m-1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                                        </svg>
+                                        </label>
+                                        <ul tabIndex={0} className="dropdown-content menu p-2 shadow  rounded-box  bg-slate-600">
+                                            <li ><a>Edit<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                            </svg>
 
-                                            <h3 className="font-bold text-lg">Are you sure, you want to delete this?</h3>
-                                            <div className="modal-action">
-                                                <a href="#" className="btn mx-4"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                                </svg>
+                                            </a></li>
+                                            <li><a>Delete <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                            </svg>
+                                            </a></li>
 
-                                                </a>
-                                                <a href="#" className="btn"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                                </a>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+                        {
+                            remainingCommennts?.length > 0 &&
+                            <div className='md:m-2 border-b'>
+                                <div className='md:my-3'>{remainingCommennts?.map(item => <div key={item?._id}>
+                                    <p className="font-medium flex items-center">
+                                        <img className={`w-8 h-8 rounded-full mr-2 border border-[brown]`} src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('email')} </p>
+                                    <div className='flex items-center'>
+                                        <p className='m-3 bg-slate-800 p-2 rounded'> {item?.comment}
+                                        </p>
+
+
+                                        <div className="modal" id="my-modal-2">
+                                            <div className="modal-box bg-slate-800 bg-opacity-90  flex flex-col items-center justify-center">
+                                                <div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-[brown]">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                    </svg>
+                                                </div>
+
+                                                <h3 className="font-bold text-lg">Are you sure, you want to delete this?</h3>
+                                                <div className="modal-action">
+                                                    <a onClick={(id) => handleRemoveComment(item?._id)} href="#" className="btn mx-4"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                                    </svg>
+
+                                                    </a>
+                                                    <a href="#" className="btn"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <input type="checkbox" id="my-modal-4" className="modal-toggle" />
-                                    <label htmlFor="my-modal-4" className="modal cursor-pointer">
-                                        <label className="modal-box relative bg-slate-800" htmlFor="">
-                                            <form onSubmit={handleSubmit(onSubmitEdit)}>
-                                                <div className="pt-10 space-y-2 pb-5 ">
-                                                    <header className="font-semibold text-xl mb-5">Edit the comment here</header>
-                                                    <div className="comments-container  border-y  py-4">
-                                                        <div>
-                                                            <p className="font-medium flex items-center"> <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('email')} </p>
 
-                                                            <div className='grow-wrap'>
-                                                                <textarea
-                                                                    required
-                                                                    placeholder="Comment"
-                                                                    id="text"
-                                                                    minlength="2"
-                                                                    // className="outline-0 pt-3 font-normal"
-                                                                    className=" outline-0 p-3 font-normal  bg-slate-700 bg-opacity-50 my-5 rounded-lg  block w-full"
-                                                                    {...register("comment")}>
-                                                                </textarea>
-                                                                {/* {errors.comment && errors.comment.type === "required" && <span>This is required</span>}
-                                        {errors.comment && errors.comment.type === "minLength" && <span>minimum 2 characters</span>} */}
-                                                            </div>
-
-                                                            <input className="btn btn-xs bg-[brown] border-0 text-white " type="submit" value="Edit" />
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>  </label>
-                                    </label>
-
-                                    {
-
-                                        localStorage?.getItem('userId') == item?.userId &&
-
-                                        <div className="dropdown dropdown-hover">
-                                            <label tabIndex={0} className=" m-1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                                            </svg>
+                                        <input type="checkbox" id="my-modal-4" className="modal-toggle" />
+                                        <label htmlFor="my-modal-4" className="modal cursor-pointer">
+                                            <label className="modal-box relative bg-slate-800" htmlFor="">
+                                                <h3 className="text-lg font-bold">Congratulations random Internet user!</h3>
+                                                <p className="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!</p>
                                             </label>
-                                            <ul tabIndex={0} className="dropdown-content menu p-2 shadow  rounded-box  bg-slate-600">
-                                                <li onClick={(id) => handleEditComment(item?._id)}><label htmlFor="my-modal-4">Edit<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                        </label>
+
+                                        {
+
+                                            localStorage?.getItem('userId') == item?.userId || localStorage?.getItem('IsAdmin')==true &&
+
+                                            <div className="dropdown dropdown-hover">
+                                                <label tabIndex={0} className=" m-1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                                                 </svg>
                                                 </label>
-                                                </li>
+                                                <ul tabIndex={0} className="dropdown-content menu p-2 shadow  rounded-box  bg-slate-600">
+                                                    <li ><label htmlFor="my-modal-4">Edit<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                                    </svg>
+                                                    </label>
+                                                    </li>
 
-                                                <li><a href="#my-modal-2">Delete <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                </svg>
-                                                </a>
-                                                </li>
 
-                                            </ul>
-                                        </div>
+                                                    <li><a href="#my-modal-2">Delete <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                    </svg>
+                                                    </a>
+                                                    </li>
 
-                                    }
+                                                </ul>
+                                            </div>
+
+                                        }
+                                    </div>
+                                </div>)}
                                 </div>
-                            </div>)}
                             </div>
-                        </div>
-                    }
 
+                        }
+                        {
+                            movie?.comments?.length > 0 && !remainingCommennts?.length > 0 &&
 
+                            <div className='m-2 border-b'>
+                                <div className='my-3'>{movie?.comments?.map(item => <div key={item?._id}>
+                                    <p className="font-medium flex items-center">
+                                        <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('email')} </p>
+                                    <div className='flex items-center'>
+                                        <p className='m-3 bg-slate-800 p-2 rounded'> {item?.comment}
+                                        </p>
+                                        <div className="modal" id="my-modal-2">
+                                            <div className="modal-box bg-slate-800 bg-opacity-90  flex flex-col items-center justify-center">
+                                                <div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-[brown]">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                    </svg>
+                                                </div>
 
+                                                <h3 className="font-bold text-lg">Are you sure, you want to delete this?</h3>
+                                                <div className="modal-action">
+                                                    <a onClick={(id) => handleRemoveComment(item?._id)} href="#" className="btn mx-4"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                                    </svg>
+
+                                                    </a>
+                                                    <a href="#" className="btn"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="checkbox" id="my-modal-4" className="modal-toggle" />
+                                        <label htmlFor="my-modal-4" className="modal cursor-pointer">
+                                            <label className="modal-box relative bg-slate-800" htmlFor="">
+                                                <form onSubmit={handleSubmit(onSubmitEdit)}>
+                                                    <div className="pt-10 space-y-2 pb-5 ">
+                                                        <header className="font-semibold text-xl mb-5">Edit the comment here</header>
+                                                        <div className="comments-container  border-y  py-4">
+                                                            <div>
+                                                                <p className="font-medium flex items-center"> <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('email')} </p>
+
+                                                                <div className='grow-wrap'>
+                                                                    <textarea
+                                                                        required
+                                                                        placeholder="Comment"
+                                                                        id="text"
+                                                                        minLength="2"
+                                                                        // className="outline-0 pt-3 font-normal"
+                                                                        className=" outline-0 p-3 font-normal  bg-slate-700 bg-opacity-50 my-5 rounded-lg  block w-full"
+                                                                        {...register("commentEdit")}>
+                                                                    </textarea>
+                                                                    {/* {errors.comment && errors.comment.type === "required" && <span>This is required</span>}
+                    {errors.comment && errors.comment.type === "minLength" && <span>minimum 2 characters</span>} */}
+                                                                </div>
+
+                                                                <input className="btn btn-xs bg-[brown] border-0 text-white " type="submit" value="Edit" />
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>  </label>
+                                        </label>
+
+                                        {
+
+                                            localStorage?.getItem('userId') == item?.userId &&
+
+                                            <div className="dropdown dropdown-hover">
+                                                <label tabIndex={0} className=" m-1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                                                </svg>
+                                                </label>
+                                                <ul tabIndex={0} className="dropdown-content menu p-2 shadow  rounded-box  bg-slate-600">
+                                                    <li onClick={(id) => handleEditComment(item?._id)}><label htmlFor="my-modal-4">Edit<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                                    </svg>
+                                                    </label>
+                                                    </li>
+
+                                                    <li><a href="#my-modal-2">Delete <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                    </svg>
+                                                    </a>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+
+                                        }
+                                    </div>
+                                </div>)}
+                                </div>
+                            </div>
+                        }
+
+                    </div>
                 </div>
+
+
 
             </div>
             {

@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-responsive-modal";
-import { base_url, getToallPostsNumber } from "../../../api/api";
+import { base_url, getAllPosts, getTotalPostsNumber } from "../../../api/api";
 import { addFeatured } from "../../../redux/features/featuredPost/featuredPostSlice";
 import { postDelete } from "../../../redux/features/postSection/postSlice";
 import usePosts from "../../Shared/usePosts";
@@ -16,9 +16,10 @@ const MovieList = () => {
     const [filteredMovies, setfilteredMovies] = useState();
     const [movies, setMovies] = useState([])
     const [searchText, setSearchText] = useState('')
-    const [postsNumber, setpostsNumber] = useState(0)
+    const [postsNumber, setPostsNumber] = useState(0)
     const [pageCount, setPageCount] = useState(1)
     const [page, setPage] = useState(1)
+    const [posts, setPosts] = useState(1)
 
     const filterHandler = (data) => {
 
@@ -26,7 +27,6 @@ const MovieList = () => {
 
         // console.log('filtered', data);
     }
-    let { isLoading, error, posts } = usePosts(page)
 
     const { post } = useSelector(state => state?.deletePost)
     const dispatch = useDispatch()
@@ -45,18 +45,25 @@ const MovieList = () => {
 
     useEffect(() => {
 
-        // const fetchPosts =async()=>{
-        //     const {data} = await axios.get(`${base_url}/post?page=2`)
-        //     console.log('posts paginate',data);
-        // }
 
-        // fetchPosts()
+        const fetchPost = async () => {
+            const { data } =await getAllPosts(`?search=${searchText}&page=${page}`)
+            setPosts(data)
+           
+            // console.log('data',data);
+            // console.log( 'text',searchText);
+ 
+
+        }
+      
+        fetchPost()
+
 
         const fetchPostsNumber = async () => {
-            const { data } = await getToallPostsNumber()
+            const { data } = await getTotalPostsNumber()
 
             const totalPosts =data?.totalNumberOfPosts
-            setpostsNumber(() =>totalPosts )
+            setPostsNumber(() =>totalPosts )
             // console.log('res',data?.totalNumberOfPosts);
             // console.log('post',postsNumber);
         }
@@ -75,14 +82,6 @@ const MovieList = () => {
             setMovies(() => filteredMovies?.posts)
         }
 
-        if (searchText) {
-
-            const searchResult =posts?.filter(movie=>movie?.title?.toLowerCase()?.includes(searchText))
-            
-            setMovies(searchResult)
-
-            // console.log(searchResult,'ressss');
-        }
 
     }, [posts, filteredMovies,searchText,page])
 
@@ -124,7 +123,7 @@ const MovieList = () => {
                                         </tr>
                                     </thead>
                                     <tbody className='bg-[#26282b]'>
-                                        {
+                                        { movies?.length>0 &&
 
                                             movies?.map(movie => {
                                                 return <tr key={movie?._id}>
@@ -168,7 +167,7 @@ const MovieList = () => {
                                                                 <input type="checkbox" id="my-modal-10" class="modal-toggle" />
                                                                 <label for="my-modal-10" class="modal cursor-pointer">
                                                                     <label class="modal-box relative w-11/12 max-w-5xl bg-slate-800" for="">
-                                                                        <EditPost></EditPost>
+                                                                        <EditPost id={movie?._id}></EditPost>
                                                                     </label>
                                                                 </label></div>
 

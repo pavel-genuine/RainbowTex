@@ -3,7 +3,7 @@ import React from 'react'
 
 const SingleMovieCard = ({ movie }) => {
     return (
-        <div className="border-b border-slate-800 pb-5">
+        <div className="border-b border-slate-800 pb-5 w-[90%] md:w-[100%]">
             <article className="flex  my-3 flex-col md:flex-row md:items-start md:space-x-6">
                 <img loading='lazy' src={movie?.thumbnail?.cdnUrl ? movie?.thumbnail?.cdnUrl : 'https://i.ibb.co/4SL78cW/1.jpg'} alt="" className="flex-none w-60  rounded-md bg-slate-100" />
 

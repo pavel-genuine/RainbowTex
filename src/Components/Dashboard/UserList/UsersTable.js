@@ -1,31 +1,37 @@
 import React, { useEffect, useState } from 'react'
+import { getTotalUsersNumber, userList } from '../../../api/api';
 import useUserList from '../../Shared/useUserList';
 
 const UsersTable = () => {
 
-    const [postsNumber, setpostsNumber] = useState(0)
+    const [users, setUsers] = useState(0)
+    const [usersNumber, setUsersNumber] = useState(0)
     const [pageCount, setPageCount] = useState(1)
     const [page, setPage] = useState(1)
 
-    const { userList } = useUserList()
+ 
 
     useEffect(() => {
         window.scrollTo(0, 0)
 
-        const fetchPostsNumber = async () => {
-            // const { data } = await getToallPostsNumber()
+        const fetchAllUsers = async () => {
+            const { data } = await userList(`?page=${page}`)
 
-            // const totalPosts =data?.totalNumberOfPosts
-            // setpostsNumber(() =>totalPosts )
-            // console.log('res',data?.totalNumberOfPosts);
-            // console.log('post',postsNumber);
+            setUsers(() =>data )
+            
         }
+        fetchAllUsers()
 
+        const fetchUsersNumber = async () => {
+            const { data } = await getTotalUsersNumber()
 
-        fetchPostsNumber()
+            setUsersNumber(() =>data )
+            
+        }
+        fetchUsersNumber()
 
-        // setPageCount(()=>Math.ceil(postsNumber/20))
-    }, [])
+        setPageCount(()=>Math.ceil(usersNumber/20))
+    }, [userList,page,pageCount,usersNumber])
 
     // if (isLoading) {
     //     return <p>Loading...</p>
@@ -49,8 +55,8 @@ const UsersTable = () => {
                         </tr>
                     </thead>
                     <tbody className='bg-[#26282b]'>
-                        {
-                            userList.map(user => <tr>
+                        { users?.length>0 &&
+                            users.map(user => <tr>
                                 <td class="border border-[#181818] px-8 py-4">{user?.name}</td>
                                 <td class="border border-[#181818] px-8 py-4">{user?.email}</td>
                                 <td class="border border-[#181818] px-8 py-4">{user?.subscription_plan}</td>
@@ -120,7 +126,7 @@ const UsersTable = () => {
             <div>
                 <div className="flex justify-center my-10 mx-auto">
                     {
-                        [...Array(5).keys()].map(number => <button className={`btn btn-sm mx-2 text-center border ${1 == 1 ? 'bg-[brown]' : ''}`}>{number + 1}</button>)
+                        [...Array(pageCount).keys()].map(number=> <button  onClick={()=>setPage(number+1)} className={`btn btn-sm mx-2 text-center border ${page==number+1?'bg-[brown]':''}`}>{number+1}</button>)
                     }
                 </div>
             </div>

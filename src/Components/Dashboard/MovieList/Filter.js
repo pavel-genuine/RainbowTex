@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCategory, getAllCategories } from "../../../api/api";
-import axios from "axios";
-import {
-    categoryCreate,
-    categoryDelete,
-} from "../../../redux/features/categorySlice";
-import CustomLink from "../../Navbar/CustomLink";
-import useAllCategories from "../../Shared/useAllCategories";
+import {categoryDelete} from "../../../redux/features/categorySlice";
 import AddCategory from "./AddCategory";
 import useHomeCategories from "../../Shared/hooks/useHomeCategories";
 import { useForm } from "react-hook-form";
@@ -17,7 +9,6 @@ const Filter = ({ filterHandler,searchHandler }) => {
     const { register, formState: { errors }, handleSubmit } = useForm();
     const [addedCate, setAddedCate] = useState('');
     const [myCategories, setMycategories] = useState([])
-    const [allMovies, setAllMovies] = useState()
 
     const { category: homeCates } = useHomeCategories()
 
@@ -37,18 +28,13 @@ const Filter = ({ filterHandler,searchHandler }) => {
         filterHandler(singleCate)
     }
 
-    let { error, category, isLoading } = useAllCategories();
-
     useEffect(() => {
 
         setMycategories(homeCates)
 
     }, [homeCates])
 
-    const { category: deletedCategory } = useSelector(
-        (state) => state?.categoryDeleting
-    );
-
+    const { category: deletedCategory } = useSelector((state) => state?.categoryDeleting);
 
     const dispatch = useDispatch();
 

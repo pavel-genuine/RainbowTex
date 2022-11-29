@@ -3,15 +3,11 @@ import { set, useForm } from 'react-hook-form';
 import { useState } from 'react';
 import ImageUploading from 'react-images-uploading';
 import toast, { Toaster } from 'react-hot-toast';
-import axios from 'axios';
 import SideBar from '../SideBar';
 import VideoUploader from './VideoUploader';
 import { useDispatch, useSelector } from 'react-redux';
 import { publishPost } from '../../../redux/features/postSection/postSlice';
-import { videoCoverAdd } from '../../../redux/features/postSection/videoCoverSlice';
-import { createPost } from '../../../api/api';
 import useAllCategories from '../../Shared/useAllCategories';
-import { categoryAdd } from '../../../redux/features/postSection/postCategorySlice';
 
 
 const PublishPost = () => {
@@ -27,8 +23,6 @@ const PublishPost = () => {
         thumbnail: null
     });
 
-    const [videocover, setVideocover] = useState()
-
     const [coverPhoto, setCoverPhoto] = useState();
     const [thumbnail, setThumbnail] = useState('')
 
@@ -36,20 +30,8 @@ const PublishPost = () => {
     const { isLoading, error, post } = useSelector(state => state?.publishPost)
     const { postCategory } = useSelector(state => state?.addPostCategory)
 
-
     // console.log('post video', video);
     const dispatch = useDispatch()
-
-    const handleSetCate = () => {
-        const cate = {
-            postId: post?._id,
-            categoryId: selectedCate
-        }
-        // console.log('set selected cate', selectedCate, post?._id);
-        // dispatch(categoryAdd(cate))
-
-        // console.log('post cate', postCategory);
-    }
 
     const onChangeCover = (data) => {
         setCoverPhoto(data)
@@ -89,7 +71,6 @@ const PublishPost = () => {
 
         // console.log('post', post);
 
-        toast.success("Congratulation! Post Published")
 
         setTimeout(() => {
             toast.success("Congratulation! Post Published")

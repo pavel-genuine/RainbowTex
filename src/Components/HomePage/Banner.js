@@ -1,11 +1,10 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
 import Slider from 'react-slick';
 import useAllFeatured from '../Shared/useAllFeatured';
 import "./Banner.css"
 
-const Banner = ({ updatedBanner }) => {
+const Banner = () => {
 
   const settings = {
     dots: true,
@@ -72,7 +71,7 @@ const Banner = ({ updatedBanner }) => {
           {
             featured?.map((movie) => <div>
 
-              <img className=' md:h-[95vh] w-[100%]' src={movie?.videoCover?.cdnUrl} alt="" />
+              <img className=' md:h-[95vh] h-[35vh] w-[100%]' src={movie?.videoCover?.cdnUrl} alt="" />
 
               <div className='absolute w-[98vw] md:top-[0%] top-[0%] md:h-[100vh] h-[40vh] text-white '>
         <div className='absolute w-[98vw] md:pt-[13%] pt-[30%] md:pt-60 p-5 md:pl-28 md:top-[0%] top-[0%] md:h-[100vh] h-[40vh] text-white bg-gradient-to-t from-[#181818]' >

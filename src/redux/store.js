@@ -20,7 +20,7 @@ import approveCommentReducer from './features/commentSlice'
 import removeCommentReducer from './features/commentSlice'
 import editCommentReducer from './features/commentSlice'
 import addPostCategoryReducer from './features/postSection/postCategorySlice'
-import homeCategoriesReducer from './features/categorySection/homeCategories'
+import homeCategoriesReducer from './features/categorySection/homeCategoriesSlice'
 import deleteCategoryReducer from './features/categorySlice'
 import addRatingReducer from './features/postSection/addRatingSlice'
 

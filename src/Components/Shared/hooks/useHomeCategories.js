@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getHomeCategories } from '../../../redux/features/categorySection/homeCategories'
+import { getHomeCategories } from '../../../redux/features/categorySection/homeCategoriesSlice'
 
 const useHomeCategories = (limit) => {
 

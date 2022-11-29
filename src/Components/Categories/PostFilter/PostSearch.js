@@ -1,12 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { base_url, getAllPosts, getToallPostsNumber } from "../../../api/api";
+import { base_url, getAllPosts, getTotalPostsNumber } from "../../../api/api";
 import usePosts from "../../Shared/usePosts";
 import SingleMovieCard from "./SingleMovieCard";
 
 
-const PostSearch = ({ searchText }) => {
+const PostSearch = ({ searchText ,filteredCategory}) => {
 
     const [filteredMovies, setfilteredMovies] = useState();
     const [movies, setMovies] = useState([])
@@ -21,25 +21,34 @@ const PostSearch = ({ searchText }) => {
         setfilteredMovies(() => data)
 
         // console.log('filtered', data);
-    
-    }
-    let { isLoading, error, posts } = usePosts(page)
 
+    }
+    let { isLoading, error, posts } = usePosts(`?search=${searchText}`)
+    
     // console.log('search',searchText);
 
+   
     useEffect(() => {
         const fetchPost = async () => {
-            // const { data } = await axios.get(`${base_url}/post?search=${searchText}`)
-            const {data}=getAllPosts('2')
+            // const { data } = await axios.get(`${base_url}/post?search=${searchText}&category=${filteredCategory}`)
+            // const { data } = getAllPosts('2')
             // setPosts(data)
-            // console.log(posts, 'posts');
-            // console.log(data, 'data');
+           
+            // console.log('data',data);
+            console.log( 'text',searchText);
+            console.log( 'filter',filteredCategory);
 
         }
-
+      
         fetchPost()
+
+        setMovies(posts)
+
+        console.log('posts ',posts);
+        console.log('movies ',movies);
+
         const fetchPostsNumber = async () => {
-            const { data } = await getToallPostsNumber()
+            const { data } = await getTotalPostsNumber()
 
             const totalPosts = data?.totalNumberOfPosts
             setpostsNumber(() => totalPosts)
@@ -54,7 +63,7 @@ const PostSearch = ({ searchText }) => {
 
         window.scrollTo(0, 0)
 
-        setMovies(posts)
+       
 
         if (searchText) {
 
@@ -62,26 +71,27 @@ const PostSearch = ({ searchText }) => {
 
             setMovies(searchResult)
 
-            console.log(searchResult,'ressss');
+            // console.log(searchResult, 'ressss');
         }
 
-    }, [posts, filteredMovies, searchText])
+    }, [posts, filteredMovies, searchText,postsNumber])
 
 
     return (
         <div className=" bg-[#181818]">
-            <div className='pt-28 min-h-screen relative mx-auto  text-slate-200 w-[90%]  grid grid-cols-2 md:grid-cols-3 gap-4'>
-
+            <h1 className="pt-28 text-white text-center mb-10 text-xl md:text-3xl font-bold" >All Your Favourite Movies</h1>
+            <div className=' min-h-screen relative mx-auto  text-slate-200 w-[90%]  grid grid-cols-2 md:grid-cols-3 gap-4'>
+                
                 {
-                    movies?.map(movie => <SingleMovieCard movie={movie} key={movie?._id}></SingleMovieCard>)
+                    posts?.map(movie => <SingleMovieCard movie={movie} key={movie?._id}></SingleMovieCard>)
                 }
 
             </div>
             <div className="flex justify-center py-10 mx-auto ">
-                    {
-                        [...Array(pageCount).keys()].map(number=> <button  onClick={()=>setPage(number+1)} className={`btn btn-sm mx-2 text-center border ${page==number+1?'bg-[brown]':''}`}>{number+1}</button>)
-                    }
-                  </div>
+                {
+                    [...Array(pageCount).keys()].map(number => <button onClick={() => setPage(number + 1)} className={`btn btn-sm mx-2 text-center border ${page == number + 1 ? 'bg-[brown]' : ''}`}>{number + 1}</button>)
+                }
+            </div>
         </div>
     );
 };

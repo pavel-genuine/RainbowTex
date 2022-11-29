@@ -13,7 +13,8 @@ export const logOut = () => axios.get(`${base_url}/auth/logout`,{
     }
 });
 
-export const userList = () => axios.get(`${base_url}/admin/userlist`);
+export const userList = (params) => axios.get(`${base_url}/admin/userlist${params}`);
+export const getTotalUsersNumber = () => axios.get(`${base_url}/admin/total_number_of_users`);
 
 // category section
 export const createCategory = (data) => axios.post(`${base_url}/category`,data)
@@ -29,7 +30,7 @@ export const homeCategory =()=>axios.get(`${base_url}/category/all_category_post
 //post section
 export const createPost = (post) => axios.post(`${base_url}/post`,post)
 export const uploadVideo = (video,option) =>axios.post(`${base_url}/post/upload_video`,video,option)
-export const getAllPosts =(page)=>axios.get(`${base_url}/post?page=${page}`)
+export const getAllPosts =(param)=>axios.get(`${base_url}/post${param}`)
 export const getSinglePost =(id)=>axios.get(`${base_url}/post/single/${id}`)
 export const deletePost =(id)=>axios.delete(`${base_url}/post/admin/${id}?removeMedia=true`)
 export const addPostToCategory=(data)=> axios.patch(`${base_url}/post/admin/add_post_to_category`,data)
@@ -42,7 +43,7 @@ export const updateNonMediaContent =(data)=>axios.patch(`${base_url}/post/admin/
 export const addVideo =(data)=>axios.patch(`${base_url}/post/admin/add_video`,data)
 export const addVideoCopy =(data)=>axios.patch(`${base_url}/post/admin/add_video`,data)
 export const removeVideos =(data)=>axios.patch(`${base_url}/admin/remove_videos`,data)
-export const getToallPostsNumber=()=>axios.get(`${base_url}/post/total_numberof_posts`)
+export const getTotalPostsNumber=()=>axios.get(`${base_url}/post/total_numberof_posts`)
 //feaured section
 export const createfeatured = (post) => axios.post(`${base_url}/featured/add`,post)
 export const getAllFeatured =()=>axios.get(`${base_url}/featured`)

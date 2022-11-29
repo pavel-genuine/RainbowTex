@@ -3,8 +3,8 @@ import axios from "axios";
 import { signInUser, userList } from "../../api/api";
 
 export const fetchUsers =createAsyncThunk("/userList/fetchUsers",
-async()=>{
-    const res =  await userList()  
+async(p)=>{
+    const res =  await userList(p)  
     // console.log('userslist thunk',res.data);
     return  res.data
 })

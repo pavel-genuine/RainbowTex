@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { set, useForm } from 'react-hook-form';
 import { useState } from 'react';
 import ImageUploading from 'react-images-uploading';
@@ -7,14 +7,14 @@ import axios from 'axios';
 import SideBar from '../SideBar';
 import VideoUploader from '../PublishPost/VideoUploader';
 import { useDispatch, useSelector } from 'react-redux';
-import { publishPost } from '../../../redux/features/postSection/postSlice';
+import { publishPost, singlePostGet } from '../../../redux/features/postSection/postSlice';
 import { videoCoverAdd } from '../../../redux/features/postSection/videoCoverSlice';
 import { createPost } from '../../../api/api';
 import useAllCategories from '../../Shared/useAllCategories';
 import { categoryAdd } from '../../../redux/features/postSection/postCategorySlice';
 
 
-const EditPost = () => {
+const EditPost = ({id}) => {
 
     const { register, formState: { errors }, handleSubmit } = useForm();
 
@@ -32,21 +32,24 @@ const EditPost = () => {
     const [coverPhoto, setCoverPhoto] = useState();
     const [thumbnail, setThumbnail] = useState('')
 
-    const { video } = useSelector(state => state?.postVideo)
-    const { isLoading, error, post } = useSelector(state => state?.publishPost)
-    const { postCategory } = useSelector(state => state?.addPostCategory)
+    
 
+    const { isLoading, error, post: movie } = useSelector(state => state?.singlePost);
     const dispatch = useDispatch()
 
-    const handleSetCate = () => {
-        const cate = {
-            postId: post?._id,
-            categoryId: selectedCate
-        }
 
-        // dispatch(categoryAdd(cate))
+    useEffect(() => {
+        window.scrollTo(0, 0)
 
+
+        dispatch(singlePostGet(id))
+    
+        // console.log('movie',movie)
     }
+      ,[movie])
+
+       
+
 
     const onChangeCover = (data) => {
         setCoverPhoto(data)
@@ -78,8 +81,8 @@ const EditPost = () => {
         // formData.append('genre', data?.genre);
         // formData.append('isActive',data?.active);
 
-        formData.append('videos[0][url]', video?.url);
-        formData.append('videos[0][key]', video?.key);
+        // formData.append('videos[0][url]', video?.url);
+        // formData.append('videos[0][key]', video?.key);
 
 
         const submit = dispatch(publishPost(formData))
@@ -150,7 +153,7 @@ const EditPost = () => {
 
                                                             <div style={{
                                                                 zIndex: '1', backgroundColor: 'black', backgroundRepeat: 'no-repeat', backgroundAttachment: "",
-                                                                backgroundImage: `url(${image?.data_url})`
+                                                                backgroundImage: `url(${movie?.thumbnail?.cdnUrl})`
                                                             }}
                                                                 class='bg-cover border-slate-600 border  md:w-[18vw] w-[90vw] h-[185px]  md:h-[205px]  md:mx-auto absolute top-[0%] left-[0%]  shadow overflow-hidden rounded-lg' >
 

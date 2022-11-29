@@ -1,10 +1,7 @@
-// import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-// import { useQuery } from '@tanstack/react-query';
 import './Navbar.css'
 import CustomLink from './CustomLink';
-import useAllCategories from '../Shared/useAllCategories';
 import { logOut } from '../../api/api';
 import useHomeCategories from '../Shared/hooks/useHomeCategories';
 import { useForm } from 'react-hook-form';
@@ -14,10 +11,13 @@ const Navbar = ({ filterHandler, searchHandler }) => {
     const [background, setBackground] = useState(false)
     const [modifiedNav, setModifiedNav] = useState(false)
 
-    const { category: homeCates } = useHomeCategories()
-    const token = localStorage.getItem('loginToken')
-    const logoutHandler = async () => {
+    const navigate = useNavigate()
 
+    const { category: homeCates } = useHomeCategories()
+
+    const token = localStorage.getItem('loginToken')
+
+    const logoutHandler = async () => {
         await logOut()
         localStorage?.removeItem('loginToken')
         localStorage?.removeItem('email')
@@ -27,21 +27,20 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
     const handleFilterCate = (id) => {
 
-
+        navigate('/')
+        setTimeout(() => {
+            window.scrollTo(500, 500)
+        }, 500);
+        
         const singleCate = homeCates?.find(cate => cate?._id == id)
-
         filterHandler(singleCate)
     }
 
-    const { error, category, isLoading } = useAllCategories()
-
-    const navigate = useNavigate()
 
     const onSubmit = (data) => {
 
         const searchText = data?.search?.toLowerCase()
-        console.log('text nav', searchText);
-        console.log('text nav type', typeof(searchText));
+
         searchHandler(searchText)
         // navigate('/post-search')
         return
@@ -57,9 +56,6 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
         }
     }
-
-
-
 
 
     window.addEventListener('scroll', changeBackground)
@@ -127,15 +123,15 @@ const Navbar = ({ filterHandler, searchHandler }) => {
             <div className=" flex w-[99%] mt-2 md:w-[76%] text-white relative md:hidden ">
 
                 <label tabIndex="0" htmlFor='bigTogglerpro' className="">
-                    <div className="indicator cursor-pointer rounded-full felx justify-center items-center">
-                        {modifiedNav &&
+                {!modifiedNav && <div className="indicator cursor-pointer rounded-full felx justify-center items-center">
+                        
                             <p className="btn-ghost hover:rounded font-bold md:p-3 md:m-5 mr-1" >Categories</p>
 
-                        }
+                     
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
                         </svg>
-                    </div>
+                    </div>   }
                 </label>
                 <input type="checkbox" name="" id="bigTogglerpro" />
 
@@ -145,8 +141,8 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                         {<CustomLink to={`/post-search`} className="border-b-2 ml-4 mt-4 cursor-pointer ">
                             All Movies</CustomLink>}
                         {
-                            category?.categories?.length > 0 &&
-                            category?.categories.map(item => {
+                            homeCates.length > 0 &&
+                            homeCates.map(item => {
                                 return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink className="border-b-2 cursor-pointer ">{item?.categoryName}</CustomLink></li>
                             })
                         }
@@ -167,8 +163,8 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                     <ul className='md:grid grid-cols-2 md:w-[20vw] mt-4'>
 
                         {
-                            category?.categories?.length > 0 &&
-                            category?.categories.map(item => {
+                            homeCates?.length > 0 &&
+                            homeCates.map(item => {
                                 return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink className="border-b-2 cursor-pointer ">{item?.categoryName}</CustomLink></li>
                             })
                         }
@@ -193,9 +189,9 @@ const Navbar = ({ filterHandler, searchHandler }) => {
             <div className={`nav h-[70px]  fixed text-white bg-[#181818] ${background ? 'bg-opacity-80' : 'bg-opacity-20 bg-gradient-to-b from-black '} backdrop-filter-none backdrop-blur-sm shadow z-100`}>
                 <div className="lg:navbar lg:w-[100vw]  mx-auto flex md:justify-around justify-between items-center">
                     <div className="lg:navbar-start hidden md:block">
-                        <Link onClick={() => setModifiedNav(false)} to='/' className=" normal-case text-xl ">
+                        <a onClick={() => setModifiedNav(false)} href='/' className=" normal-case text-xl ">
                             <img className='md:w-40 ml-20 mt-2' src="https://i.ibb.co/Mnc17bk/1-22-removebg-preview.png" alt="" />
-                        </Link>
+                        </a>
                     </div>
 
 
@@ -215,7 +211,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                                 {!modifiedNav &&
                                     <div className="form-control w-full max-w-xs">
                                         <input
-                                        onFocus={()=>navigate('/post-search')}
+                                            onFocus={() => navigate('/post-search')}
                                             type="text"
                                             placeholder="Search"
                                             className={`outline-0 px-2 py-1  w-full max-w-xs rounded-full bg-opacity-60 text-white bg-[grey] `}
@@ -237,7 +233,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                                 <div className="flex w-[125%]">
                                     <input
                                         type="text"
-                                        onFocus={()=>navigate('/post-search')}
+                                        onFocus={() => navigate('/post-search')}
                                         placeholder="Search movies"
                                         className={`outline-0 px-4 py-2 mt-10 md:mt-0 md:ml-20 w-full max-w-xs rounded-full bg-opacity-80 text-white bg-[grey] `}
                                         {...register("search")}

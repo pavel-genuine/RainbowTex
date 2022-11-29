@@ -24,7 +24,7 @@ const AddCategory = ({ handleNewCate }) => {
     }
 
     return (
-        <div className='text-center '> <label for="my-modal-4" class="btn modal-button btn-sm">Add Category</label>
+        <div> <label for="my-modal-4" class="btn modal-button btn-sm">Add Category</label>
             <Toaster></Toaster>
 
             <input type="checkbox" id="my-modal-4" class="modal-toggle" />

@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Footer from '../Footer/Footer'
 import Banner from './Banner'
 import Categories from '../Categories/Categories'
 
-const HomePage = ({filteredCategory,searchText}) => {
+const HomePage = ({filteredCategory}) => {
 
 
-  const [updatedBanner, setUpdatedBanner] = useState({})
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -14,20 +13,16 @@ const HomePage = ({filteredCategory,searchText}) => {
 
   }, [])
 
-  const handleBanner = (data) => {
-    setUpdatedBanner(data)
-  }
-
   return (
     <div>
       <div className='bg-[#181818] pt-16 md:pt-0 box-border'>
 
         <div>
-          <Banner updatedBanner={updatedBanner} ></Banner>
+          <Banner></Banner>
         </div>
 
         <div className='mt-20'>
-          <Categories searchText={searchText} filteredCategory={filteredCategory} handleBanner={handleBanner}></Categories>
+          <Categories filteredCategory={filteredCategory}></Categories>
         </div>
 
         <Footer></Footer>
