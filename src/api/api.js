@@ -30,7 +30,7 @@ export const homeCategory =()=>axios.get(`${base_url}/category/all_category_post
 //post section
 export const createPost = (post) => axios.post(`${base_url}/post`,post)
 export const uploadVideo = (video,option) =>axios.post(`${base_url}/post/upload_video`,video,option)
-export const getAllPosts =(param)=>axios.get(`${base_url}/post${param}`)
+export const getAllPosts =()=>axios.get(`${base_url}/post`)
 export const getSinglePost =(id)=>axios.get(`${base_url}/post/single/${id}`)
 export const deletePost =(id)=>axios.delete(`${base_url}/post/admin/${id}?removeMedia=true`)
 export const addPostToCategory=(data)=> axios.patch(`${base_url}/post/admin/add_post_to_category`,data)

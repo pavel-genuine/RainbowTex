@@ -59,7 +59,7 @@ const VideoUploader = (props) => {
 
     return (
         <div>
-            {!progress > 0 &&
+            {progress > 0 &&
                 <div>
                     <div className='flex justify-end items-center '>
                     <progress class="progress progress-error mr-2" value={progress} max="100"></progress>
@@ -104,12 +104,12 @@ const VideoUploader = (props) => {
                    please wait, video uploading...<progress label={`ww`} className="progress w-56 progress-info"></progress>
                 </button> 
                 } */}
-                {source|| video?.url && (
+                {source && (
 
                     <div className='absolute md:top-[-30%] top-[0]'>
                        
                         <video className=' rounded cursor-pointer md:w-[30vw] w-[90vw] h-[270px] md:h-[270px] ' controls poster={props?.poster} controlsList="nodownload">
-                            <source src={source?source:video?.url} />
+                            <source src={props?.videoUrl?props?.videoUrl:source} />
                         </video>
                     </div>
                 )}

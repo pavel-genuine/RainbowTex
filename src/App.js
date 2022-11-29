@@ -15,6 +15,7 @@ import MovieList from "./Components/Dashboard/MovieList/MovieList";
 import MovieDetails from "./Components/MovieDetail/MovieDetail";
 import { useState } from "react";
 import PostSearch from './Components/Categories/PostFilter/PostSearch'
+import EditPost from "./Components/Dashboard/MovieList/EditPost";
 
 const queryClient = new QueryClient()
 function App() {
@@ -49,6 +50,7 @@ function App() {
           <Route path='/dashboard/movie-list' element={<MovieList></MovieList>}></Route>
           <Route path='/dashboard/userlist' element={<UserList></UserList>}></Route>
           <Route path='/dashboard/publish-post' element={<PublishPost></PublishPost>}></Route>
+          <Route path='/dashboard/edit-post/:id' element={<EditPost></EditPost>}></Route>
           <Route path='/profile' element={<Profile></Profile>}></Route>
           <Route path='/movie-detail/:id' element={<MovieDetails></MovieDetails>}></Route>
         </Routes>

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-responsive-modal";
+import { Link, useNavigate } from "react-router-dom";
 import { base_url, getAllPosts, getTotalPostsNumber } from "../../../api/api";
 import { addFeatured } from "../../../redux/features/featuredPost/featuredPostSlice";
 import { postDelete } from "../../../redux/features/postSection/postSlice";
@@ -47,31 +48,31 @@ const MovieList = () => {
 
 
         const fetchPost = async () => {
-            const { data } =await getAllPosts(`?search=${searchText}&page=${page}`)
+            const { data } = await getAllPosts(`?search=${searchText}&page=${page}`)
             setPosts(data)
-           
+
             // console.log('data',data);
             // console.log( 'text',searchText);
- 
+
 
         }
-      
+
         fetchPost()
 
 
         const fetchPostsNumber = async () => {
             const { data } = await getTotalPostsNumber()
 
-            const totalPosts =data?.totalNumberOfPosts
-            setPostsNumber(() =>totalPosts )
+            const totalPosts = data?.totalNumberOfPosts
+            setPostsNumber(() => totalPosts)
             // console.log('res',data?.totalNumberOfPosts);
             // console.log('post',postsNumber);
         }
-        
+
 
         fetchPostsNumber()
 
-        setPageCount(()=>Math.ceil(postsNumber/20))
+        setPageCount(() => Math.ceil(postsNumber / 20))
 
         setMovies(posts)
 
@@ -83,7 +84,7 @@ const MovieList = () => {
         }
 
 
-    }, [posts, filteredMovies,searchText,page])
+    }, [posts, filteredMovies, searchText, page])
 
     const handleDeleteOne = (id) => {
         const confirmation = window.confirm('Are you sure to delete?');
@@ -99,7 +100,7 @@ const MovieList = () => {
 
             <div className='mx-auto w-[100%] pt-[.7%] md:grid grid-cols-12  '>
                 <SideBar index={2} color={'[#e50914]'}></SideBar>
-                <div className=" lg:ml-20 col-span-10 w-[100%] px-[5%] mt-10  md:w-[100%]">
+                <div className=" lg:ml-10 col-span-10 w-[100%] px-[5%] mt-10  md:w-[100%]">
 
                     <div class="space-y-4 ">
                         <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
@@ -123,54 +124,33 @@ const MovieList = () => {
                                         </tr>
                                     </thead>
                                     <tbody className='bg-[#26282b]'>
-                                        { movies?.length>0 &&
+                                        {movies?.length > 0 &&
 
                                             movies?.map(movie => {
                                                 return <tr key={movie?._id}>
-                                                    <td class="border border-[#181818] px-8 py-4">{movie?.title}</td>
+                                                    <td class="border border-[#181818] px-5 py-2">{movie?.title}</td>
                                                     <td class="border border-[#181818] ">
                                                         <img className="w-36" src={movie?.thumbnail?.cdnUrl} alt="" />
                                                     </td>
-                                                    <td class="border border-[#181818] px-8 py-4">Sci-fi</td>
-                                                    <td class="border border-[#181818] px-8 py-4"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                    <td class="border border-[#181818]  px-5 py-2">{movie?.categoryName}</td>
+                                                    <td class="border border-[#181818]  px-5 py-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                                     </svg>
                                                     </td>
-                                                    <td class="border border-[#181818] px-8 py-4">
+                                                    <td class="border border-[#181818]  px-5 py-2">
                                                         <FeaturedBanner key={movie?._id} movie={movie}></FeaturedBanner>
                                                     </td>
 
-                                                    <td class="border border-[#181818] px-8 py-4">{movie?.imdbRating}</td>
-                                                    <td class="border border-[#181818] px-8 py-4">{movie?.createdAt}</td>
-                                                    <td class="border border-[#181818] px-8 py-4 ">
+                                                    <td class="border border-[#181818]  px-5 py-2">{movie?.imdbRating}</td>
+                                                    <td class="border border-[#181818]  px-5 py-2">{movie?.createdAt}</td>
+                                                    <td class="border border-[#181818] px-5 py-2 ">
                                                         <p className='flex'>
                                                             <span title='edit' >
-                                                                {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-10 cursor-pointer text-[blue]">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                            </svg> */}
-                                                                <label for="my-modal-10" class=" modal-button  "> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-10 cursor-pointer text-[blue]">
+                                                                <Link to={`/dashboard/edit-post/${movie?._id}`}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-10 cursor-pointer text-[blue]">
                                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                                </svg></label>
+                                                                </svg>
+                                                                </Link>
                                                             </span>
-                                                            {/* 
-                                                        <Modal classNames={{
-                                                            overlay: 'customOverlay',
-                                                            modal: 'customModal',
-                                                        }} open={open} onClose={() => setOpen(false)}>
-                                                            <EditPost></EditPost>
-                                                        </Modal> */}
-
-
-                                                            <div>
-
-
-                                                                <input type="checkbox" id="my-modal-10" class="modal-toggle" />
-                                                                <label for="my-modal-10" class="modal cursor-pointer">
-                                                                    <label class="modal-box relative w-11/12 max-w-5xl bg-slate-800" for="">
-                                                                        <EditPost id={movie?._id}></EditPost>
-                                                                    </label>
-                                                                </label></div>
-
 
                                                             <span onClick={() => handleDeleteOne(movie?._id)} title='remove'>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer text-[red]">
@@ -187,22 +167,19 @@ const MovieList = () => {
                                 </table>
                             </div>
                         </div>
-
-
                     </div>
-                
-                  <div className="flex justify-center my-10 mx-auto">
-                    {
-                        [...Array(pageCount).keys()].map(number=> <button  onClick={()=>setPage(number+1)} className={`btn btn-sm mx-2 text-center border ${page==number+1?'bg-[brown]':''}`}>{number+1}</button>)
-                    }
-                  </div>
+
+                    <div className="flex justify-center my-10 mx-auto">
+                        {
+                            [...Array(pageCount).keys()].map(number => <button onClick={() => setPage(number + 1)} className={`btn btn-sm mx-2 text-center border ${page == number + 1 ? 'bg-[brown]' : ''}`}>{number + 1}</button>)
+                        }
+                    </div>
                 </div>
-              
+
             </div>
-           
+
         </div>
     );
 };
 
 export default MovieList;
-
