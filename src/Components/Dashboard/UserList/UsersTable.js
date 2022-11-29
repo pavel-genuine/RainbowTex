@@ -15,7 +15,7 @@ const UsersTable = () => {
         window.scrollTo(0, 0)
 
         const fetchAllUsers = async () => {
-            const { data } = await userList(`?page=${page}`)
+            const { data } = await userList(`?page=${page}&limit=20`)
 
             setUsers(() =>data )
             

@@ -7,7 +7,7 @@ const VideoUploader = (props) => {
     const inputRef = useRef();
     const [source, setSource] = useState();
 
-    const [progress, setProgress] = useState();
+    const [progress, setProgress] = useState(0);
     const [erro, setError] = useState();
     const cancelFileUpload = useRef(null);
     
@@ -23,26 +23,26 @@ const VideoUploader = (props) => {
 
         setSource(url);
        
-        // dispatch(videoUpload(formData, {
-        //     headers: {
-        //       "Content-Type": "multipart/form-data",
-        //     },
-        //     onUploadProgress: data => {
-        //       //Set the progress value to show the progress bar
-        //       setProgress(Math.round((100 * data.loaded) / data.total))
-        //     },
-        //   })
-        //   .catch(error => {
-        //     const { code } = error?.response?.data
-        //     switch (code) {
-        //       case "FILE_MISSING":
-        //         setError("Please select a file before uploading!")
-        //         break
-        //       default:
-        //         setError("Sorry! Something went wrong. Please try again later")
-        //         break
-        //     }
-        //   }))
+        dispatch(videoUpload(formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            onUploadProgress: data => {
+              //Set the progress value to show the progress bar
+              setProgress(Math.round((100 * data.loaded) / data.total))
+            },
+          })
+          .catch(error => {
+            const { code } = error?.response?.data
+            switch (code) {
+              case "FILE_MISSING":
+                setError("Please select a file before uploading!")
+                break
+              default:
+                setError("Sorry! Something went wrong. Please try again later")
+                break
+            }
+          }))
 
     };
 
