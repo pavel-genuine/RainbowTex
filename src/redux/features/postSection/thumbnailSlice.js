@@ -2,14 +2,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { addThumbnail, removeThumbnail} from "../../../api/api";
 
 //
-export const thumbnailAdd =createAsyncThunk("/thumbnail/thumbnailAdd",
+export const thumbnailAdd =createAsyncThunk("/videoThumbnail/thumbnailAdd",
 async(data)=>{
     const res = await addThumbnail(data);
     console.log('thumbnailAdd thunk',res?.data);
     return res?.data;
 })
 //
-export const thumbnailRemove =createAsyncThunk("/thumbnail/thumbnailRemove",
+export const thumbnailRemove =createAsyncThunk("/videoThumbnail/thumbnailRemove",
 async(data)=>{
     const res = await removeThumbnail(data);
     console.log('thumbnailRemove thunk',res?.data);
@@ -18,10 +18,10 @@ async(data)=>{
 
 
 const thumbnailSlice = createSlice({
-    name:'thumbnail',
+    name:'videoThumbnail',
     initialState:{
         isLoading:false,
-        thumbnail:[],
+        videoThumbnail:[],
         error:null
     },
     extraReducers:(builder) =>{
@@ -32,12 +32,12 @@ const thumbnailSlice = createSlice({
         });
         builder.addCase(thumbnailAdd.fulfilled,(state, action)=>{
             state.isLoading= false
-            state.thumbnail=action.payload
+            state.videoThumbnail=action.payload
             state.error=null
         });
         builder.addCase(thumbnailAdd.rejected,(state,action)=>{
             state.isLoading= false
-            state.thumbnail= []
+            state.videoThumbnail= []
             state.error=action.error.message
         })
 
@@ -47,12 +47,12 @@ const thumbnailSlice = createSlice({
         });
         builder.addCase(thumbnailRemove.fulfilled,(state, action)=>{
             state.isLoading= false
-            state.thumbnail=action.payload
+            state.videoThumbnail=action.payload
             state.error=null
         });
         builder.addCase(thumbnailRemove.rejected,(state,action)=>{
             state.isLoading= false
-            state.thumbnail= []
+            state.videoThumbnail= []
             state.error=action.error.message
         })
 

@@ -3,8 +3,8 @@ import {  removeVideos, uploadVideo} from "../../../api/api";
 
 //
 export const videoUpload =createAsyncThunk("/video/videoUpload",
-async(video)=>{
-    const res = await uploadVideo(video);
+async(video,option)=>{
+    const res = await uploadVideo(video,option);
     console.log('videoUpload thunk',res?.data);
     return res?.data;
 })

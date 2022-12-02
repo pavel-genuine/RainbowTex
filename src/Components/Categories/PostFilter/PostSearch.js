@@ -14,7 +14,7 @@ const PostSearch = ({ searchText ,filteredCategory}) => {
     const [postsNumber, setpostsNumber] = useState(0)
     const [pageCount, setPageCount] = useState(1)
     const [page, setPage] = useState(1)
-    // const [posts, setPosts] = useState([])
+    const [posts, setPosts] = useState([])
 
     const filterHandler = (data) => {
 
@@ -23,20 +23,15 @@ const PostSearch = ({ searchText ,filteredCategory}) => {
         // console.log('filtered', data);
 
     }
-    let { isLoading, error, posts } = usePosts(`?search=${searchText}`)
+  
     
     // console.log('search',searchText);
 
    
     useEffect(() => {
         const fetchPost = async () => {
-            // const { data } = await axios.get(`${base_url}/post?search=${searchText}&category=${filteredCategory}`)
-            // const { data } = getAllPosts('2')
-            // setPosts(data)
-           
-            // console.log('data',data);
-            console.log( 'text',searchText);
-            console.log( 'filter',filteredCategory);
+            const { data } = await axios.get(`${base_url}/post?search=${searchText}`)
+            setPosts(data)
 
         }
       
@@ -44,16 +39,12 @@ const PostSearch = ({ searchText ,filteredCategory}) => {
 
         setMovies(posts)
 
-        console.log('posts ',posts);
-        console.log('movies ',movies);
-
         const fetchPostsNumber = async () => {
             const { data } = await getTotalPostsNumber()
 
             const totalPosts = data?.totalNumberOfPosts
             setpostsNumber(() => totalPosts)
-            // console.log('res', data?.totalNumberOfPosts);
-            // console.log('post', postsNumber);
+
         }
 
 
@@ -61,17 +52,11 @@ const PostSearch = ({ searchText ,filteredCategory}) => {
 
         setPageCount(() => Math.ceil(postsNumber / 20))
 
-        window.scrollTo(0, 0)
-
-       
-
         if (searchText) {
 
             const searchResult = posts?.filter(movie => movie?.title?.toLowerCase()?.includes(searchText))
 
             setMovies(searchResult)
-
-            // console.log(searchResult, 'ressss');
         }
 
     }, [posts, filteredMovies, searchText,postsNumber])

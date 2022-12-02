@@ -188,6 +188,8 @@ const SignIn = () => {
                             <input type="checkbox" id="my-modal-4" class="modal-toggle" />
                             <label for="my-modal-4" class="modal cursor-pointer">
                             <label class="modal-box relative bg-slate-800 h-[40vh] flex justify-center items-center" for="">
+                            <label htmlFor="my-modal-4" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+
                                 <div class="modal-action">
                                     {stayLoggedIn && (
                                         <label for="my-modal-4" className="px-4 py-3 font-bold rounded mb-10  bg-[brown] text-white  cursor-pointer m-auto"

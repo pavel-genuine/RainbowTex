@@ -2,47 +2,39 @@ import React, { useRef, useState } from 'react'
 import axios, { CancelToken, isCancel } from "axios";
 import { useDispatch, useSelector } from 'react-redux';
 import { videoUpload } from '../../../redux/features/postSection/postVideoSlice'
+import { uploadVideo } from '../../../api/api';
 
-const VideoUploader = (props) => {
-    const inputRef = useRef();
+const VideoUploader =  (props) => {
+
     const [source, setSource] = useState();
 
     const [progress, setProgress] = useState(0);
     const [erro, setError] = useState();
     const cancelFileUpload = useRef(null);
-    
+
     const { isLoading, error, video } = useSelector(state => state?.postVideo)
 
     const dispatch = useDispatch()
 
-    const handleFileChange = (event) => {
+    const handleFileChange =async(event) => {
         const file = event.target.files[0];
         const formData = new FormData()
         formData.append("video", file)
         const url = URL.createObjectURL(file);
 
         setSource(url);
-       
-        dispatch(videoUpload(formData, {
+
+        const {data}= await uploadVideo(formData, {
             headers: {
-              "Content-Type": "multipart/form-data",
+                "Content-Type": "multipart/form-data",
             },
             onUploadProgress: data => {
-              //Set the progress value to show the progress bar
-              setProgress(Math.round((100 * data.loaded) / data.total))
+                //Set the progress value to show the progress bar
+                setProgress(Math.round((100 * data.loaded) / data.total))
             },
-          })
-          .catch(error => {
-            const { code } = error?.response?.data
-            switch (code) {
-              case "FILE_MISSING":
-                setError("Please select a file before uploading!")
-                break
-              default:
-                setError("Sorry! Something went wrong. Please try again later")
-                break
-            }
-          }))
+        })
+
+        props.handleVideoData(data)
 
     };
 
@@ -62,23 +54,16 @@ const VideoUploader = (props) => {
             {progress > 0 &&
                 <div>
                     <div className='flex justify-end items-center '>
-                    <progress class="progress progress-error mr-2" value={progress} max="100"></progress>
-                    {/* <span
-                        className="text-[red] cursor-pointer"
-                        onClick={() => cancelUpload()}
-                    >
-                        X
-                    </span> */}
+                        <progress class="progress progress-error mr-2" value={progress} max="100"></progress>
+                    </div>
+                    <label>{progress}% uploaded</label>
                 </div>
-                <label>{progress}% uploaded</label>
-                </div>
-                
+
             }
 
             <div className="VideoInput relative">
                 <input
                     id="file-upload"
-                    // ref={inputRef}
                     className="VideoInput_input hidden"
                     type="file"
                     onChange={handleFileChange}
@@ -98,22 +83,22 @@ const VideoUploader = (props) => {
                         </div>
                     </div>
                 </div>
-               <div>
-               {/* {
+                <div>
+                    {/* {
                     !video?.url && source &&  <button type="submit" className=" btn hover:bg-[#e50914] bg-[brown] btn-xs">
                    please wait, video uploading...<progress label={`ww`} className="progress w-56 progress-info"></progress>
                 </button> 
                 } */}
-                {source && (
+                    {source && (
 
-                    <div className='absolute md:top-[-30%] top-[0]'>
-                       
-                        <video className=' rounded cursor-pointer md:w-[30vw] w-[90vw] h-[270px] md:h-[270px] ' controls poster={props?.poster} controlsList="nodownload">
-                            <source src={props?.videoUrl?props?.videoUrl:source} />
-                        </video>
-                    </div>
-                )}
-               </div>
+                        <div className='absolute md:top-[-30%] top-[0]'>
+
+                            <video className=' rounded cursor-pointer md:w-[30vw] w-[90vw] h-[270px] md:h-[270px] ' controls poster={props?.poster} controlsList="nodownload">
+                                <source src={ source} />
+                            </video>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     )

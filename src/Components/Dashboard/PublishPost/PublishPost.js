@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { set, useForm } from 'react-hook-form';
 import { useState } from 'react';
 import ImageUploading from 'react-images-uploading';
@@ -19,36 +19,43 @@ const PublishPost = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
 
     const [selectedCate, setSelectedCate] = useState()
-
-    const { category } = useAllCategories()
-
     const [postData, setPostData] = useState({
         videocover: null,
         thumbnail: null
     });
-
-    const [videocover, setVideocover] = useState()
-
+    const [premium, setPremium] = useState()
+    const [active, setActive] = useState()
+    const [videoData, setVideoData] = useState()
     const [coverPhoto, setCoverPhoto] = useState();
     const [thumbnail, setThumbnail] = useState('')
 
-    const { video } = useSelector(state => state?.postVideo)
+    const { category } = useAllCategories()
     const { isLoading, error, post } = useSelector(state => state?.publishPost)
-    const { postCategory } = useSelector(state => state?.addPostCategory)
 
 
-    // console.log('post video', video);
+    // console.log('post video', videoData);
     const dispatch = useDispatch()
 
-    const handleSetCate = () => {
-        const cate = {
-            postId: post?._id,
-            categoryId: selectedCate
-        }
-        // console.log('set selected cate', selectedCate, post?._id);
-        // dispatch(categoryAdd(cate))
+    const handleVideoData = (data) => {
+        setVideoData(()=>data)
+    }
 
-        // console.log('post cate', postCategory);
+    const onChangePremium = (e) => {
+        const { value, checked } = e.target;
+
+        if (checked) setPremium(() => true);
+        else setPremium(() => false)
+
+
+    }
+
+    const onChangeActive = (e) => {
+        const { value, checked } = e.target;
+
+        if (checked) setActive(() => true);
+        else setActive(() => false)
+
+
     }
 
     const onChangeCover = (data) => {
@@ -61,6 +68,7 @@ const PublishPost = () => {
         const image = data[0].file
         setThumbnail(data)
         setPostData((items) => ({ ...items, thumbnail: image }));
+
     }
 
     const onSubmit = async (data) => {
@@ -70,26 +78,20 @@ const PublishPost = () => {
         formData.append('description', data?.description);
         formData.append('category', selectedCate);
         // formData.append('tags', []);
-        // formData.append('premium', data?.false);
-        console.log('fdata cover file', coverPhoto);
+        formData.append('premium', premium);
         formData.append('videocover', postData?.videocover);
         formData.append('thumbnail', postData?.thumbnail);
-        // formData.append('imdbRating', data?.rating);
+        formData.append('imdbRating', data?.rating);
         // formData.append('trailerUrl', '');
 
 
         // formData.append('genre', data?.genre);
         // formData.append('isActive',data?.active);
 
-        formData.append('videos[0][url]', video?.url);
-        formData.append('videos[0][key]', video?.key);
+        formData.append('videos[0][url]', videoData?.url);
+        formData.append('videos[0][key]', videoData?.key);
 
-
-        const submit = dispatch(publishPost(formData))
-
-        // console.log('post', post);
-
-        toast.success("Congratulation! Post Published")
+        // dispatch(publishPost(formData))
 
         setTimeout(() => {
             toast.success("Congratulation! Post Published")
@@ -240,77 +242,98 @@ const PublishPost = () => {
                                         </ImageUploading>
                                     </div>
                                     <div className='mb-7 md:ml-5'>
-                                        <VideoUploader/>
+                                        <VideoUploader handleVideoData={handleVideoData} />
                                     </div>
                                 </div>
                             </div>
 
                             <div>
-                               <div className='md:grid grid-cols-3'>
-                               <div className='grow-wrap mr-10 col-span-2'>
-                                    <textarea
-                                        style={{ fontWeight: 'bolder', fontSize: '20px' }}
-                                        placeholder='Movie Title'
-                                        className='shadow-sm bg-[#181818] border-b-2 text-2xl font-blod focus:outline-none mt-20   block w-full sm:text-md'
-                                        name="" id="" cols="30" rows="1"
-                                        {...register("title", {
-                                            required: {
-                                                value: true,
-                                                message: 'Title is required'
-                                            }
-                                        })}>
-                                    </textarea>
-                                    <label className="label">
-                                        {errors?.title?.type === 'required' && <span className="label-text-alt text-[#e87c03]">{errors.title.message}</span>}
+                                <div className='md:grid grid-cols-3'>
+                                    <div className='grow-wrap mr-10 col-span-2'>
+                                        <textarea
+                                            style={{ fontWeight: 'bolder', fontSize: '20px' }}
+                                            placeholder='Movie Title'
+                                            className='shadow-sm bg-[#181818] border-b-2 text-2xl font-blod focus:outline-none mt-20   block w-full sm:text-md'
+                                            name="" id="" cols="30" rows="1"
+                                            {...register("title", {
+                                                required: {
+                                                    value: true,
+                                                    message: 'Title is required'
+                                                }
+                                            })}>
+                                        </textarea>
+                                        <label className="label">
+                                            {errors?.title?.type === 'required' && <span className="label-text-alt text-[#e87c03]">{errors.title.message}</span>}
 
-                                    </label>
+                                        </label>
+                                    </div>
+
+                                    <div className="form-control w-full max-w-xs text-white md:mt-16 ">
+                                        <select onChange={(e) => { setSelectedCate(e.target.value) }} className="select select-bordered bg-slate-600">
+
+
+                                            <option disabled selected>Select Category</option>
+                                            {
+                                                category?.categories?.length > 0 &&
+                                                category?.categories?.map(item => {
+                                                    return <option value={item?._id}>{item?.categoryName}</option>
+                                                })
+                                            }
+                                        </select>
+                                    </div>
+
                                 </div>
 
-                                <div className="form-control w-full max-w-xs text-white md:mt-16 ">
-                                            <select onChange={(e) => { setSelectedCate(e.target.value) }} className="select select-bordered bg-slate-400">
-
-
-                                                <option disabled selected>Select Category</option>
-                                                {
-                                                    category?.categories?.length > 0 &&
-                                                    category?.categories?.map(item => {
-                                                        return <option value={item?._id}>{item?.categoryName}</option>
-                                                    })
-                                                }
-                                            </select>
-                                        </div>
-
-                               </div>
-
-                                <div className='flex '>
-                                    <div className='grow-wrap'>
+                                <div className='flex mt-10'>
+                                <div className='grow-wrap'>
                                         <textarea
                                             style={{ fontWeight: 'bold', fontSize: '15px' }}
-                                            placeholder='Release Date'
-                                            className='shadow-sm bg-[#181818] border-b-2 md:text-lg font-blod focus:outline-none mt-10 px-2 block w-full sm:text-md p-2'
-                                            name="" id="" cols="30" rows="1"
-                                            {...register("release")}>
+                                            placeholder='Genre'
+                                            className='shadow-sm bg-[#181818]  border-b-2 md:text-lg font-blod focus:outline-none px-2 block w-full sm:text-md p-2'
+                                            name="" id="" cols="40" rows="1"
+                                            {...register("genre")}>
+                                        </textarea>
+                                    </div>
+                                    <div className='grow-wrap md:mx-10 mt-10 md:mt-0 '>
+                                        <textarea
+                                            style={{ fontWeight: 'bold', fontSize: '15px' }}
+                                            placeholder='Tags'
+                                            className='shadow-sm bg-[#181818] p-2  border-b-2 md:text-lg font-blod focus:outline-none  px-2 block w-full sm:text-md p-2'
+                                            name="" id="" cols="40" rows="1"
+                                            {...register("tags")}>
                                         </textarea>
                                     </div>
 
-                                    <div className='grow-wrap md:mx-10 mx-2'>
-                                        <textarea
-                                            style={{ fontWeight: 'bold', fontSize: '15px' }}
-                                            placeholder='Duration'
-                                            className='shadow-sm bg-[#181818]  border-b-2 md:text-lg font-blod focus:outline-none mt-10 px-2 block w-full sm:text-md p-2'
-                                            name="" id="" cols="30" rows="1"
-                                            {...register("duration")}>
-                                        </textarea>
-                                    </div>
-
-                                    <div className='grow-wrap'>
+                                </div>
+                                <div className='md:flex mt-10 md:space-x-5 space-y-5 md:space-y-0'>
+                                <div className='grow-wrap'>
                                         <textarea
                                             style={{ fontWeight: 'bold', fontSize: '15px' }}
                                             placeholder='IMDb Rating'
-                                            className='shadow-sm bg-[#181818]  border-b-2 md:text-lg font-blod focus:outline-none mt-10 px-2 block w-full sm:text-md p-2'
+                                            className='shadow-sm bg-[#181818]  border-b-2 md:text-lg font-blod focus:outline-none  px-2 block w-full sm:text-md p-2'
                                             name="" id="" cols="30" rows="1"
-                                            {...register("rating")}>
+                                            {...register("imdbRating")}>
                                         </textarea>
+                                    </div>
+                                    <div className="form-control ">
+                                        <label className="label cursor-pointer btn px-2">
+                                            <span className=" text-md">Premium</span>
+                                            <input
+                                                onChange={onChangePremium}
+                                                type="checkbox"
+                                                className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                            />
+                                        </label>
+                                    </div>
+                                    <div className="form-control ">
+                                        <label className="label cursor-pointer btn px-2">
+                                            <span className=" text-md">Active</span>
+                                            <input
+                                                onChange={onChangeActive}
+                                                type="checkbox"
+                                                className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                            />
+                                        </label>
                                     </div>
                                 </div>
 
@@ -318,7 +341,7 @@ const PublishPost = () => {
                                     <textarea
                                         style={{ fontWeight: 'bold', fontSize: '15px' }}
                                         placeholder="Description..."
-                                        id="blog" name="blog" rows="4"
+                                        id="description" name="description" rows="4"
                                         className="bg-[#181818] shadow-sm border-b-2 focus:outline-none mt-20 pt-12 text-lg mt-1 block w-full  px-2 "
                                         {...register("description")}>
 

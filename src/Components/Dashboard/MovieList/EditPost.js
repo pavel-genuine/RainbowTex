@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { set, useForm } from 'react-hook-form';
 import { useState } from 'react';
 import ImageUploading from 'react-images-uploading';
@@ -9,81 +9,133 @@ import VideoUploader from '../PublishPost/VideoUploader';
 import { useDispatch, useSelector } from 'react-redux';
 import { publishPost, singlePostGet } from '../../../redux/features/postSection/postSlice';
 import { videoCoverAdd } from '../../../redux/features/postSection/videoCoverSlice';
-import { createPost } from '../../../api/api';
+import { addVideo, createPost, uploadVideo } from '../../../api/api';
 import useAllCategories from '../../Shared/useAllCategories';
 import { categoryAdd } from '../../../redux/features/postSection/postCategorySlice';
 import { useParams } from 'react-router-dom';
+import { updatePostText } from '../../../redux/features/postSection/postTextSlice';
+import { thumbnailAdd } from '../../../redux/features/postSection/thumbnailSlice';
 
 
 const EditPost = () => {
 
-
     const { id } = useParams()
-    const { register, formState: { errors }, handleSubmit } = useForm();
-    const { isLoading, error, post: movie } = useSelector(state => state?.singlePost);
-
-    const [selectedCate, setSelectedCate] = useState()
 
     const { category } = useAllCategories()
+    const dispatch = useDispatch()
 
+    const { isLoading, error, post: movie } = useSelector(state => state?.singlePost);
+    const { postCategory } = useSelector(state => state?.postCategory);
+    const { postText } = useSelector(state => state?.postText);
+    const { videoCover } = useSelector(state => state?.postVideoCover);
+    const { videoThumbnail } = useSelector(state => state?.postThumbnail);
+
+    const { register, formState: { errors }, handleSubmit } = useForm();
+
+    const [source, setSource] = useState('');
+    const [videoData, setVideoData] = useState()
+    const [progress, setProgress] = useState(0);
+    const [selectedCate, setSelectedCate] = useState(movie?.category)
+    const [premium, setPremium] = useState(movie?.premium)
+    const [active, setActive] = useState(movie?.isActive)
+    const [coverPhoto, setCoverPhoto] = useState();
+    const [thumbnail, setThumbnail] = useState()
     const [postData, setPostData] = useState({
         videocover: null,
         thumbnail: null
     });
 
-    const [videocover, setVideocover] = useState()
-
-    const [coverPhoto, setCoverPhoto] = useState();
-    const [thumbnail, setThumbnail] = useState('')
-
-    const dispatch = useDispatch()
-
     useEffect(() => {
-
         dispatch(singlePostGet(id))
+
     }
         , [])
 
+    const handleFileChange = async (event) => {
+        const file = event.target.files[0];
+        const url = URL.createObjectURL(file);
+        setSource(url);
+        // console.log('src',source);
+        const formData = new FormData()
+        formData.append("video", file)
+        formData.append('_id', movie?._id);
 
-
+        await addVideo(formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            onUploadProgress: data => {
+                setProgress(Math.round((100 * data.loaded) / data.total))
+            },
+        })
+    };
 
     const onChangeCover = (data) => {
         setCoverPhoto(data)
         const image = data[0].file
         setPostData((items) => ({ ...items, videocover: image }));
+        const formData = new FormData();
+        formData.append('_id', movie?._id);
+        formData.append('videocover', postData?.videocover);
+
+        dispatch(videoCoverAdd(formData))
+
+        toast.success("Video cover updated")
+
+
     }
 
     const onChangeThumbnail = (data) => {
         const image = data[0].file
         setThumbnail(data)
         setPostData((items) => ({ ...items, thumbnail: image }));
+        const formData = new FormData();
+        formData.append('_id', movie?._id);
+        formData.append('thumbnail', postData?.thumbnail);
+
+        // dispatch(thumbnailAdd(formData))
+        toast.success("Thumbnail Updated")
+
+
+    }
+
+    const onChangeCategory = (e) => {
+        setSelectedCate(() => e.target.value)
+
+        // dispatch(categoryAdd({ postId: id, categoryId: selectedCate }))
+        toast.success("Post category Updated")
+
+
+
+    }
+
+    const onChangePremium = (e) => {
+        const { value, checked } = e.target;
+
+        if (checked) setPremium(() => true);
+        else setPremium(() => false)
+
+
+    }
+    const onChangeActive = (e) => {
+        const { value, checked } = e.target;
+
+        if (checked) setActive(() => true);
+        else setActive(() => false)
+
+
     }
 
     const onSubmit = async (data) => {
 
-        const formData = new FormData();
-        formData.append('title', data?.title);
-        formData.append('description', data?.description);
-        formData.append('category', selectedCate);
-        // formData.append('tags', []);
-        // formData.append('premium', data?.false);
-        console.log('fdata cover file', coverPhoto);
-        formData.append('videocover', postData?.videocover);
-        formData.append('thumbnail', postData?.thumbnail);
-        // formData.append('imdbRating', data?.rating);
-        // formData.append('trailerUrl', '');
+        let updatedData = { ...data, _id: id }
 
+        if (movie?.premium != premium) {
+            updatedData = { ...updatedData, premium: premium }
+        }
+        dispatch(updatePostText(updatedData))
 
-        // formData.append('genre', data?.genre);
-        // formData.append('isActive',data?.active);
-
-        // formData.append('videos[0][url]', video?.url);
-        // formData.append('videos[0][key]', video?.key);
-
-
-        const submit = dispatch(publishPost(formData))
-
-        toast.success("Congratulation! Post Published")
+        toast.success("Post Text Updated")
     }
 
     if (isLoading) {
@@ -91,7 +143,7 @@ const EditPost = () => {
     }
 
     return (
-        <div className='bg-[#181818] text-slate-200 pt-[18.5%] md:pt-0   '>
+        <div className='bg-[#181818] text-slate-200 pt-[18.5%] md:pt-0' >
             <Toaster></Toaster>
             <div className='md:hidden'>
                 <SideBar index={4} color={'[#e50914]'} className=''></SideBar>
@@ -103,228 +155,309 @@ const EditPost = () => {
 
                 <div className='col-span-10  pb-10 mx-auto  md: md:pt-32 '>
 
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <h2 className="text-2xl font-bold ">Update information</h2>
-                        <div className="flex justify-between">
-                            <h1 className="text-[brown] font-semibold"></h1>
-                            {/* { */}
-                            {/* videoUrl ?  */}
-                            <button type="submit" className=" btn hover:bg-[#e50914] bg-[brown] btn-xs mb-10 ">
-                                Publish
-                            </button>
-                            {/* :
-                         <button disabled type="submit" className="disabled:btn-error  disabled:btn-xs ">
-                         Publish
-                     </button> */}
 
-                            {/* } */}
-                        </div>
-                        <div>
+                    <h2 className="text-2xl font-bold mb-10 ">Update information</h2>
 
+                    <div>
+                        <div className='flex flex-col'>
+                            <div className='md:flex items-center '>
+                                <div className='mr-5'>
+                                    <div style={{
+                                        zIndex: '0', backgroundColor: 'black', backgroundRepeat: 'no-repeat', backgroundAttachment: "",
+                                        backgroundImage: `url(${movie?.videoCover?.cdnUrl && movie?.videoCover?.cdnUrl})`
+                                    }} class='bg-cover absolute border-slate-600 border border-b-0 md:w-[18vw] w-[90vw] h-[180px] md:h-[200px]  md:mx-auto shadow overflow-hidden sm:rounded-t-lg ' >
 
+                                        <div class="px-4 py-5 sm:px-6 md:w-[18vw] w-[90vw] h-[180px] md:h-[200px]" >
 
-                            <div className='flex flex-col'>
-                                <div className='md:flex items-center '>
-                                    <div className='mr-5'>
-                                        <div style={{
-                                            zIndex: '0', backgroundColor: 'black', backgroundRepeat: 'no-repeat', backgroundAttachment: "",
-                                            backgroundImage: `url(${movie?.videoCover?.cdnUrl && movie?.videoCover?.cdnUrl})`
-                                        }} class='bg-cover absolute border-slate-600 border border-b-0 md:w-[18vw] w-[90vw] h-[180px] md:h-[200px]  md:mx-auto shadow overflow-hidden sm:rounded-t-lg' >
-
-                                            <div class="px-4 py-5 sm:px-6 md:w-[18vw] w-[90vw] h-[180px] md:h-[200px]" >
-
-                                            </div>
                                         </div>
-                                        <ImageUploading
-                                            value={coverPhoto}
-                                            onChange={onChangeCover}
-                                            dataURLKey="data_url"
-                                        >
-                                            {({
-                                                imageList,
-                                                onImageUpload
-                                            }) => (
+                                    </div>
+                                    <ImageUploading
+                                        value={coverPhoto}
+                                        onChange={onChangeCover}
+                                        dataURLKey="data_url"
+                                    >
+                                        {({
+                                            imageList,
+                                            onImageUpload
+                                        }) => (
 
 
-                                                <div className="upload__image-wrapper relative text-black">
+                                            <div className="upload__image-wrapper relative text-black">
 
-                                                    <div class="mt-1 flex justify-center mb-8 mr-2 items-center px-6 pt-5 pb-6 border-2 md:w-[18vw] w-[90vw] h-[180px] md:h-[200px]  border-dashed rounded-md">
-                                                        <div class="space-y-1 text-center">
-                                                            <div class="flex text-sm text-gray-600">
-                                                                <label onClick={onImageUpload} for="file-upload1" class="relative cursor-pointer rounded-md font-medium text-white bg-black p-2 bg-opacity-50 hover:text-[brown] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                                                    <svg class="mx-auto h-8 w-8" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                                    </svg><span>Upload Video Cover</span>
-                                                                    <input style={{ backgroundColor: ' #919cb1', border: '#6b7280' }} class="sr-only" />
-                                                                </label>
-                                                            </div>
+                                                <div class="mt-1 flex justify-center mb-8 mr-2 items-center px-6 pt-5 pb-6 border-2 md:w-[18vw] w-[90vw] h-[180px] md:h-[200px]  border-dashed rounded-md">
+                                                    <div class="space-y-1 text-center">
+                                                        <div class="flex text-sm text-gray-600">
+                                                            <label onClick={onImageUpload} for="file-upload1" class="relative cursor-pointer rounded-md font-bold text-white bg-black p-2 bg-opacity-80 hover:text-[brown] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                                <svg class="mx-auto h-8 w-8" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                                </svg><span >Update Video Cover</span>
+                                                                <input style={{ backgroundColor: ' #919cb1', border: '#6b7280' }} class="sr-only" />
+                                                            </label>
                                                         </div>
                                                     </div>
-                                                    {
-                                                        imageList?.map((image, index) => (
-
-                                                            <div style={{
-                                                                zIndex: '1', backgroundColor: 'black', backgroundRepeat: 'no-repeat', backgroundAttachment: "",
-                                                                backgroundImage: `url(${image?.data_url})`
-                                                            }}
-                                                                class='bg-cover border-slate-600 border  md:w-[18vw] w-[90vw] h-[185px]  md:h-[205px]  md:mx-auto absolute top-[-2%] left-[0%]  shadow overflow-hidden rounded-lg' >
-
-                                                                <div class="px-4 py-5 sm:px-6 mr-2 " >
-
-                                                                    <p title='Change cover' onClick={onImageUpload} className='absolute top-[2%] right-[1%] md:top-[0%] md:right-[1%]  btn btn-xs my-3 '><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                                    </svg></p>
-
-                                                                </div>
-                                                            </div>))
-                                                    }
-
                                                 </div>
-                                            )}
-                                        </ImageUploading>
-                                    </div>
+                                                {
+                                                    imageList?.map((image, index) => (
 
-                                    <div>
-                                        <div style={{
-                                            zIndex: '0', backgroundColor: 'black', backgroundRepeat: 'no-repeat', backgroundAttachment: "",
-                                            backgroundImage: `url(${movie?.thumbnail?.cdnUrl && movie?.thumbnail?.cdnUrl})`
-                                        }} class='bg-cover absolute border-slate-600 border border-b-0 md:w-[18vw] w-[90vw] h-[180px] md:h-[200px]  md:mx-auto shadow overflow-hidden sm:rounded-t-lg' >
+                                                        <div style={{
+                                                            zIndex: '1', backgroundColor: 'black', backgroundRepeat: 'no-repeat', backgroundAttachment: "",
+                                                            backgroundImage: `url(${image?.data_url})`
+                                                        }}
+                                                            class='bg-cover border-slate-600 border  md:w-[18vw] w-[90vw] h-[185px]  md:h-[205px]  md:mx-auto absolute top-[-2%] left-[0%]  shadow overflow-hidden rounded-lg' >
 
-                                            <div class="px-4 py-5 sm:px-6 md:w-[18vw] w-[90vw] h-[180px] md:h-[200px]" >
+                                                            <div class="px-4 py-5 sm:px-6 mr-2 " >
+
+                                                                <p title='Change cover' onClick={onImageUpload} className='absolute top-[2%] right-[1%] md:top-[0%] md:right-[1%]  btn btn-xs my-3 '><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                </svg></p>
+
+                                                            </div>
+                                                        </div>))
+                                                }
 
                                             </div>
+                                        )}
+                                    </ImageUploading>
+                                </div>
+
+                                <div>
+                                    <div style={{
+                                        zIndex: '0', backgroundColor: 'black', backgroundRepeat: 'no-repeat', backgroundAttachment: "",
+                                        backgroundImage: `url(${movie?.thumbnail?.cdnUrl && movie?.thumbnail?.cdnUrl})`
+                                    }} class='z-0 bg-cover absolute border-slate-600 border border-b-0 md:w-[18vw] w-[90vw] h-[180px] md:h-[200px]  md:mx-auto shadow overflow-hidden sm:rounded-t-lg' >
+
+                                        <div class="px-4 py-5 sm:px-6 md:w-[18vw] w-[90vw] h-[180px] md:h-[200px]" >
+
                                         </div>
-                                        <ImageUploading
-                                            value={thumbnail}
-                                            onChange={onChangeThumbnail}
-                                            dataURLKey="data_url"
-                                        >
-                                            {({
-                                                imageList,
-                                                onImageUpload
-                                            }) => (
+                                    </div>
+                                    <ImageUploading
+                                        value={thumbnail}
+                                        onChange={onChangeThumbnail}
+                                        dataURLKey="data_url"
+                                    >
+                                        {({
+                                            imageList,
+                                            onImageUpload
+                                        }) => (
 
 
-                                                <div className="upload__image-wrapper relative">
+                                            <div className="upload__image-wrapper relative ">
 
-                                                    <div class="mt-1 flex justify-center mb-8 items-center px-6 pt-5 pb-6 border-2 md:w-[18vw] w-[90vw] h-[180px] md:h-[200px]  border-dashed rounded-md">
-                                                        <div class="space-y-1 text-center">
-                                                            <div class="flex text-sm text-gray-600">
-                                                                <label onClick={onImageUpload} for="file-upload2" class="relative cursor-pointer rounded-md font-medium text-white bg-black p-2 bg-opacity-50 hover:text-[brown] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                                                    <svg class="mx-auto h-8 w-8" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                                    </svg><span>Upload Thumbnail</span>
-                                                                    <input style={{ backgroundColor: ' #919cb1', border: '#6b7280' }} class="sr-only" />
-                                                                </label>
-                                                            </div>
+                                                <div class="mt-1 flex justify-center mb-8 items-center px-6 pt-5 pb-6 border-2 md:w-[18vw] w-[90vw] h-[180px] md:h-[200px]  border-dashed rounded-md">
+                                                    <div class="space-y-1 text-center">
+                                                        <div class="flex text-sm text-gray-600">
+                                                            <label onClick={onImageUpload} for="file-upload2" class="relative cursor-pointer rounded-md font-bold text-white bg-black p-2 bg-opacity-80 hover:text-[brown] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                                <svg class="mx-auto h-8 w-8" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                                </svg><span>Update Thumbnail</span>
+                                                                <input style={{ backgroundColor: ' #919cb1', border: '#6b7280' }} class="sr-only" />
+                                                            </label>
                                                         </div>
                                                     </div>
-                                                    {
-                                                        imageList?.map((image, index) => (
-
-                                                            <div style={{
-                                                                zIndex: '1', backgroundColor: 'black', backgroundRepeat: 'no-repeat', backgroundAttachment: "",
-                                                                backgroundImage: `url(${image?.data_url})`
-                                                            }}
-                                                                class='bg-cover border-slate-600 border  md:w-[18vw] w-[90vw] h-[180px] md:h-[205px]  md:mx-auto absolute top-[-2%] left-[0%]  shadow overflow-hidden rounded-lg' >
-
-                                                                <div class="px-4 py-5 sm:px-6  " >
-
-                                                                    <p title='Change thumbnail' onClick={onImageUpload} className='absolute top-[2%] right-[1%] md:top-[0%] md:right-[1%]  btn btn-xs my-3 '><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                                    </svg></p>
-
-                                                                </div>
-                                                            </div>))
-                                                    }
-
                                                 </div>
-                                            )}
-                                        </ImageUploading>
+                                                {
+                                                    imageList?.map((image, index) => (
+
+                                                        <div style={{
+                                                            zIndex: '1', backgroundColor: 'black', backgroundRepeat: 'no-repeat', backgroundAttachment: "",
+                                                            backgroundImage: `url(${image?.data_url})`
+                                                        }}
+                                                            class='z-10 bg-cover border-slate-600 border  md:w-[18vw] w-[90vw] h-[180px] md:h-[205px]  md:mx-auto absolute top-[-2%] left-[0%]  shadow overflow-hidden rounded-lg' >
+
+                                                            <div class="px-4 py-5 sm:px-6  " >
+
+                                                                <p title='Change thumbnail' onClick={onImageUpload} className='absolute top-[2%] right-[1%] md:top-[0%] md:right-[1%]  btn btn-xs my-3 '><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                </svg></p>
+
+                                                            </div>
+                                                        </div>))
+                                                }
+
+                                            </div>
+                                        )}
+                                    </ImageUploading>
+                                </div>
+                                <div className='mb-7 md:ml-5 relativ'>
+                                    {progress > 0 &&
+                                        <div>
+                                            <div className='flex justify-end items-center '>
+                                                <progress class="progress progress-error mr-2" value={progress} max="100"></progress>
+                                            </div>
+                                            <label>{progress}% uploaded</label>
+                                        </div>
+
+                                    }
+
+                                    <div className="VideoInput relative">
+                                        <input
+                                            id="file-upload"
+                                            className="VideoInput_input hidden"
+                                            type="file"
+                                            onChange={handleFileChange}
+                                        />
+
+                                        <div class="flex justify-center  items-center  border-2 px-6 pt-5 pb-6 md:w-[18vw] w-[90vw] h-[270px]  md:h-[200px] order-2 border-dashed rounded-md">
+
+
+                                            {
+                                                <div class="space-y-1 text-center z-10">
+                                                    <div class="flex text-sm text-gray-600">
+                                                        <label for="file-upload" class="relative cursor-pointer rounded-md font-bold text-white bg-black p-2 bg-opacity-80 hover:text-[brown] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                            <svg onChange={handleFileChange} class="mx-auto h-8 w-8" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                            </svg><span>Update Video</span>
+                                                            <input style={{ backgroundColor: ' #919cb1', border: '#6b7280' }} class="sr-only" />
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div>
+                                            {source &&
+
+                                                <div style={{ zIndex: '10' }} className='absolute md:top-[-30%] top-[0] z-10'>
+
+                                                    <video className=' rounded cursor-pointer md:w-[30vw] w-[90vw] h-[270px] md:h-[270px] ' controls controlsList="nodownload">
+                                                        <source src={source} />
+                                                    </video>
+                                                </div>
+
+                                            }
+                                            {
+                                                <div style={{ zIndex: '2' }} className='absolute md:top-[-30%] top-[0] z-2'>
+
+                                                    <video className=' rounded cursor-pointer md:w-[30vw] w-[90vw] h-[270px] md:h-[270px] ' controls controlsList="nodownload">
+                                                        <source src={'https://media.w3.org/2010/05/sintel/trailer_hd.mp4'} />
+                                                    </video>
+                                                </div>
+                                            }
+                                        </div>
                                     </div>
-                                    <div className='mb-7 md:ml-5'>
-                                        <VideoUploader videoUrl={movie?.video?.url} />
-                                    </div>
+
                                 </div>
                             </div>
+                        </div>
+                        <div className="form-control w-full max-w-xs text-white mt-10 ">
+                            <p className='m-2'>Update Category</p>
+                            <select onChange={onChangeCategory} className="select select-bordered bg-slate-600">
 
+
+                                <option selected>{movie?.categoryName}</option>
+                                {
+                                    category?.categories?.length > 0 &&
+                                    category?.categories?.map(item => {
+                                        return <option value={item?._id}>{item?.categoryName}</option>
+                                    })
+                                }
+                            </select>
+                        </div>
+
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <div className="flex justify-between">
+                                <h1 className="text-[brown] font-semibold"></h1>
+
+                                <button type="submit" className=" btn bg-[brown] btn-xs my-5">
+                                    Update below fields
+                                </button>
+                            </div>
                             <div>
                                 <div className='md:grid grid-cols-3'>
-                                    <div className='grow-wrap mr-10 col-span-2'>
-                                        {
+                                    <div className='grow-wrap md:mr-10 col-span-2'>
+                                        <div>
+                                            <textarea
+                                                style={{ fontWeight: 'bolder', fontSize: '20px' }}
+                                                placeholder='Title'
+                                                defaultValue={movie?.title}
+                                                className='shadow-sm bg-[#181818] px-2 p-2 border-b-2 text-2xl font-blod focus:outline-none  block w-full sm:text-md'
+                                                name="" id="" cols="30" rows="1"
+                                                {...register("title", {
+                                                    required: {
+                                                        value: true,
+                                                        message: 'Title is required'
+                                                    }
+                                                })}>
+                                            </textarea>
+                                            <label className="label">
+                                                {errors?.title?.type === 'required' && <span className="label-text-alt text-[#e87c03]">{errors.title.message}</span>}
 
-                                            <div>
-                                                <textarea
-                                                    style={{ fontWeight: 'bolder', fontSize: '20px' }}
-                                                    placeholder='Title'
-                                                    defaultValue={movie?.title}
-                                                    // readOnly={false}
-                                                    className='shadow-sm bg-[#181818]  border-b-2 text-2xl font-blod focus:outline-none  block w-full sm:text-md'
-                                                    name="" id="" cols="30" rows="1"
-                                                    {...register("title", {
-                                                        required: {
-                                                            value: true,
-                                                            message: 'Title is required'
-                                                        }
-                                                    })}>
-                                                </textarea>
-                                                <label className="label">
-                                                    {errors?.title?.type === 'required' && <span className="label-text-alt text-[#e87c03]">{errors.title.message}</span>}
-
-                                                </label>
-                                            </div>
-                                        }
+                                            </label>
+                                        </div>
                                     </div>
 
-                                    <div className="form-control w-full max-w-xs text-white mt-5 ">
-                                        <select onChange={(e) => { setSelectedCate(e.target.value) }} className="select select-bordered bg-slate-400">
+                                    <div className='md:flex md:space-x-5'>
+                                        <div className="form-control mt-10 ">
 
+                                            {movie?.premium ?
+                                                <label className="label cursor-pointer btn px-2">
+                                                    <span className=" text-md">Premium</span>
+                                                    <input onChange={onChangePremium} type="checkbox"
+                                                        checked
+                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                                    />
+                                                </label>
+                                                :
+                                                <label className="label cursor-pointer btn px-2">
+                                                    <span className=" text-md">Premium</span>
+                                                    <input onChange={onChangePremium} type="checkbox"
 
-                                            <option selected>{movie?.categoryName}</option>
-                                            {
-                                                category?.categories?.length > 0 &&
-                                                category?.categories?.map(item => {
-                                                    return <option value={item?._id}>{item?.categoryName}</option>
-                                                })
+                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                                    />
+                                                </label>
                                             }
-                                        </select>
+                                        </div>
+                                        <div className="form-control mt-10 ">
+
+                                            {movie?.isActive ?
+                                                <label className="label cursor-pointer btn px-2">
+                                                    <span className=" text-md">Active</span>
+                                                    <input onChange={onChangeActive} type="checkbox"
+                                                        checked
+                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                                    />
+                                                </label>
+                                                :
+                                                <label className="label cursor-pointer btn px-2">
+                                                    <span className=" text-md">Active</span>
+                                                    <input onChange={onChangeActive} type="checkbox"
+
+                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                                    />
+                                                </label>
+                                            }
+                                        </div>
                                     </div>
 
                                 </div>
 
-                                <div className='flex '>
+                                <div className='md:flex mt-10'>
                                     <div className='grow-wrap'>
                                         <textarea
                                             style={{ fontWeight: 'bold', fontSize: '15px' }}
-                                            placeholder='Release Date'
-                                            defaultValue={movie?.release}
-                                            className='shadow-sm bg-[#181818]   border-b-2 md:text-lg font-blod focus:outline-none mt-10 px-2 block w-full sm:text-md p-2'
-                                            name="" id="" cols="30" rows="1"
-                                            {...register("release")}>
+                                            placeholder='Genre'
+                                            className='shadow-sm bg-[#181818]  border-b-2 md:text-lg font-blod focus:outline-none px-2 block w-full sm:text-md p-2'
+                                            name="" id="" cols="40" rows="1"
+                                            {...register("genre")}>
                                         </textarea>
                                     </div>
-
-                                    <div className='grow-wrap md:mx-10 mx-2'>
+                                    <div className='grow-wrap md:mx-10 mt-10 md:mt-0 '>
                                         <textarea
                                             style={{ fontWeight: 'bold', fontSize: '15px' }}
-                                            placeholder='Duration'
-                                            defaultValue={movie?.duration}
-                                            className='shadow-sm bg-[#181818]   border-b-2 md:text-lg font-blod focus:outline-none mt-10 px-2 block w-full sm:text-md p-2'
-                                            name="" id="" cols="30" rows="1"
-                                            {...register("duration")}>
+                                            placeholder='Tags'
+                                            className='shadow-sm bg-[#181818] p-2  border-b-2 md:text-lg font-blod focus:outline-none  px-2 block w-full sm:text-md p-2'
+                                            name="" id="" cols="40" rows="1"
+                                            {...register("tags")}>
                                         </textarea>
                                     </div>
-
-                                    <div className='grow-wrap'>
+                                    <div className='grow-wrap mt-10 md:mt-0'>
                                         <textarea
                                             style={{ fontWeight: 'bold', fontSize: '15px' }}
                                             placeholder='IMDb Rating'
-                                            defaultValue={movie?.imdbRating}
-                                            className='shadow-sm bg-[#181818]  border-b-2 md:text-lg font-blod focus:outline-none mt-10 px-2 block w-full sm:text-md p-2'
+                                            className='shadow-sm bg-[#181818]  border-b-2 md:text-lg font-blod focus:outline-none  px-2 block w-full sm:text-md p-2'
                                             name="" id="" cols="30" rows="1"
-                                            {...register("rating")}>
+                                            {...register("imdbRating")}>
                                         </textarea>
                                     </div>
                                 </div>
@@ -334,19 +467,20 @@ const EditPost = () => {
                                         style={{ fontWeight: 'bold', fontSize: '15px' }}
                                         placeholder="Description..."
                                         defaultValue={movie?.description}
-                                        id="blog" name="blog" rows="4"
-                                        className=" shadow-sm bg-[#181818] border-b-2 focus:outline-none mt-20 pt-12 text-lg mt-1 block w-full  px-2 "
+                                        id="description" name="description" rows="4"
+                                        className=" shadow-sm bg-[#181818] border-b-2 focus:outline-none mt-12 pt-12 text-lg mt-1 block w-full  px-2 "
                                         {...register("description")}>
 
 
                                     </textarea>
                                 </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
+
                 </div>
             </div>
-        </div>
+        </div >
 
     );
 };

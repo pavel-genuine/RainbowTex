@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addPostToCategory, addThumbnail, removeCategoryFromPost, removeThumbnail} from "../../../api/api";
+import { addPostToCategory, removeCategoryFromPost,} from "../../../api/api";
 
 //
 export const categoryAdd =createAsyncThunk("/category/categoryAdd",

@@ -13,6 +13,8 @@ import { settings } from '../Categories/slickSetting';
 import SinglePost from '../Categories/SinglePost';
 import { ratingAdd } from '../../redux/features/postSection/addRatingSlice';
 import toast, { Toaster } from 'react-hot-toast';
+import { Link } from 'react-router-dom';
+import PaymentHome from '../Payment/PaymentHome';
 
 const MovieDetails = () => {
 
@@ -118,7 +120,7 @@ const MovieDetails = () => {
 
         toast.success('Comment edited')
 
-         setTimeout(() => {
+        setTimeout(() => {
             window.location.reload()
         }, 200);
 
@@ -154,7 +156,7 @@ const MovieDetails = () => {
 
         toast.success('Comment deleted')
 
-        
+
 
 
 
@@ -179,14 +181,24 @@ const MovieDetails = () => {
                     <p className='md:text-lg md:w-[40%] md:my-5 my-2'>{movie?.description}</p>
 
                     <div className='flex space-x-10'>
-                        <button className='md:py-3 px-16 py-1 font-semibold md:text-lg rounded max-w-xs text-white bg-[#e50914] hover:bg-[brown] cursor-pointer mt-4 mb-2'>Join Now</button>
+                        <label htmlFor="my-modal-5" className='md:py-3 px-16 py-1 font-semibold md:text-lg rounded max-w-xs text-white bg-[#e50914] hover:bg-[brown] cursor-pointer mt-4 mb-2'>Join Now</label>
+
+
                     </div>
+
+                    <input type="checkbox" id="my-modal-5" className="modal-toggle" />
+                    <div className="modal">
+                        <div className="modal-box md:w-5/12 max-w-5xl bg-slate-800  text-slate-200 ">
+                        <label htmlFor="my-modal-5" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+
+                            <PaymentHome></PaymentHome>
+                        </div>
+                    </div>
+
                     <div className='md:flex items-center'>
 
                         <div className='mb-3 mt-5'>
                             <p className='text-[#e50914] text-2xl font-semibold'>Release Date  </p>
-
-                            {/* <p className='text-2xl font-semibold'>{movie?.release}</p> */}
                         </div>
 
                         <div className='mt-3 md:ml-20'>
@@ -277,7 +289,7 @@ const MovieDetails = () => {
                                 <p className='text-[#e50914] text-2xl font-semibold'>Tags  </p>
 
                                 {
-                                    movie?.tags?.map((tag,i)=><span key={i}>{tag}</span>)
+                                    movie?.tags?.map((tag, i) => <span key={i}>{tag}</span>)
                                 }
                             </div>
 
@@ -396,7 +408,7 @@ const MovieDetails = () => {
 
                                         {
 
-                                            localStorage?.getItem('userId') == item?.userId || localStorage?.getItem('IsAdmin')==true &&
+                                            localStorage?.getItem('userId') == item?.userId || localStorage?.getItem('IsAdmin') == true &&
 
                                             <div className="dropdown dropdown-hover">
                                                 <label tabIndex={0} className=" m-1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
