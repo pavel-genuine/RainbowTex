@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const base_url = 'http://ec2-3-75-191-65.eu-central-1.compute.amazonaws.com:5000/api';
+export const base_url = 'https://server.jucundu.com/api';
 
 axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('loginToken')}`;
 

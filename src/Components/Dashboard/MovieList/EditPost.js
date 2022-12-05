@@ -9,7 +9,7 @@ import VideoUploader from '../PublishPost/VideoUploader';
 import { useDispatch, useSelector } from 'react-redux';
 import { publishPost, singlePostGet } from '../../../redux/features/postSection/postSlice';
 import { videoCoverAdd } from '../../../redux/features/postSection/videoCoverSlice';
-import { addVideo, createPost, uploadVideo } from '../../../api/api';
+import { addVideo, createPost, getSinglePost, uploadVideo } from '../../../api/api';
 import useAllCategories from '../../Shared/useAllCategories';
 import { categoryAdd } from '../../../redux/features/postSection/postCategorySlice';
 import { useParams } from 'react-router-dom';
@@ -24,7 +24,7 @@ const EditPost = () => {
     const { category } = useAllCategories()
     const dispatch = useDispatch()
 
-    const { isLoading, error, post: movie } = useSelector(state => state?.singlePost);
+    // const { isLoading, error, post: movie } = useSelector(state => state?.singlePost);
     const { postCategory } = useSelector(state => state?.postCategory);
     const { postText } = useSelector(state => state?.postText);
     const { videoCover } = useSelector(state => state?.postVideoCover);
@@ -32,21 +32,40 @@ const EditPost = () => {
 
     const { register, formState: { errors }, handleSubmit } = useForm();
 
+    const [movie, setMovie] = useState('');
     const [source, setSource] = useState('');
-    const [videoData, setVideoData] = useState()
+    const [showActive, setShowActive] = useState(false);
+    const [videoData, setVideoData] = useState('')
     const [progress, setProgress] = useState(0);
-    const [selectedCate, setSelectedCate] = useState(movie?.category)
-    const [premium, setPremium] = useState(movie?.premium)
-    const [active, setActive] = useState(movie?.isActive)
-    const [coverPhoto, setCoverPhoto] = useState();
-    const [thumbnail, setThumbnail] = useState()
+    const [selectedCate, setSelectedCate] = useState('')
+    const [premium, setPremium] = useState(false)
+    const [active, setActive] = useState(false)
+    const [coverPhoto, setCoverPhoto] = useState('');
+    const [thumbnail, setThumbnail] = useState('')
+    const [updatedData, setUpdatedData] = useState({})
     const [postData, setPostData] = useState({
         videocover: null,
         thumbnail: null
     });
 
     useEffect(() => {
-        dispatch(singlePostGet(id))
+        // dispatch(singlePostGet(id))
+
+        // console.log('movvvv',movie);
+
+        const fetchSinglePost =async()=>{
+           const {data}= await getSinglePost(id);
+           setMovie(()=>data)
+
+        }
+
+        fetchSinglePost()
+
+        console.log('mov',movie);
+        
+        if (movie?.isActive) {
+           setShowActive(()=>true) 
+        }
 
     }
         , [])
@@ -120,27 +139,46 @@ const EditPost = () => {
     const onChangeActive = (e) => {
         const { value, checked } = e.target;
 
-        if (checked) setActive(() => true);
-        else setActive(() => false)
+       
 
+        if (checked) {
+            setActive(() => true);
+            setShowActive(() =>true)
+        }
+        else {
+            setActive(() => false)
+            setShowActive(() => false)
 
+        }
     }
 
     const onSubmit = async (data) => {
 
-        let updatedData = { ...data, _id: id }
+        setUpdatedData(() => ({ ...data, _id: id }))
 
-        if (movie?.premium != premium) {
-            updatedData = { ...updatedData, premium: premium }
+        if (movie?.premium != premium && movie?.active == active) {
+ 
+          return  dispatch(updatePostText({ ...data, _id: id, premium: premium, isActive: movie?.isActive }))
+        }
+
+        if (movie?.active != active && movie?.premium == premium ) {
+
+            return  dispatch(updatePostText({ ...data, _id: id, isActive: active ,premium: movie?.premium}))
+
+        }
+        if (movie?.active != active && movie?.premium != premium ) {
+     
+            return dispatch(updatePostText({ ...data, _id: id, isActive: active ,premium:premium}))
+
         }
         dispatch(updatePostText(updatedData))
 
         toast.success("Post Text Updated")
     }
 
-    if (isLoading) {
-        <p>loading...</p>
-    }
+    // if (isLoading) {
+    //     <p>loading...</p>
+    // }
 
     return (
         <div className='bg-[#181818] text-slate-200 pt-[18.5%] md:pt-0' >
@@ -409,8 +447,7 @@ const EditPost = () => {
                                             }
                                         </div>
                                         <div className="form-control mt-10 ">
-
-                                            {movie?.isActive ?
+                                            {showActive ?
                                                 <label className="label cursor-pointer btn px-2">
                                                     <span className=" text-md">Active</span>
                                                     <input onChange={onChangeActive} type="checkbox"

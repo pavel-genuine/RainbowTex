@@ -15,7 +15,7 @@ const HomePage = ({filteredCategory}) => {
 
   return (
     <div>
-      <div className='bg-[#181818] pt-16 md:pt-0 box-border'>
+      <div className='bg-[#181818] pt-16 md:pt-0 box-border min-h-[100vh]'>
 
         <div>
           <Banner></Banner>

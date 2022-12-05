@@ -65,7 +65,7 @@ const PostSearch = ({ searchText ,filteredCategory}) => {
     return (
         <div className=" bg-[#181818]">
             <h1 className="pt-28 text-white text-center mb-10 text-xl md:text-3xl font-bold" >All Your Favourite Movies</h1>
-            <div className=' min-h-screen relative mx-auto  text-slate-200 w-[90%]  grid grid-cols-2 md:grid-cols-3 gap-4'>
+            <div className=' min-h-screen relative mx-auto  text-slate-200 w-[90%]  grid grid-cols-2 md:grid-cols-3 md:gap-4'>
                 
                 {
                     posts?.map(movie => <SingleMovieCard movie={movie} key={movie?._id}></SingleMovieCard>)

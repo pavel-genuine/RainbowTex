@@ -187,7 +187,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
         <div >
 
             <div className={`nav h-[70px]  fixed text-white bg-[#181818] ${background ? 'bg-opacity-80' : 'bg-opacity-20 bg-gradient-to-b from-black '} backdrop-filter-none backdrop-blur-sm shadow z-100`}>
-                <div className="lg:navbar lg:w-[100vw]  mx-auto flex md:justify-around justify-between items-center">
+                <div className="lg:navbar lg:w-[100vw]  mx-auto md:flex justify-around items-center">
                     <div className="lg:navbar-start hidden md:block">
                         <a onClick={() => setModifiedNav(false)} href='/' className=" normal-case text-xl ">
                             <img className='md:w-40 ml-20 mt-2' src="https://i.ibb.co/Mnc17bk/1-22-removebg-preview.png" alt="" />

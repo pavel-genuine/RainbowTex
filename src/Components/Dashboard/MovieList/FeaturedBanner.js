@@ -41,12 +41,12 @@ const FeaturedBanner = ({movie}) => {
                 });
                 setIsBanner(true);
             }}
-            type="checkbox" class="toggle toggle-error " />
+            type="checkbox" class="toggle " />
 
     }
     </div>
     :
-    <input type="checkbox" class="toggle toggle-error "/>
+    <input type="checkbox" class="toggle  "/>
 
 }
 

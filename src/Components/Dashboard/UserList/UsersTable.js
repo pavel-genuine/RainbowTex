@@ -41,7 +41,7 @@ const UsersTable = () => {
         <div className=''>
 
             <p className='font-semibold my-2 text-xl underline underline-offset-2 '> Users List</p>
-            <p className='font-semibold my-10 bg-slate-600 px-3 md:w-[25%]  py-2 text-lg  '>Total Users : {userList.length} </p>
+            <p className='font-semibold my-10 bg-slate-600 px-3 md:w-[25%]  py-2 text-lg  '>Total Users : {usersNumber} </p>
 
             <div style={{ overflowX: 'auto' }}>
                 <table class="shadow-lg table-auto overflow-x-scroll overflow-auto w-full">

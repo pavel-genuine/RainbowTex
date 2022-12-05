@@ -3,8 +3,8 @@ import { base_url } from '../../api/api';
 
 const PaymentHome = () => {
     return (
-        <div className='bg-slate-800  text-slate-200 '>
-            <div className=' mx-auto md:w-[90%] md:flex  md:space-x-5'>
+        <div className='bg-slate-800 md:h-[100vh] h-[120vh] text-slate-200 '>
+            <div className=' md:ml-[30vw] md:w-[50%] md:flex md:pt-28 pt-20 md:space-x-5'>
                 <div className='px-5 py-10 rounded-md border hover:border-slate-400 border-slate-600 space-y-2 drop-shadow-2xl'>
                     <h1 className='text-xl font-semibold'>Freemium</h1>
                     <p className='text-5xl font-semibold'>No fees.</p>

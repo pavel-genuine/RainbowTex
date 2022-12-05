@@ -14,7 +14,7 @@ import SinglePost from '../Categories/SinglePost';
 import { ratingAdd } from '../../redux/features/postSection/addRatingSlice';
 import toast, { Toaster } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
-import PaymentHome from '../Payment/PaymentHome';
+import Comment from './Comment';
 
 const MovieDetails = () => {
 
@@ -70,7 +70,7 @@ const MovieDetails = () => {
 
 
     }, [])
-
+// console.log(movie,'mov');
 
     const onSubmit = async (data) => {
 
@@ -86,7 +86,7 @@ const MovieDetails = () => {
         dispatch(commentAdd(newComment))
 
         setTimeout(() => {
-            window.location.reload()
+            // window.location.reload()
         }, 200);
     }
 
@@ -120,7 +120,7 @@ const MovieDetails = () => {
 
         toast.success('Comment edited')
 
-        setTimeout(() => {
+         setTimeout(() => {
             window.location.reload()
         }, 200);
 
@@ -135,6 +135,9 @@ const MovieDetails = () => {
             postId: movie?._id,
             commentId: id
         }
+                console.log(data, 'rrr');
+                console.log(id, 'id');
+//
 
         // if (remainingCommennts.length == 1) {
         //     dispatch(commentRemove(data))
@@ -144,19 +147,16 @@ const MovieDetails = () => {
         //     }, 200);
         // }
 
-        dispatch(commentRemove(data))
+        // dispatch(commentRemove(data))
 
         setTimeout(() => {
-            window.location.reload()
+            // window.location.reload()
         }, 200);
 
-        const updatedComments = movie?.comments?.filter(item => item?._id != id);
-
-        setRemainingCommennts(() => updatedComments)
-
+   
         toast.success('Comment deleted')
 
-
+        
 
 
 
@@ -172,33 +172,26 @@ const MovieDetails = () => {
     }
 
     return (
-        <div className='mx-auto bg-[#181818] text-slate-200'>
+        <div className='mx-auto bg-[#181818] text-slate-200 min-h-[100vh]'>
             <Toaster></Toaster>
             <div className=" h-[40vh]  w-[98vw] mx-auto relative mb-40 md:mb-60">
                 <img className='md:h-[100vh] h-[40vh] w-[100vw] brightness-125 contrast-125' src={movie?.videoCover?.cdnUrl ? movie?.videoCover?.cdnUrl : 'https://i.ibb.co/R6Y4CQ3/1-white-1.png'} alt="" />
                 <div className='absolute w-[98vw] md:pt-[13%] pt-[30%] md:pt-60 p-5 md:pl-28 md:top-[0%] top-[0%] md:h-[100vh] h-[40vh] text-white bg-gradient-to-t from-[#181818]'>
                     <h1 className='md:text-6xl text-2xl font-semibold'>{movie?.title}</h1>
-                    <p className='md:text-lg md:w-[40%] md:my-5 my-2'>{movie?.description}</p>
+                    <p  className='md:text-lg md:w-[40%] md:my-5 my-2'>{movie?.description?.slice(0,100)}...</p>
 
                     <div className='flex space-x-10'>
-                        <label htmlFor="my-modal-5" className='md:py-3 px-16 py-1 font-semibold md:text-lg rounded max-w-xs text-white bg-[#e50914] hover:bg-[brown] cursor-pointer mt-4 mb-2'>Join Now</label>
-
-
+                        <Link to={'/payment'}><button className='md:py-3 px-16 py-1 font-semibold md:text-lg rounded max-w-xs text-white bg-[#e50914] hover:bg-[brown] cursor-pointer mt-4 mb-2'>Join Now</button></Link>
                     </div>
 
-                    <input type="checkbox" id="my-modal-5" className="modal-toggle" />
-                    <div className="modal">
-                        <div className="modal-box md:w-5/12 max-w-5xl bg-slate-800  text-slate-200 ">
-                        <label htmlFor="my-modal-5" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
 
-                            <PaymentHome></PaymentHome>
-                        </div>
-                    </div>
-
+                    
                     <div className='md:flex items-center'>
 
                         <div className='mb-3 mt-5'>
                             <p className='text-[#e50914] text-2xl font-semibold'>Release Date  </p>
+
+                            {/* <p className='text-2xl font-semibold'>{movie?.release}</p> */}
                         </div>
 
                         <div className='mt-3 md:ml-20'>
@@ -289,7 +282,7 @@ const MovieDetails = () => {
                                 <p className='text-[#e50914] text-2xl font-semibold'>Tags  </p>
 
                                 {
-                                    movie?.tags?.map((tag, i) => <span key={i}>{tag}</span>)
+                                    movie?.tags?.map((tag,i)=><span key={i}>{tag}</span>)
                                 }
                             </div>
 
@@ -363,174 +356,17 @@ const MovieDetails = () => {
                             </div>
                         }
 
-
                         {
-                            remainingCommennts?.length > 0 &&
-                            <div className='md:m-2 border-b'>
-                                <div className='md:my-3'>{remainingCommennts?.map(item => <div key={item?._id}>
-                                    <p className="font-medium flex items-center">
-                                        <img className={`w-8 h-8 rounded-full mr-2 border border-[brown]`} src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('email')} </p>
-                                    <div className='flex items-center'>
-                                        <p className='m-3 bg-slate-800 p-2 rounded'> {item?.comment}
-                                        </p>
-
-
-                                        <div className="modal" id="my-modal-2">
-                                            <div className="modal-box bg-slate-800 bg-opacity-90  flex flex-col items-center justify-center">
-                                                <div>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-[brown]">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                    </svg>
-                                                </div>
-
-                                                <h3 className="font-bold text-lg">Are you sure, you want to delete this?</h3>
-                                                <div className="modal-action">
-                                                    <a onClick={(id) => handleRemoveComment(item?._id)} href="#" className="btn mx-4"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                                    </svg>
-
-                                                    </a>
-                                                    <a href="#" className="btn"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <input type="checkbox" id="my-modal-4" className="modal-toggle" />
-                                        <label htmlFor="my-modal-4" className="modal cursor-pointer">
-                                            <label className="modal-box relative bg-slate-800" htmlFor="">
-                                                <h3 className="text-lg font-bold">Congratulations random Internet user!</h3>
-                                                <p className="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!</p>
-                                            </label>
-                                        </label>
-
-                                        {
-
-                                            localStorage?.getItem('userId') == item?.userId || localStorage?.getItem('IsAdmin') == true &&
-
-                                            <div className="dropdown dropdown-hover">
-                                                <label tabIndex={0} className=" m-1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                                                </svg>
-                                                </label>
-                                                <ul tabIndex={0} className="dropdown-content menu p-2 shadow  rounded-box  bg-slate-600">
-                                                    <li ><label htmlFor="my-modal-4">Edit<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                    </svg>
-                                                    </label>
-                                                    </li>
-
-
-                                                    <li><a href="#my-modal-2">Delete <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                    </svg>
-                                                    </a>
-                                                    </li>
-
-                                                </ul>
-                                            </div>
-
-                                        }
-                                    </div>
-                                </div>)}
-                                </div>
-                            </div>
-
-                        }
-                        {
-                            movie?.comments?.length > 0 && !remainingCommennts?.length > 0 &&
+                            movie?.comments?.length > 0 && 
 
                             <div className='m-2 border-b'>
-                                <div className='my-3'>{movie?.comments?.map(item => <div key={item?._id}>
-                                    <p className="font-medium flex items-center">
-                                        <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('email')} </p>
-                                    <div className='flex items-center'>
-                                        <p className='m-3 bg-slate-800 p-2 rounded'> {item?.comment}
-                                        </p>
-                                        <div className="modal" id="my-modal-2">
-                                            <div className="modal-box bg-slate-800 bg-opacity-90  flex flex-col items-center justify-center">
-                                                <div>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-[brown]">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                    </svg>
-                                                </div>
-
-                                                <h3 className="font-bold text-lg">Are you sure, you want to delete this?</h3>
-                                                <div className="modal-action">
-                                                    <a onClick={(id) => handleRemoveComment(item?._id)} href="#" className="btn mx-4"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                                    </svg>
-
-                                                    </a>
-                                                    <a href="#" className="btn"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <input type="checkbox" id="my-modal-4" className="modal-toggle" />
-                                        <label htmlFor="my-modal-4" className="modal cursor-pointer">
-                                            <label className="modal-box relative bg-slate-800" htmlFor="">
-                                                <form onSubmit={handleSubmit(onSubmitEdit)}>
-                                                    <div className="pt-10 space-y-2 pb-5 ">
-                                                        <header className="font-semibold text-xl mb-5">Edit the comment here</header>
-                                                        <div className="comments-container  border-y  py-4">
-                                                            <div>
-                                                                <p className="font-medium flex items-center"> <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('email')} </p>
-
-                                                                <div className='grow-wrap'>
-                                                                    <textarea
-                                                                        required
-                                                                        placeholder="Comment"
-                                                                        id="text"
-                                                                        minLength="2"
-                                                                        // className="outline-0 pt-3 font-normal"
-                                                                        className=" outline-0 p-3 font-normal  bg-slate-700 bg-opacity-50 my-5 rounded-lg  block w-full"
-                                                                        {...register("commentEdit")}>
-                                                                    </textarea>
-                                                                    {/* {errors.comment && errors.comment.type === "required" && <span>This is required</span>}
-                    {errors.comment && errors.comment.type === "minLength" && <span>minimum 2 characters</span>} */}
-                                                                </div>
-
-                                                                <input className="btn btn-xs bg-[brown] border-0 text-white " type="submit" value="Edit" />
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>  </label>
-                                        </label>
-
-                                        {
-
-                                            localStorage?.getItem('userId') == item?.userId &&
-
-                                            <div className="dropdown dropdown-hover">
-                                                <label tabIndex={0} className=" m-1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                                                </svg>
-                                                </label>
-                                                <ul tabIndex={0} className="dropdown-content menu p-2 shadow  rounded-box  bg-slate-600">
-                                                    <li onClick={(id) => handleEditComment(item?._id)}><label htmlFor="my-modal-4">Edit<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                    </svg>
-                                                    </label>
-                                                    </li>
-
-                                                    <li><a href="#my-modal-2">Delete <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                    </svg>
-                                                    </a>
-                                                    </li>
-
-                                                </ul>
-                                            </div>
-
-                                        }
-                                    </div>
-                                </div>)}
+                                <div className='my-3'>{movie?.comments?.map(item =>{
+                                    // console.log('cid',item?._id);
+                                    return <Comment key={item?._id} item={item} postId={movie?._id}></Comment>
+                                 
+                                }
+                                    
+                                )}
                                 </div>
                             </div>
                         }

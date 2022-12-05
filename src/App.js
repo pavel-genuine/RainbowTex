@@ -29,7 +29,6 @@ function App() {
     setfilteredCategory(() => data)
   }
 
-  console.log('filter',filteredCategory);
   const searchHandler = (data) => {
     setSearchText(() => data)
 

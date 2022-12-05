@@ -82,12 +82,12 @@ const SignIn = () => {
     }},[token])
 
     return (
-        <div style={{ backgroundImage: `url(${'https://i.ibb.co/WFbg3T0/background1-1.jpg'})` }}
-            className={` min-h-screen bg-cover md:h-[120vh] h-[150vh] md:w-[100%] w-[150%] `}>
+        <div style={{ backgroundImage: `url(${'https://i.ibb.co/WFbg3T0/background1-1.jpg'})`, backgroundSize:'cover' }}
+            className={`md:relative min-h-screen   md:h-[140vh] md:w-[100%]  bg-cover `}>
             <Toaster></Toaster>
-            <div className="w-[100%]  bg-black bg-opacity-50  flex flex-col justify-center items-center ">
-                <div className="md:w-[30%] w-[100%] bg-black h-screen md:h-auto bg-opacity-80 shadow-xl md:mt-28 pt-40 md:py-10  ">
-                    <div className="card-body w-96 mx-auto my-auto  ">
+            <div className="w-[100%]  bg-black min-h-screen bg-cover  md:h-[140vh] bg-opacity-50  flex flex-col justify-center items-center">
+                <div className="md:w-[30%] w-[100%] bg-black h-screen md:absolute bottom-[35%]  md:h-auto bg-opacity-80 shadow-xl md:mt-28 pt-40 md:py-10  ">
+                    <div className="card-body w-[95%] md:w-96 mx-auto my-auto  ">
                         <h2 className="text-center text-white text-4xl mb-6 font-bold">Sign In</h2>
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className="form-control w-full max-w-xs">
@@ -206,7 +206,7 @@ const SignIn = () => {
                     </div>
                 </div>
                 
-                <div className="bg-black bg-opacity-90 w-[100%] md:mt-20 h-[33%] md:h-auto  md:py-10 py-40 text-[grey] ">
+                <div className="md:absolute bottom-[0] bg-black bg-opacity-90 w-[100%] md:mt-20  md:h-auto  md:py-10 py-40 text-[grey] ">
                     <div className="w-[80%] mx-auto">
                         <Link to={`/contact-us`}><span className="text-lg hover:underline mb-5">Questions? Contact us.</span></Link>
                         <div className="grid grid-cols-3 md:space-y-3 mt-5">
