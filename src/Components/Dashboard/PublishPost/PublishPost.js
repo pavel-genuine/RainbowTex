@@ -19,12 +19,14 @@ const PublishPost = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
 
     const [selectedCate, setSelectedCate] = useState()
+    const [selectedGenre, setSelectedGenre] = useState('movie')
+
     const [postData, setPostData] = useState({
         videocover: null,
         thumbnail: null
     });
     const [premium, setPremium] = useState()
-    const [active, setActive] = useState()
+    const [active, setActive] = useState(true)
     const [videoData, setVideoData] = useState()
     const [coverPhoto, setCoverPhoto] = useState();
     const [thumbnail, setThumbnail] = useState('')
@@ -37,16 +39,7 @@ const PublishPost = () => {
     const dispatch = useDispatch()
 
     const handleVideoData = (data) => {
-        setVideoData(()=>data)
-    }
-
-    const onChangePremium = (e) => {
-        const { value, checked } = e.target;
-
-        if (checked) setPremium(() => true);
-        else setPremium(() => false)
-
-
+        setVideoData(() => data)
     }
 
     const onChangeActive = (e) => {
@@ -55,9 +48,7 @@ const PublishPost = () => {
         if (checked) setActive(() => true);
         else setActive(() => false)
 
-
     }
-
     const onChangeCover = (data) => {
         setCoverPhoto(data)
         const image = data[0].file
@@ -77,28 +68,31 @@ const PublishPost = () => {
         formData.append('title', data?.title);
         formData.append('description', data?.description);
         formData.append('category', selectedCate);
-        // formData.append('tags', []);
-        formData.append('premium', premium);
+
+        var tags =data?.tags.split(',');
+
+        console.log('tags',tags);
+
+        for (var i = 0; i < tags.length; i++) {
+            formData.append('tags[]', tags[i]);
+        }
+   
         formData.append('videocover', postData?.videocover);
         formData.append('thumbnail', postData?.thumbnail);
-        formData.append('imdbRating', data?.rating);
-        // formData.append('trailerUrl', '');
-
-
-        // formData.append('genre', data?.genre);
-        // formData.append('isActive',data?.active);
-
+        data?.imdbRating && formData.append('imdbRating', data?.imdbRating);
+        formData.append('genre', selectedGenre);
+        formData.append('isActive', active);
         formData.append('videos[0][url]', videoData?.url);
         formData.append('videos[0][key]', videoData?.key);
 
-        // dispatch(publishPost(formData))
+        dispatch(publishPost(formData))
 
         setTimeout(() => {
             toast.success("Congratulation! Post Published")
         }, 1000);
 
         setTimeout(() => {
-            window.location.reload();
+            // window.location.reload();
         }, 2000);
     }
     const email = ''
@@ -270,8 +264,6 @@ const PublishPost = () => {
 
                                     <div className="form-control w-full max-w-xs text-white md:mt-16 ">
                                         <select onChange={(e) => { setSelectedCate(e.target.value) }} className="select select-bordered bg-slate-600">
-
-
                                             <option disabled selected>Select Category</option>
                                             {
                                                 category?.categories?.length > 0 &&
@@ -285,14 +277,12 @@ const PublishPost = () => {
                                 </div>
 
                                 <div className='flex mt-10'>
-                                <div className='grow-wrap'>
-                                        <textarea
-                                            style={{ fontWeight: 'bold', fontSize: '15px' }}
-                                            placeholder='Genre'
-                                            className='shadow-sm bg-[#181818]  border-b-2 md:text-lg font-blod focus:outline-none px-2 block w-full sm:text-md p-2'
-                                            name="" id="" cols="40" rows="1"
-                                            {...register("genre")}>
-                                        </textarea>
+                                    <div className="form-control w-full max-w-xs text-white md:mt-16 ">
+                                        <select onChange={(e) => { setSelectedGenre(e.target.value) }} className="select select-bordered bg-slate-600">
+                                            <option disabled selected>Select Genre</option>
+                                            <option>movie</option>
+                                            <option>anime</option>
+                                        </select>
                                     </div>
                                     <div className='grow-wrap md:mx-10 mt-10 md:mt-0 '>
                                         <textarea
@@ -306,7 +296,7 @@ const PublishPost = () => {
 
                                 </div>
                                 <div className='md:flex mt-10 md:space-x-5 space-y-5 md:space-y-0'>
-                                <div className='grow-wrap'>
+                                    <div className='grow-wrap'>
                                         <textarea
                                             style={{ fontWeight: 'bold', fontSize: '15px' }}
                                             placeholder='IMDb Rating'
@@ -316,24 +306,27 @@ const PublishPost = () => {
                                         </textarea>
                                     </div>
                                     <div className="form-control ">
-                                        <label className="label cursor-pointer btn px-2">
-                                            <span className=" text-md">Premium</span>
-                                            <input
-                                                onChange={onChangePremium}
-                                                type="checkbox"
-                                                className="checkbox bg-slate-200 checkbox-error ml-5 "
-                                            />
-                                        </label>
-                                    </div>
-                                    <div className="form-control ">
-                                        <label className="label cursor-pointer btn px-2">
-                                            <span className=" text-md">Active</span>
-                                            <input
-                                                onChange={onChangeActive}
-                                                type="checkbox"
-                                                className="checkbox bg-slate-200 checkbox-error ml-5 "
-                                            />
-                                        </label>
+                                        {
+                                            active ?
+                                                <label className="label cursor-pointer btn px-2">
+                                                    <span className=" text-md">Active</span>
+                                                    <input
+                                                        onChange={onChangeActive}
+                                                        type="checkbox"
+                                                        checked
+                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                                    />
+                                                </label>
+                                                :
+                                                <label className="label cursor-pointer btn px-2">
+                                                    <span className=" text-md">Active</span>
+                                                    <input
+                                                        onChange={onChangeActive}
+                                                        type="checkbox"
+                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                                    />
+                                                </label>
+                                        }
                                     </div>
                                 </div>
 

@@ -279,10 +279,10 @@ const MovieDetails = () => {
                         <div className=''>
 
                             <div className='mb-3 '>
-                                <p className='text-[#e50914] text-2xl font-semibold'>Tags  </p>
+                                <p className='text-[#e50914] text-2xl font-semibold my-2'>Tags  </p>
 
                                 {
-                                    movie?.tags?.map((tag,i)=><span key={i}>{tag}</span>)
+                                    movie?.tags?.map((tag,i)=><span className='bg-slate-600 p-1 border rounded m-1' key={i}>{tag}</span>)
                                 }
                             </div>
 

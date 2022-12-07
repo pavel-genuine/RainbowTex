@@ -48,17 +48,16 @@ const MovieList = () => {
 
 
         const fetchPost = async () => {
-            const { data } = await getAllPosts(`?search=${searchText}&page=${page}`)
+            const { data } = await axios.get(`${base_url}/post?search=${searchText}`)
             setPosts(data)
 
             // console.log('data',data);
-            // console.log( 'text',searchText);
-
+           
+            // console.log( 'text',searchText)
 
         }
 
         fetchPost()
-
 
         const fetchPostsNumber = async () => {
             const { data } = await getTotalPostsNumber()
@@ -75,6 +74,10 @@ const MovieList = () => {
         setPageCount(() => Math.ceil(postsNumber / 20))
 
         setMovies(posts)
+
+        // console.log('posts',posts);
+        // console.log('movies',movies);
+
 
         if (filteredMovies == 1) {
             setMovies(posts)

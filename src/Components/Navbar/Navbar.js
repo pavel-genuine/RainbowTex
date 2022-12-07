@@ -31,7 +31,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
         setTimeout(() => {
             window.scrollTo(500, 500)
         }, 500);
-        
+
         const singleCate = homeCates?.find(cate => cate?._id == id)
         filterHandler(singleCate)
     }
@@ -70,7 +70,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                     <label tabIndex="0" htmlFor="toggler" name="toggle" className="btn btn-ghost btn-circle avatar">
                         <div className="w-9 border border-[brown] rounded-full" >
                             {
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb8Wygf4kyxHztYd0ep1BAq_ARXG9lxZsIosP60cyBiOSNLPRprFE126kSfSPhqNGcvNU&usqp=CAU" />
+                                <img src="https://i.ibb.co/vj0Ctmj/user.png" />
                             }
                         </div>
                     </label>
@@ -87,12 +87,12 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                                 <li className='font-semibold text-[white]  text-lg hover:text-[brown]  word-break'>{user.displayName}</li>
                             </Link> */}
                             {/* <li className='text-[white] text-sm  break-all'>{user.email}</li> */}
-                            <li>
+                            {/* <li>
 
                                 <Link to='/profile' className="  btn bg-[brown] border-none text-[white] btn-xs mx-auto">
                                     View Profile
                                 </Link>
-                            </li>
+                            </li> */}
                             <li >
                                 {
                                     localStorage.getItem('isAdmin') &&
@@ -106,7 +106,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
                         <div className='space-y-2 pt-4'>
 
-                            <li><a className='btn btn-outline btn-xs text-[white]'>Settings</a></li>
+                            {/* <li><a className='btn btn-outline btn-xs text-[white]'>Settings</a></li> */}
                             <li><button onClick={logoutHandler} className='btn btn-xs'>Logout</button></li>
 
                         </div>
@@ -120,24 +120,19 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
     const menuItems =
         <>
-            <div className=" flex w-[99%] mt-2 md:w-[76%] text-white relative md:hidden ">
+            <div className=" flex w-[99%] mt-2 md:w-[76%] text-white relative lg:hidden ">
 
                 <label tabIndex="0" htmlFor='bigTogglerpro' className="">
-                {!modifiedNav && <div className="indicator cursor-pointer rounded-full felx justify-center items-center">
-                        
-                            <p className="btn-ghost hover:rounded font-bold md:p-3 md:m-5 mr-1" >Categories</p>
+                    {!modifiedNav && <div className="indicator cursor-pointer rounded-full felx justify-center items-center">
 
-                     
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
-                        </svg>
-                    </div>   }
+                        <p className="btn-ghost hover:rounded font-bold  mr-1" >Categories</p>
+                    </div>}
                 </label>
                 <input type="checkbox" name="" id="bigTogglerpro" />
 
 
                 <ul className="space-y-2 p-4 font-bold rounded-lg notificationpro text-black absolute left-[80%] top-[100%] bg-black text-[white]  bg-opacity-60 ">
-                    <ul className='md:grid grid-cols-2 md:w-[20vw]'>
+                    <ul className='lg:grid grid-cols-2 md:w-[20vw]'>
                         {<CustomLink to={`/post-search`} className="border-b-2 ml-4 mt-4 cursor-pointer ">
                             All Movies</CustomLink>}
                         {
@@ -150,7 +145,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                 </ul>
             </div>
 
-            <div className="dropdown dropdown-hover hidden md:block relative">
+            <div className="dropdown dropdown-hover hidden lg:block relative">
                 {!modifiedNav &&
                     <label tabIndex="0" className="">
                         <CustomLink className="btn-ghost hover:rounded md:p-3 md:m-5" >Categories</CustomLink>
@@ -187,15 +182,12 @@ const Navbar = ({ filterHandler, searchHandler }) => {
         <div >
 
             <div className={`nav h-[70px]  fixed text-white bg-[#181818] ${background ? 'bg-opacity-80' : 'bg-opacity-20 bg-gradient-to-b from-black '} backdrop-filter-none backdrop-blur-sm shadow z-100`}>
-                <div className="lg:navbar lg:w-[100vw]  mx-auto md:flex justify-around items-center">
-                    <div className="lg:navbar-start hidden md:block">
+                <div className="lg:navbar lg:w-[100vw]  mx-auto lg:flex justify-around items-center">
+                    <div className="lg:navbar-start hidden lg:block">
                         <a onClick={() => setModifiedNav(false)} href='/' className=" normal-case text-xl ">
                             <img className='md:w-40 ml-20 mt-2' src="https://i.ibb.co/Mnc17bk/1-22-removebg-preview.png" alt="" />
                         </a>
                     </div>
-
-
-
 
                     <div className='lg:hidden flex justify-between items-center p-2'>
                         <div className="dropdown">
@@ -229,17 +221,19 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
                     <div className='space-x-3'>
                         {!modifiedNav &&
-                            <form className={`hidden md:block `} onSubmit={handleSubmit(onSubmit)}>
+                            <form className={`hidden lg:block `} onSubmit={handleSubmit(onSubmit)}>
                                 <div className="flex w-[125%]">
                                     <input
                                         type="text"
                                         onFocus={() => navigate('/post-search')}
                                         placeholder="Search movies"
-                                        className={`outline-0 px-4 py-2 mt-10 md:mt-0 md:ml-20 w-full max-w-xs rounded-full bg-opacity-80 text-white bg-[grey] `}
+                                        className={`outline-0 px-4 py-2 mt-10 md:mt-0 md:ml-20 w-full max-w-xs rounded-l-full bg-opacity-80 text-white bg-[grey] `}
                                         {...register("search")}
                                     />
-                                    <input className='hidden bg-opacity-80 text-slate-400 bg-[grey] py-2 px-2 cursor-pointer border-l rounded-r-full pr-4' type="submit" value="Search" />
-
+                                    <button className='bg-opacity-80 text-slate-400 bg-[grey] py-2 px-2 cursor-pointer rounded-r-full pr-4' type="submit"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 cursor-pointer">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                                    </svg>
+                                    </button>
                                 </div>
                             </form>
 
@@ -286,13 +280,13 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                                             </Link> */}
                                                 {/* <li className='text-[white] text-sm  break-all'>{user.email}</li> */}
 
-                                                <li>
+                                                {/* <li>
 
                                                     <Link onClick={() => setModifiedNav(false)} to='/profile' className="  btn bg-[brown] border-none text-[white] btn-xs mx-auto">
                                                         View Profile
                                                     </Link>
 
-                                                </li>
+                                                </li> */}
                                                 <li>
                                                     {localStorage.getItem('isAdmin') &&
                                                         <Link onClick={() => setModifiedNav(true)} to='/dashboard' className="btn bg-[green] border-none text-[white] btn-xs">Dashboard</Link>
@@ -305,7 +299,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
                                             <div className='space-y-2 pt-4'>
 
-                                                <li><a className='btn btn-outline btn-xs text-[white]'>Settings</a></li>
+                                                {/* <li><a className='btn btn-outline btn-xs text-[white]'>Settings</a></li> */}
                                                 <Link to='/'>
                                                     <li><button onClick={logoutHandler} className='btn btn-xs'>Logout</button></li>
                                                 </Link>
