@@ -135,26 +135,13 @@ const EditPost = () => {
 
         var tags = data?.tags?.split(',');
 
-        setUpdatedData(() => ({ ...data, genre: selectedGenre, tags: tags, _id: id }))
-
-        console.log(updatedData, 'upd');
-
         if (movie?.isActive != active) {
-
-            console.log(showActive.current, 'ac');
-            console.log(movie?.isActive, 'acttt');
-            console.log(active, 'actttvvvv');
-            return dispatch(updatePostText({ ...updatedData, _id: id, isActive: active }))
-
+            return dispatch(updatePostText({ ...data, genre: selectedGenre, tags: tags, _id: id , isActive: active }))
         }
-        dispatch(updatePostText(updatedData))
+        dispatch(updatePostText({ ...data, genre: selectedGenre, tags: tags, _id: id }))
 
         toast.success("Post Text Updated")
     }
-
-    // if (isLoading) {
-    //     <p>loading...</p>
-    // }
 
     return (
         <div className='bg-[#181818] text-slate-200 pt-[18.5%] md:pt-0' >
@@ -359,8 +346,6 @@ const EditPost = () => {
                             {
                                 selectedCate ?
                                 <select onChange={onChangeCategory} className="select select-bordered bg-slate-600">
-
-
                                 <option selected>{selectedCateName}</option>
                                 {
                                     category?.categories?.length > 0 &&
