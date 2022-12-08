@@ -114,7 +114,7 @@ const EditPost = () => {
         const selected = category?.categories?.find(cate=>cate?._id==selectedCate)
         setSelectedCateName((selectedCateName)=>selected?.categoryName)
         console.log(selectedCateName,'cateName');
-        dispatch(categoryAdd({ postId: id, categoryId: selectedCate }))
+        dispatch(categoryAdd({ postId: id, categoryId: e.target.value }))
         toast.success("Post category Updated")
     }
 
