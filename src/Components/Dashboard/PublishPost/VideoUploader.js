@@ -18,13 +18,14 @@ const VideoUploader =  (props) => {
 
     const handleFileChange =async(event) => {
         const file = event.target.files[0];
-        const formData = new FormData()
-        formData.append("video", file)
         const url = URL.createObjectURL(file);
-
         setSource(url);
 
+        const formData = new FormData()
+        formData.append("video", file)
+        
         const {data}= await uploadVideo(formData, {
+            withCredentials: true,
             headers: {
                 "Content-Type": "multipart/form-data",
             },
@@ -33,9 +34,7 @@ const VideoUploader =  (props) => {
                 setProgress(Math.round((100 * data.loaded) / data.total))
             },
         })
-
         props.handleVideoData(data)
-
     };
 
     // console.log(video,'vido');
@@ -58,7 +57,6 @@ const VideoUploader =  (props) => {
                     </div>
                     <label>{progress}% uploaded</label>
                 </div>
-
             }
 
             <div className="VideoInput relative">

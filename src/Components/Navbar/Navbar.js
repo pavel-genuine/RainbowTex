@@ -77,12 +77,12 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                     <ul tabIndex="0" id='profile' className="bg-black border border-slate-600 space-y-4 divide divide-y mt-2  w-[450%] card card-compact  dropdown-content pl-4 pr-1 pt-4 pb-4 shadow-xl  bg-opacity-60 rounded-box w-52">
 
                         <div className='space-y-2'>
-                            <Link to="/profile">
+                            {/* <Link to="/profile"> */}
                                 <li>
                                     <img className='w-14 border border-[brown]  rounded-full'
                                         src={"https://i.ibb.co/vj0Ctmj/user.png"} />
                                 </li>
-                            </Link>
+                            {/* </Link> */}
                             {/* <Link to="/profile">
                                 <li className='font-semibold text-[white]  text-lg hover:text-[brown]  word-break'>{user.displayName}</li>
                             </Link> */}
@@ -101,8 +101,6 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                                 }
                             </li>
                         </div>
-
-
 
                         <div className='space-y-2 pt-4'>
 
@@ -264,7 +262,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                                         </label>
                                         <ul tabIndex="0" id='profile' className=" bg-black border border-slate-600 space-y-4 divide divide-y mt-2  w-[350%] card card-compact  dropdown-content pl-4 pr-1 pt-4 pb-4 shadow-xl bg-opacity-60 rounded-box w-52">
                                             <div className='space-y-2 '>
-                                                <Link onClick={() => setModifiedNav(false)} to="/profile">
+                                                {/* <Link onClick={() => setModifiedNav(false)} to="/profile"> */}
                                                     <li>
 
                                                         {
@@ -274,7 +272,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                                                         }
 
                                                     </li>
-                                                </Link>
+                                                {/* </Link> */}
                                                 {/* <Link to="/profile">
                                                 <li className='font-semibold text-[white]  text-lg hover:text-[brown]  word-break'>{profile?.displayName ? profile?.displayName : user?.displayName}</li>
                                             </Link> */}

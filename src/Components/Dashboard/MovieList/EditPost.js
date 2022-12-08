@@ -33,13 +33,13 @@ const EditPost = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
 
     const [movie, setMovie] = useState('');
+    const [selectedGenre, setSelectedGenre] = useState(movie?.genre);
+    const [active, setActive] = useState(true);
     const [source, setSource] = useState('');
-    const [showActive, setShowActive] = useState(false);
     const [videoData, setVideoData] = useState('')
     const [progress, setProgress] = useState(0);
     const [selectedCate, setSelectedCate] = useState('')
     const [premium, setPremium] = useState(false)
-    const [active, setActive] = useState(false)
     const [coverPhoto, setCoverPhoto] = useState('');
     const [thumbnail, setThumbnail] = useState('')
     const [updatedData, setUpdatedData] = useState({})
@@ -47,28 +47,26 @@ const EditPost = () => {
         videocover: null,
         thumbnail: null
     });
+    const showActive = useRef(movie?.isActive)
+
 
     useEffect(() => {
         // dispatch(singlePostGet(id))
 
         // console.log('movvvv',movie);
 
-        const fetchSinglePost =async()=>{
-           const {data}= await getSinglePost(id);
-           setMovie(()=>data)
+        const fetchSinglePost = async () => {
+            const { data } = await getSinglePost(id);
+            setMovie(() => data)
 
         }
 
         fetchSinglePost()
-
-        console.log('mov',movie);
-        
-        if (movie?.isActive) {
-           setShowActive(()=>true) 
-        }
-
     }
-        , [])
+        , [movie])
+
+    // console.log('mov',movie);
+
 
     const handleFileChange = async (event) => {
         const file = event.target.files[0];
@@ -80,6 +78,7 @@ const EditPost = () => {
         formData.append('_id', movie?._id);
 
         await addVideo(formData, {
+            withCredentials: true,
             headers: {
                 "Content-Type": "multipart/form-data",
             },
@@ -92,83 +91,59 @@ const EditPost = () => {
     const onChangeCover = (data) => {
         setCoverPhoto(data)
         const image = data[0].file
-        setPostData((items) => ({ ...items, videocover: image }));
         const formData = new FormData();
         formData.append('_id', movie?._id);
-        formData.append('videocover', postData?.videocover);
-
+        formData.append('videocover', image);
         dispatch(videoCoverAdd(formData))
-
         toast.success("Video cover updated")
-
-
     }
 
     const onChangeThumbnail = (data) => {
         const image = data[0].file
+        console.log(image, 'img');
         setThumbnail(data)
-        setPostData((items) => ({ ...items, thumbnail: image }));
         const formData = new FormData();
         formData.append('_id', movie?._id);
-        formData.append('thumbnail', postData?.thumbnail);
-
-        // dispatch(thumbnailAdd(formData))
+        formData.append('thumbnail', image);
+        dispatch(thumbnailAdd(formData))
         toast.success("Thumbnail Updated")
-
-
     }
 
     const onChangeCategory = (e) => {
         setSelectedCate(() => e.target.value)
 
-        // dispatch(categoryAdd({ postId: id, categoryId: selectedCate }))
+        dispatch(categoryAdd({ postId: id, categoryId: selectedCate }))
         toast.success("Post category Updated")
-
-
-
     }
 
-    const onChangePremium = (e) => {
-        const { value, checked } = e.target;
-
-        if (checked) setPremium(() => true);
-        else setPremium(() => false)
-
-
-    }
     const onChangeActive = (e) => {
         const { value, checked } = e.target;
 
-       
-
         if (checked) {
-            setActive(() => true);
-            setShowActive(() =>true)
+            showActive.current = true
+            setActive(() => true)
         }
         else {
+            showActive.current = false
             setActive(() => false)
-            setShowActive(() => false)
-
         }
     }
 
+
     const onSubmit = async (data) => {
 
-        setUpdatedData(() => ({ ...data, _id: id }))
+        var tags = data?.tags?.split(',');
 
-        if (movie?.premium != premium && movie?.active == active) {
- 
-          return  dispatch(updatePostText({ ...data, _id: id, premium: premium, isActive: movie?.isActive }))
-        }
+        setUpdatedData(() => ({ ...data, genre: selectedGenre, tags: tags, _id: id }))
 
-        if (movie?.active != active && movie?.premium == premium ) {
+        console.log(updatedData, 'upd');
 
-            return  dispatch(updatePostText({ ...data, _id: id, isActive: active ,premium: movie?.premium}))
+        if (movie?.isActive != active) {
 
-        }
-        if (movie?.active != active && movie?.premium != premium ) {
-     
-            return dispatch(updatePostText({ ...data, _id: id, isActive: active ,premium:premium}))
+            console.log(showActive.current, 'ac');
+            console.log(movie?.isActive, 'acttt');
+            console.log(active, 'actttvvvv');
+            return dispatch(updatePostText({ ...updatedData, _id: id, isActive: active }))
 
         }
         dispatch(updatePostText(updatedData))
@@ -368,7 +343,7 @@ const EditPost = () => {
                                                 <div style={{ zIndex: '2' }} className='absolute md:top-[-30%] top-[0] z-2'>
 
                                                     <video className=' rounded cursor-pointer md:w-[30vw] w-[90vw] h-[270px] md:h-[270px] ' controls controlsList="nodownload">
-                                                        <source src={'https://media.w3.org/2010/05/sintel/trailer_hd.mp4'} />
+                                                        <source src={movie?.videos?.length && movie?.videos[0]?.url} />
                                                     </video>
                                                 </div>
                                             }
@@ -402,8 +377,8 @@ const EditPost = () => {
                                 </button>
                             </div>
                             <div>
-                                <div className='md:grid grid-cols-3'>
-                                    <div className='grow-wrap md:mr-10 col-span-2'>
+                                <div>
+                                    <div>
                                         <div>
                                             <textarea
                                                 style={{ fontWeight: 'bolder', fontSize: '20px' }}
@@ -425,70 +400,94 @@ const EditPost = () => {
                                         </div>
                                     </div>
 
-                                    <div className='md:flex md:space-x-5'>
-                                        <div className="form-control mt-10 ">
+                                </div>
 
-                                            {movie?.premium ?
-                                                <label className="label cursor-pointer btn px-2">
-                                                    <span className=" text-md">Premium</span>
-                                                    <input onChange={onChangePremium} type="checkbox"
-                                                        checked
-                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
-                                                    />
-                                                </label>
-                                                :
-                                                <label className="label cursor-pointer btn px-2">
-                                                    <span className=" text-md">Premium</span>
-                                                    <input onChange={onChangePremium} type="checkbox"
+                                <div className='md:flex'>
 
-                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
-                                                    />
-                                                </label>
+                                    <div className='grow-wrap  md:mr-5'>
+                                        <div className="form-control w-full max-w-xs text-white  ">
+                                            <label class="label">
+                                                <span class="label-text text-white">Pick the genre</span>
+                                            </label>
+                                            {
+                                                movie?.genre == 'movie' ?
+                                                    <select onChange={(e) => { setSelectedGenre(e.target.value) }} className="select select-bordered bg-slate-600">
+                                                        <option disabled>Select Genre</option>
+                                                        <option>movie</option>
+                                                        <option>anime</option>
+                                                    </select>
+                                                    :
+                                                    <select onChange={(e) => { setSelectedGenre(e.target.value) }} className="select select-bordered bg-slate-600">
+                                                        <option disabled>Select Genre</option>
+                                                        <option>anime</option>
+                                                        <option>movie</option>
+                                                    </select>
                                             }
                                         </div>
-                                        <div className="form-control mt-10 ">
-                                            {showActive ?
-                                                <label className="label cursor-pointer btn px-2">
-                                                    <span className=" text-md">Active</span>
-                                                    <input onChange={onChangeActive} type="checkbox"
-                                                        checked
-                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
-                                                    />
-                                                </label>
-                                                :
-                                                <label className="label cursor-pointer btn px-2">
-                                                    <span className=" text-md">Active</span>
-                                                    <input onChange={onChangeActive} type="checkbox"
 
-                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
-                                                    />
-                                                </label>
-                                            }
-                                        </div>
+                                    </div>
+
+                                    
+                                    <div className='md:flex md:space-x-5 md:mt-[4%] '>
+                                        {
+                                            active ?
+                                                <div>
+                                                    {movie?.isActive &&
+                                                        <div className="form-control mt-10 ">
+                                                            <label className="label cursor-pointer btn px-2">
+                                                                <span className=" text-md">Active</span>
+                                                                <input onChange={onChangeActive} type="checkbox"
+                                                                    checked
+                                                                    className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                                                />
+                                                            </label>
+                                                        </div>
+                                                    }
+                                                </div>
+                                                :
+
+                                                <div>
+                                                    {
+                                                        <div className="form-control mt-10 ">
+                                                            {showActive.current ?
+                                                                <label className="label cursor-pointer btn px-2">
+                                                                    <span className=" text-md">Active</span>
+                                                                    <input onChange={onChangeActive} type="checkbox"
+                                                                        checked
+                                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                                                    />
+                                                                </label>
+                                                                :
+                                                                <label className="label cursor-pointer btn px-2">
+                                                                    <span className=" text-md">Active</span>
+                                                                    <input onChange={onChangeActive} type="checkbox"
+                                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                                                    />
+                                                                </label>
+                                                            }
+                                                        </div>
+                                                    }
+                                                </div>
+
+                                        }
                                     </div>
 
                                 </div>
 
                                 <div className='md:flex mt-10'>
-                                    <div className='grow-wrap'>
-                                        <textarea
-                                            style={{ fontWeight: 'bold', fontSize: '15px' }}
-                                            placeholder='Genre'
-                                            className='shadow-sm bg-[#181818]  border-b-2 md:text-lg font-blod focus:outline-none px-2 block w-full sm:text-md p-2'
-                                            name="" id="" cols="40" rows="1"
-                                            {...register("genre")}>
-                                        </textarea>
-                                    </div>
-                                    <div className='grow-wrap md:mx-10 mt-10 md:mt-0 '>
+
+                                    <div className='grow-wrap md:mr-10 mt-10 md:mt-0 md:mb-20 '>
                                         <textarea
                                             style={{ fontWeight: 'bold', fontSize: '15px' }}
                                             placeholder='Tags'
+                                            defaultValue={movie?.tags}
                                             className='shadow-sm bg-[#181818] p-2  border-b-2 md:text-lg font-blod focus:outline-none  px-2 block w-full sm:text-md p-2'
-                                            name="" id="" cols="40" rows="1"
-                                            {...register("tags")}>
+                                            name="" id="" cols="30" rows="1"
+                                            {...register("tags")}
+                                        >
                                         </textarea>
                                     </div>
-                                    <div className='grow-wrap mt-10 md:mt-0'>
+                                    <div className='grow-wrap mt-10 md:mt-0 md:mb-20 '>
                                         <textarea
                                             style={{ fontWeight: 'bold', fontSize: '15px' }}
                                             placeholder='IMDb Rating'

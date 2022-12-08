@@ -48,7 +48,7 @@ const MovieList = () => {
 
 
         const fetchPost = async () => {
-            const { data } = await axios.get(`${base_url}/post?search=${searchText}`)
+            const { data } = await axios.get(`${base_url}/post?page=${page}&search=${searchText}&limit=${20}`)
             setPosts(data)
 
             // console.log('data',data);

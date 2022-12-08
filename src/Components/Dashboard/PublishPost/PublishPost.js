@@ -47,8 +47,8 @@ const PublishPost = () => {
 
         if (checked) setActive(() => true);
         else setActive(() => false)
-
     }
+
     const onChangeCover = (data) => {
         setCoverPhoto(data)
         const image = data[0].file
@@ -70,8 +70,6 @@ const PublishPost = () => {
         formData.append('category', selectedCate);
 
         var tags =data?.tags.split(',');
-
-        console.log('tags',tags);
 
         for (var i = 0; i < tags.length; i++) {
             formData.append('tags[]', tags[i]);
@@ -243,7 +241,7 @@ const PublishPost = () => {
 
                             <div>
                                 <div className='md:grid grid-cols-3'>
-                                    <div className='grow-wrap mr-10 col-span-2'>
+                                    <div className='grow-wrap'>
                                         <textarea
                                             style={{ fontWeight: 'bolder', fontSize: '20px' }}
                                             placeholder='Movie Title'
@@ -262,7 +260,31 @@ const PublishPost = () => {
                                         </label>
                                     </div>
 
-                                    <div className="form-control w-full max-w-xs text-white md:mt-16 ">
+                                    <div className='grow-wrap  md:mx-10 '>
+                                        <textarea
+                                            style={{ fontWeight: 'bold', fontSize: '15px' }}
+                                            placeholder='IMDb Rating'
+                                            className='shadow-sm bg-[#181818] mb-4 border-b-2 text-2xl font-blod focus:outline-none mt-20   block w-full sm:text-md'
+                                            name="" id="" cols="30" rows="1"
+                                            {...register("imdbRating")}>
+                                        </textarea>
+                                    </div>
+
+                                    <div className='grow-wrap'>
+                                        <textarea
+                                            style={{ fontWeight: 'bold', fontSize: '15px' }}
+                                            placeholder='Tags'
+                                            className='shadow-sm bg-[#181818] mb-4 border-b-2 text-2xl font-blod focus:outline-none mt-20   block w-full sm:text-md'
+                                            name="" id="" cols="30" rows="1"
+                                            {...register("tags")}>
+                                        </textarea>
+                                    </div>
+                              
+                                </div>
+
+                                <div className='md:grid grid-cols-3 md:my-20'>
+                                    
+                                <div className="form-control w-full max-w-xs text-white  ">
                                         <select onChange={(e) => { setSelectedCate(e.target.value) }} className="select select-bordered bg-slate-600">
                                             <option disabled selected>Select Category</option>
                                             {
@@ -273,38 +295,15 @@ const PublishPost = () => {
                                             }
                                         </select>
                                     </div>
-
-                                </div>
-
-                                <div className='flex mt-10'>
-                                    <div className="form-control w-full max-w-xs text-white md:mt-16 ">
+                                    <div className="form-control w-full max-w-xs text-white ">
                                         <select onChange={(e) => { setSelectedGenre(e.target.value) }} className="select select-bordered bg-slate-600">
                                             <option disabled selected>Select Genre</option>
                                             <option>movie</option>
                                             <option>anime</option>
                                         </select>
                                     </div>
-                                    <div className='grow-wrap md:mx-10 mt-10 md:mt-0 '>
-                                        <textarea
-                                            style={{ fontWeight: 'bold', fontSize: '15px' }}
-                                            placeholder='Tags'
-                                            className='shadow-sm bg-[#181818] p-2  border-b-2 md:text-lg font-blod focus:outline-none  px-2 block w-full sm:text-md p-2'
-                                            name="" id="" cols="40" rows="1"
-                                            {...register("tags")}>
-                                        </textarea>
-                                    </div>
-
-                                </div>
-                                <div className='md:flex mt-10 md:space-x-5 space-y-5 md:space-y-0'>
-                                    <div className='grow-wrap'>
-                                        <textarea
-                                            style={{ fontWeight: 'bold', fontSize: '15px' }}
-                                            placeholder='IMDb Rating'
-                                            className='shadow-sm bg-[#181818]  border-b-2 md:text-lg font-blod focus:outline-none  px-2 block w-full sm:text-md p-2'
-                                            name="" id="" cols="30" rows="1"
-                                            {...register("imdbRating")}>
-                                        </textarea>
-                                    </div>
+                                
+     
                                     <div className="form-control ">
                                         {
                                             active ?
@@ -314,7 +313,7 @@ const PublishPost = () => {
                                                         onChange={onChangeActive}
                                                         type="checkbox"
                                                         checked
-                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                                        className="checkbox bg-slate-200 checkbox-error"
                                                     />
                                                 </label>
                                                 :
@@ -323,13 +322,13 @@ const PublishPost = () => {
                                                     <input
                                                         onChange={onChangeActive}
                                                         type="checkbox"
-                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                                        className="checkbox bg-slate-200 checkbox-error"
                                                     />
                                                 </label>
                                         }
                                     </div>
                                 </div>
-
+                                
                                 <div className='grow-wrap'>
                                     <textarea
                                         style={{ fontWeight: 'bold', fontSize: '15px' }}
@@ -337,8 +336,6 @@ const PublishPost = () => {
                                         id="description" name="description" rows="4"
                                         className="bg-[#181818] shadow-sm border-b-2 focus:outline-none mt-20 pt-12 text-lg mt-1 block w-full  px-2 "
                                         {...register("description")}>
-
-
                                     </textarea>
                                 </div>
                             </div>

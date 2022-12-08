@@ -4,8 +4,8 @@ import { updateNonMediaContent } from "../../../api/api";
 
 
 export const updatePostText =createAsyncThunk("/signIn/fetchUsers",
-async(user)=>{
-    const res =  await updateNonMediaContent(user)  
+async(data)=>{
+    const res =  await updateNonMediaContent(data)  
     console.log('updatePostText thunk',res?.data);
     return  res?.data
 })
