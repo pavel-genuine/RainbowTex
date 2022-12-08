@@ -6,6 +6,7 @@ const SingleMovieCard = ({ movie }) => {
     // console.log(movie,'mov');
 
     return (
+        movie?.isActive && 
         <Link to={`/movie-detail/${movie?._id}`}>
         <div className="border-b border-slate-800 pb-5 w-[90%] md:w-[100%] md:pl-0 pl-5">
             <article className="flex  my-3 flex-col md:flex-row md:items-start md:space-x-6">

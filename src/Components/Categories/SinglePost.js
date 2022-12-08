@@ -12,6 +12,7 @@ const SinglePost = ({movie}) => {
 
     return (
       
+        movie?.isActive &&
         <div  className='promo relative cursor-pointer'>
             <img className="promo  w-[95%] mx-auto  border-white hover:opacity-70" src={movie?.thumbnail? movie?.thumbnail?.cdnUrl :'https://i.ibb.co/R6Y4CQ3/1-white-1.png' } alt="" />
 
