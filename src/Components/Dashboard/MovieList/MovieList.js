@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-responsive-modal";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,6 +15,9 @@ import Filter from "./Filter";
 const MovieList = () => {
 
     const [filteredMovies, setfilteredMovies] = useState();
+    const [active, setActive] = useState(true);
+    const showActive = useRef(true)
+
     const [movies, setMovies] = useState([])
     const [searchText, setSearchText] = useState('')
     const [postsNumber, setPostsNumber] = useState(0)
@@ -89,6 +92,20 @@ const MovieList = () => {
 
     }, [posts, filteredMovies, searchText, page])
 
+    const onChangeActive = (e) => {
+        const { value, checked } = e.target;
+
+        if (checked) {
+            showActive.current = true
+            setActive(() => true)
+        }
+        else {
+            showActive.current = false
+            setActive(() => false)
+        }
+    }
+
+
     const handleDeleteOne = (id) => {
         const confirmation = window.confirm('Are you sure to delete?');
         if (confirmation) {
@@ -138,14 +155,47 @@ const MovieList = () => {
                                                     <td class="border border-[#181818]  px-5 py-2">{movie?.categoryName}</td>
                                                     <td class="border border-[#181818]  px-5 py-2">
 
-                                                        {
-                                                            movie?.isActive ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                                            </svg>
-                                                                : <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                                                </svg>
-                                                        }
+                                                    <div className='md:flex md:space-x-5 md:mt-[4%] '>
+                                        {
+                                            active ?
+                                                <div>
+                                                    {movie?.isActive &&
+                                                        <div className="form-control mt-10 ">
+                                                            <label className="label cursor-pointer btn px-2">
+                                                                <input onChange={onChangeActive} type="checkbox"
+                                                                    checked
+                                                                    className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                                                />
+                                                            </label>
+                                                        </div>
+                                                    }
+                                                </div>
+                                                :
+
+                                                <div>
+                                                    {
+                                                        <div className="form-control mt-10 ">
+                                                            {showActive.current ?
+                                                                <label className="label cursor-pointer btn px-2">
+                                                                    <input onChange={onChangeActive} type="checkbox"
+                                                                        checked
+                                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                                                    />
+                                                                </label>
+                                                                :
+                                                                <label className="label cursor-pointer btn px-2">
+                                                                    <input onChange={onChangeActive} type="checkbox"
+                                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                                                    />
+                                                                </label>
+                                                            }
+                                                        </div>
+                                                    }
+                                                </div>
+
+                                        }
+                                    </div>
+
 
                                                     </td>
                                                     <td class="border border-[#181818]  px-5 py-2">
