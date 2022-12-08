@@ -17,7 +17,7 @@ const Comment = ({ item, postId }) => {
 
     const onSubmit = (data) => {
 
-        console.log(data);
+        
 
         const comment = {
             postId: postId,
@@ -26,8 +26,9 @@ const Comment = ({ item, postId }) => {
             userId: localStorage.getItem('userId')
         }
 
-        console.log('commt', comment);
-        dispatchEvent(commentEdit(comment))
+        console.log(comment,'cmt');
+
+        dispatch(commentEdit(comment))
 
         // const updatedComments = movie?.comments?.filter(item => item?._id != commentId);
 
@@ -50,8 +51,6 @@ const Comment = ({ item, postId }) => {
     }
 
     const handleRemoveComment = (id) => {
-
-
 
         const data = {
             postId: postId,
@@ -84,14 +83,6 @@ const Comment = ({ item, postId }) => {
 
 
         toast.success('Comment deleted')
-
-
-
-
-
-
-        // console.log(remainingCommennts, 'rrr');
-        // console.log(movie?.comments?.length, 'lll');
 
     }
 
