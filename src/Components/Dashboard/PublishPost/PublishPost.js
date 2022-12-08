@@ -284,8 +284,8 @@ const PublishPost = () => {
 
                                 <div className='md:grid grid-cols-3 md:my-20'>
                                     
-                                <div className="form-control w-full max-w-xs text-white  ">
-                                        <select onChange={(e) => { setSelectedCate(e.target.value) }} className="select select-bordered bg-slate-600">
+                                <div className="form-control w-full max-w-xs text-white ">
+                                        <select onChange={(e) => { setSelectedCate(e.target.value) }} className="select select-bordered bg-slate-600 my-10 md:my-0">
                                             <option disabled selected>Select Category</option>
                                             {
                                                 category?.categories?.length > 0 &&
@@ -304,7 +304,7 @@ const PublishPost = () => {
                                     </div>
                                 
      
-                                    <div className="form-control ">
+                                    <div className="form-control my-10 md:my-0 ">
                                         {
                                             active ?
                                                 <label className="label cursor-pointer btn px-2">
