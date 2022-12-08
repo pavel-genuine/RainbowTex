@@ -70,7 +70,7 @@ const MovieDetails = () => {
 
 
     }, [])
-// console.log(movie,'mov');
+    // console.log(movie,'mov');
 
     const onSubmit = async (data) => {
 
@@ -120,7 +120,7 @@ const MovieDetails = () => {
 
         toast.success('Comment edited')
 
-         setTimeout(() => {
+        setTimeout(() => {
             window.location.reload()
         }, 200);
 
@@ -135,9 +135,9 @@ const MovieDetails = () => {
             postId: movie?._id,
             commentId: id
         }
-                console.log(data, 'rrr');
-                console.log(id, 'id');
-//
+        console.log(data, 'rrr');
+        console.log(id, 'id');
+        //
 
         // if (remainingCommennts.length == 1) {
         //     dispatch(commentRemove(data))
@@ -153,10 +153,10 @@ const MovieDetails = () => {
             // window.location.reload()
         }, 200);
 
-   
+
         toast.success('Comment deleted')
 
-        
+
 
 
 
@@ -178,28 +178,16 @@ const MovieDetails = () => {
                 <img className='md:h-[100vh] h-[40vh] w-[100vw] brightness-125 contrast-125' src={movie?.videoCover?.cdnUrl ? movie?.videoCover?.cdnUrl : 'https://i.ibb.co/R6Y4CQ3/1-white-1.png'} alt="" />
                 <div className='absolute w-[98vw] md:pt-[13%] pt-[30%] md:pt-60 p-5 md:pl-28 md:top-[0%] top-[0%] md:h-[100vh] h-[40vh] text-white bg-gradient-to-t from-[#181818]'>
                     <h1 className='md:text-6xl text-2xl font-semibold'>{movie?.title}</h1>
-                    <p  className='md:text-lg md:w-[40%] md:my-5 my-2'>{movie?.description?.slice(0,100)}...</p>
+                    <p className='md:text-lg md:w-[40%] md:my-5 my-2'>{movie?.description?.slice(0, 100)}...</p>
 
                     <div className='flex space-x-10'>
                         <Link to={'/payment'}><button className='md:py-3 px-16 py-1 font-semibold md:text-lg rounded max-w-xs text-white bg-[#e50914] hover:bg-[brown] cursor-pointer mt-4 mb-2'>Join Now</button></Link>
                     </div>
 
-
-                    
-                    <div className='md:flex items-center'>
-
-                        <div className='mb-3 mt-5'>
-                            <p className='text-[#e50914] text-2xl font-semibold'>Release Date  </p>
-
-                            {/* <p className='text-2xl font-semibold'>{movie?.release}</p> */}
-                        </div>
-
-                        <div className='mt-3 md:ml-20'>
-                            <p className='text-[#e50914] text-2xl font-semibold'>IMDb Rating</p>
-                            <p className='text-2xl font-semibold'>{movie?.imdbRating}</p>
-                        </div>
+                    <div>
+                        <p className='text-[#e50914] text-2xl font-semibold'>IMDb Rating</p>
+                        <p className='text-2xl font-semibold'>{movie?.imdbRating}</p>
                     </div>
-
                 </div>
             </div>
 
@@ -282,7 +270,7 @@ const MovieDetails = () => {
                                 <p className='text-[#e50914] text-2xl font-semibold my-2'>Tags  </p>
 
                                 {
-                                    movie?.tags?.map((tag,i)=><span className='bg-slate-600 p-1 border rounded m-1' key={i}>{tag}</span>)
+                                    movie?.tags?.map((tag, i) => <span className='bg-slate-600 p-1 border rounded m-1' key={i}>{tag}</span>)
                                 }
                             </div>
 
@@ -357,15 +345,15 @@ const MovieDetails = () => {
                         }
 
                         {
-                            movie?.comments?.length > 0 && 
+                            movie?.comments?.length > 0 &&
 
                             <div className='m-2 border-b'>
-                                <div className='my-3'>{movie?.comments?.map(item =>{
+                                <div className='my-3'>{movie?.comments?.map(item => {
                                     // console.log('cid',item?._id);
                                     return <Comment key={item?._id} item={item} postId={movie?._id}></Comment>
-                                 
+
                                 }
-                                    
+
                                 )}
                                 </div>
                             </div>
