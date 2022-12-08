@@ -112,7 +112,7 @@ const EditPost = () => {
         setSelectedCate(() => e.target.value)
         console.log(selectedCate,'id');
         const selected = category?.categories?.find(cate=>cate?._id==selectedCate)
-        setSelectedCateName(()=>selected?.categoryName)
+        setSelectedCateName((selectedCateName)=>selected?.categoryName)
         console.log(selectedCateName,'cateName');
         dispatch(categoryAdd({ postId: id, categoryId: selectedCate }))
         toast.success("Post category Updated")
@@ -133,15 +133,24 @@ const EditPost = () => {
 
     const onSubmit = async (data) => {
 
-        var tags = data?.tags?.split(',');
+        const tags = data?.tags?.split(',');
+
+        setUpdatedData((data) => ({ ...data, genre: selectedGenre, tags: tags, _id: id }))
+
+        console.log(updatedData, 'upd');
 
         if (movie?.isActive != active) {
-            return dispatch(updatePostText({ ...data, genre: selectedGenre, tags: tags, _id: id , isActive: active }))
+            return dispatch(updatePostText({  ...data, genre: selectedGenre, tags: tags, _id: id , isActive: active }))
+
         }
         dispatch(updatePostText({ ...data, genre: selectedGenre, tags: tags, _id: id }))
 
         toast.success("Post Text Updated")
     }
+
+    // if (isLoading) {
+    //     <p>loading...</p>
+    // }
 
     return (
         <div className='bg-[#181818] text-slate-200 pt-[18.5%] md:pt-0' >
@@ -413,13 +422,11 @@ const EditPost = () => {
                                             {
                                                 movie?.genre == 'movie' ?
                                                     <select onChange={(e) => { setSelectedGenre(e.target.value) }} className="select select-bordered bg-slate-600">
-                                                        <option disabled>Select Genre</option>
                                                         <option>movie</option>
                                                         <option>anime</option>
                                                     </select>
                                                     :
                                                     <select onChange={(e) => { setSelectedGenre(e.target.value) }} className="select select-bordered bg-slate-600">
-                                                        <option disabled>Select Genre</option>
                                                         <option>anime</option>
                                                         <option>movie</option>
                                                     </select>
