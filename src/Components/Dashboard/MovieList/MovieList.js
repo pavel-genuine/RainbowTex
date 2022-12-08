@@ -161,10 +161,10 @@ const MovieList = () => {
                                                 <div>
                                                     {movie?.isActive &&
                                                         <div className="form-control mt-10 ">
-                                                            <label className="label cursor-pointer btn px-2">
+                                                            <label className="label cursor-pointer">
                                                                 <input onChange={onChangeActive} type="checkbox"
                                                                     checked
-                                                                    className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                                                    className="checkbox bg-slate-200 checkbox-error "
                                                                 />
                                                             </label>
                                                         </div>
@@ -176,16 +176,16 @@ const MovieList = () => {
                                                     {
                                                         <div className="form-control mt-10 ">
                                                             {showActive.current ?
-                                                                <label className="label cursor-pointer btn px-2">
+                                                                <label className="label cursor-pointer">
                                                                     <input onChange={onChangeActive} type="checkbox"
                                                                         checked
-                                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                                                        className="checkbox bg-slate-200 checkbox-error "
                                                                     />
                                                                 </label>
                                                                 :
-                                                                <label className="label cursor-pointer btn px-2">
+                                                                <label className="label cursor-pointer">
                                                                     <input onChange={onChangeActive} type="checkbox"
-                                                                        className="checkbox bg-slate-200 checkbox-error ml-5 "
+                                                                        className="checkbox bg-slate-200 checkbox-error "
                                                                     />
                                                                 </label>
                                                             }
