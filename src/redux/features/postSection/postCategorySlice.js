@@ -5,7 +5,7 @@ import { addPostToCategory, removeCategoryFromPost,} from "../../../api/api";
 export const categoryAdd =createAsyncThunk("/category/categoryAdd",
 async(data)=>{
     const res = await addPostToCategory(data);
-    // console.log('categoryAdd thunk',res?.data);
+    console.log('categoryAdd thunk',res?.data);
     return res?.data;
 })
 //

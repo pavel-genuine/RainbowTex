@@ -36,10 +36,9 @@ const EditPost = () => {
     const [selectedGenre, setSelectedGenre] = useState(movie?.genre);
     const [active, setActive] = useState(true);
     const [source, setSource] = useState('');
-    const [videoData, setVideoData] = useState('')
     const [progress, setProgress] = useState(0);
     const [selectedCate, setSelectedCate] = useState('')
-    const [premium, setPremium] = useState(false)
+    const [selectedCateName, setSelectedCateName] = useState('')
     const [coverPhoto, setCoverPhoto] = useState('');
     const [thumbnail, setThumbnail] = useState('')
     const [updatedData, setUpdatedData] = useState({})
@@ -111,7 +110,10 @@ const EditPost = () => {
 
     const onChangeCategory = (e) => {
         setSelectedCate(() => e.target.value)
-
+        console.log(selectedCate,'id');
+        const selected = category?.categories?.find(cate=>cate?._id==selectedCate)
+        setSelectedCateName(()=>selected?.categoryName)
+        console.log(selectedCateName,'cateName');
         dispatch(categoryAdd({ postId: id, categoryId: selectedCate }))
         toast.success("Post category Updated")
     }
@@ -128,7 +130,6 @@ const EditPost = () => {
             setActive(() => false)
         }
     }
-
 
     const onSubmit = async (data) => {
 
@@ -355,6 +356,20 @@ const EditPost = () => {
                         </div>
                         <div className="form-control w-full max-w-xs text-white mt-10 ">
                             <p className='m-2'>Update Category</p>
+                            {
+                                selectedCate ?
+                                <select onChange={onChangeCategory} className="select select-bordered bg-slate-600">
+
+
+                                <option selected>{selectedCateName}</option>
+                                {
+                                    category?.categories?.length > 0 &&
+                                    category?.categories?.map(item => {
+                                        return <option value={item?._id}>{item?.categoryName}</option>
+                                    })
+                                }
+                            </select>
+                            :
                             <select onChange={onChangeCategory} className="select select-bordered bg-slate-600">
 
 
@@ -366,6 +381,7 @@ const EditPost = () => {
                                     })
                                 }
                             </select>
+                            }
                         </div>
 
                         <form onSubmit={handleSubmit(onSubmit)}>
@@ -427,7 +443,7 @@ const EditPost = () => {
 
                                     </div>
 
-                                    
+
                                     <div className='md:flex md:space-x-5 md:mt-[4%] '>
                                         {
                                             active ?
