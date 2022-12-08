@@ -81,10 +81,10 @@ const Filter = ({ filterHandler, searchHandler }) => {
                         <input
                             type="text"
                             placeholder="Search movies"
-                            className={`outline-0 px-4 py-2 mt-10 md:mt-0 md:ml-20 w-full max-w-xs rounded-l-full bg-opacity-80 text-white bg-[grey] `}
+                            className={`outline-0 px-4 py-2 mt-10 md:mt-0 md:ml-20 w-full max-w-xs md:rounded-l-full rounded-full bg-opacity-80 text-white bg-[grey] `}
                             {...register("search")}
                         />
-                        <button className='bg-opacity-80 text-slate-400 bg-[grey] py-2 px-2 cursor-pointer  rounded-r-full pr-4' type="submit"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                        <button className=' md:block hidden bg-opacity-80 text-slate-400 bg-[grey] py-2 px-2 cursor-pointer  rounded-r-full pr-4' type="submit"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                         </svg>
                         </button>
