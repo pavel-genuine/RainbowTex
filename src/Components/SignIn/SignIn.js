@@ -153,27 +153,7 @@ const SignIn = () => {
                         <label for="my-modal-4" onClick={async () => {
                             const x = window.open(
                                 `${base_url}/auth/google`,
-                                "ModalPopUp",
-
-                                "toolbar=no," +
-
-                                "scrollbars=no," +
-
-                                "location=no," +
-
-                                "statusbar=no," +
-
-                                "menubar=no," +
-
-                                "resizable=0," +
-
-                                "width=500," +
-
-                                "height=600," +
-
-                                "left = 490," +
-
-                                "top=100"
+                               '_blank'
                             );
                             setStay(true);
                             x.focus();
