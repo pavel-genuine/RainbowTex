@@ -6,14 +6,16 @@ import { settings } from './slickSetting'
 
 const HomeCategories = ({ filteredCategory, searchText }) => {
 
-  
+
     const { category } = useHomeCategories()
- 
+
 
     return (
-        <div>
+        <div >
+          
             {filteredCategory?._id ?
                 <div>
+
                     {
                         filteredCategory?.posts?.length ? <div>
                             <h1 className='text-white font-semibold text-lg md:text-xl mt-5 mx-2 md:mt-10 mb-4'>{filteredCategory?.categoryName} </h1>

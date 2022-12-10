@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +21,6 @@ const MovieList = () => {
     const [postsNumber, setPostsNumber] = useState(0)
     const [pageCount, setPageCount] = useState(1)
     const [page, setPage] = useState(1)
-    const [posts, setPosts] = useState(1)
 
     const filterHandler = (data) => {
 
@@ -55,21 +55,16 @@ const MovieList = () => {
         }
     }
 
+    const fetcher = async () => {
+        const { data } = await axios.get(`${base_url}/post?page=${page}&search=${searchText}&category=${filteredMovies?._id}&limit=${20}`)
+        return data
+    }
+
+    let { data, isLoading } = useQuery(["profile", page, searchText,filteredMovies], () => fetcher())
+
+    // console.log(data,'data');
 
     useEffect(() => {
-
-
-        const fetchPost = async () => {
-            const { data } = await axios.get(`${base_url}/post?page=${page}&search=${searchText}&limit=${20}`)
-            setPosts(data)
-
-            // console.log('data',data);
-
-            // console.log( 'text',searchText)
-
-        }
-
-        fetchPost()
 
         const fetchPostsNumber = async () => {
             const { data } = await getTotalPostsNumber()
@@ -85,21 +80,8 @@ const MovieList = () => {
 
         setPageCount(() => Math.ceil(postsNumber / 20))
 
-        setMovies(() => posts)
 
-        // console.log('posts',posts);
-        // console.log('movies',movies);
-
-
-        if (filteredMovies == 1) {
-            setMovies(posts)
-        }
-        else if (filteredMovies?._id) {
-            setMovies(() => filteredMovies?.posts)
-        }
-
-
-    }, [posts, filteredMovies, searchText, page])
+    }, [])
 
     const onChangeActive = (e) => {
         const { value, checked } = e.target;
@@ -129,7 +111,7 @@ const MovieList = () => {
                                 <p className='font-semibold my-2 text-xl underline underline-offset-2 '> Movies List</p>
                                 <Filter filterHandler={filterHandler} searchHandler={searchHandler}></Filter>
 
-                                <p className='font-semibold my-5 bg-slate-600 px-3 py-2 md:mr-20 text-lg md:w-96 '>Total Movies Uploaded : {movies?.length} </p>
+                                <p className='font-semibold my-5 bg-slate-600 px-3 py-2 md:mr-20 text-lg md:w-96 '>Total Movies Uploaded : {data?.length} </p>
 
                             </div>
                             <div style={{ overflowX: 'auto' }}>
@@ -147,9 +129,9 @@ const MovieList = () => {
                                         </tr>
                                     </thead>
                                     <tbody className='bg-[#26282b]'>
-                                        {movies?.length > 0 &&
+                                        {data?.length > 0 &&
 
-                                            movies?.map(movie => {
+                                            data?.map(movie => {
                                                 return <tr key={movie?._id}>
                                                     <td class="border border-[#181818] pl-4 py-2">{movie?.title}</td>
                                                     <td class="border border-[#181818] pl-10 ">
@@ -233,44 +215,15 @@ const MovieList = () => {
                         </div>
                     </div>
 
-                    <div className="flex justify-center py-10 mx-auto ">
-                    {pageCount < 11 ?
+                    <div className="flex justify-center my-10 mx-auto">
                         <div> <button onClick={() => setPage(page - 1)} className="btn btn-sm mx-2">prev</button>
                             {[...Array(pageCount).keys()].map(number =>
                                 <button onClick={() => setPage(number + 1)} className={`btn btn-sm mx-2 text-center border ${page == number + 1 ? 'bg-[brown]' : ''}`}>{number + 1}</button>
                             )}
                             <button onClick={() => setPage(page + 1)} className="btn btn-sm mx-2">next</button>
                         </div>
-                        :
 
-                        <div>
-                            <button onClick={() => setPage(page - 1)} className="btn btn-sm mx-2">prev</button>
-                            {[...Array(5).keys()].map(number =>
-                                <button onClick={() => setPage(number + 1)} className={`btn btn-sm mx-2 text-center border ${page == number + 1 ? 'bg-[brown]' : ''}`}>{number + 1}</button>
-                            )}
-                            {[...Array(pageCount).slice(6, pageCount - 6).keys()].map(number =>
-                                <button onClick={() => setPage(number + 1)} className={`btn btn-sm hidden mx-2 text-center border ${page == number + 1 ? 'bg-[brown]' : ''}`}></button>
-                            )}
-                            {
-                                page > 6 && page < pageCount - 5 ?
-                                    <span> <button className="btn btn-sm mx-2 text-center border bg-[brown]">.</button>
-                                        <button className="btn btn-sm mx-2 text-center border bg-[brown]">.</button>
-                                        <button className="btn btn-sm mx-2 text-center border bg-[brown]">.</button>
-                                    </span>
-                                    :
-                                    <span> <button className="btn btn-sm mx-2 text-center border">.</button>
-                                        <button className="btn btn-sm mx-2 text-center border">.</button>
-                                        <button className="btn btn-sm mx-2 text-center border">.</button>
-                                    </span>
-                            }
-                            {[...Array(pageCount).keys()].map(number =>
-                                <button onClick={() => setPage(number + 1)} className={`btn btn-sm mx-2 text-center border ${page == number + 1 ? 'bg-[brown]' : ''}`}>{number + 1}</button>
-                            ).slice(pageCount - 5, pageCount)}
-                            <button onClick={() => setPage(page + 1)} className="btn btn-sm mx-2">next</button>
-                        </div>
-                    }
-
-                </div>
+                    </div>
                 </div>
 
             </div>

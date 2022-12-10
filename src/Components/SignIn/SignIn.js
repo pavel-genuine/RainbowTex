@@ -152,45 +152,24 @@ const SignIn = () => {
                                 <div className="  flex flex-col justify-center items-center lg:w-[150%] w-[100%]  ">
                                     <input className='px-4 py-3 font-bold rounded w-full  text-white bg-[#e50914]  cursor-pointer mt-4 mb-2' type="submit" value="Sign In" />
                                     <label onClick={async () => {
-                                    const x = window.open(
-                                        `${base_url}/auth/google`,
-                                        "_blank"
-                                    );
-                                    setStay(true);
-                                    // x.focus();
+                                        const x = window.open(
+                                            `${base_url}/auth/google`,
+                                            "_blank"
+                                        );
+                                        setStay(true);
+                                        // x.focus();
 
 
-                                }}
-                                    className=" px-4 py-3 font-bold rounded w-full  cursor-pointer mt-4 space-x-2 flex items-center justify-center bg-white ">
-                                    <img src="https://www.100ms.live/_next/image?url=%2Fassets%2Fhero%2Fgoogle.svg&w=32&q=75" alt="" /> <span className="font-bold">Start with Google</span>
-                                </label>
+                                    }}
+                                        className=" px-4 py-3 font-bold rounded w-full  cursor-pointer mt-4 space-x-2 flex items-center justify-center bg-white ">
+                                        <img src="https://www.100ms.live/_next/image?url=%2Fassets%2Fhero%2Fgoogle.svg&w=32&q=75" alt="" /> <span className="font-bold">Start with Google</span>
+                                    </label>
                                 </div>
 
-                                
+
 
                             </form>
-
-
-
-                            {/* <div>
-                            <input type="checkbox" id="my-modal-4" class="modal-toggle" />
-                            <label for="my-modal-4" class="modal cursor-pointer">
-                            <label class="modal-box relative bg-slate-800 h-[40vh] flex justify-center items-center" for="">
-                            <label htmlFor="my-modal-4" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-
-                                <div class="modal-action">
-                                    {stayLoggedIn && (
-                                        <label for="my-modal-4" className="px-4 py-3 font-bold rounded mb-10  bg-[brown] text-white  cursor-pointer m-auto"
-                                            onClick={loginTokenControl}>Stay LoggedIn with google.</label>
-
-                                    )}
-                               
-                                </div>
-                            </label>
-                            </label>
-                        </div> */}
-
-
+                            <p className="my-5 text-slate-400">New to <span className="my-5 text-[red]">Jucundu</span>? <Link to={'/sign-up'} className="my-5 text-[blue] hover:underline"> Sign up now.</Link></p>
                         </div>
                     </div>
                 </div>

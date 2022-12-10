@@ -84,16 +84,16 @@ const SignUp = () => {
 
     return (
         <div style={{ backgroundImage: `url(${'https://i.ibb.co/WFbg3T0/background1-1.jpg'})` }}
-        className={`md:relative h-[900px]   md:h-[1000px] md:w-[100%]  bg-cover `}>
+            className={`md:relative h-[900px]   md:h-[1100px] md:w-[100%]  bg-cover `}>
             <Toaster></Toaster>
             <div className="w-[100%] bg-black h-[900px]  bg-cover min-h-screen   md:h-[1000px] bg-opacity-50  flex flex-col justify-center items-center">
-            <div className="flex justify-center items-center md:w-[500px] w-[100vw] bg-black h-screen md:absolute bottom-[35%]  md:h-auto bg-opacity-80 shadow-xl md:mt-28 pt-40 md:py-10  ">
-            <div>
-            <div className="card-body flex justify-center items-center my-auto  ">
+                <div className="flex justify-center items-center md:w-[500px] w-[100vw] bg-black h-screen md:absolute bottom-[35%]  md:h-auto bg-opacity-80 shadow-xl md:mt-28 pt-40 md:py-10  ">
+                    <div>
+                        <div className="card-body flex justify-center items-center my-auto  ">
                             <h2 className="text-center text-white text-4xl mb-6 font-bold">Sign Up</h2>
-                            <form  className="flex justify-center items-center flex-col" onSubmit={handleSubmit(onSubmit)}>
+                            <form className="flex justify-center items-center flex-col" onSubmit={handleSubmit(onSubmit)}>
 
-                            <div className="form-control w-full max-w-xs flex justify-center items-center">
+                                <div className="form-control w-full max-w-xs flex justify-center items-center">
                                     <input
                                         type="text"
                                         placeholder="Name"
@@ -133,7 +133,7 @@ const SignUp = () => {
                                     </label>
                                 </div>
                                 <div className="form-control w-full max-w-xs flex justify-center items-center">
-                                <div className="flex lg:w-[150%] w-[100%] ">
+                                    <div className="flex lg:w-[150%] w-[100%] ">
                                         <input
                                             type={showPassword ? 'text' : 'password'}
                                             placeholder="Password"
@@ -168,42 +168,21 @@ const SignUp = () => {
                                 <div className="  flex flex-col justify-center items-center lg:w-[150%] w-[100%]  ">
                                     <input className='px-4 py-3 font-bold rounded w-full  text-white bg-[#e50914]  cursor-pointer mt-4 mb-2' type="submit" value="Sign Up" />
                                     <label onClick={async () => {
-                                    const x = window.open(
-                                        `${base_url}/auth/google`,
-                                        "_blank"
-                                    );
-                                    setStay(true);
-                                    // x.focus();
+                                        const x = window.open(
+                                            `${base_url}/auth/google`,
+                                            "_blank"
+                                        );
+                                        setStay(true);
+                                        // x.focus();
 
 
-                                }}
-                                    className=" px-4 py-3 font-bold rounded w-full  cursor-pointer mt-4 space-x-2 flex items-center justify-center bg-white ">
-                                    <img src="https://www.100ms.live/_next/image?url=%2Fassets%2Fhero%2Fgoogle.svg&w=32&q=75" alt="" /> <span className="font-bold">Start with Google</span>
-                                </label>
+                                    }}
+                                        className=" px-4 py-3 font-bold rounded w-full  cursor-pointer mt-4 space-x-2 flex items-center justify-center bg-white ">
+                                        <img src="https://www.100ms.live/_next/image?url=%2Fassets%2Fhero%2Fgoogle.svg&w=32&q=75" alt="" /> <span className="font-bold">Start with Google</span>
+                                    </label>
                                 </div>
                             </form>
-                            {/* <p><small>Don't have an account <Link className='text-primary' to="/sign_up">Create New Account</Link></small></p>
-                <div className="divider">OR</div> */}
-                         
-
-                            {/* <div>
-                            <input type="checkbox" id="my-modal-4" class="modal-toggle" />
-                            <label for="my-modal-4" class="modal cursor-pointer">
-                            <label class="modal-box relative bg-slate-800 h-[40vh] flex justify-center items-center" for="">
-                            <label htmlFor="my-modal-4" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-
-                                <div class="modal-action">
-                                    {stayLoggedIn && (
-                                        <label for="my-modal-4" className="px-4 py-3 font-bold rounded mb-10  bg-[brown] text-white  cursor-pointer m-auto"
-                                            onClick={loginTokenControl}>Stay LoggedIn with google.</label>
-
-                                    )}
-                               
-                                </div>
-                            </label>
-                            </label>
-                        </div> */}
-
+                            <p className="my-5 text-slate-400">Already on <span className="my-5 text-[red]">Jucundu</span>? <Link to={'/sign-in'} className="my-5 text-[blue] hover:underline"> Sign in now.</Link></p>
                         </div>
                     </div>
                 </div>

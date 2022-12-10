@@ -59,7 +59,7 @@ const PostSearch = ({ searchText, filteredCategory }) => {
             setMovies(searchResult)
         }
 
-    }, [posts, filteredMovies, searchText, postsNumber])
+    }, [ filteredMovies, searchText, postsNumber])
 
     // console.log(page,'page');
 

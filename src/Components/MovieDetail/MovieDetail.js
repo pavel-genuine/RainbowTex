@@ -253,7 +253,7 @@ const MovieDetails = () => {
                 <p className='lg:text-2xl md:text-xl text-lg font-semibold'>Videos || {movie?.title}  </p>
                 {
                     <video className=' md:w-[50%] w-[90%] rounded my-5' controls poster={movie?.videoCover?.cdnUrl} controlsList="nodownload">
-                        <source src={movie?.videos?.length && movie?.videos[0]?.url} />
+                        <source src={movie?.videos?.length && movie?.videos[movie?.videos.length-1] ?.url} />
                     </video>
                 }
 
