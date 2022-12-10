@@ -76,7 +76,7 @@ const MovieDetails = () => {
 
         setComment(data?.comment)
 
-        console.log(comment, data, 'cccccccc');
+        // console.log(comment, data, 'cccccccc');
 
         const newComment = {
             postId: movie?._id,
@@ -166,18 +166,74 @@ const MovieDetails = () => {
 
     }
 
+    const Rating1 = <div>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[red]`}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+        </svg>
+    </div>
+    const Rating2 = <div className='flex'>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[red]`}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[red]`}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+        </svg>
+    </div>
+    const Rating3 = <div className='flex'>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[red]`}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[red]`}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[red]`}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+        </svg>
+    </div>
+    const Rating4 = <div className='flex'>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[red]`}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[red]`}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[red]`}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[red]`}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+        </svg>
+    </div>
+    const Rating5 = <div className='flex'>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[red]`}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[red]`}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[red]`}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[red]`}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[red]`}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+        </svg>
+    </div>
+
 
     if (isLoading) {
         return <p>loading...</p>
     }
 
     return (
-        <div className='mx-auto bg-[#181818] text-slate-200 min-h-[100vh]'>
+        <div className='mx-auto bg-[#181818] text-slate-200 min-h-[100vh] pt-16'>
             <Toaster></Toaster>
             <div className=" h-[40vh]  w-[98vw] mx-auto relative mb-40 md:mb-60">
-                <img className='md:h-[100vh] h-[40vh] w-[100vw] brightness-125 contrast-125' src={movie?.videoCover?.cdnUrl ? movie?.videoCover?.cdnUrl : 'https://i.ibb.co/R6Y4CQ3/1-white-1.png'} alt="" />
-                <div className='absolute w-[98vw] md:pt-[13%] pt-[30%] md:pt-60 p-5 md:pl-28 md:top-[0%] top-[0%] md:h-[100vh] h-[40vh] text-white bg-gradient-to-t from-[#181818]'>
-                    <h1 className='md:text-6xl text-2xl font-semibold'>{movie?.title}</h1>
+                <img className='lg:h-[100vh] h-[40vh] w-[100vw] brightness-125 contrast-125' src={movie?.videoCover?.cdnUrl ? movie?.videoCover?.cdnUrl : 'https://i.ibb.co/R6Y4CQ3/1-white-1.png'} alt="" />
+                <div className='absolute w-[98vw] md:pt-[15%]  pt-[20%]  p-5 md:pl-28 md:top-[0%] top-[0%] lg:h-[100vh] h-[40vh] text-white bg-gradient-to-t from-[#181818]'>
+                    <h1 className='lg:text-6xl md:text-4xl text-2xl font-semibold'>{movie?.title}</h1>
                     <p className='md:text-lg md:w-[40%] md:my-5 my-2'>{movie?.description?.slice(0, 100)}...</p>
 
                     <div className='flex space-x-10'>
@@ -194,17 +250,17 @@ const MovieDetails = () => {
 
             <div className='md:mt-[32%] md:pl-16 pl-5 '>
 
-                <p className='text-2xl font-semibold'>Videos || {movie?.title}  </p>
+                <p className='lg:text-2xl md:text-xl text-lg font-semibold'>Videos || {movie?.title}  </p>
                 {
                     <video className=' md:w-[50%] w-[90%] rounded my-5' controls poster={movie?.videoCover?.cdnUrl} controlsList="nodownload">
                         <source src={movie?.videos?.length && movie?.videos[0]?.url} />
                     </video>
                 }
 
-                <div onMouseLeave={() => setRatingsHover(0)} className='flex my-5'>
+                <div className='flex my-5'>
                     <h1 className='text-lg mr-4'>Give Your Rating :</h1>
                     <span title='rating-1'>
-                        <svg onClick={(rating) => handleRating(1)} onMouseOver={() => setRatingsHover(1)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer ${ratingsHover >= 1 ? 'text-[red]' : ''}`}>
+                        <svg onClick={(rating) => handleRating(1)} onMouseOver={() => setRatingsHover(1)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer ${ratingsHover > 1 ? 'text-[red]' : ''}`}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                         </svg>
                     </span>
@@ -212,6 +268,7 @@ const MovieDetails = () => {
                         <svg onClick={(rating) => handleRating(2)} onMouseOver={() => setRatingsHover(2)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer ${ratingsHover >= 2 ? 'text-[red]' : ''}`}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                         </svg>
+
                     </span>
                     <span title='rating-3'>
                         <svg onClick={(rating) => handleRating(3)} onMouseOver={() => setRatingsHover(3)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer ${ratingsHover >= 3 ? 'text-[red]' : ''}`}>
@@ -230,20 +287,31 @@ const MovieDetails = () => {
                     </span>
                 </div>
 
+                <div className='my-2'>
+                    {ratingsHover>1 &&<span>Your Given Rating:</span>}
+                    {
+                        // ratingsHover == 1 && Rating1
+                    }
+                    {
+                        ratingsHover == 2 && Rating2
+                    }
+                    {
+                        ratingsHover == 3 && Rating3
+                    }
+                    {
+                        ratingsHover == 4 && Rating4
+                    }
+                    {
+                        ratingsHover == 5 && Rating5
+                    }
+
+                </div>
 
                 <div className='space-y-2'>
                     <h1 className='text-lg mr-4'>Average Given Ratings :</h1>
-                    <div className='flex'>
-                        {thisRating == 0 && movie?.ratings?.length
-                            ?
-                            movie?.ratings?.map(rating => rating?.rating).reduce(function (a, b) {
-                                return a + b;
-                            }, 0) / movie?.ratings?.map(rating => rating?.rating).length
-                            :
-                            (movie?.ratings?.map(rating => rating?.rating).reduce(function (a, b) {
-                                return a + b;
-                            }, 0) + thisRating) / (movie?.ratings?.map(rating => rating?.rating).length + 1)
-                        }
+                    <div className='flex items-center'>
+    
+                        {movie?.averageRating}
 
                         <span title='' className='mx-2'>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="#e50914" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[#e50914]`}>
@@ -262,24 +330,24 @@ const MovieDetails = () => {
 
                 <div className='w-[40%]'>
                     <div className='py-5 '>
-                        <p className='text-[#e50914] text-2xl font-bold mb-3'>More Detail:  </p>
+                        <p className='text-[#e50914] lg:text-2xl md:text-xl text-lg font-semibold mb-3'>More Detail:  </p>
 
                         <div className=''>
 
                             <div className='mb-3 '>
-                                <p className='text-[#e50914] text-2xl font-semibold my-2'>Tags  </p>
+                                <p className='text-[#e50914] lg:text-2xl md:text-xl text-lg font-semibold my-2'>Tags  </p>
 
-                                {
+                                {movie?.tags?.length > 0 &&
                                     movie?.tags?.map((tag, i) => <span className='bg-slate-600 p-1 border rounded m-1' key={i}>{tag}</span>)
                                 }
                             </div>
 
                             <div className='my-3'>
-                                <p className='text-[#e50914] text-2xl font-semibold'>Genres</p>
+                                <p className='text-[#e50914] lg:text-2xl md:text-xl text-lg font-semibold'>Genres</p>
                                 <p className=''>{movie?.genre}</p>
                             </div>
                         </div>
-                        <p className='text-[#e50914] text-2xl font-semibold'>Description</p>
+                        <p className='text-[#e50914] lg:text-2xl md:text-xl text-lg font-semibold'>Description</p>
 
                         <p className='text-lg font md:w-[80%] w-60 text-justify'>{movie?.description}</p>
                     </div>
@@ -290,7 +358,7 @@ const MovieDetails = () => {
                                 <header className="font-semibold text-xl mb-5">Comment here</header>
                                 <div className="comments-container  border-y  py-4">
                                     <div>
-                                        <p className="font-medium flex items-center"> <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('email')} </p>
+                                        <p className="font-medium flex items-center"> <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('name') ? localStorage.getItem('name') : 'Anonymous'}</p>
 
                                         <div className='grow-wrap'>
                                             <textarea
@@ -318,7 +386,7 @@ const MovieDetails = () => {
                             comment &&
                             <div className='my-3 md:m-2'>
                                 <p className="font-medium flex items-center">
-                                    <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('email')} </p>
+                                    <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('name') ? localStorage.getItem('name') : 'Anonymous'}</p>
 
                                 <div className='flex items-center'>
                                     <p className='md:m-3 bg-slate-800 p-2 rounded'> {comment}</p>

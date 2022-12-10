@@ -45,7 +45,7 @@ const DashboardHome = () => {
                             <h2 className="text-2xl font-bold mb-5 ">Welcome to Admin Dashboard</h2>
                         </div>
 
-                        <img className="w-40" src={"https://i.ibb.co/vj0Ctmj/user.png"} alt="" />
+                        <img className="md:w-40 w-24" src={"https://i.ibb.co/vj0Ctmj/user.png"} alt="" />
                         <h2 className="font-bold text-4xl">Admin</h2>
                         <div className='md:flex items-center'>
                             <p className='font-semibold my-5 bg-slate-600 px-3 py-2 md:mr-20 text-lg '>Total Movies Uploaded : {postsNumber} </p>

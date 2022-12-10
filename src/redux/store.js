@@ -14,6 +14,7 @@ import PostTextReducer from './features/postSection/postTextSlice'
 import postDeleteReducer from './features/postSection/postSlice'
 import getFeaturedReducer from './features/featuredPost/featuredPostSlice'
 import addFeaturedReducer from './features/featuredPost/featuredPostSlice'
+import removeFeatureReducer from './features/featuredPost/featuredPostSlice'
 import createCategoryReducer from './features/categorySlice'
 import addCommentReducer from './features/commentSlice'
 import approveCommentReducer from './features/commentSlice'
@@ -49,8 +50,8 @@ export const store = configureStore({
     commentEditing:editCommentReducer,
     addPostCategory: addPostCategoryReducer,
     categoryDeleting:deleteCategoryReducer,
-    ratingAdding:addRatingReducer
-
+    ratingAdding:addRatingReducer,
+    removeFeature:removeFeatureReducer
 
   },
 });

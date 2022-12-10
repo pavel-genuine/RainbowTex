@@ -10,18 +10,21 @@ const Navbar = ({ filterHandler, searchHandler }) => {
     const { register, formState: { errors }, handleSubmit } = useForm();
     const [background, setBackground] = useState(false)
     const [modifiedNav, setModifiedNav] = useState(false)
+    const [showBorder, setShowBorder] = useState(false)
 
     const navigate = useNavigate()
 
     const { category: homeCates } = useHomeCategories()
 
     const token = localStorage.getItem('loginToken')
+    const admin = localStorage.getItem('isAdmin')
 
     const logoutHandler = async () => {
         await logOut()
         localStorage?.removeItem('loginToken')
         localStorage?.removeItem('email')
         localStorage?.removeItem('userId')
+        localStorage?.removeItem('isAdmin')
         window.location.reload();
     }
 
@@ -34,6 +37,9 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
         const singleCate = homeCates?.find(cate => cate?._id == id)
         filterHandler(singleCate)
+        if (id==singleCate?._id) {
+            setShowBorder(()=>({id:id, clicked:true}))
+        }
     }
 
 
@@ -123,20 +129,20 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                 <label tabIndex="0" htmlFor='bigTogglerpro' className="">
                     {!modifiedNav && <div className="indicator cursor-pointer rounded-full felx justify-center items-center">
 
-                        <p className="btn-ghost hover:rounded font-bold  mr-1" >Categories</p>
+                        <a href='/' className="btn-ghost hover:rounded font-bold  mr-1" >Categories</a>
                     </div>}
                 </label>
                 <input type="checkbox" name="" id="bigTogglerpro" />
 
 
                 <ul className="space-y-2 p-4 font-bold rounded-lg notificationpro text-black absolute left-[80%] top-[100%] bg-black text-[white]  bg-opacity-60 ">
-                    <ul className='lg:grid grid-cols-2 md:w-[20vw]'>
+                    <ul className='md:grid grid-cols-2 md:w-[30vw]'>
                         {<CustomLink to={`/post-search`} className="border-b-2 ml-4 mt-4 cursor-pointer ">
                             All Movies</CustomLink>}
                         {
                             homeCates.length > 0 &&
                             homeCates.map(item => {
-                                return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink className="border-b-2 cursor-pointer ">{item?.categoryName}</CustomLink></li>
+                                return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink to='/home' className={` border-b-2 cursor-pointer ${showBorder?.id==item?._id?'border-[red]':''}`}>{item?.categoryName}</CustomLink></li>
                             })
                         }
                     </ul>
@@ -146,19 +152,19 @@ const Navbar = ({ filterHandler, searchHandler }) => {
             <div className="dropdown dropdown-hover hidden lg:block relative">
                 {!modifiedNav &&
                     <label tabIndex="0" className="">
-                        <CustomLink className="btn-ghost hover:rounded md:p-3 md:m-5" >Categories</CustomLink>
+                        <a href='/' className="btn-ghost hover:rounded md:p-3 md:m-5 font-bold text-lg" >Categories</a>
                     </label>
                 }
-                <div tabIndex="0" className="px-4 py-6 abolute right-[30%] rounded-lg dropdown-content menu mt-3 shadow text-white bg-black bg-opacity-60 w-auto">
+                <div tabIndex="0" className="px-4 py-6 abolute right-[30%] rounded-lg dropdown-content menu  mt-3 shadow text-white bg-black bg-opacity-60 w-auto">
 
-                    {<CustomLink to={`/post-search`} className="border-b-2 ml-4 mt-4 cursor-pointer ">
+                    {<CustomLink onClick={()=>setShowBorder(false)} to={`/post-search`} className="border-b-2 ml-4 mt-4 cursor-pointer ">
                         All Movies</CustomLink>}
                     <ul className='md:grid grid-cols-2 md:w-[20vw] mt-4'>
 
                         {
                             homeCates?.length > 0 &&
                             homeCates.map(item => {
-                                return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink className="border-b-2 cursor-pointer ">{item?.categoryName}</CustomLink></li>
+                                return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink to='/home' className={` border-b-2 cursor-pointer ${showBorder?.id==item?._id?'border-[red]':''}`}>{item?.categoryName}</CustomLink></li>
                             })
                         }
 
@@ -167,11 +173,11 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                 </div>
             </div>
             {!token &&
-                <CustomLink onClick={() => setModifiedNav(true)} className="btn-ghost hover:rounded md:p-3 md:m-5" to='/sign-up'>Sign Up</CustomLink>
+                <CustomLink onClick={() => setModifiedNav(true)} className="btn-ghost hover:rounded lg:p-3 lg:m-5" to='/sign-up'>Sign Up</CustomLink>
 
             }
             {!token &&
-                <CustomLink onClick={() => setModifiedNav(true)} className="btn-ghost hover:rounded md:p-3 md:m-5" to='/sign-in'>Sign In</CustomLink>
+                <CustomLink onClick={() => setModifiedNav(true)} className="btn-ghost hover:rounded lg:p-3 lg:m-5" to='/sign-in'>Sign In</CustomLink>
             }
         </>
 
@@ -286,8 +292,9 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
                                                 </li> */}
                                                 <li>
-                                                    {localStorage.getItem('isAdmin') &&
+                                                    { admin &&
                                                         <Link onClick={() => setModifiedNav(true)} to='/dashboard' className="btn bg-[green] border-none text-[white] btn-xs">Dashboard</Link>
+                                                    
                                                     }
                                                 </li>
 

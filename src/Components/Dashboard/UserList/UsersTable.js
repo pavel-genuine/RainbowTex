@@ -9,7 +9,7 @@ const UsersTable = () => {
     const [pageCount, setPageCount] = useState(1)
     const [page, setPage] = useState(1)
 
- 
+
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -17,21 +17,21 @@ const UsersTable = () => {
         const fetchAllUsers = async () => {
             const { data } = await userList(`?page=${page}&limit=20`)
 
-            setUsers(() =>data )
-            
+            setUsers(() => data)
+
         }
         fetchAllUsers()
 
         const fetchUsersNumber = async () => {
             const { data } = await getTotalUsersNumber()
 
-            setUsersNumber(() =>data )
-            
+            setUsersNumber(() => data)
+
         }
         fetchUsersNumber()
 
-        setPageCount(()=>Math.ceil(usersNumber/20))
-    }, [userList,page,pageCount,usersNumber])
+        setPageCount(() => Math.ceil(usersNumber / 20))
+    }, [userList, page, pageCount, usersNumber])
 
     // if (isLoading) {
     //     return <p>Loading...</p>
@@ -55,7 +55,7 @@ const UsersTable = () => {
                         </tr>
                     </thead>
                     <tbody className='bg-[#26282b]'>
-                        { users?.length>0 &&
+                        {users?.length > 0 &&
                             users.map(user => <tr>
                                 <td class="border border-[#181818] px-8 py-4">{user?.name}</td>
                                 <td class="border border-[#181818] px-8 py-4">{user?.email}</td>
@@ -124,10 +124,43 @@ const UsersTable = () => {
             </div>
 
             <div>
-                <div className="flex justify-center my-10 mx-auto">
-                    {
-                        [...Array(pageCount).keys()].map(number=> <button  onClick={()=>setPage(number+1)} className={`btn btn-sm mx-2 text-center border ${page==number+1?'bg-[brown]':''}`}>{number+1}</button>)
+            <div className="flex justify-center py-10 mx-auto ">
+                    {pageCount < 11 ?
+                        <div> <button onClick={() => setPage(page - 1)} className="btn btn-sm mx-2">prev</button>
+                            {[...Array(pageCount).keys()].map(number =>
+                                <button onClick={() => setPage(number + 1)} className={`btn btn-sm mx-2 text-center border ${page == number + 1 ? 'bg-[brown]' : ''}`}>{number + 1}</button>
+                            )}
+                            <button onClick={() => setPage(page + 1)} className="btn btn-sm mx-2">next</button>
+                        </div>
+                        :
+
+                        <div>
+                            <button onClick={() => setPage(page - 1)} className="btn btn-sm mx-2">prev</button>
+                            {[...Array(5).keys()].map(number =>
+                                <button onClick={() => setPage(number + 1)} className={`btn btn-sm mx-2 text-center border ${page == number + 1 ? 'bg-[brown]' : ''}`}>{number + 1}</button>
+                            )}
+                            {[...Array(pageCount).slice(6, pageCount - 6).keys()].map(number =>
+                                <button onClick={() => setPage(number + 1)} className={`btn btn-sm hidden mx-2 text-center border ${page == number + 1 ? 'bg-[brown]' : ''}`}></button>
+                            )}
+                            {
+                                page > 6 && page < pageCount - 5 ?
+                                    <span> <button className="btn btn-sm mx-2 text-center border bg-[brown]">.</button>
+                                        <button className="btn btn-sm mx-2 text-center border bg-[brown]">.</button>
+                                        <button className="btn btn-sm mx-2 text-center border bg-[brown]">.</button>
+                                    </span>
+                                    :
+                                    <span> <button className="btn btn-sm mx-2 text-center border">.</button>
+                                        <button className="btn btn-sm mx-2 text-center border">.</button>
+                                        <button className="btn btn-sm mx-2 text-center border">.</button>
+                                    </span>
+                            }
+                            {[...Array(pageCount).keys()].map(number =>
+                                <button onClick={() => setPage(number + 1)} className={`btn btn-sm mx-2 text-center border ${page == number + 1 ? 'bg-[brown]' : ''}`}>{number + 1}</button>
+                            ).slice(pageCount - 5, pageCount)}
+                            <button onClick={() => setPage(page + 1)} className="btn btn-sm mx-2">next</button>
+                        </div>
                     }
+
                 </div>
             </div>
         </div>

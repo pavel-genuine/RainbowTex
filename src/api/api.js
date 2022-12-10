@@ -40,14 +40,14 @@ export const removeThumbnail =(data)=>axios.patch(`${base_url}/post/admin/remove
 export const addVideoCoverPhoto =(data)=>axios.patch(`${base_url}/post/admin/add_video_cover`,data)
 export const removeVideoCoverPhoto =(data)=>axios.patch(`${base_url}/remove_video_cover`,data)
 export const updateNonMediaContent =(data)=>axios.patch(`${base_url}/post/admin/change`,data)
-export const addVideo =(data,option)=>axios.patch(`${base_url}//post/admin/add_video`,data,option)
+export const addVideo =(data,option)=>axios.patch(`${base_url}/post/admin/add_video`,data,option)
 export const addVideoCopy =(data)=>axios.patch(`${base_url}/post/admin/add_video`,data)
 export const removeVideos =(data)=>axios.patch(`${base_url}/admin/remove_videos`,data)
 export const getTotalPostsNumber=()=>axios.get(`${base_url}/post/total_numberof_posts`)
 //feaured section
 export const createfeatured = (post) => axios.post(`${base_url}/featured/add`,post)
 export const getAllFeatured =()=>axios.get(`${base_url}/featured`)
-
+export const removeFeatured =(id)=>axios.patch(`${base_url}/featured/remove`,id)
 
 // comment
 export const addComment =(data)=>axios.patch(`${base_url}/post/add_comment`,data)

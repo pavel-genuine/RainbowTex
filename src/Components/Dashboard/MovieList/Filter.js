@@ -54,12 +54,12 @@ const Filter = ({ filterHandler, searchHandler }) => {
 
 
     return (
-        <div className="md:flex items-center my-5">
+        <div className="lg:flex items-center my-5 space-y-4 lg:space-y-0">
 
             <div className="dropdown dropdown-hover">
                 <label tabIndex={0} className="btn btn-sm m-1">Filter By Category</label>
-                <ul tabIndex={0} className="dropdown-content menu p-2 rounded w-[30vw] bg-slate-800 grid grid-cols-2 gap-4 bg-opacity-90 md:ml-20 p-3">
-                    {<li onClick={() => handleFilterCate(1)} className="bg-[brown] cursor-pointer bg-opacity-90 my-2 px-2 py-1 rounded ">
+                <ul tabIndex={0} className="dropdown-content menu  rounded w-[30vw] bg-slate-800 md:grid grid-cols-2 gap-4 bg-opacity-90 md:ml-20 px-1 md:px-3 py-3">
+                    {<li onClick={() => handleFilterCate(1)} className="bg-[brown] cursor-pointer bg-opacity-90 my-2 px-2  rounded ">
                         {'All Movies'}
 
                     </li>}
@@ -81,7 +81,7 @@ const Filter = ({ filterHandler, searchHandler }) => {
                         <input
                             type="text"
                             placeholder="Search movies"
-                            className={`outline-0 px-4 py-2 mt-10 md:mt-0 md:ml-20 w-full max-w-xs  rounded-full bg-opacity-80 text-white bg-[grey] `}
+                            className={`outline-0 px-4 py-2 mt-10 md:mt-0 lg:ml-20 w-full max-w-xs  rounded-full bg-opacity-80 text-white bg-[grey] `}
                             {...register("search")}
                         />
                         <button className='  hidden bg-opacity-80 text-slate-400 bg-[grey] py-2 px-2 cursor-pointer  rounded-r-full pr-4' type="submit"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -93,7 +93,7 @@ const Filter = ({ filterHandler, searchHandler }) => {
             </div>
 
 
-            <div className="md:mr-10 md:ml-28 my-5 md:my-0">
+            <div className="md:mr-10 lg:ml-28 my-5 md:my-0">
                 <AddCategory handleNewCate={handleNewCate}></AddCategory>
             </div>
 

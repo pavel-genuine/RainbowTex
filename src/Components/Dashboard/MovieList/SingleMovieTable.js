@@ -7,23 +7,23 @@ import FeaturedBanner from './FeaturedBanner'
 const SingleMovieTable = ({movie,handleDeleteOne}) => {
 
     return (
-        <tr >
-            <td class="border border-[#181818] px-8 py-4">{movie?.title}</td>
-            <td class="border border-[#181818] ">
+        <div className='flex'>
+            <p class="border border-[#181818] px-8 py-4">{movie?.title}</p>
+            <div class="border border-[#181818] ">
                 <img className="w-36" src={movie?.thumbnail?.cdnUrl} alt="" />
-            </td>
-            <td class="border border-[#181818] px-8 py-4">Sci-fi</td>
-            <td class="border border-[#181818] px-8 py-4"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            </div>
+            <p class="border border-[#181818] px-8 py-4">{movie?.categoryName}</p>
+            <div class="border border-[#181818] px-8 py-4"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
-            </td>
-            <td class="border border-[#181818] px-8 py-4">
+            </div>
+            <div class="border border-[#181818] px-8 py-4">
                 <FeaturedBanner key={movie?._id} movie={movie}></FeaturedBanner>
-            </td>
+            </div>
 
-            <td class="border border-[#181818] px-8 py-4">{movie?.imdbRating}</td>
-            <td class="border border-[#181818] px-8 py-4">{movie?.createdAt}</td>
-            <td class="border border-[#181818] px-8 py-4 ">
+            <p class="border border-[#181818] px-8 py-4">{movie?.imdbRating}</p>
+            <p class="border border-[#181818] px-8 py-4">{movie?.createdAt}</p>
+            <div class="border border-[#181818] px-8 py-4 ">
                 <p className='flex'>
                     <span title='edit' >
                         <Link to={`/dashboard/edit-post/${movie?._id}`}> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-10 cursor-pointer text-[blue]">
@@ -61,8 +61,8 @@ const SingleMovieTable = ({movie,handleDeleteOne}) => {
                     </span>
                 </p>
 
-            </td>
-        </tr>
+            </div>
+        </div>
     )
 }
 

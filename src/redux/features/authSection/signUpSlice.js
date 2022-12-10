@@ -5,8 +5,9 @@ import { signUpUser } from "../../../api/api";
 export const fetchSignUp =createAsyncThunk("/signUp/fetchUsers",
 async(user)=>{
     const res =  await signUpUser(user)  
-    console.log('signUp thunk',res.data);
+    // console.log('signUp thunk',res.data);
     localStorage.setItem('email',res?.data?.email)
+    localStorage.setItem('name',res?.data?.name)
     return  res?.data
 })
 

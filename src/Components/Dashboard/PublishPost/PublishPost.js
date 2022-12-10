@@ -303,7 +303,7 @@ const PublishPost = () => {
                                         </select>
                                     </div>
                                 
-     
+{/*      
                                     <div className="form-control my-10 md:my-0 ">
                                         {
                                             active ?
@@ -326,7 +326,7 @@ const PublishPost = () => {
                                                     />
                                                 </label>
                                         }
-                                    </div>
+                                    </div> */}
                                 </div>
                                 
                                 <div className='grow-wrap'>

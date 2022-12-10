@@ -9,7 +9,9 @@ async(user)=>{
     localStorage.setItem('loginToken',res?.data?.loginToken)
     localStorage.setItem('userId',res?.data?._id)
     localStorage.setItem('email',res?.data?.email)
-    localStorage.setItem('isAdmin',res?.data?.isAdmin)
+    if (res?.data?.isAdmin==true) {
+        localStorage.setItem('isAdmin',res?.data?.isAdmin)
+    }
     return  res?.data
 })
 
