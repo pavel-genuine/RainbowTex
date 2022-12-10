@@ -37,8 +37,8 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
         const singleCate = homeCates?.find(cate => cate?._id == id)
         filterHandler(singleCate)
-        if (id==singleCate?._id) {
-            setShowBorder(()=>({id:id, clicked:true}))
+        if (id == singleCate?._id) {
+            setShowBorder(() => ({ id: id, clicked: true }))
         }
     }
 
@@ -84,10 +84,10 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
                         <div className='space-y-2'>
                             {/* <Link to="/profile"> */}
-                                <li>
-                                    <img className='w-14 border border-[brown]  rounded-full'
-                                        src={"https://i.ibb.co/vj0Ctmj/user.png"} />
-                                </li>
+                            <li>
+                                <img className='w-14 border border-[brown]  rounded-full'
+                                    src={"https://i.ibb.co/vj0Ctmj/user.png"} />
+                            </li>
                             {/* </Link> */}
                             {/* <Link to="/profile">
                                 <li className='font-semibold text-[white]  text-lg hover:text-[brown]  word-break'>{user.displayName}</li>
@@ -129,20 +129,20 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                 <label tabIndex="0" htmlFor='bigTogglerpro' className="">
                     {!modifiedNav && <div className="indicator cursor-pointer rounded-full felx justify-center items-center">
 
-                        <a href='/' className="btn-ghost hover:rounded font-bold  mr-1" >Categories</a>
+                        <a className={`btn-ghost hover:rounded font-bold  mr-1 border-b-2 ${showBorder?.id ? ' border-b-[red]' : ''}`} >Categories</a>
                     </div>}
                 </label>
                 <input type="checkbox" name="" id="bigTogglerpro" />
+                {/* sm  */}
 
-
-                <ul className="space-y-2 p-4 font-bold rounded-lg notificationpro text-black absolute left-[80%] top-[100%] bg-black text-[white]  bg-opacity-60 ">
-                    <ul className='md:grid grid-cols-2 md:w-[30vw]'>
-                        {<CustomLink to={`/post-search`} className="border-b-2 ml-4 mt-4 cursor-pointer ">
+                <ul className="space-y-2 p-4 font-bold rounded-lg notificationpro text-black absolute left-[115%] md:left-[145%] top-[100%] bg-black text-[white]  bg-opacity-60 ">
+                    <ul className='md:grid grid-cols-2 w-[35vw] md:w-[25vw]'>
+                        {<CustomLink onClick={(id) => setShowBorder({id:1})} to={`/post-search`}  className="border-b-2 ml-4 mt-4 cursor-pointer ">
                             All Movies</CustomLink>}
                         {
                             homeCates.length > 0 &&
                             homeCates.map(item => {
-                                return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink to='/home' className={` border-b-2 cursor-pointer ${showBorder?.id==item?._id?'border-[red]':''}`}>{item?.categoryName}</CustomLink></li>
+                                return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink to='/home' className={` border-b-2 cursor-pointer ${showBorder?.id == item?._id ? 'border-[red]' : ''}`}>{item?.categoryName}</CustomLink></li>
                             })
                         }
                     </ul>
@@ -152,19 +152,19 @@ const Navbar = ({ filterHandler, searchHandler }) => {
             <div className="dropdown dropdown-hover hidden lg:block relative">
                 {!modifiedNav &&
                     <label tabIndex="0" className="">
-                        <a href='/' className="btn-ghost hover:rounded md:p-3 md:m-5 font-bold text-lg" >Categories</a>
+                        <a className={`btn-ghost hover:rounded md:p-3 md:m-5 font-bold text-lg border-2 ${showBorder?.id ? ' border-b-[red]' : ''}`} >Categories</a>
                     </label>
                 }
                 <div tabIndex="0" className="px-4 py-6 abolute right-[30%] rounded-lg dropdown-content menu  mt-3 shadow text-white bg-black bg-opacity-60 w-auto">
-
-                    {<CustomLink onClick={()=>setShowBorder(false)} to={`/post-search`} className="border-b-2 ml-4 mt-4 cursor-pointer ">
+                    {/* lg  */}
+                    {<CustomLink onClick={(id) => setShowBorder({id:1})} to={`/post-search`} className="border-b-2 ml-4 mt-4 cursor-pointer ">
                         All Movies</CustomLink>}
                     <ul className='md:grid grid-cols-2 md:w-[20vw] mt-4'>
 
                         {
                             homeCates?.length > 0 &&
                             homeCates.map(item => {
-                                return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink to='/home' className={` border-b-2 cursor-pointer ${showBorder?.id==item?._id?'border-[red]':''}`}>{item?.categoryName}</CustomLink></li>
+                                return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink to='/home' className={` border-b-2 cursor-pointer ${showBorder?.id == item?._id ? 'border-[red]' : ''}`}>{item?.categoryName}</CustomLink></li>
                             })
                         }
 
@@ -201,7 +201,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                             <input type="checkbox" name="" id="menuToggler" />
 
 
-                            <div tabIndex="0" id="menuContent" className=" menu border border-slate-600 bg-black text-[white]  bg-opacity-60 menu menu-compact dropdown-content my-2 p-4 shadow  rounded-box w-36 space-y-2">
+                            <div tabIndex="0" id="menuContent" className=" menu mx-2 border border-slate-600 bg-black text-[white]  bg-opacity-60 menu menu-compact dropdown-content my-2 p-4 shadow w-[80%] md:w-[100%]  rounded-box w-36 space-y-2">
 
                                 {menuItems}
                                 {!modifiedNav &&
@@ -210,7 +210,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                                             onFocus={() => navigate('/post-search')}
                                             type="text"
                                             placeholder="Search"
-                                            className={`outline-0 px-2 py-1  w-full max-w-xs rounded-full bg-opacity-60 text-white bg-[grey] `}
+                                            className={`outline-0 px-2 py-1  w-full rounded-full bg-opacity-60 text-white bg-[grey] `}
                                             {...register("search")}
                                         />
                                     </div>
@@ -269,15 +269,15 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                                         <ul tabIndex="0" id='profile' className=" bg-black border border-slate-600 space-y-4 divide divide-y mt-2  w-[350%] card card-compact  dropdown-content pl-4 pr-1 pt-4 pb-4 shadow-xl bg-opacity-60 rounded-box w-52">
                                             <div className='space-y-2 '>
                                                 {/* <Link onClick={() => setModifiedNav(false)} to="/profile"> */}
-                                                    <li>
+                                                <li>
 
-                                                        {
+                                                    {
 
-                                                            <img className='w-14 border border-white  rounded-full'
-                                                                src="https://i.ibb.co/vj0Ctmj/user.png" />
-                                                        }
+                                                        <img className='w-14 border border-white  rounded-full'
+                                                            src="https://i.ibb.co/vj0Ctmj/user.png" />
+                                                    }
 
-                                                    </li>
+                                                </li>
                                                 {/* </Link> */}
                                                 {/* <Link to="/profile">
                                                 <li className='font-semibold text-[white]  text-lg hover:text-[brown]  word-break'>{profile?.displayName ? profile?.displayName : user?.displayName}</li>
@@ -292,9 +292,9 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
                                                 </li> */}
                                                 <li>
-                                                    { admin &&
+                                                    {admin &&
                                                         <Link onClick={() => setModifiedNav(true)} to='/dashboard' className="btn bg-[green] border-none text-[white] btn-xs">Dashboard</Link>
-                                                    
+
                                                     }
                                                 </li>
 

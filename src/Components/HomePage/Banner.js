@@ -78,14 +78,14 @@ const Banner = () => {
               {/* <img className='lg:h-[95vh] md:h-[80vh] h-[50vh] w-[100%]' src={movie?.videoCover?.cdnUrl} alt="" /> */}
 
               <div className='absolute w-[98vw] md:top-[0%] top-[0%] md:h-[100vh] h-[40vh] text-white '>
-                <div className='absolute w-[98vw] lg:pt-[13%] md:pt-[10%] pt-[25%]  p-5 lg:pl-40 md:pl-28 md:top-[0%] top-[0%]  lg:h-[95vh] md:h-[80vh] h-[50vh] text-white bg-gradient-to-t from-[#181818]' >
+                <div className='absolute w-[98vw] lg:pt-[15%] md:pt-[20%] pt-[25%]  p-5 lg:pl-40 md:pl-28 md:top-[0%] top-[0%]  lg:h-[95vh] md:h-[80vh] h-[50vh] text-white bg-gradient-to-t from-[#181818]' >
                   <h1 className='md:text-6xl text-2xl font-semibold'>{movie?.title}</h1>
                   <p className='md:text-lg md:w-[40%]  md:my-5 my-2'>{movie?.description?.slice(0, 100)}...</p>
 
                   <div className='flex md:space-x-10 space-x-5'>
                     {
                       <Link to={'/payment'}>
-                        <button className='md:py-3 px-2 py-1 font-semibold md:text-lg rounded max-w-xs text-white bg-[#e50914] hover:bg-[brown] cursor-pointer mt-4 mb-2'>Subscribe Now</button>
+                        <button className='md:py-3 px-2 py-2 font-semibold md:text-lg rounded max-w-xs text-white bg-[#e50914] hover:bg-[brown] cursor-pointer mt-4 mb-2'>Subscribe Now</button>
                       </Link>
                     }
                     {
