@@ -7,7 +7,7 @@ const UsersTable = () => {
     const [users, setUsers] = useState(0)
     const [usersNumber, setUsersNumber] = useState(0)
     const [pageCount, setPageCount] = useState(1)
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState(0)
 
 
 

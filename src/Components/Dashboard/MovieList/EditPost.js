@@ -69,7 +69,7 @@ const EditPost = () => {
         };
 
         fetchSinglePost();
-    }, [movie]);
+    }, []);
 
     // console.log('mov',movie);
 
@@ -201,8 +201,7 @@ const EditPost = () => {
                                             backgroundColor: "black",
                                             backgroundRepeat: "no-repeat",
                                             backgroundAttachment: "",
-                                            backgroundImage: `url(${movie?.videoCover?.cdnUrl && movie?.videoCover?.cdnUrl
-                                                })`,
+                                            backgroundImage: `url(${movie?.videoCover?.cdnUrl})`,
                                         }}
                                         class="bg-cover absolute border-slate-600 border border-b-0 md:w-[18vw] w-[90vw] h-[180px] md:h-[200px]  md:mx-auto shadow overflow-hidden sm:rounded-t-lg "
                                     >

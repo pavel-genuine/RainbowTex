@@ -32,6 +32,8 @@ const ContactUs = () => {
                     <input type="checkbox" id="my-modal-4" class="modal-toggle" />
                     <label for="my-modal-4" class="modal cursor-pointer">
                         <label class="modal-box relative" for="">
+                        <label htmlFor="my-modal-4" className="modal-action btn btn-sm btn-circle absolute right-2 top-2 p-2">✕</label>
+
                             <div className='h-[65vh] md:h-[45vh]'>
                                 <label for="review" class="block text-lg font-semibold text-black mb-5 "> Email Us </label>
                                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -64,23 +66,13 @@ const ContactUs = () => {
                                         className="text-black shadow-sm  mt-1 block w-full sm:text-sm border  rounded-md p-2"
                                         {...register("review")}>
                                     </textarea>
-                                    <input className='btn bg-[#050535] w-full max-w-xs text-white my-3' type="submit" value="Submit" />
+                                    <a href="mailto:jucundu@gmail.com" className='btn bg-[#050535] w-full max-w-xs text-white my-3' type="submit" >Send</a>
 
                                 </form>
                             </div>
                         </label>
                     </label>
                 </div>
-                <div className='space-y-2 pt-3'>
-                    <h3 className='text-2xl font-bold'>Live Chat</h3>
-                    <p>
-                        You will need an internet or mobile phone connection.
-                    </p>
-                    <button className='btn'>
-                        Start Live Chat
-                    </button>
-                </div>
-
             </div>
 
             <Footer></Footer>

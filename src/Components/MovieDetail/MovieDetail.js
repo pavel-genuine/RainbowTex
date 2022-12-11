@@ -65,8 +65,7 @@ const MovieDetails = () => {
         const singleCate = category?.find(cate => cate?._id == movie?.category)
         setThisCate(singleCate?.posts)
 
-        // console.log(movie,'mov');
-        // console.log(movie?.comments,'mov ccc');
+        // console.log(movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')).rating,'mov ccc');
 
 
     }, [])
@@ -253,7 +252,7 @@ const MovieDetails = () => {
                 <p className='lg:text-2xl md:text-xl text-lg font-semibold'>Videos || {movie?.title}  </p>
                 {
                     <video className=' md:w-[50%] w-[90%] rounded my-5' controls poster={movie?.videoCover?.cdnUrl} controlsList="nodownload">
-                        <source src={movie?.videos?.length && movie?.videos[movie?.videos.length-1] ?.url} />
+                        <source src={movie?.videos?.length && movie?.videos[movie?.videos.length - 1]?.url} />
                     </video>
                 }
 
@@ -288,9 +287,15 @@ const MovieDetails = () => {
                 </div>
 
                 <div className='my-2'>
-                    {ratingsHover>1 &&<span>Your Given Rating:</span>}
                     {
-                        // ratingsHover == 1 && Rating1
+                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')) ?
+                            <p>
+                                {ratingsHover > 1 && <span>Your Updated Rating:</span>}  </p>
+                            :
+
+                            <p>{ratingsHover > 1 && <span>Your Given Rating:</span>}</p>
+
+
                     }
                     {
                         ratingsHover == 2 && Rating2
@@ -304,15 +309,37 @@ const MovieDetails = () => {
                     {
                         ratingsHover == 5 && Rating5
                     }
+                    <br />
+
+                    {movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')).rating > 1 && <span>Your Given Rating:</span>}
+
+                    {
+                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')).rating == 2 && Rating2
+                    }
+
+                    {
+                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')).rating == 3 && Rating3
+                    }
+
+                    {
+                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')).rating == 4 && Rating4
+                    }
+
+                    {
+                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')).rating == 5 && Rating5
+                    }
+
 
                 </div>
 
                 <div className='space-y-2'>
                     <h1 className='text-lg mr-4'>Average Given Ratings :</h1>
                     <div className='flex items-center'>
-    
-                        {movie?.averageRating}
 
+                        {thisRating && movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')) ?
+                            (movie?.averageRating * movie?.ratings?.length - movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')).rating + thisRating) / (movie?.ratings?.length)
+                            : (movie?.averageRating + thisRating) / (movie?.ratings?.length + 1)
+                        }
                         <span title='' className='mx-2'>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="#e50914" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[#e50914]`}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
@@ -320,7 +347,7 @@ const MovieDetails = () => {
                         </span>
                     </div>
                     <p className='text-[grey]'>Total :
-                        {thisRating == 0
+                        {thisRating == 0 && !movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))
                             ?
                             movie?.ratings?.length
                             :
@@ -328,7 +355,7 @@ const MovieDetails = () => {
                 </div>
 
 
-                <div className='w-[40%]'>
+                <div className='w-[90%]'>
                     <div className='py-5 '>
                         <p className='text-[#e50914] lg:text-2xl md:text-xl text-lg font-semibold mb-3'>More Detail:  </p>
 
@@ -349,10 +376,10 @@ const MovieDetails = () => {
                         </div>
                         <p className='text-[#e50914] lg:text-2xl md:text-xl text-lg font-semibold'>Description</p>
 
-                        <p className='text-lg font md:w-[80%] w-60 text-justify'>{movie?.description}</p>
+                        <p className='text-lg font md:w-[70%] w-60 text-justify'>{movie?.description}</p>
                     </div>
 
-                    <div className=' md:w-96 w-40 '>
+                    <div className=' md:w-96 w-80 '>
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className="pt-10 space-y-2 pb-5 ">
                                 <header className="font-semibold text-xl mb-5">Comment here</header>
@@ -360,7 +387,7 @@ const MovieDetails = () => {
                                     <div>
                                         <p className="font-medium flex items-center"> <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('name') ? localStorage.getItem('name') : 'Anonymous'}</p>
 
-                                        <div className='grow-wrap'>
+                                        <div className='grow-wrap my-2 md:my-0'>
                                             <textarea
                                                 required
                                                 placeholder="Comment"
@@ -374,7 +401,7 @@ const MovieDetails = () => {
                     {errors.comment && errors.comment.type === "minLength" && <span>minimum 2 characters</span>} */}
                                         </div>
 
-                                        <input className="btn btn-xs bg-[brown] border-0 text-white " type="submit" value="response" />
+                                        <input className="btn my-2 btn-xs bg-[brown] border-0 text-white " type="submit" value="response" />
 
                                     </div>
                                 </div>

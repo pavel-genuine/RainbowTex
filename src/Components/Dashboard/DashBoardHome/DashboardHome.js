@@ -5,8 +5,8 @@ import { getTotalPostsNumber, getTotalUsersNumber } from "../../../api/api";
 
 const DashboardHome = () => {
 
-    const [postsNumber,setPostsNumber] =useState(0)
-    const [usersNumber,setUsersNumber] =useState(0)
+    const [postsNumber, setPostsNumber] = useState(0)
+    const [usersNumber, setUsersNumber] = useState(0)
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -14,8 +14,8 @@ const DashboardHome = () => {
         const fetchPostsNumber = async () => {
             const { data } = await getTotalPostsNumber()
 
-            const totalPosts =data?.totalNumberOfPosts
-            setPostsNumber(() =>totalPosts )
+            const totalPosts = data?.totalNumberOfPosts
+            setPostsNumber(() => totalPosts)
             // console.log('res',data?.totalNumberOfPosts);
             // console.log('post',postsNumber);
         }
@@ -23,12 +23,12 @@ const DashboardHome = () => {
         const fetchUsersNumber = async () => {
             const { data } = await getTotalUsersNumber()
 
-            setUsersNumber(() =>data )
-            
+            setUsersNumber(() => data)
+
         }
         fetchUsersNumber()
 
-    }, [postsNumber,usersNumber])
+    }, [postsNumber, usersNumber])
 
     return (
         <div className='py-16 min-h-screen relative bg-[#181818] text-slate-200'>
@@ -46,15 +46,17 @@ const DashboardHome = () => {
                         </div>
 
                         <img className="md:w-40 w-24" src={"https://i.ibb.co/vj0Ctmj/user.png"} alt="" />
-                        <h2 className="font-bold text-4xl">Admin</h2>
+                        <h2 className="font-bold text-2xl">Admin :   <span className='text-salte-200'>
+                            {window.localStorage?.getItem('name')}
+                        </span></h2>
                         <div className='md:flex items-center'>
                             <p className='font-semibold my-5 bg-slate-600 px-3 py-2 md:mr-20 text-lg '>Total Movies Uploaded : {postsNumber} </p>
                             <p className='font-semibold my-5 bg-slate-600 px-3 py-2 text-lg '>Total Users : {usersNumber} </p>
                         </div>
-                        
-                <div>
-               
-{/* 
+
+                        <div>
+
+                            {/* 
                 <AreaChart
                     width={1000}
                     height={700}
@@ -76,7 +78,7 @@ const DashboardHome = () => {
                     <Legend style={{ buttom: 0, right: 0 }} />
 
                 </AreaChart> */}
-            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -86,7 +88,7 @@ const DashboardHome = () => {
 
             </div>
 
-            
+
 
         </div>
     );

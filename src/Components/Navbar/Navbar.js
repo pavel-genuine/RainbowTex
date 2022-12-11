@@ -25,6 +25,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
         localStorage?.removeItem('email')
         localStorage?.removeItem('userId')
         localStorage?.removeItem('isAdmin')
+        localStorage.clear();
         window.location.reload();
     }
 
@@ -84,9 +85,13 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
                         <div className='space-y-2'>
                             {/* <Link to="/profile"> */}
+                          
                             <li>
                                 <img className='w-14 border border-[brown]  rounded-full'
                                     src={"https://i.ibb.co/vj0Ctmj/user.png"} />
+                            </li>
+                            <li className='text-salte-200'>
+                                {window.localStorage?.getItem('name')}
                             </li>
                             {/* </Link> */}
                             {/* <Link to="/profile">
@@ -135,9 +140,9 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                 <input type="checkbox" name="" id="bigTogglerpro" />
                 {/* sm  */}
 
-                <ul className="space-y-2 p-4 font-bold rounded-lg notificationpro text-black absolute left-[115%] md:left-[145%] top-[100%] bg-black text-[white]  bg-opacity-60 ">
-                    <ul className='md:grid grid-cols-2 w-[35vw] md:w-[25vw]'>
-                        {<CustomLink onClick={(id) => setShowBorder({id:1})} to={`/post-search`}  className="border-b-2 ml-4 mt-4 cursor-pointer ">
+                <ul className="md:space-y-2 py-1 md:p-4 font-bold rounded-lg notificationpro text-black absolute top-[325%] left-[0%]  md:left-[145%] md:top-[-50%] bg-black text-[white]  bg-opacity-60 ">
+                    <ul className='grid grid-cols-2 w-[85vw] md:w-[45vw] mx-auto'>
+                        {<CustomLink onClick={(id) => setShowBorder({ id: 1 })} to={`/post-search`} className="border-b-2 ml-4 mt-4 cursor-pointer ">
                             All Movies</CustomLink>}
                         {
                             homeCates.length > 0 &&
@@ -157,9 +162,9 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                 }
                 <div tabIndex="0" className="px-4 py-6 abolute right-[30%] rounded-lg dropdown-content menu  mt-3 shadow text-white bg-black bg-opacity-60 w-auto">
                     {/* lg  */}
-                    {<CustomLink onClick={(id) => setShowBorder({id:1})} to={`/post-search`} className="border-b-2 ml-4 mt-4 cursor-pointer ">
+                    {<CustomLink onClick={(id) => setShowBorder({ id: 1 })} to={`/post-search`} className="border-b-2 ml-4 mt-4 cursor-pointer ">
                         All Movies</CustomLink>}
-                    <ul className='md:grid grid-cols-2 md:w-[20vw] mt-4'>
+                    <ul className='md:grid grid-cols-2 md:w-[30vw] mt-4 mx-auto'>
 
                         {
                             homeCates?.length > 0 &&
@@ -269,6 +274,8 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                                         <ul tabIndex="0" id='profile' className=" bg-black border border-slate-600 space-y-4 divide divide-y mt-2  w-[350%] card card-compact  dropdown-content pl-4 pr-1 pt-4 pb-4 shadow-xl bg-opacity-60 rounded-box w-52">
                                             <div className='space-y-2 '>
                                                 {/* <Link onClick={() => setModifiedNav(false)} to="/profile"> */}
+
+                                              
                                                 <li>
 
                                                     {
@@ -277,6 +284,9 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                                                             src="https://i.ibb.co/vj0Ctmj/user.png" />
                                                     }
 
+                                                </li>
+                                                <li className='text-salte-200'>
+                                                    {window.localStorage?.getItem('name')}
                                                 </li>
                                                 {/* </Link> */}
                                                 {/* <Link to="/profile">

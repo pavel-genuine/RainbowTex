@@ -50,15 +50,7 @@ const VideoUploader =  (props) => {
 
     return (
         <div>
-            {progress > 0 &&
-                <div>
-                    <div className='flex justify-end items-center '>
-                        <progress class="progress progress-error mr-2" value={progress} max="100"></progress>
-                    </div>
-                    <label>{progress}% uploaded</label>
-                </div>
-            }
-
+           
             <div className="VideoInput relative">
                 <input
                     id="file-upload"
@@ -98,6 +90,15 @@ const VideoUploader =  (props) => {
                     )}
                 </div>
             </div>
+            {progress > 0 &&
+                <div>
+                    <div className='flex justify-end items-center my-2'>
+                        <progress class="progress progress-error mr-2" value={progress} max="100"></progress>
+                    </div>
+                    <label>{progress}% uploaded</label>
+                </div>
+            }
+
         </div>
     )
 }

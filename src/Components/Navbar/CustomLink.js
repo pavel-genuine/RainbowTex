@@ -9,7 +9,7 @@ function CustomLink({ children, to, ...props }) {
       <div>
         <Link className='customLink'
           style= {{ textDecoration: "none", borderBottom:match?"3px solid #e50914":'',
-           fontWeight:'bold',fontSize:'17px' }}
+           fontWeight:'bold' }}
           to={to}
           {...props}
         >
