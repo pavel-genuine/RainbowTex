@@ -43,6 +43,7 @@ const EditPost = () => {
     } = useForm();
 
     const [movie, setMovie] = useState("");
+    const [greenBar, setGreenBar] = useState(false);
     const [selectedGenre, setSelectedGenre] = useState(movie?.genre);
     const [active, setActive] = useState(true);
     const [source, setSource] = useState("");
@@ -57,11 +58,15 @@ const EditPost = () => {
         thumbnail: null,
     });
     const showActive = useRef(movie?.isActive);
+   
 
     useEffect(() => {
         // dispatch(singlePostGet(id))
 
         // console.log('movvvv',movie);
+        if (progress==100) {
+            setGreenBar(()=>true)
+        }
 
         const fetchSinglePost = async () => {
             const { data } = await getSinglePost(id);
@@ -69,7 +74,7 @@ const EditPost = () => {
         };
 
         fetchSinglePost();
-    }, []);
+    }, [progress]);
 
     // console.log('mov',movie);
 
@@ -82,7 +87,7 @@ const EditPost = () => {
         formData.append("video", file);
         formData.append("_id", movie?._id);
 
-       const {data} = await addVideo(formData, {
+        const { data } = await addVideo(formData, {
             withCredentials: true,
             headers: {
                 "Content-Type": "multipart/form-data",
@@ -91,7 +96,7 @@ const EditPost = () => {
                 setProgress(Math.round((100 * data.loaded) / data.total));
             },
         });
-        
+
         // console.log(data,'ddd');
 
         toast.success("Video updated");
@@ -472,20 +477,16 @@ const EditPost = () => {
                                                     </video>
                                                 </div>
                                             }
-                                            
+
                                         </div>
-                                             {progress > 0 && (
-                    <div>
-                      <div className="flex justify-end items-center ">
-                        <progress
-                          class="progress progress-error mr-2"
-                          value={progress}
-                          max="100"
-                        ></progress>
-                      </div>
-                      <label>{progress}% uploaded</label>
+                                        {progress > 0 &&
+                <div>
+                    <div className='flex justify-end items-center my-2'>
+                        <progress class={`progress ${greenBar?'progress-success':'progress-error'}`} value={progress} max="100"></progress>
                     </div>
-                  )}
+                    <label>{progress}% uploaded</label>
+                </div>
+            }
                                     </div>
                                 </div>
                             </div>

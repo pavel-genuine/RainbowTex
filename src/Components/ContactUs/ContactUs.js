@@ -28,8 +28,10 @@ const ContactUs = () => {
                     <p>
                         You will need an internet or mobile phone connection.
                     </p>
-                    <label for="my-modal-4" class="btn modal-button">Email Us</label>
-                    <input type="checkbox" id="my-modal-4" class="modal-toggle" />
+                    <a href="mailto:jucundu@gmail.com" class="btn modal-button" type="submit" >Email Us</a>
+
+                    {/* <label for="my-modal-4" class="btn modal-button">Email Us</label> */}
+                    {/* <input type="checkbox" id="my-modal-4" class="modal-toggle" />
                     <label for="my-modal-4" class="modal cursor-pointer">
                         <label class="modal-box relative" for="">
                         <label htmlFor="my-modal-4" className="modal-action btn btn-sm btn-circle absolute right-2 top-2 p-2">✕</label>
@@ -71,7 +73,7 @@ const ContactUs = () => {
                                 </form>
                             </div>
                         </label>
-                    </label>
+                    </label> */}
                 </div>
             </div>
 

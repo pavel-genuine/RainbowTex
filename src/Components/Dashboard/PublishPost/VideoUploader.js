@@ -3,6 +3,7 @@ import axios, { CancelToken, isCancel } from "axios";
 import { useDispatch, useSelector } from 'react-redux';
 import { videoUpload } from '../../../redux/features/postSection/postVideoSlice'
 import { uploadVideo } from '../../../api/api';
+import { useEffect } from 'react';
 
 const VideoUploader =  (props) => {
 
@@ -10,11 +11,14 @@ const VideoUploader =  (props) => {
 
     const [progress, setProgress] = useState(0);
     const [erro, setError] = useState();
+    const [greenBar, setGreenBar] = useState(false);
     const cancelFileUpload = useRef(null);
 
     const { isLoading, error, video } = useSelector(state => state?.postVideo)
 
     const dispatch = useDispatch()
+
+  
 
     const handleFileChange =async(event) => {
         const file = event.target.files[0];
@@ -47,6 +51,16 @@ const VideoUploader =  (props) => {
     const handleChoose = (event) => {
         //   inputRef.current.click();
     };
+
+    useEffect(()=>{
+
+        console.log(progress,'bar');
+
+        if (progress==100) {
+            setGreenBar(()=>true)
+        }
+        
+    },[progress])
 
     return (
         <div>
@@ -81,7 +95,7 @@ const VideoUploader =  (props) => {
                 } */}
                     {source && (
 
-                        <div className='absolute md:top-[-30%] top-[0]'>
+                        <div className='absolute md:top-[-30%] top-[0] mb-2'>
 
                             <video className=' rounded cursor-pointer md:w-[30vw] w-[90vw] h-[270px] md:h-[270px] ' controls poster={props?.poster} controlsList="nodownload">
                                 <source src={ source} />
@@ -93,7 +107,7 @@ const VideoUploader =  (props) => {
             {progress > 0 &&
                 <div>
                     <div className='flex justify-end items-center my-2'>
-                        <progress class="progress progress-error mr-2" value={progress} max="100"></progress>
+                        <progress class={`progress ${greenBar?'progress-success':'progress-error'}`} value={progress} max="100"></progress>
                     </div>
                     <label>{progress}% uploaded</label>
                 </div>

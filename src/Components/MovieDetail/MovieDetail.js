@@ -247,16 +247,17 @@ const MovieDetails = () => {
             </div>
 
 
-            <div className='md:mt-[32%] md:pl-16 pl-5 '>
+            <div className='md:mt-[32%] md:pl-16 pl-5 pt-20 '>
 
                 <p className='lg:text-2xl md:text-xl text-lg font-semibold'>Videos || {movie?.title}  </p>
                 {
-                    <video className=' md:w-[70%] lg:w-[40%] w-[90%] rounded my-5'  controls poster={movie?.videoCover?.cdnUrl} controlsList="nodownload">
+                    <video className=' md:w-[70%] lg:w-[60%] w-[90%] rounded my-5'  controls poster={movie?.videoCover?.cdnUrl} controlsList="nodownload">
                         <source type='video/mp4' src={movie?.videos?.length && movie?.videos[movie?.videos.length - 1]?.url} />
                         <source type='video/ogg' src={movie?.videos?.length && movie?.videos[movie?.videos.length - 1]?.url} />
                         <source type='video/webm' src={movie?.videos?.length && movie?.videos[movie?.videos.length - 1]?.url} />
                     </video>
                 }
+                <p className='text-slate-400'> {movie?.viewedByDevices?.length ?movie?.viewedByDevices.length:'0' } <span className='mx-2 '>views</span> </p>
 
                 <div className='flex my-5'>
                     <h1 className='text-lg mr-4'>Give Your Rating :</h1>

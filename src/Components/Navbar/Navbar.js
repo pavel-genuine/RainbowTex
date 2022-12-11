@@ -84,7 +84,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
                         <div className='space-y-2'>
                             {/* <Link to="/profile"> */}
-                          
+
                             <li>
                                 <img className='w-14 border border-[brown]  rounded-full'
                                     src={"https://i.ibb.co/vj0Ctmj/user.png"} />
@@ -161,14 +161,14 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                 }
                 <div tabIndex="0" className="px-4 py-6 abolute right-[30%] rounded-lg dropdown-content menu  mt-3 shadow text-white bg-black bg-opacity-60 w-auto">
                     {/* lg  */}
-                    {<CustomLink onClick={(id) => setShowBorder({ id: 1 })} to={`/post-search`} className="border-b-2 ml-4 mt-4 cursor-pointer ">
+                    {<CustomLink onClick={(id) => setShowBorder({ id: 1 })} to={`/post-search`} className=" ml-4 mt-4 cursor-pointer ">
                         All Movies</CustomLink>}
                     <ul className='md:grid grid-cols-2 md:w-[30vw] mt-4 mx-auto'>
 
                         {
                             homeCates?.length > 0 &&
                             homeCates.map(item => {
-                                return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink to='/home' className={` border-b-2 cursor-pointer ${showBorder?.id == item?._id ? 'border-[red]' : ''}`}>{item?.categoryName}</CustomLink></li>
+                                return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink to='/home' className={` cursor-pointer ${showBorder?.id == item?._id ? '  border-b-2 border-[red]' : ''}`}>{item?.categoryName}</CustomLink></li>
                             })
                         }
 
@@ -199,7 +199,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
                     <div className='lg:hidden flex justify-between items-center p-2'>
                         <div className="dropdown">
-                            <label htmlFor='menuToggler' tabIndex="0" className="btn btn-ghost ">
+                            <label htmlFor='menuToggler' tabIndex="0" className="btn btn-ghost md:mr-0 ">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
                             </label>
                             <input type="checkbox" name="" id="menuToggler" />
@@ -220,10 +220,13 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                                     </div>
                                 }
                             </div>
-                            <Link to='/' className="btn btn-ghost normal-case text-3xl text-[#e50914] font-bold">Jucundu</Link>
 
                         </div>
-                        {personalizeItems}
+                        <Link to='/' className="btn btn-ghost normal-case text-3xl text-[#e50914] font-bold ">Jucundu</Link>
+
+                        <div>
+                            {personalizeItems}
+                        </div>
                     </div>
 
 
@@ -274,7 +277,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                                             <div className='space-y-2 '>
                                                 {/* <Link onClick={() => setModifiedNav(false)} to="/profile"> */}
 
-                                              
+
                                                 <li>
 
                                                     {

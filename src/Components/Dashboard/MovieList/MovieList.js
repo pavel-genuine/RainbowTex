@@ -124,7 +124,7 @@ const MovieList = () => {
                                             {/* <th class=" border border-[#181818] text-left px-8 py-4">Is Live</th> */}
                                             <th class=" border border-[#181818] text-left pl-2 py-4">Add To Banner</th>
                                             <th class=" border border-[#181818] text-left pl-2 py-4">IMDb Rating</th>
-                                            <th class=" border border-[#181818] text-left pl-2 py-4">Create Time</th>
+                                            <th class=" border border-[#181818] text-left pl-2 py-4">Total Views</th>
                                             <th class=" border border-[#181818] text-left pl-2 py-4">Action</th>
                                         </tr>
                                     </thead>
@@ -188,7 +188,7 @@ const MovieList = () => {
                                                     </td>
 
                                                     <td class="border border-[#181818]  pl-10 py-2">{movie?.imdbRating}</td>
-                                                    <td class="border border-[#181818]  pl-2 py-2">{movie?.createdAt}</td>
+                                                    <td class="border border-[#181818]  px-10 py-2">{movie?.viewedByDevices?.length ?movie?.viewedByDevices.length:'0' }</td>
                                                     <td class="border border-[#181818] pl-2 py-2 ">
                                                         <p className='flex'>
                                                             <span title='edit' >
