@@ -251,8 +251,10 @@ const MovieDetails = () => {
 
                 <p className='lg:text-2xl md:text-xl text-lg font-semibold'>Videos || {movie?.title}  </p>
                 {
-                    <video className=' md:w-[50%] w-[90%] rounded my-5' controls poster={movie?.videoCover?.cdnUrl} controlsList="nodownload">
-                        <source src={movie?.videos?.length && movie?.videos[movie?.videos.length - 1]?.url} />
+                    <video className=' md:w-[70%] lg:w-[40%] w-[90%] rounded my-5'  controls poster={movie?.videoCover?.cdnUrl} controlsList="nodownload">
+                        <source type='video/mp4' src={movie?.videos?.length && movie?.videos[movie?.videos.length - 1]?.url} />
+                        <source type='video/ogg' src={movie?.videos?.length && movie?.videos[movie?.videos.length - 1]?.url} />
+                        <source type='video/webm' src={movie?.videos?.length && movie?.videos[movie?.videos.length - 1]?.url} />
                     </video>
                 }
 
@@ -311,22 +313,22 @@ const MovieDetails = () => {
                     }
                     <br />
 
-                    {movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')).rating > 1 && <span>Your Given Rating:</span>}
+                    {movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating > 1 && <span>Your Given Rating:</span>}
 
                     {
-                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')).rating == 2 && Rating2
+                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating == 2 && Rating2
                     }
 
                     {
-                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')).rating == 3 && Rating3
+                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating == 3 && Rating3
                     }
 
                     {
-                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')).rating == 4 && Rating4
+                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating == 4 && Rating4
                     }
 
                     {
-                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')).rating == 5 && Rating5
+                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating == 5 && Rating5
                     }
 
 
@@ -337,7 +339,7 @@ const MovieDetails = () => {
                     <div className='flex items-center'>
 
                         {thisRating && movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')) ?
-                            (movie?.averageRating * movie?.ratings?.length - movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')).rating + thisRating) / (movie?.ratings?.length)
+                            (movie?.averageRating * movie?.ratings?.length - movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating + thisRating) / (movie?.ratings?.length)
                             : movie?.averageRating 
                         }
                         <span title='' className='mx-2'>
