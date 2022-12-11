@@ -58,7 +58,7 @@ function App() {
           <Route path='/profile' element={<Profile></Profile>}></Route>
           <Route path='/movie-detail/:id' element={<RequireAuth><MovieDetails></MovieDetails></RequireAuth>}></Route>
           <Route path='/payment' element={<PaymentHome></PaymentHome>}></Route>
-          <Route path={`/:id`} element={<GSignin></GSignin>}></Route>
+          <Route path={`/google`} element={<GSignin></GSignin>}></Route>
           <Route path='*' element={<NotFound></NotFound>}></Route>
 
         </Routes>

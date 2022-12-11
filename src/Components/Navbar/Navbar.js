@@ -20,7 +20,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
     const admin = localStorage.getItem('isAdmin')
 
     const logoutHandler = async () => {
-        await logOut()
+        // await logOut()
         localStorage?.removeItem('loginToken')
         localStorage?.removeItem('email')
         localStorage?.removeItem('userId')
