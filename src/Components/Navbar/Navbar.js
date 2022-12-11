@@ -141,12 +141,12 @@ const Navbar = ({ filterHandler, searchHandler }) => {
 
                 <ul className="md:space-y-2 py-1 md:p-4 font-bold rounded-lg notificationpro text-black absolute top-[325%] left-[0%]  md:left-[145%] md:top-[-50%] bg-black text-[white]  bg-opacity-60 ">
                     <ul className='grid grid-cols-2 w-[85vw] md:w-[45vw] mx-auto'>
-                        {<CustomLink onClick={(id) => setShowBorder({ id: 1 })} to={`/post-search`} className="border-b-2 ml-4 mt-4 cursor-pointer ">
+                        {<CustomLink onClick={(id) => setShowBorder({ id: 1 })} to={`/post-search`} className=" ml-4 mt-4 cursor-pointer ">
                             All Movies</CustomLink>}
                         {
                             homeCates.length > 0 &&
                             homeCates.map(item => {
-                                return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink to='/home' className={` border-b-2 cursor-pointer ${showBorder?.id == item?._id ? 'border-[red]' : ''}`}>{item?.categoryName}</CustomLink></li>
+                                return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink to='/home' className={` cursor-pointer ${showBorder?.id == item?._id ? 'border-[red]  border-b-2' : ''}`}>{item?.categoryName}</CustomLink></li>
                             })
                         }
                     </ul>
@@ -222,7 +222,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                             </div>
 
                         </div>
-                        <Link to='/' className="btn btn-ghost normal-case text-3xl text-[#e50914] font-bold ">Jucundu</Link>
+                        <a href='/' className="btn btn-ghost normal-case text-3xl text-[#e50914] font-bold ">Jucundu</a>
 
                         <div>
                             {personalizeItems}
