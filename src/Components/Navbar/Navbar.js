@@ -28,7 +28,6 @@ const Navbar = ({ filterHandler, searchHandler }) => {
         localStorage.clear();
         window.location.reload();
     }
-
     const handleFilterCate = (id) => {
 
         navigate('/')

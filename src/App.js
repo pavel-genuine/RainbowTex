@@ -20,6 +20,7 @@ import PaymentHome from "./Components/Payment/PaymentHome";
 import GSignin from "./Components/SignIn/GSignin";
 import RequireAdmin from "./Components/Shared/hooks/requireAdmin";
 import RequireAuth from "./Components/Shared/hooks/requireAuth";
+import NotFound from "./Components/NotFound/NotFound";
 
 const queryClient = new QueryClient()
 function App() {
@@ -57,7 +58,9 @@ function App() {
           <Route path='/profile' element={<Profile></Profile>}></Route>
           <Route path='/movie-detail/:id' element={<RequireAuth><MovieDetails></MovieDetails></RequireAuth>}></Route>
           <Route path='/payment' element={<PaymentHome></PaymentHome>}></Route>
-          <Route path={`/google?logintoken=${localStorage.getItem('loginToken')}`} element={<GSignin></GSignin>}></Route>
+          <Route path={`/:id`} element={<GSignin></GSignin>}></Route>
+          <Route path='*' element={<NotFound></NotFound>}></Route>
+
         </Routes>
       </div>
     </QueryClientProvider>
