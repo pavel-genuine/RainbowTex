@@ -227,13 +227,13 @@ const MovieDetails = () => {
     }
 
     return (
-        <div className='mx-auto bg-[#181818] text-slate-200 min-h-[100vh] pt-16'>
+        <div className=' bg-[#181818] text-slate-200 min-h-[100vh] pt-16'>
             <Toaster></Toaster>
             <div className=" h-[40vh]  w-[98vw] mx-auto relative mb-40 md:mb-60">
                 <img className='lg:h-[100vh] h-[40vh] w-[100vw] brightness-125 contrast-125' src={movie?.videoCover?.cdnUrl ? movie?.videoCover?.cdnUrl : 'https://i.ibb.co/R6Y4CQ3/1-white-1.png'} alt="" />
                 <div className='absolute w-[98vw] md:pt-[15%]  pt-[20%]  p-5 md:pl-28 md:top-[0%] top-[0%] lg:h-[100vh] h-[40vh] text-white bg-gradient-to-t from-[#181818]'>
                     <h1 className='lg:text-6xl md:text-4xl text-2xl font-semibold'>{movie?.title}</h1>
-                    <p className='md:text-lg md:w-[40%] md:my-5 my-2'>{movie?.description?.slice(0, 100)}...</p>
+                    <p className='md:text-lg md:w-[70%] lg:w-[50%] w-[90%] md:my-5 my-2'>{movie?.description?.slice(0, 100)}...</p>
 
                     <div className='flex space-x-10'>
                         <Link to={'/payment'}><button className='md:py-3 px-16 py-1 font-semibold md:text-lg rounded max-w-xs text-white bg-[#e50914] hover:bg-[brown] cursor-pointer mt-4 mb-2'>Join Now</button></Link>
@@ -338,7 +338,7 @@ const MovieDetails = () => {
 
                         {thisRating && movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')) ?
                             (movie?.averageRating * movie?.ratings?.length - movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')).rating + thisRating) / (movie?.ratings?.length)
-                            : (movie?.averageRating + thisRating) / (movie?.ratings?.length + 1)
+                            : movie?.averageRating 
                         }
                         <span title='' className='mx-2'>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="#e50914" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[#e50914]`}>
@@ -376,10 +376,10 @@ const MovieDetails = () => {
                         </div>
                         <p className='text-[#e50914] lg:text-2xl md:text-xl text-lg font-semibold'>Description</p>
 
-                        <p className='text-lg font md:w-[70%] w-60 text-justify'>{movie?.description}</p>
+                        <p className='text-lg font md:w-[90%] lg:w-[80%] w-[] text-justify'>{movie?.description}</p>
                     </div>
 
-                    <div className=' md:w-96 w-80 '>
+                    <div className='lg:w-[40%] md:w-[70%] '>
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className="pt-10 space-y-2 pb-5 ">
                                 <header className="font-semibold text-xl mb-5">Comment here</header>
@@ -394,7 +394,7 @@ const MovieDetails = () => {
                                                 id="text"
                                                 minLength="2"
                                                 // className="outline-0 pt-3 font-normal"
-                                                className=" outline-0 p-3 font-normal  bg-slate-700 bg-opacity-50 md:my-5 rounded-lg  block md:w-full w-60"
+                                                className=" outline-0 p-3 font-normal  bg-slate-700 bg-opacity-50 md:my-5 rounded-lg  block  "
                                                 {...register("comment")}>
                                             </textarea>
                                             {/* {errors.comment && errors.comment.type === "required" && <span>This is required</span>}
