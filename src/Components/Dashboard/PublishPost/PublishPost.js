@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { set, useForm } from 'react-hook-form';
 import { useState } from 'react';
 import ImageUploading from 'react-images-uploading';
@@ -9,7 +9,7 @@ import VideoUploader from './VideoUploader';
 import { useDispatch, useSelector } from 'react-redux';
 import { publishPost } from '../../../redux/features/postSection/postSlice';
 import { videoCoverAdd } from '../../../redux/features/postSection/videoCoverSlice';
-import { createPost } from '../../../api/api';
+import { createPost, uploadVideo } from '../../../api/api';
 import useAllCategories from '../../Shared/useAllCategories';
 import { categoryAdd } from '../../../redux/features/postSection/postCategorySlice';
 
@@ -30,17 +30,58 @@ const PublishPost = () => {
     const [videoData, setVideoData] = useState()
     const [coverPhoto, setCoverPhoto] = useState();
     const [thumbnail, setThumbnail] = useState('')
+    const [source, setSource] = useState();
+    const [progress, setProgress] = useState(0);
+    const [erro, setError] = useState();
+    const [greenBar, setGreenBar] = useState(false);
+    const cancelFileUpload = useRef(null);
+
 
     const { category } = useAllCategories()
     const { isLoading, error, post } = useSelector(state => state?.publishPost)
+    const { video } = useSelector(state => state?.postVideo)
 
-
-    // console.log('post video', videoData);
     const dispatch = useDispatch()
-
-    const handleVideoData = (data) => {
+    
+    const handleFileChange =async(event) => {
+        const file = event.target.files[0];
+        const url = URL.createObjectURL(file);
+        setSource(url);
+        const formData = new FormData()
+        formData.append("video", file)  
+        const {data}= await uploadVideo(formData, {
+            withCredentials: true,
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            onUploadProgress: data => {
+                //Set the progress value to show the progress bar
+                setProgress(Math.round((100 * data.loaded) / data.total))
+            },
+        })
+       
         setVideoData(() => data)
-    }
+ 
+        if (data?.url) {
+            toast.success('Video Uploaded Successfully.')
+        }
+    };
+
+    const cancelUpload = () => {
+        if (cancelFileUpload.current)
+            cancelFileUpload.current("User has canceled the file upload.");
+    };
+
+    const handleChoose = (event) => {
+        //   inputRef.current.click();
+    };
+
+    useEffect(()=>{
+
+        if ( videoData?.url) {
+            setGreenBar(()=>true)
+        }  
+    },[videoData])
 
     const onChangeActive = (e) => {
         const { value, checked } = e.target;
@@ -69,12 +110,12 @@ const PublishPost = () => {
         formData.append('description', data?.description);
         formData.append('category', selectedCate);
 
-        var tags =data?.tags.split(',');
+        var tags = data?.tags.split(',');
 
         for (var i = 0; i < tags.length; i++) {
             formData.append('tags[]', tags[i]);
         }
-   
+
         formData.append('videocover', postData?.videocover);
         formData.append('thumbnail', postData?.thumbnail);
         data?.imdbRating && formData.append('imdbRating', data?.imdbRating);
@@ -115,17 +156,17 @@ const PublishPost = () => {
                         <h2 className="text-2xl font-bold ">Upload Your Movie</h2>
                         <div className="flex justify-between my-10 ">
                             <h1 className="text-[brown] font-semibold">{email}</h1>
-                            {/* { */}
-                            {/* videoUrl ?  */}
+                            {
+                            videoData?.url ? 
                             <button type="submit" className=" btn hover:bg-[#e50914] bg-[brown] btn-xs mb-10 ">
                                 Publish
                             </button>
-                            {/* :
-                         <button disabled type="submit" className="disabled:btn-error  disabled:btn-xs ">
+                             :
+                         <button title='Upload video to enable publish button' disabled type="submit" className="diabled:btn-xs disabled:bg-slate-600 disabled:rounded-lg px-1 ">
                          Publish
-                     </button> */}
+                     </button> 
 
-                            {/* } */}
+                             } 
                         </div>
                         <div className=''>
 
@@ -233,9 +274,60 @@ const PublishPost = () => {
                                             )}
                                         </ImageUploading>
                                     </div>
+
+                                    {/* video  */}
                                     <div className='mb-7 md:ml-5'>
-                                        <VideoUploader handleVideoData={handleVideoData} />
-                                    </div>
+                                        <div>
+
+                                            <div className="VideoInput relative">
+                                                <input
+                                                    id="file-upload"
+                                                    className="VideoInput_input hidden"
+                                                    type="file"
+                                                    onChange={handleFileChange}
+                                                />
+
+                                                <div class="flex justify-center  items-center  border-2 px-6 pt-5 pb-6 md:w-[18vw] w-[90vw] h-[270px]  md:h-[200px] order-2 border-dashed rounded-md">
+
+
+                                                    <div class="space-y-1 text-center">
+                                                        <div class="flex text-sm text-gray-600">
+                                                            <label for="file-upload" class="relative cursor-pointer rounded-md font-medium hover:text-[brown] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                                <svg onChange={handleFileChange} class="mx-auto h-12 w-12" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                                </svg><span>Upload Video</span>
+                                                                <input style={{ backgroundColor: ' #919cb1', border: '#6b7280' }} class="sr-only" />
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    {/* {
+                   !video?.url && source &&  <button type="submit" className=" btn hover:bg-[#e50914] bg-[brown] btn-xs">
+                  please wait, video uploading...<progress label={`ww`} className="progress w-56 progress-info"></progress>
+               </button> 
+               } */}
+                                                    {source && (
+
+                                                        <div className='absolute md:top-[-30%] top-[0] mb-2'>
+
+                                                            <video className=' rounded cursor-pointer md:w-[30vw] w-[90vw] h-[270px] md:h-[270px] ' controls poster={postData?.videocover} controlsList="nodownload">
+                                                                <source src={source} />
+                                                            </video>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            {progress > 0 &&
+                                                <div>
+                                                    <div className='flex justify-end items-center my-2'>
+                                                        <progress class={`progress ${greenBar ? 'progress-success' : 'progress-error'}`} value={progress} max="100"></progress>
+                                                    </div>
+                                                    <label>{progress}% uploaded</label>
+                                                </div>
+                                            }
+
+                                        </div>                                    </div>
                                 </div>
                             </div>
 
@@ -279,12 +371,12 @@ const PublishPost = () => {
                                             {...register("tags")}>
                                         </textarea>
                                     </div>
-                              
+
                                 </div>
 
                                 <div className='md:grid grid-cols-3 md:my-20'>
-                                    
-                                <div className="form-control w-full max-w-xs text-white ">
+
+                                    <div className="form-control w-full max-w-xs text-white ">
                                         <select onChange={(e) => { setSelectedCate(e.target.value) }} className="select select-bordered bg-slate-600 my-10 md:my-0">
                                             <option disabled selected>Select Category</option>
                                             {
@@ -302,8 +394,8 @@ const PublishPost = () => {
                                             <option>anime</option>
                                         </select>
                                     </div>
-                                
-{/*      
+
+                                    {/*      
                                     <div className="form-control my-10 md:my-0 ">
                                         {
                                             active ?
@@ -328,7 +420,7 @@ const PublishPost = () => {
                                         }
                                     </div> */}
                                 </div>
-                                
+
                                 <div className='grow-wrap'>
                                     <textarea
                                         style={{ fontWeight: 'bold', fontSize: '15px' }}

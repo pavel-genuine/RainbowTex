@@ -365,19 +365,20 @@ const MovieDetails = () => {
                         <div className=''>
 
                             <div className='mb-3 '>
-                                <p className='text-[#e50914] lg:text-2xl md:text-xl text-lg font-semibold my-2'>Tags  </p>
-
-                                {movie?.tags?.length > 0 &&
+                            {movie?.tags?.length > 1 &&
+                                <p className='text-[#e50914] lg:text-xl md:text-lg text-md font-semibold my-2'>Tags  </p>
+                            }
+                                {movie?.tags?.length > 1 &&
                                     movie?.tags?.map((tag, i) => <span className='bg-slate-600 p-1 border rounded m-1' key={i}>{tag}</span>)
                                 }
                             </div>
 
                             <div className='my-3'>
-                                <p className='text-[#e50914] lg:text-2xl md:text-xl text-lg font-semibold'>Genres</p>
+                                <p className='text-[#e50914] lg:text-xl md:text-lg text-md font-semibold'>Genres</p>
                                 <p className=''>{movie?.genre}</p>
                             </div>
                         </div>
-                        <p className='text-[#e50914] lg:text-2xl md:text-xl text-lg font-semibold'>Description</p>
+                        <p className='text-[#e50914] lg:text-xl md:text-lg text-md font-semibold'>Description</p>
 
                         <p className='text-lg font md:w-[90%] lg:w-[80%] w-[] text-justify'>{movie?.description}</p>
                     </div>

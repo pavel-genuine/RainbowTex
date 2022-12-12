@@ -18,8 +18,6 @@ const VideoUploader =  (props) => {
 
     const dispatch = useDispatch()
 
-  
-
     const handleFileChange =async(event) => {
         const file = event.target.files[0];
         const url = URL.createObjectURL(file);
@@ -38,10 +36,9 @@ const VideoUploader =  (props) => {
                 setProgress(Math.round((100 * data.loaded) / data.total))
             },
         })
+        console.log(data,'data');
         props.handleVideoData(data)
     };
-
-    // console.log(video,'vido');
 
     const cancelUpload = () => {
         if (cancelFileUpload.current)
@@ -54,7 +51,6 @@ const VideoUploader =  (props) => {
 
     useEffect(()=>{
 
-        console.log(progress,'bar');
 
         if (progress==100) {
             setGreenBar(()=>true)
