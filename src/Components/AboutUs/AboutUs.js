@@ -18,9 +18,7 @@ const AboutUs = () => {
                 <p className='pt-5 text-justify'>
                     Lorem ipsum dolor, sit amet consectetur adipisicing elit. Harum maxime placeat fugit repellendus facilis dolores! Soluta sit necessitatibus numquam veritatis, atque quis, possimus quos dolore mollitia sed repellendus libero accusamus?Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus asperiores inventore esse, debitis laboriosam omnis similique quo aut ullam dolore magnam unde possimus id perspiciatis velit. Illum ipsum quas doloremque?<br /><br />  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Labore repudiandae voluptate, soluta totam odio earum aperiam saepe aliquid dolores deleniti minus quidem modi commodi! Illo voluptatum adipisci ex quasi reiciendis. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Labore nisi sed voluptatum quidem culpa doloribus cumque eveniet vel repudiandae soluta expedita sint illum magnam, distinctio molestiae necessitatibus blanditiis! Culpa, eligendi.
                 </p>
-                <button className='btn bg-[brown]'>
-                    Learn More About What We Do...
-                </button>
+                <a href="mailto:jucundu@gmail.com" className='btn bg-[brown]' type="submit" > Learn More About What We Do...</a>
 
                 <div className='text-justify md:grid grid-cols-3 gap-10 py-10 space-y-4 md:space-y-0'>
                     <div>

@@ -140,13 +140,13 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                 {/* sm  */}
 
                 <ul className="md:space-y-2 py-1 md:p-4 font-bold rounded-lg notificationpro text-black absolute top-[325%] left-[0%]  md:left-[145%] md:top-[-50%] bg-black text-[white]  bg-opacity-60 ">
-                    <ul className='grid grid-cols-2 w-[85vw] md:w-[45vw] mx-auto'>
-                        {<CustomLink onClick={(id) => setShowBorder({ id: 1 })} to={`/post-search`} className=" ml-4 mt-4 cursor-pointer ">
+                    <ul className='grid grid-cols-2 w-[85vw] md:w-[45vw] mx-auto gap-4 p-4 font-semibold'>
+                        {<CustomLink onClick={(id) => setShowBorder({ id: 1 })} to={`/post-search`} className=" mt-4 cursor-pointer ">
                             All Movies</CustomLink>}
                         {
                             homeCates.length > 0 &&
                             homeCates.map(item => {
-                                return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink to='/home' className={` cursor-pointer ${showBorder?.id == item?._id ? 'border-[red]  border-b-2' : ''}`}>{item?.categoryName}</CustomLink></li>
+                                return <p key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink to='/home' className={` cursor-pointer ${showBorder?.id == item?._id ? 'border-[red]  border-b-2' : ''}`}>{item?.categoryName}</CustomLink></p>
                             })
                         }
                     </ul>
@@ -159,16 +159,16 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                         <a className={`btn-ghost hover:rounded md:p-3 md:m-5 font-bold text-lg border-2 ${showBorder?.id ? ' border-b-[red]' : ''}`} >Categories</a>
                     </label>
                 }
-                <div tabIndex="0" className="px-4 py-6 abolute right-[30%] rounded-lg dropdown-content menu  mt-3 shadow text-white bg-black bg-opacity-60 w-auto">
+                <div tabIndex="0" className="font-semibold py-6 abolute right-[30%] rounded-lg dropdown-content menu  mt-3 shadow text-white bg-black bg-opacity-60 w-auto">
                     {/* lg  */}
-                    {<CustomLink onClick={(id) => setShowBorder({ id: 1 })} to={`/post-search`} className=" ml-4 mt-4 cursor-pointer ">
+                    {<CustomLink onClick={(id) => setShowBorder({ id: 1 })} to={`/post-search`} className=" ml-10 mt-4 cursor-pointer ">
                         All Movies</CustomLink>}
-                    <ul className='md:grid grid-cols-2 md:w-[30vw] mt-4 mx-auto'>
+                    <ul className='md:grid grid-cols-2 md:w-[30vw] mt-4 ml-10 gap-5'>
 
                         {
                             homeCates?.length > 0 &&
                             homeCates.map(item => {
-                                return <li key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink to='/home' className={` cursor-pointer ${showBorder?.id == item?._id ? '  border-b-2 border-[red]' : ''}`}>{item?.categoryName}</CustomLink></li>
+                                return <p key={item?._id} onClick={(id) => handleFilterCate(item?._id)}><CustomLink to='/home' className={`  ${showBorder?.id == item?._id ? '  border-b-2 border-[red]' : ''}`}>{item?.categoryName}</CustomLink></p>
                             })
                         }
 
@@ -205,7 +205,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                             <input type="checkbox" name="" id="menuToggler" />
 
 
-                            <div tabIndex="0" id="menuContent" className=" menu mx-2 border border-slate-600 bg-black text-[white]  bg-opacity-60 menu menu-compact dropdown-content my-2 p-4 shadow w-[80%] md:w-[100%]  rounded-box w-36 space-y-2">
+                            <div tabIndex="0" id="menuContent" className=" menu mx-2 border border-slate-600 bg-black text-[white]  bg-opacity-60 menu menu-compact dropdown-content my-2 p-4 shadow w-[100%]  rounded-box w-36 space-y-2">
 
                                 {menuItems}
                                 {!modifiedNav &&

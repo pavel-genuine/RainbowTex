@@ -8,11 +8,11 @@ const Footer = () => {
     <Link to={`/contact-us`}><span className="text-lg hover:underline">Questions? Contact us.</span></Link>
      <div className="grid md:grid-cols-3 grid-cols-2 mt-5 gap-10 md:gap-4">
          <Link to={`/about-us`}><p className="hover:underline">About Us</p></Link>
-         <Link to={``}><p className="hover:underline">FAQ</p></Link>
-         <Link to={``}><p className="hover:underline">Terms of Use</p></Link>
-         <Link to={``}><p className="hover:underline">Privacy</p></Link>
-         <Link to={``}><p className="hover:underline">Cookie Preferences</p></Link>
-         <Link to={``}><p className="hover:underline">Corporate Information</p></Link>
+         <Link to={`/contact-us`}><p className="hover:underline">FAQ</p></Link>
+         <Link to={`/about-us`}><p className="hover:underline">Terms of Use</p></Link>
+         <Link to={`/about-us`}><p className="hover:underline">Privacy</p></Link>
+         <Link to={`/about-us`}><p className="hover:underline">Cookie Preferences</p></Link>
+         <Link to={`/about-us`}><p className="hover:underline">Corporate Information</p></Link>
      </div>
     </div>
  </div>

@@ -3,7 +3,7 @@ import { base_url } from '../../api/api';
 
 const PaymentHome = () => {
     return (
-        <div className='bg-slate-800 md:h-[100vh] h-[110vh]  pt-20 md:pt-0 text-slate-200 md:flex justify-center items-center text-[80%] font-[80%] md:text-[100%] '>
+        <div className='bg-slate-800 md:h-[100vh] h-[110vh]  pt-20 md:pt-0 text-slate-200 md:flex justify-center items-center text-[80%] md:text-[100%] '>
             <div className=' md:flex  md:space-x-5 space-y-5 md:space-y-0 '>
                 <div className='px-5 py-5 md:py-10 w-[80%] lg:w-[100%] mx-auto rounded-md border hover:border-slate-400 border-slate-600 space-y-2 drop-shadow-2xl'>
                     <h1 className='text-xl font-semibold'>Freemium</h1>

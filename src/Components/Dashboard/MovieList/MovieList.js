@@ -116,7 +116,7 @@ const MovieList = () => {
                                 <p className='font-semibold my-5 bg-slate-600 px-3 py-2 md:mr-20 text-lg md:w-96 '>Total Movies Uploaded : {data?.length} </p>
 
                             </div>
-                            <div style={{ overflowX: 'auto' }}>
+                            <div className="min-h-screen" style={{ overflowX: 'auto' }}>
                                 <table class="shadow-lg table-auto overflow-x-scroll overflow-auto w-full mt-5 ">
                                     <thead className='text-white'>
                                         <tr className='bg-[brown]'>
