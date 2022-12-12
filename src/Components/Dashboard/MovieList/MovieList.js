@@ -57,6 +57,7 @@ const MovieList = () => {
 
     const fetcher = async () => {
         const { data } = await axios.get(`${base_url}/post?page=${page}&search=${searchText}&category=${filteredMovies?._id}&limit=${20}`)
+          
         return data
     }
 
@@ -64,6 +65,8 @@ const MovieList = () => {
 
 
     useEffect(() => {
+        console.log(filteredMovies,'ff');
+
 
         const fetchPostsNumber = async () => {
             const { data } = await getTotalPostsNumber()
@@ -80,7 +83,7 @@ const MovieList = () => {
         setPageCount(() => Math.ceil(postsNumber / 20))
 
 
-    }, [pageCount,postsNumber])
+    }, [pageCount,postsNumber,filteredMovies])
 
     const onChangeActive = (e) => {
         const { value, checked } = e.target;

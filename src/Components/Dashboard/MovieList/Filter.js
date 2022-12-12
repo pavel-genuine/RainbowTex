@@ -21,9 +21,7 @@ const Filter = ({ filterHandler, searchHandler }) => {
     }
 
     const handleFilterCate = (id) => {
-        if (id == 1) {
-            filterHandler(1)
-        }
+      
         const singleCate = homeCates?.find(cate => cate?._id == id)
         filterHandler(singleCate)
     }
@@ -59,7 +57,7 @@ const Filter = ({ filterHandler, searchHandler }) => {
             <div className="dropdown dropdown-hover">
                 <label tabIndex={0} className="btn btn-sm m-1">Filter By Category</label>
                 <ul tabIndex={0} className="dropdown-content menu  rounded w-[30vw] bg-slate-800 md:grid grid-cols-2 gap-4 bg-opacity-90 md:ml-20 px-1 md:px-3 py-3">
-                    {<li onClick={() => handleFilterCate(1)} className="bg-[brown] cursor-pointer bg-opacity-90 my-2 px-2  rounded ">
+                    {<li onClick={() => window.location.reload()} className="bg-[brown] cursor-pointer bg-opacity-90 my-2 px-2  rounded ">
                         {'All Movies'}
 
                     </li>}
