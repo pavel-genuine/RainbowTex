@@ -15,7 +15,7 @@ const SinglePost = ({ movie }) => {
         movie?.isActive &&
         <div className='promo relative cursor-pointer'>
             {
-                movie?.thumbnail || movie?.videoCover ? <img className="promo  w-[95%] h-[130px] lg:h-[200px] mx-auto  border-white hover:opacity-70" src={movie?.thumbnail ? movie?.thumbnail?.cdnUrl : movie?.videoCover?.cdnUrl} alt="" />
+                movie?.thumbnail || movie?.videoCover ? <img className="promo rounded  w-[95%] h-[130px] lg:h-[200px] mx-auto  border-white hover:opacity-70" src={movie?.thumbnail ? movie?.thumbnail?.cdnUrl : movie?.videoCover?.cdnUrl} alt="" />
                     :
                     <img className="promo  w-[95%] lg:h-[200px] h-[130px] mx-auto  border-white hover:opacity-70" src={'https://i.ibb.co/R6Y4CQ3/1-white-1.png'} alt="" />
 
