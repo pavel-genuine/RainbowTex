@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getTotalUsersNumber, userList } from '../../../api/api';
+import SkeletonTable from '../../Shared/Loading/TableSkeleton';
 import useUserList from '../../Shared/useUserList';
 
 const UsersTable = () => {
@@ -32,9 +33,11 @@ const UsersTable = () => {
         setPageCount(() => Math.ceil(usersNumber / 20))
     }, [userList, page, pageCount, usersNumber])
 
-    // if (isLoading) {
-    //     return <p>Loading...</p>
-    // }
+    if (!users?.length) {
+        return <div className='md:ml-[-15%] md:mt-[-10%] mt-[-28%]'>
+            <SkeletonTable></SkeletonTable>
+        </div>
+    }
 
     return (
         <div className=''>

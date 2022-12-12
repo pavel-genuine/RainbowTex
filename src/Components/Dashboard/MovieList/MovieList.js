@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { base_url, getAllPosts, getTotalPostsNumber } from "../../../api/api";
 import { addFeatured } from "../../../redux/features/featuredPost/featuredPostSlice";
 import { postDelete } from "../../../redux/features/postSection/postSlice";
+import SkeletonTable from "../../Shared/Loading/TableSkeleton";
 import SideBar from "../SideBar";
 import FeaturedBanner from "./FeaturedBanner";
 import Filter from "./Filter";
@@ -98,6 +99,12 @@ const MovieList = () => {
         }
     }
 
+    if (isLoading) {
+        return <div>
+            <SkeletonTable></SkeletonTable>
+        </div>
+    }
+
 
     return (
         <div className='pt-16 min-h-screen relative bg-[#181818] text-slate-200'>
@@ -136,8 +143,8 @@ const MovieList = () => {
                                             data?.map(movie => {
                                                 return <tr key={movie?._id}>
                                                     <td class="border border-[#181818] pl-4 py-2">{movie?.title}</td>
-                                                    <td class="border border-[#181818] pl-10 ">
-                                                        <img className="w-28" src={movie?.thumbnail?.cdnUrl} alt="" />
+                                                    <td class="border border-[#181818] lg:pl-10 ">
+                                                        <img className="md:w-28" src={movie?.thumbnail?.cdnUrl} alt="" />
                                                     </td>
                                                     <td class="border border-[#181818]  pl-4 py-2">{movie?.categoryName}</td>
                                                     {/* <td class="border border-[#181818]  px-5 py-2">

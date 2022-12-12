@@ -31,10 +31,10 @@ const Skeleton = props => (
 )
 
 Skeleton.metadata = {
-  name: 'Nic Bovee', // My name
-  github: 'ghettifish', // Github username
+  name: 'pavel.genuine', // My name
+  github: 'pavel.genuine', // Github username
   description: 'A simple favorite from the DoorDash local favorites.', // Little tagline
-  filename: 'DoorDashFavorite', // filename of your loader
+  filename: 'pavel.genuineDoorDashFavorite', // filename of your loader
 }
 
 export default Skeleton

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { base_url, getAllPosts, getTotalPostsNumber } from "../../../api/api";
+import SkeletonSearch from "../../Shared/Loading/SkeletonSearch";
 import usePosts from "../../Shared/usePosts";
 import SingleMovieCard from "./SingleMovieCard";
 
@@ -62,6 +63,12 @@ const PostSearch = ({ searchText, filteredCategory }) => {
     }, [ filteredMovies, searchText, postsNumber])
 
     // console.log(page,'page');
+
+    if (!posts.length) {
+        return <div>
+            <SkeletonSearch></SkeletonSearch>
+        </div>
+    }
 
 
     return (

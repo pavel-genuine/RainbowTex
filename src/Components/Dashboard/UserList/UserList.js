@@ -5,13 +5,6 @@ import UsersTable from "./UsersTable";
 
 const UserList = () => {
 
- 
-
-    useEffect(() => {
-        window.scrollTo(0, 0)
-
-       
-    }, [])
 
     return (
         <div className='py-16 min-h-screen relative bg-[#181818] text-slate-200'>
