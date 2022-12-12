@@ -62,7 +62,6 @@ const MovieList = () => {
 
     let { data, isLoading } = useQuery(["profile", page, searchText,filteredMovies], () => fetcher())
 
-    // console.log(data,'data');
 
     useEffect(() => {
 
@@ -81,7 +80,7 @@ const MovieList = () => {
         setPageCount(() => Math.ceil(postsNumber / 20))
 
 
-    }, [])
+    }, [pageCount,postsNumber])
 
     const onChangeActive = (e) => {
         const { value, checked } = e.target;
@@ -98,7 +97,7 @@ const MovieList = () => {
 
 
     return (
-        <div className='py-16 min-h-screen relative bg-[#181818] text-slate-200'>
+        <div className='pt-16 min-h-screen relative bg-[#181818] text-slate-200'>
 
             <div className='mx-auto w-[100%] pt-[.7%] md:grid grid-cols-12  '>
                 <SideBar index={2} color={'[#e50914]'}></SideBar>
@@ -215,15 +214,44 @@ const MovieList = () => {
                         </div>
                     </div>
 
-                    <div className="flex justify-center my-10 mx-auto">
+                    <div className="flex justify-center py-10 mx-auto ">
+                    {pageCount < 11 ?
                         <div> <button onClick={() => setPage(page - 1)} className="btn btn-sm mx-2">prev</button>
                             {[...Array(pageCount).keys()].map(number =>
                                 <button onClick={() => setPage(number + 1)} className={`btn btn-sm mx-2 text-center border ${page == number + 1 ? 'bg-[brown]' : ''}`}>{number + 1}</button>
                             )}
                             <button onClick={() => setPage(page + 1)} className="btn btn-sm mx-2">next</button>
                         </div>
+                        :
 
-                    </div>
+                        <div>
+                            <button onClick={() => setPage(page - 1)} className="btn btn-sm mx-2">prev</button>
+                            {[...Array(5).keys()].map(number =>
+                                <button onClick={() => setPage(number + 1)} className={`btn btn-sm mx-2 text-center border ${page == number + 1 ? 'bg-[brown]' : ''}`}>{number + 1}</button>
+                            )}
+                            {[...Array(pageCount).slice(6, pageCount - 6).keys()].map(number =>
+                                <button onClick={() => setPage(number + 1)} className={`btn btn-sm hidden mx-2 text-center border ${page == number + 1 ? 'bg-[brown]' : ''}`}></button>
+                            )}
+                            {
+                                page > 6 && page < pageCount - 5 ?
+                                    <span> <button className="btn btn-sm mx-2 text-center border bg-[brown]">.</button>
+                                        <button className="btn btn-sm mx-2 text-center border bg-[brown]">.</button>
+                                        <button className="btn btn-sm mx-2 text-center border bg-[brown]">.</button>
+                                    </span>
+                                    :
+                                    <span> <button className="btn btn-sm mx-2 text-center border">.</button>
+                                        <button className="btn btn-sm mx-2 text-center border">.</button>
+                                        <button className="btn btn-sm mx-2 text-center border">.</button>
+                                    </span>
+                            }
+                            {[...Array(pageCount).keys()].map(number =>
+                                <button onClick={() => setPage(number + 1)} className={`btn btn-sm mx-2 text-center border ${page == number + 1 ? 'bg-[brown]' : ''}`}>{number + 1}</button>
+                            ).slice(pageCount - 5, pageCount)}
+                            <button onClick={() => setPage(page + 1)} className="btn btn-sm mx-2">next</button>
+                        </div>
+                    }
+
+                </div>
                 </div>
 
             </div>

@@ -41,7 +41,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="text-[80%] md:text-[90%] lg:text-[100%]">
+      <div className="text-[80%] md:text-[90%] lg:text-[100%] bg-[#181818]">
         <Navbar filterHandler={filterHandler} searchHandler={searchHandler}></Navbar>
         <Routes>
           <Route path='/' element={<HomePage filteredCategory={filteredCategory}></HomePage>}></Route>
