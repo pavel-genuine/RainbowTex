@@ -59,7 +59,7 @@ const MovieDetails = () => {
     }
 
     useEffect(() => {
-        window.scrollTo(0, 0)
+       
 
 
         dispatch(singlePostGet(id))
@@ -86,7 +86,8 @@ const MovieDetails = () => {
         dispatch(commentAdd(newComment))
 
         setTimeout(() => {
-            // window.location.reload()
+            window.location.reload()
+            window.scrollTo(50, 50)
         }, 200);
     }
 
