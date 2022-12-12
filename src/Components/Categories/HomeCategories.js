@@ -1,15 +1,16 @@
 
 import Slider from 'react-slick'
 import useHomeCategories from '../Shared/hooks/useHomeCategories'
+import SkeletonHome from '../Shared/Loading/SkeletonHome'
 import SinglePost from './SinglePost'
 import { settings } from './slickSetting'
 
 const HomeCategories = ({ filteredCategory, searchText }) => {
 
 
-    const { category } = useHomeCategories()
+    const {error, category, isLoading} = useHomeCategories()
 
-
+   
     return (
         <div >
           

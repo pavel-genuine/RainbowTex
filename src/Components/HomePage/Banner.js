@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Slider from 'react-slick';
+import SkeletonHome from '../Shared/Loading/SkeletonHome';
 import useAllFeatured from '../Shared/useAllFeatured';
 import "./Banner.css"
 
@@ -47,6 +48,14 @@ const Banner = () => {
   };
 
   const { error, featured, isLoading } = useAllFeatured()
+
+  if (isLoading) {
+
+    return <div>
+      <SkeletonHome></SkeletonHome>
+    </div>
+    
+  }
 
   return (
     <div className="w-[98vw] mx-auto lg:h-[95vh] md:h-[80vh] h-[50vh] text-[80%] md:text-[100%]">
