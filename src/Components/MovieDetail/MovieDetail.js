@@ -15,6 +15,7 @@ import { ratingAdd } from '../../redux/features/postSection/addRatingSlice';
 import toast, { Toaster } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import Comment from './Comment';
+import Skeleton from '../Shared/Loading/Skeleton';
 
 const MovieDetails = () => {
 
@@ -223,11 +224,11 @@ const MovieDetails = () => {
 
 
     if (isLoading) {
-        return <p>loading...</p>
+        return <Skeleton></Skeleton>
     }
 
     return (
-        <div className=' bg-[#181818] text-slate-200 min-h-[100vh] pt-16'>
+        <div className=' bg-[#181818] text-slate-200 min-h-[100vh] pt-16 lg:pt-0'>
             <Toaster></Toaster>
             <div className=" h-[40vh]  w-[98vw] mx-auto relative mb-40 md:mb-60">
                 <img className='lg:h-[100vh] h-[40vh] w-[100vw] brightness-125 contrast-125' src={movie?.videoCover?.cdnUrl ? movie?.videoCover?.cdnUrl : 'https://i.ibb.co/R6Y4CQ3/1-white-1.png'} alt="" />
