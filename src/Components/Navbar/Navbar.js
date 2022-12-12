@@ -36,7 +36,11 @@ const Navbar = ({ filterHandler, searchHandler }) => {
         }, 500);
 
         const singleCate = homeCates?.find(cate => cate?._id == id)
-        filterHandler(singleCate)
+        if (id==1) {
+            filterHandler({_id:0})
+        }
+        else filterHandler(singleCate)
+        
         if (id == singleCate?._id) {
             setShowBorder(() => ({ id: id, clicked: true }))
         }
@@ -156,7 +160,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
             <div className="dropdown dropdown-hover hidden lg:block relative">
                 {!modifiedNav &&
                     <label tabIndex="0" className="">
-                        <a className={`btn-ghost hover:rounded md:p-3 md:m-5 font-bold text-lg border-2 ${showBorder?.id ? ' border-b-[red]' : ''}`} >Categories</a>
+                        <a className={`btn-ghost hover:rounded cursor-pointer md:p-3 md:m-5 font-bold text-lg border-2 ${showBorder?.id ? ' border-b-[red]' : ''}`} >Categories</a>
                     </label>
                 }
                 <div tabIndex="0" className="font-semibold py-6 abolute right-[30%] rounded-lg dropdown-content menu  mt-3 shadow text-white bg-black bg-opacity-60 w-auto">
@@ -192,9 +196,9 @@ const Navbar = ({ filterHandler, searchHandler }) => {
             <div className={`nav h-[70px]  fixed text-white bg-[#181818] ${background ? 'bg-opacity-80' : 'bg-opacity-20 bg-gradient-to-b from-black '} backdrop-filter-none backdrop-blur-sm shadow z-100`}>
                 <div className="lg:navbar lg:w-[100vw]  mx-auto lg:flex justify-around items-center">
                     <div className="lg:navbar-start hidden lg:block">
-                        <a onClick={() => setModifiedNav(false)} href='/' className=" normal-case text-xl ">
+                        <Link onClick={()=>{setModifiedNav(false); setShowBorder();handleFilterCate(1)}} to='/' className=" normal-case text-xl ">
                             <img className='md:w-40 ml-20 mt-2' src="https://i.ibb.co/Mnc17bk/1-22-removebg-preview.png" alt="" />
-                        </a>
+                        </Link>
                     </div>
 
                     <div className='lg:hidden flex justify-between items-center p-2'>
@@ -211,7 +215,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                                 {!modifiedNav &&
                                     <div className="form-control w-full max-w-xs">
                                         <input
-                                            onFocus={() => navigate('/post-search')}
+                                            onFocus={() => {navigate('/post-search');setShowBorder({ id: 1 })}}
                                             type="text"
                                             placeholder="Search"
                                             className={`outline-0 px-2 py-1  w-full rounded-full bg-opacity-60 text-white bg-[grey] `}
@@ -222,7 +226,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                             </div>
 
                         </div>
-                        <a href='/' className="btn btn-ghost normal-case text-3xl text-[#e50914] font-bold ">Jucundu</a>
+                        <Link to='/' onClick={()=>{setModifiedNav(false); setShowBorder();handleFilterCate(1)}} className="btn btn-ghost normal-case text-3xl text-[#e50914] font-bold ">Jucundu</Link>
 
                         <div>
                             {personalizeItems}
@@ -236,7 +240,7 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                                 <div className="flex w-[125%]">
                                     <input
                                         type="text"
-                                        onFocus={() => navigate('/post-search')}
+                                        onFocus={() => {navigate('/post-search');setShowBorder({ id: 1 })}}
                                         placeholder="Search movies"
                                         className={`outline-0 px-4 py-2 mt-10 md:mt-0 md:ml-20 w-full max-w-xs rounded-l-full bg-opacity-80 text-white bg-[grey] `}
                                         {...register("search")}

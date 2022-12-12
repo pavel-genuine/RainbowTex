@@ -120,7 +120,7 @@ const MovieList = () => {
                                 <p className='font-semibold my-2 text-xl underline underline-offset-2 '> Movies List</p>
                                 <Filter filterHandler={filterHandler} searchHandler={searchHandler}></Filter>
 
-                                <p className='font-semibold my-5 bg-slate-600 px-3 py-2 md:mr-20 text-lg md:w-96 '>Total Movies Uploaded : {data?.length} </p>
+                                <p className='font-semibold my-5 bg-slate-600 px-3 py-2 md:mr-20 text-lg md:w-96 rounded-lg'>Total Movies Uploaded : {data?.length} </p>
 
                             </div>
                             <div className="min-h-screen" style={{ overflowX: 'auto' }}>

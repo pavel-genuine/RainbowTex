@@ -21,7 +21,7 @@ const Filter = ({ filterHandler, searchHandler }) => {
     }
 
     const handleFilterCate = (id) => {
-      
+
         const singleCate = homeCates?.find(cate => cate?._id == id)
         filterHandler(singleCate)
     }
@@ -56,12 +56,12 @@ const Filter = ({ filterHandler, searchHandler }) => {
 
             <div className="dropdown dropdown-hover">
                 <label tabIndex={0} className="btn btn-sm m-1">Filter By Category</label>
-                <ul tabIndex={0} className="dropdown-content menu  rounded w-[30vw] bg-slate-800 md:grid grid-cols-2 gap-4 bg-opacity-90 md:ml-20 px-1 md:px-3 py-3">
-                    {<li onClick={() => window.location.reload()} className="bg-[brown] cursor-pointer bg-opacity-90 my-2 px-2  rounded ">
+                <ul tabIndex={0} className="dropdown-content menu  rounded w-[70vw] md:w-[50vw] lg:w-[30vw]  bg-black grid grid-cols-2 gap-3 bg-opacity-90 md:ml-20 px-1 md:px-4 py-4">
+                    {<li onClick={() => window.location.reload()} className="bg-[brown] cursor-pointer bg-opacity-90 px-1  rounded ">
                         {'All Movies'}
 
                     </li>}
-                    {myCategories?.map(item => <li onClick={() => handleFilterCate(item?._id)} className="bg-[brown] cursor-pointer bg-opacity-90 my-2 px-2 py-1 rounded ">
+                    {myCategories?.map(item => <li onClick={() => handleFilterCate(item?._id)} className="bg-[brown] cursor-pointer bg-opacity-90  px-1  rounded ">
                         {item?.categoryName}
 
                     </li>)}
@@ -73,16 +73,16 @@ const Filter = ({ filterHandler, searchHandler }) => {
             </div>
 
 
-            <div className="form-control w-full max-w-xs md:block">
+            <div className="form-control lg:w-[30%] md:w-[40%] w-[70%] md:block">
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex">
                         <input
                             type="text"
                             placeholder="Search movies"
-                            className={`outline-0 px-4 py-2 mt-10 md:mt-0 lg:ml-20 w-full max-w-xs  rounded-full bg-opacity-80 text-white bg-[grey] `}
+                            className={`outline-0 px-4 py-2 md:mt-0 lg:ml-10 w-full rounded-full bg-opacity-80 text-white bg-[grey] `}
                             {...register("search")}
                         />
-                        <button className='  hidden bg-opacity-80 text-slate-400 bg-[grey] py-2 px-2 cursor-pointer  rounded-r-full pr-4' type="submit"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                        <button className=' bg-opacity-80 text-slate-400 bg-[grey] py-2 px-2 cursor-pointer  rounded-r-full pr-4 hidden' type="submit"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                         </svg>
                         </button>
@@ -91,20 +91,21 @@ const Filter = ({ filterHandler, searchHandler }) => {
             </div>
 
 
-            <div className="md:mr-10 lg:ml-28 my-5 md:my-0">
+            <div className="lg:mr-10 lg:ml-10 my-5 md:my-0">
                 <AddCategory handleNewCate={handleNewCate}></AddCategory>
             </div>
 
 
             <label htmlFor="my-modal-x" className="btn btn-sm">Delete Category</label>
-
             <input type="checkbox" id="my-modal-x" className="modal-toggle" />
             <label htmlFor="my-modal-x" className="modal cursor-pointer">
                 <label className="modal-box relative bg-slate-800 py-10 px-4 w-11/12 max-w-2xl" htmlFor="">
+                    <label htmlFor="my-modal-x" className="modal-action btn btn-sm btn-circle absolute right-2 top-[-2.5%] p-2">✕</label>
+
                     <h1 className="text-xl font-semibold text-center mb-5">Delete Category</h1>
-                    <div className=" grid grid-cols-2 gap-4">
+                    <div className=" grid grid-cols-2 gap-3">
                         {
-                            myCategories?.map(item => <li className="cursor-pointer border my-2 px-4 py-2 rounded flex justify-between">
+                            myCategories?.map(item => <li className="cursor-pointer border px-2 py-1 rounded flex justify-between">
                                 {item?.categoryName}
                                 <span title='remove' onClick={() => handleDeleteCategory(item?._id)}>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer text-[red]">

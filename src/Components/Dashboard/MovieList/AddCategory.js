@@ -30,6 +30,8 @@ const AddCategory = ({ handleNewCate }) => {
             <input type="checkbox" id="my-modal-4" class="modal-toggle" />
             <label for="my-modal-4" class="modal cursor-pointer">
                 <label class="modal-box relative bg-slate-800 text-white" for="">
+                <label htmlFor="my-modal-x" className="modal-action btn btn-sm btn-circle absolute right-2 top-[-6%] p-2">✕</label>
+
                     <div >
                         <label for="review" class="block text-lg font-semibold mb-5   "> Add Category</label>
                         <form onSubmit={handleSubmit(onSubmit)}>

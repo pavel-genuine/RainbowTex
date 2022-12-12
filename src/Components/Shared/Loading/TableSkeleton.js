@@ -3,7 +3,7 @@ import ContentLoader from 'react-content-loader'
 
 const SkeletonTable = props => {
   return (
-   <div className='min-h-screen pt-40 md:px-28'>
+   <div className='min-h-screen md:pt-40 md:px-28'>
      <ContentLoader
       width={1200}
       height={400}

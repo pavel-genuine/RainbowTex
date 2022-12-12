@@ -35,9 +35,8 @@ const DashboardHome = () => {
 
             <div className='mx-auto w-[100%] pt-[.7%] md:grid grid-cols-12  '>
                 <SideBar index={1} color={'[#e50914]'}></SideBar>
-                <div className=" lg:mx-5 col-span-10 w-[100%] px-[5%] mt-10 md:px-[10%] ">
-                    <div className="mx-[3%]">
-                    </div>
+                <div className=" col-span-10 w-[100%] px-[5%] mt-10 md:px-[10%] ">
+         
                     <div class="space-y-4 ">
                         <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
                         <div class="drawer-content">
@@ -50,8 +49,8 @@ const DashboardHome = () => {
                             {window.localStorage?.getItem('name')}
                         </span></h2>
                         <div className='md:flex items-center'>
-                            <p className='font-semibold my-5 bg-slate-600 px-3 py-2 md:mr-20 text-lg '>Total Movies Uploaded : {postsNumber} </p>
-                            <p className='font-semibold my-5 bg-slate-600 px-3 py-2 text-lg '>Total Users : {usersNumber} </p>
+                            <p className='font-semibold my-5 bg-slate-600 px-3 py-2 md:mr-20 text-lg rounded-lg'>Total Movies Uploaded : {postsNumber} </p>
+                            <p className='font-semibold my-5 bg-slate-600 px-3 py-2 text-lg rounded-lg'>Total Users : {usersNumber} </p>
                         </div>
 
                         <div>
