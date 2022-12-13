@@ -7,10 +7,7 @@ import useAllFeatured from '../../Shared/useAllFeatured'
 const FeaturedBanner = ({ movie }) => {
 
     const [isBanner, setIsBanner] = useState(true)
-    const { featured: addedFeature } = useSelector(state => state?.featuredAdd)
-    // const { featured: removeFeat } = useSelector(state => state?.removeFeature)
-    const dispatch = useDispatch()
-
+ 
     const { error, featured, isLoading } = useAllFeatured()
 
     const addBanner = async (data) => {
@@ -22,7 +19,6 @@ const FeaturedBanner = ({ movie }) => {
         }
         await removeFeatured(data)
         setIsBanner(() => false)
-
         
     }
     // console.log(featured, 'bbb');
