@@ -39,8 +39,8 @@ const Comment = ({ item, postId }) => {
         toast.success('Comment edited')
 
         setTimeout(() => {
-            // window.location.reload()
-        }, 200);
+            window.location.reload()
+        }, 500);
 
 
 
@@ -76,7 +76,7 @@ const Comment = ({ item, postId }) => {
 
         setTimeout(() => {
             window.location.reload()
-        }, 200);
+        }, 500);
 
 
         toast.success('Comment deleted')
