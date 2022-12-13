@@ -352,7 +352,7 @@ const MovieDetails = () => {
 
                         {thisRating && movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')) ?
                             (movie?.averageRating * movie?.ratings?.length - movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating + thisRating) / (movie?.ratings?.length)
-                            : <span>{thisRating?thisRating: movie?.averageRating}</span>
+                            : <span>{thisRating?(movie?.averageRating * movie?.ratings?.length+thisRating)/(movie?.ratings?.length+1): movie?.averageRating}</span>
                         }
                         <span title='' className='mx-2'>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="#e50914" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[#e50914]`}>
