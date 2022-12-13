@@ -292,49 +292,68 @@ const MovieDetails = () => {
                 </div>
 
                 <div className='my-2'>
-                    {
-                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')) ?
-                            <p>
-                                {thisRating > 0 && <span>Your Updated Rating:</span>}  </p>
-                            :
+                    <div>
+                        {
+                            movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')) ?
+                                <p>
+                                    {thisRating > 0 &&
+                                        <p className="font-medium flex items-center my-2">
+                                            <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('name') ? localStorage.getItem('name') : 'Anonymous'}
+                                        </p>}
+                                </p>
+                                :
 
-                            <p>{thisRating > 0 && <span>Your Given Rating:</span>}</p>
+                                <p>
+                                    {thisRating > 0 &&
+                                        <p className="font-medium flex items-center my-2">
+                                            <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('name') ? localStorage.getItem('name') : 'Anonymous'}
+                                        </p>}
+                                </p>
 
 
-                    }
-                    {
-                        thisRating == 1 && Rating1
-                    }
-                    {
-                        thisRating == 2 && Rating2
-                    }
-                    {
-                        thisRating == 3 && Rating3
-                    }
-                    {
-                        thisRating == 4 && Rating4
-                    }
-                    {
-                        thisRating == 5 && Rating5
-                    }
-                    <br />
+                        }
+                        {
+                            thisRating == 1 && Rating1
+                        }
+                        {
+                            thisRating == 2 && Rating2
+                        }
+                        {
+                            thisRating == 3 && Rating3
+                        }
+                        {
+                            thisRating == 4 && Rating4
+                        }
+                        {
+                            thisRating == 5 && Rating5
+                        }
 
-                    {movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating > 1 && <span>Your Given Rating:</span>}
-
-                    {
-                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating == 2 && Rating2
-                    }
-
-                    {
-                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating == 3 && Rating3
-                    }
-
-                    {
-                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating == 4 && Rating4
-                    }
+                    </div>
 
                     {
-                        movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating == 5 && Rating5
+                        !thisRating > 0 && <div>
+                            {movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating > 1 && <p>
+                                {
+                                    <p className="font-medium flex items-center my-2">
+                                        <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{localStorage.getItem('name') ? localStorage.getItem('name') : 'Anonymous'}
+                                    </p>}  </p>}
+
+                            {
+                                movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating == 2 && Rating2
+                            }
+
+                            {
+                                movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating == 3 && Rating3
+                            }
+
+                            {
+                                movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating == 4 && Rating4
+                            }
+
+                            {
+                                movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating == 5 && Rating5
+                            }
+                        </div>
                     }
 
 
@@ -343,7 +362,7 @@ const MovieDetails = () => {
                 <div className='space-y-2'>
                     <h1 className='text-lg mr-4'>Average Given Ratings :</h1>
                     <div className='flex items-center'>
-                    {/* {thisRating == 0 && !movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))
+                        {/* {thisRating == 0 && !movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))
                             ?
                             movie?.ratings?.length
                             :
@@ -355,7 +374,7 @@ const MovieDetails = () => {
 
                         {thisRating && movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')) ?
                             (movie?.averageRating * movie?.ratings?.length - movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating + thisRating) / (movie?.ratings?.length)
-                            : <span>{thisRating?(movie?.averageRating * movie?.ratings?.length+thisRating)/(movie?.ratings?.length+1): movie?.averageRating}</span>
+                            : <span>{thisRating ? (movie?.averageRating * movie?.ratings?.length + thisRating) / (movie?.ratings?.length + 1) : movie?.averageRating}</span>
                         }
                         <span title='' className='mx-2'>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="#e50914" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[#e50914]`}>

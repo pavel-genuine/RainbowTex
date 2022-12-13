@@ -86,7 +86,8 @@ const Comment = ({ item, postId }) => {
     return (
         <div key={item?._id}>
             <p className="font-medium flex items-center">
-                <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{item?.userName ? item?.userName : 'Anonymous'} </p>
+                <img className="w-8 h-8 rounded-full mr-2 border border-[brown]" src="https://i.ibb.co/vj0Ctmj/user.png" alt="" />{item?.userName ? item?.userName : 'Anonymous'} 
+                </p>
             <div className='flex items-center'>
                 <p className='m-3 bg-slate-800 p-2 rounded'> {item?.comment}
                 </p>
