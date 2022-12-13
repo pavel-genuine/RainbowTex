@@ -295,24 +295,27 @@ const MovieDetails = () => {
                     {
                         movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')) ?
                             <p>
-                                {ratingsHover > 1 && <span>Your Updated Rating:</span>}  </p>
+                                {thisRating > 0 && <span>Your Updated Rating:</span>}  </p>
                             :
 
-                            <p>{ratingsHover > 1 && <span>Your Given Rating:</span>}</p>
+                            <p>{thisRating > 0 && <span>Your Given Rating:</span>}</p>
 
 
                     }
                     {
-                        ratingsHover == 2 && Rating2
+                        thisRating == 1 && Rating1
                     }
                     {
-                        ratingsHover == 3 && Rating3
+                        thisRating == 2 && Rating2
                     }
                     {
-                        ratingsHover == 4 && Rating4
+                        thisRating == 3 && Rating3
                     }
                     {
-                        ratingsHover == 5 && Rating5
+                        thisRating == 4 && Rating4
+                    }
+                    {
+                        thisRating == 5 && Rating5
                     }
                     <br />
 

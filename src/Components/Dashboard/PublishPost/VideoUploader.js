@@ -14,10 +14,6 @@ const VideoUploader =  (props) => {
     const [greenBar, setGreenBar] = useState(false);
     const cancelFileUpload = useRef(null);
 
-    const { isLoading, error, video } = useSelector(state => state?.postVideo)
-
-    const dispatch = useDispatch()
-
     const handleFileChange =async(event) => {
         const file = event.target.files[0];
         const url = URL.createObjectURL(file);
