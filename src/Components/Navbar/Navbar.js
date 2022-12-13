@@ -181,11 +181,11 @@ const Navbar = ({ filterHandler, searchHandler }) => {
                 </div>
             </div>
             {!token &&
-                <CustomLink onClick={() => setModifiedNav(true)} className="btn-ghost hover:rounded lg:p-3 lg:m-5" to='/sign-up'>Sign Up</CustomLink>
+                <CustomLink onClick={() => setModifiedNav(true)} className="btn-ghost hover:rounded lg:p-3 lg:m-5 font-bold" to='/sign-up'>Sign Up</CustomLink>
 
             }
             {!token &&
-                <CustomLink onClick={() => setModifiedNav(true)} className="btn-ghost hover:rounded lg:p-3 lg:m-5" to='/sign-in'>Sign In</CustomLink>
+                <CustomLink onClick={() => setModifiedNav(true)} className="btn-ghost hover:rounded lg:p-3 lg:m-5 font-bold" to='/sign-in'>Sign In</CustomLink>
             }
         </>
 

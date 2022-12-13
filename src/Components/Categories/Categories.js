@@ -10,6 +10,7 @@ const Categories = ({  filteredCategory}) => {
 
   return (
     <div className='md:mx-1 mx-auto mt-10 z-10 '>
+      
       <HomeCategories  filteredCategory={filteredCategory}></HomeCategories>
     </div>
   )

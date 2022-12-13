@@ -59,7 +59,7 @@ const MovieDetails = () => {
     }
 
     useEffect(() => {
-       
+
 
 
         dispatch(singlePostGet(id))
@@ -253,13 +253,13 @@ const MovieDetails = () => {
 
                 <p className='lg:text-2xl md:text-xl text-lg font-semibold'>Videos || {movie?.title}  </p>
                 {
-                    <video className=' md:w-[70%] lg:w-[60%] w-[90%] rounded my-5'  controls poster={movie?.videoCover?.cdnUrl} controlsList="nodownload">
+                    <video className=' md:w-[70%] lg:w-[60%] w-[90%] rounded my-5' controls poster={movie?.videoCover?.cdnUrl} controlsList="nodownload">
                         <source type='video/mp4' src={movie?.videos?.length && movie?.videos[movie?.videos.length - 1]?.url} />
                         <source type='video/ogg' src={movie?.videos?.length && movie?.videos[movie?.videos.length - 1]?.url} />
                         <source type='video/webm' src={movie?.videos?.length && movie?.videos[movie?.videos.length - 1]?.url} />
                     </video>
                 }
-                <p className='text-slate-400'> {movie?.viewedByDevices?.length ?movie?.viewedByDevices.length:'0' } <span className='mx-2 '>views</span> </p>
+                <p className='text-slate-400'> {movie?.viewedByDevices?.length ? movie?.viewedByDevices.length : '0'} <span className='mx-2 '>views</span> </p>
 
                 <div className='flex my-5'>
                     <h1 className='text-lg mr-4'>Give Your Rating :</h1>
@@ -340,10 +340,19 @@ const MovieDetails = () => {
                 <div className='space-y-2'>
                     <h1 className='text-lg mr-4'>Average Given Ratings :</h1>
                     <div className='flex items-center'>
+                    {/* {thisRating == 0 && !movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))
+                            ?
+                            movie?.ratings?.length
+                            :
+                            <span>{
+                                movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')) ?
+                                    movie?.ratings?.length : movie?.ratings?.length + 1
+                            }</span>
+                        } */}
 
                         {thisRating && movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')) ?
                             (movie?.averageRating * movie?.ratings?.length - movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId'))?.rating + thisRating) / (movie?.ratings?.length)
-                            : movie?.averageRating 
+                            : <span>{thisRating?thisRating: movie?.averageRating}</span>
                         }
                         <span title='' className='mx-2'>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="#e50914" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 cursor-pointer text-[#e50914]`}>
@@ -356,7 +365,11 @@ const MovieDetails = () => {
                             ?
                             movie?.ratings?.length
                             :
-                            movie?.ratings?.length + 1} ratings</p>
+                            <span>{
+                                movie?.ratings?.find(rating => rating?.userId == localStorage.getItem('userId')) ?
+                                    movie?.ratings?.length : movie?.ratings?.length + 1
+                            }</span>
+                        } ratings</p>
                 </div>
 
 
@@ -367,9 +380,9 @@ const MovieDetails = () => {
                         <div className=''>
 
                             <div className='mb-3 '>
-                            {movie?.tags?.length > 1 &&
-                                <p className='text-[#e50914] lg:text-xl md:text-lg text-md font-semibold my-2'>Tags  </p>
-                            }
+                                {movie?.tags?.length > 1 &&
+                                    <p className='text-[#e50914] lg:text-xl md:text-lg text-md font-semibold my-2'>Tags  </p>
+                                }
                                 {movie?.tags?.length > 1 &&
                                     movie?.tags?.map((tag, i) => <span className='bg-slate-600 p-1 border rounded m-1' key={i}>{tag}</span>)
                                 }

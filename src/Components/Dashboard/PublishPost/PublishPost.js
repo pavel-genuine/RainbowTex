@@ -157,7 +157,7 @@ const PublishPost = () => {
                         <div className="flex justify-between my-10 ">
                             <h1 className="text-[brown] font-semibold">{email}</h1>
                             {
-                            videoData?.url ? 
+                            !videoData?.url ? 
                             <button type="submit" className=" btn hover:bg-[#e50914] bg-[brown] btn-xs mb-10 ">
                                 Publish
                             </button>
