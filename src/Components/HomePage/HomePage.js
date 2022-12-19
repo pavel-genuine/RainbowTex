@@ -1,33 +1,21 @@
-import React, { useEffect } from 'react'
-import Footer from '../Footer/Footer'
-import Banner from './Banner'
-import Categories from '../Categories/Categories'
+import React from 'react'
+import Navbar from '../Navbar/Navbar'
+import CarResult from './CarResult/CarResult'
+import FindCars from './FindCars/FindCars'
 
-const HomePage = ({filteredCategory}) => {
-
-
-
-  useEffect(() => {
-    window.scrollTo(0, 0)
-
-
-  }, [])
-
+const HomePage = () => {
   return (
     <div>
-      <div className='bg-[#181818] pt-16 md:pt-0 box-border min-h-[100vh]'>
-
-        <div>
-          <Banner></Banner>
-        </div>
-
-        <div className='mt-20'>
-          <Categories filteredCategory={filteredCategory}></Categories>
-        </div>
-
-        <Footer></Footer>
+      <Navbar></Navbar>
+      <FindCars></FindCars>
+      <div className='grid grid-cols-1 md:grid-cols-3 gap-2 space-y-5 md:space-y-0  md:w-[90%] w-[95%] mx-auto'>
+      <CarResult></CarResult>
+      <CarResult></CarResult>
+      <CarResult></CarResult>
+      <CarResult></CarResult>
+      <CarResult></CarResult>
+      <CarResult></CarResult>
       </div>
-    
     </div>
   )
 }
