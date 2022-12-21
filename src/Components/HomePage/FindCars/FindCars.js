@@ -28,9 +28,11 @@ const FindCars = () => {
 
 
     return (
-        <div
-
-            className={` py-10`}>
+        <div style={{ backgroundImage: `url(${'https://new-media.dhakatribune.com/en/uploads/2021/10/26/zakir-hossain.jpeg'})`, backgroundSize: 'cover' }}
+        className='h-[80vh] mb-5 md:mb-10'>
+           <div className=' md:pt-28 md:pl-40 bg-black bg-opacity-50 h-[80vh] w-[100%]'>
+               <div className='bg-white md:w-[500px] pt-20 md:pt-0 md:h-[400px] h-[80vh]'>
+                 
             <form className="flex  justify-center items-center flex-col relative" onSubmit={handleSubmit(onSubmit)}>
 
 
@@ -53,6 +55,7 @@ const FindCars = () => {
                                 }
 
                             })}
+                         
                         />
                         <span className='absolute top-[15%] right-[10%]'>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-9 h-9 text-primary bg-[#52f15217] rounded-full p-2">
@@ -117,6 +120,9 @@ const FindCars = () => {
                 <input className='w-[90vw] md:w-[350px] px-4  py-3 font-bold rounded  text-white bg-primary  cursor-pointer' type="submit" value="Find Cars" />
             </form>
         </div>
+        </div>
+        </div>
+        
     )
 }
 

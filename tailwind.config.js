@@ -7,9 +7,10 @@ module.exports = withMT({
     extend: {},
     colors: {
       // 'primary': '#000040', //navy
-      'primary': '#10a310', //green
+      // 'primary': '#10a310', //green
       // 'primary': '#ff4500', //orange
       // 'primary': 'black',
+      'primary': '#020267',
     }
   },
   plugins: [],

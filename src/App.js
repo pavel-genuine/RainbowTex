@@ -6,9 +6,9 @@ const App = () => {
   const theme = createTheme({
     palette: {
       primary: {
-        main: "#10a310", 
-        light: "#10a310",
-        dark: "#10a310",
+        main: "#020267", 
+        light: "#020267",
+        dark: "#020267",
       },
     },
   });
