@@ -10,7 +10,8 @@ module.exports = withMT({
       // 'primary': '#10a310', //green
       // 'primary': '#ff4500', //orange
       // 'primary': 'black',
-      'primary': '#020267',
+      // 'primary': '#020267',//navy
+      'primary': '#5c0931', //qatar
     }
   },
   plugins: [],

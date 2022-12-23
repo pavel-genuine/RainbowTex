@@ -20,8 +20,9 @@ import {
 import parseMax from 'libphonenumber-js/max';
 import { MuiOtpInput } from 'mui-one-time-password-input';
 import { useReadOTP } from 'react-read-otp';
-
-
+import { signInPartner, signInPassenger } from '../../api/api';
+export let accessTokenPassenger;
+export let accessTokenPartner;
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -55,13 +56,14 @@ function a11yProps(index) {
         'aria-controls': `simple-tabpanel-${index}`,
     };
 }
-
 export default function AuthHome() {
     const { register, formState: { errors }, handleSubmit } = useForm();
 
     const [tabValue, setTabValue] = React.useState(0);
     const [otpPassenger, setOtpPasssenger] = React.useState(0);
+    const [otpPasssengerFinal, setOtpPasssengerFinal] = React.useState(0);
     const [otpPartner, setOtpPartner] = React.useState(0);
+    const [otpPartnerFinal, setOtpPartnerFinal] = React.useState(0);
     const [phonePassenger, setPhonePassenger] = React.useState(0);
     const [phonePartner, setPhonePartner] = React.useState(0);
     const [loginPassenger, setLoginPassenger] = React.useState(false);
@@ -77,8 +79,8 @@ export default function AuthHome() {
             }
 
             if (seconds === 0) {
-                    clearInterval(interval);
-               
+                clearInterval(interval);
+
             }
         }, 1000);
 
@@ -88,14 +90,14 @@ export default function AuthHome() {
     }, [seconds]);
 
 
-    const resend=()=>{
+    const resend = () => {
         const interval = setInterval(() => {
             if (seconds > 0) {
                 setSeconds(seconds - 1);
             }
 
             if (seconds === 0) {
-                    clearInterval(interval);
+                clearInterval(interval);
             }
         }, 1000);
 
@@ -104,7 +106,7 @@ export default function AuthHome() {
         };
     }
 
-    
+
 
     useReadOTP(setOtpPasssenger, {
         enabledPassenger
@@ -117,9 +119,9 @@ export default function AuthHome() {
     const theme = createTheme({
         palette: {
             primary: {
-                main: "#020267",
-                light: "#020267",
-                dark: "#020267",
+                main: "#5c0931",
+                light: "#5c0931",
+                dark: "#5c0931",
             },
         },
         zIndex: {
@@ -142,28 +144,36 @@ export default function AuthHome() {
         phonePartner && setLoginPartner(() => !loginPartner) && setEnabledPartner(() => true)
     };
 
-    const onSubmitPassenger = async (data) => {
+    const onSubmitPassenger = async (datas) => {
 
-        console.log(data, 'data');
-
+        const passengerData = { phone: phonePassenger, otp: otpPasssengerFinal }
+        const { data } = await signInPassenger(passengerData)
+        const accessToken = data?.accessToken
+        accessTokenPassenger = accessToken
     }
-    const onSubmitPartner = async (data) => {
+    const onSubmitPartner = async (datas) => {
+        const partnerData = { phone: phonePartner, otp: otpPartnerFinal }
+        const { data } = await signInPartner(partnerData)
+        const accessToken = data?.accessToken
+        accessTokenPartner = accessToken
 
     }
 
     const handleCompleteOtpPassenger = (finalValue) => {
-        alert(finalValue);
+        // alert(finalValue);
+        setOtpPasssengerFinal(finalValue)
     };
     const handleCompleteOtpPartner = (finalValue) => {
-        alert(finalValue);
+        // alert(finalValue);
+        setOtpPartnerFinal(finalValue)
     };
 
 
 
     return (
         <div style={{ backgroundImage: `url(${'https://www.ligman.com/wp-content/uploads/2021/03/6.Project-Bangladesh-Street-Lighting-Installation-2-2048x1365.jpg'})`, backgroundSize: 'cover' }}
-            className='h-[110vh] w-[100%] bg-cover'>
-            <div className=' md:pt-28 md:pl-40 bg-black bg-opacity-50 h-[110vh] bg-cover w-[100%]'>
+            className='h-[110vh] md:h-[820px] md:min-h-[110vh] w-[100%] bg-cover'>
+            <div className=' md:pt-28 md:pl-40 bg-black bg-opacity-50 h-[110vh] bg-cover w-[100%] md:h-[820px] md:min-h-[110vh] '>
                 <div className='bg-white md:w-[500px] pt-20 md:pt-0 md:h-[500px] h-[100%]'>
                     <Box>
                         <ThemeProvider theme={theme}>
@@ -189,12 +199,14 @@ export default function AuthHome() {
                                                             length={6}
                                                             onComplete={handleCompleteOtpPassenger}
                                                             value={otpPassenger}
-                                                            onChange={(val) => setOtpPasssenger(val)}
+                                                            onChange={(val) => {
+                                                                setOtpPasssenger(val)
+                                                            }}
                                                         />
                                                         <Box className="countdown-text mt-2">
                                                             {seconds > 0 ? (
                                                                 <p>
-                                                                    Time Remaining: { `00`}:
+                                                                    Time Remaining: {`00`}:
                                                                     {seconds < 10 ? `0${seconds}` : seconds}
                                                                 </p>
                                                             ) : (
@@ -203,9 +215,9 @@ export default function AuthHome() {
 
                                                             <button
                                                                 disabled={seconds > 0}
-                                                               
-                                                                className={`${!seconds > 0 ? 'text-primary':'text-[grey]'}`}
-                                                            onClick={()=>setSeconds(60)}
+
+                                                                className={`${!seconds > 0 ? 'text-primary' : 'text-[grey]'}`}
+                                                                onClick={() => setSeconds(60)}
                                                             >
                                                                 Resend OTP
                                                             </button>
@@ -233,7 +245,7 @@ export default function AuthHome() {
                                                     </div>
                                                     :
                                                     <div className='mt-10 flex flex-row-reverse'>
-                                                        <Button type='submit' size='small' onClick={() => handleLoginPassenger()} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
+                                                        <Button disabled={ phonePassenger? false :true} type='submit' size='small' onClick={() => handleLoginPassenger()} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
                                                     </div>
                                             }
                                         </form>
@@ -257,7 +269,7 @@ export default function AuthHome() {
                                                             onChange={(val) => setOtpPartner(val)}
                                                         />
                                                         <Box className="countdown-text mt-2">
-                                                            {seconds > 0? (
+                                                            {seconds > 0 ? (
                                                                 <p>
                                                                     Time Remaining: {`00`}:
                                                                     {seconds < 10 ? `0${seconds}` : seconds}
@@ -267,10 +279,10 @@ export default function AuthHome() {
                                                             )}
 
                                                             <button
-                                                                disabled={seconds > 0 }
-                                                               
-                                                                className={`${!seconds > 0 ? 'text-primary':'text-[grey]'}`}
-                                                            onClick={()=>setSeconds(60)}
+                                                                disabled={seconds > 0}
+
+                                                                className={`${!seconds > 0 ? 'text-primary' : 'text-[grey]'}`}
+                                                                onClick={() => setSeconds(60)}
                                                             >
                                                                 Resend OTP
                                                             </button>
@@ -298,7 +310,7 @@ export default function AuthHome() {
                                                     </div>
                                                     :
                                                     <div className='mt-10 flex flex-row-reverse'>
-                                                        <Button type='submit' size='small' onClick={() => handleLoginPartner()} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
+                                                        <Button disabled={ phonePartner? false :true} type='submit' size='small' onClick={() => handleLoginPartner()} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
                                                     </div>
                                             }
                                         </form>

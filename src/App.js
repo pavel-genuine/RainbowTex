@@ -6,12 +6,14 @@ const App = () => {
   const theme = createTheme({
     palette: {
       primary: {
-        main: "#020267", 
-        light: "#020267",
-        dark: "#020267",
+        main: "#5c0931", 
+        light: "#5c0931",
+        dark: "#5c0931",
       },
     },
   });
+
+
 
   return (
     <ThemeProvider theme={theme}>
