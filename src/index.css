@@ -1,11 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Artifika&display=swap');
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family:'Artifika', serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -17,21 +16,25 @@ code {
 
   /* width */
 body::-webkit-scrollbar {
-    width: 10px;
-    background:rgb(255, 255, 255);
-  
+    width: 6px;
+    background:#ffffff;
   }
   
   /* Track */
   body::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px grey; 
+    box-shadow: inset 0 0 5px #ffffff; 
     border-radius: 10px;
+
   }
    
   /* Handle */
   body::-webkit-scrollbar-thumb {
-    background: #5c0931; 
+    background: #9f9f9f; 
+    /* background: #f1a2c8;  */
     border-radius: 10px;
+  
+
+  
   }
   
   /* Handle on hover */
@@ -48,6 +51,7 @@ body::-webkit-scrollbar {
   #findCars::-webkit-scrollbar-track {
     box-shadow: inset 0 0 5px #ffffff; 
     border-radius: 10px;
+    
   }
    
   /* Handle */

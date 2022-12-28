@@ -1,5 +1,5 @@
 import React from 'react'
-import { accessTokenPartner } from '../Components/Authentication/AuthHome';
+import { accessTokenPartner } from '../Authentication/AuthHome';
 
 const useDrawerOpen = () => {
     const [open, setOpen] = React.useState(false);

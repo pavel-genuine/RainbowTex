@@ -20,9 +20,8 @@ import {
 import parseMax from 'libphonenumber-js/max';
 import { MuiOtpInput } from 'mui-one-time-password-input';
 import { useReadOTP } from 'react-read-otp';
-import { signInPartner, signInPassenger } from '../../api/api';
-export let accessTokenPassenger;
-export let accessTokenPartner;
+import { getAccessToken, signInPartner, signInPassenger, signUpPartner, signUpPassenger } from '../../api/api';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -116,18 +115,6 @@ export default function AuthHome() {
         enabledPartner
     });
 
-    const theme = createTheme({
-        palette: {
-            primary: {
-                main: "#5c0931",
-                light: "#5c0931",
-                dark: "#5c0931",
-            },
-        },
-        zIndex: {
-            drawer: 20
-        }
-    });
 
     const handleChangeTab = (event, newValue) => {
         setTabValue(newValue);
@@ -144,18 +131,37 @@ export default function AuthHome() {
         phonePartner && setLoginPartner(() => !loginPartner) && setEnabledPartner(() => true)
     };
 
+    let name;
+
+    const location = useLocation();
+    let from = location.state?.from?.pathname || "/";
+    const navigate = useNavigate();
+
+    // navigate(from, { replace: true });
+
     const onSubmitPassenger = async (datas) => {
 
-        const passengerData = { phone: phonePassenger, otp: otpPasssengerFinal }
-        const { data } = await signInPassenger(passengerData)
-        const accessToken = data?.accessToken
-        accessTokenPassenger = accessToken
+        const passengerData = { name: 'passenger', contractNumber: phonePassenger, password: otpPasssengerFinal }
+
+        // const res = await signUpPassenger(passengerData)
+        // const { data } = await signInPassenger()
+        // console.log(passengerData,'pdta');
+        getAccessToken({ contractNumber: phonePassenger, password: otpPasssengerFinal })
+
+        // console.log(getAccessToken({ contractNumber: phonePassenger, password: otpPasssengerFinal }),'ldata');
+        // const accessToken = data?.accessToken
+        // accessTokenPassenger = accessToken
     }
+
+
+
     const onSubmitPartner = async (datas) => {
-        const partnerData = { phone: phonePartner, otp: otpPartnerFinal }
-        const { data } = await signInPartner(partnerData)
+
+        const partnerData = { name: 'partner', contractNumber: phonePartner, password: otpPartnerFinal }
+
+        const { data } = await signUpPartner(partnerData)
         const accessToken = data?.accessToken
-        accessTokenPartner = accessToken
+
 
     }
 
@@ -172,152 +178,160 @@ export default function AuthHome() {
 
     return (
         <div style={{ backgroundImage: `url(${'https://www.ligman.com/wp-content/uploads/2021/03/6.Project-Bangladesh-Street-Lighting-Installation-2-2048x1365.jpg'})`, backgroundSize: 'cover' }}
-            className='h-[110vh] md:h-[820px] md:min-h-[110vh] w-[100%] bg-cover'>
-            <div className=' md:pt-28 md:pl-40 bg-black bg-opacity-50 h-[110vh] bg-cover w-[100%] md:h-[820px] md:min-h-[110vh] '>
-                <div className='bg-white md:w-[500px] pt-20 md:pt-0 md:h-[500px] h-[100%]'>
+            className={`md:h-[94.5vh] h-[90vh]  w-[100%] bg-cover `}>
+
+
+            <div className=' md:pt-28 md:pl-40 bg-black bg-opacity-50 md:h-[94.5vh] h-[90vh] bg-cover w-[100%]  '>
+
+                <div className='bg-white md:w-[500px]  md:h-[500px] h-[100%]'>
+
+                    <Box className='flex justify-center md:hidden '>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-28 h-16 text-[grey]">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15" />
+                        </svg>
+
+                    </Box>
                     <Box>
-                        <ThemeProvider theme={theme}>
-                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                <Tabs value={tabValue} onChange={handleChangeTab} aria-label="basic tabs example" sx={{ backgroundColor: '#f7f7f7' }}>
-                                    <Tab icon={<AirlineSeatLegroomExtraIcon />} disableRipple label="Guest" {...a11yProps(0)} />
-                                    <Tab icon={<CarRentalIcon />} disableRipple label="Partner" {...a11yProps(1)} />
-                                </Tabs>
-                            </Box>
-                            <Box>
-                                <TabPanel value={tabValue} index={0} className='flex justify-center'>
-                                    <div>
-                                        <form className="" onSubmit={handleSubmit(onSubmitPassenger)}>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                            <Tabs value={tabValue} onChange={handleChangeTab} aria-label="basic tabs example" sx={{ backgroundColor: '#f7f7f7' }}>
+                                <Tab className='normal-case' icon={<AirlineSeatLegroomExtraIcon />} disableRipple label="Guest" {...a11yProps(0)} />
+                                <Tab className='normal-case' icon={<CarRentalIcon />} disableRipple label="Partner" {...a11yProps(1)} />
+                            </Tabs>
+                        </Box>
+                        <Box>
+                            <TabPanel value={tabValue} index={0} className='flex justify-center'>
+                                <div>
+                                    <form className="" onSubmit={handleSubmit(onSubmitPassenger)}>
 
-                                            <p className='font-semibold my-10 text-primary'>
-                                                Continue to GoRental
-                                            </p>
-                                            {
-                                                loginPassenger ?
-                                                    <Box>
-                                                        <p className='text-primary my-2'>Enter OTP</p>
-                                                        <MuiOtpInput
-                                                            length={6}
-                                                            onComplete={handleCompleteOtpPassenger}
-                                                            value={otpPassenger}
-                                                            onChange={(val) => {
-                                                                setOtpPasssenger(val)
-                                                            }}
-                                                        />
-                                                        <Box className="countdown-text mt-2">
-                                                            {seconds > 0 ? (
-                                                                <p>
-                                                                    Time Remaining: {`00`}:
-                                                                    {seconds < 10 ? `0${seconds}` : seconds}
-                                                                </p>
-                                                            ) : (
-                                                                <p>Didn't recieve code?</p>
-                                                            )}
-
-                                                            <button
-                                                                disabled={seconds > 0}
-
-                                                                className={`${!seconds > 0 ? 'text-primary' : 'text-[grey]'}`}
-                                                                onClick={() => setSeconds(60)}
-                                                            >
-                                                                Resend OTP
-                                                            </button>
-                                                        </Box>
-                                                    </Box>
-                                                    :
-                                                    <MuiPhoneNumber
-                                                        className='w-[90vw] md:w-[350px]'
-                                                        defaultCountry={'bd'}
-                                                        onlyCountries={['bd']}
-                                                        value={phonePassenger}
-                                                        onChange={(c, t) => {
-                                                            //   console.log(c, t, isValidPhoneNumber(c));
-                                                            isValidPhoneNumber(c) && setPhonePassenger(c)
-
+                                        <p className='font-semibold my-10 text-primary'>
+                                            Continue to GoRental
+                                        </p>
+                                        {
+                                            loginPassenger ?
+                                                <Box>
+                                                    <p className='text-primary my-2 text-xs'>Enter OTP</p>
+                                                    <MuiOtpInput
+                                                        length={6}
+                                                        onComplete={handleCompleteOtpPassenger}
+                                                        value={otpPassenger}
+                                                        onChange={(val) => {
+                                                            setOtpPasssenger(val)
                                                         }}
                                                     />
-                                            }
+                                                    <Box className="countdown-text mt-2 text-xs">
+                                                        {seconds > 0 ? (
+                                                            <p>
+                                                                Time Remaining: {`00`}:
+                                                                {seconds < 10 ? `0${seconds}` : seconds}
+                                                            </p>
+                                                        ) : (
+                                                            <p>Didn't recieve code?</p>
+                                                        )}
 
-                                            {
-                                                loginPassenger ?
-                                                    <div className='mt-10 flex justify-between'>
-                                                        <Button size='small' onClick={() => handleLoginPassenger()} variant="text"><span className='font-normal flex items-center'> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon> <span className='ml-1'>Back</span></span></Button>
-                                                        <Button type='submit' size='small' variant="contained">Log In</Button>
-                                                    </div>
-                                                    :
-                                                    <div className='mt-10 flex flex-row-reverse'>
-                                                        <Button disabled={ phonePassenger? false :true} type='submit' size='small' onClick={() => handleLoginPassenger()} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
-                                                    </div>
-                                            }
-                                        </form>
-                                    </div>
-                                </TabPanel>
-                                <TabPanel value={tabValue} index={1} className='flex justify-center'>
-                                    <div>
-                                        <form className="" onSubmit={handleSubmit(onSubmitPartner)}>
+                                                        <button
+                                                            disabled={seconds > 0}
 
-                                            <p className='font-semibold my-10 text-primary'>
-                                                Continue to GoRental
-                                            </p>
-                                            {
-                                                loginPartner ?
-                                                    <Box>
-                                                        <p className='text-primary my-2'>Enter OTP</p>
-                                                        <MuiOtpInput
-                                                            length={6}
-                                                            onComplete={handleCompleteOtpPartner}
-                                                            value={otpPartner}
-                                                            onChange={(val) => setOtpPartner(val)}
-                                                        />
-                                                        <Box className="countdown-text mt-2">
-                                                            {seconds > 0 ? (
-                                                                <p>
-                                                                    Time Remaining: {`00`}:
-                                                                    {seconds < 10 ? `0${seconds}` : seconds}
-                                                                </p>
-                                                            ) : (
-                                                                <p>Didn't recieve code?</p>
-                                                            )}
-
-                                                            <button
-                                                                disabled={seconds > 0}
-
-                                                                className={`${!seconds > 0 ? 'text-primary' : 'text-[grey]'}`}
-                                                                onClick={() => setSeconds(60)}
-                                                            >
-                                                                Resend OTP
-                                                            </button>
-                                                        </Box>
-
+                                                            className={`${!seconds > 0 ? 'text-primary' : 'text-[grey]'}`}
+                                                            onClick={() => setSeconds(60)}
+                                                        >
+                                                            Resend OTP
+                                                        </button>
                                                     </Box>
-                                                    :
-                                                    <MuiPhoneNumber
-                                                        className='w-[90vw] md:w-[350px]'
-                                                        defaultCountry={'bd'}
-                                                        onlyCountries={['bd']}
-                                                        value={phonePartner}
-                                                        onChange={(c, t) => {
-                                                            //   console.log(c, t, isValidPhoneNumber(c));
-                                                            isValidPhoneNumber(c) && setPhonePartner(c)
-                                                        }}
-                                                    />
-                                            }
+                                                </Box>
+                                                :
+                                                <MuiPhoneNumber
+                                                    className='w-[80vw] md:w-[350px]'
+                                                    defaultCountry={'bd'}
+                                                    onlyCountries={['bd']}
+                                                    value={phonePassenger}
+                                                    onChange={(c, t) => {
+                                                        //   console.log(c, t, isValidPhoneNumber(c));
+                                                        isValidPhoneNumber(c) && setPhonePassenger(c)
 
-                                            {
-                                                loginPartner ?
-                                                    <div className='mt-10 flex justify-between'>
-                                                        <Button size='small' onClick={() => handleLoginPartner()} variant="text"><span className='font-normal flex items-center'> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon> <span className='ml-1'>Back</span></span></Button>
-                                                        <Button type='submit' size='small' variant="contained">Log In</Button>
-                                                    </div>
-                                                    :
-                                                    <div className='mt-10 flex flex-row-reverse'>
-                                                        <Button disabled={ phonePartner? false :true} type='submit' size='small' onClick={() => handleLoginPartner()} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
-                                                    </div>
-                                            }
-                                        </form>
-                                    </div>
-                                </TabPanel>
-                            </Box>
-                        </ThemeProvider>
+                                                    }}
+                                                />
+                                        }
+
+                                        {
+                                            loginPassenger ?
+                                                <div className='mt-10 flex justify-between'>
+                                                    <Button size='small' onClick={() => handleLoginPassenger()} variant="text"><span className='font-normal flex items-center'> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon> <span className='ml-1'>Back</span></span></Button>
+                                                    <Button type='submit' size='small' variant="contained">Log In</Button>
+                                                </div>
+                                                :
+                                                <div className='mt-10 flex flex-row-reverse'>
+                                                    <Button disabled={phonePassenger ? false : true} type='submit' size='small' onClick={() => handleLoginPassenger()} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
+                                                </div>
+                                        }
+                                    </form>
+                                </div>
+                            </TabPanel>
+                            <TabPanel value={tabValue} index={1} className='flex justify-center'>
+                                <div>
+                                    <form className="" onSubmit={handleSubmit(onSubmitPartner)}>
+
+                                        <p className='font-semibold my-10 text-primary'>
+                                            Continue to GoRental
+                                        </p>
+                                        {
+                                            loginPartner ?
+                                                <Box>
+                                                    <p className='text-primary my-2 text-xs'>Enter OTP</p>
+                                                    <MuiOtpInput
+                                                        length={6}
+                                                        onComplete={handleCompleteOtpPartner}
+                                                        value={otpPartner}
+                                                        onChange={(val) => setOtpPartner(val)}
+                                                    />
+                                                    <Box className="countdown-text mt-2 text-xs">
+                                                        {seconds > 0 ? (
+                                                            <p>
+                                                                Time Remaining: {`00`}:
+                                                                {seconds < 10 ? `0${seconds}` : seconds}
+                                                            </p>
+                                                        ) : (
+                                                            <p>Didn't recieve code?</p>
+                                                        )}
+
+                                                        <button
+                                                            disabled={seconds > 0}
+
+                                                            className={`${!seconds > 0 ? 'text-primary' : 'text-[grey]'}`}
+                                                            onClick={() => setSeconds(60)}
+                                                        >
+                                                            Resend OTP
+                                                        </button>
+                                                    </Box>
+
+                                                </Box>
+                                                :
+                                                <MuiPhoneNumber
+                                                    className='w-[80vw] md:w-[350px]'
+                                                    defaultCountry={'bd'}
+                                                    onlyCountries={['bd']}
+                                                    value={phonePartner}
+                                                    onChange={(c, t) => {
+                                                        //   console.log(c, t, isValidPhoneNumber(c));
+                                                        isValidPhoneNumber(c) && setPhonePartner(c)
+                                                    }}
+                                                />
+                                        }
+
+                                        {
+                                            loginPartner ?
+                                                <div className='mt-10 flex justify-between'>
+                                                    <Button size='small' onClick={() => handleLoginPartner()} variant="text"><span className='font-normal flex items-center'> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon> <span className='ml-1'>Back</span></span></Button>
+                                                    <Button type='submit' size='small' variant="contained">Log In</Button>
+                                                </div>
+                                                :
+                                                <div className='mt-10 flex flex-row-reverse'>
+                                                    <Button disabled={phonePartner ? false : true} type='submit' size='small' onClick={() => handleLoginPartner()} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
+                                                </div>
+                                        }
+                                    </form>
+                                </div>
+                            </TabPanel>
+                        </Box>
                     </Box>
                 </div>
             </div>

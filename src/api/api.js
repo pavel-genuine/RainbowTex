@@ -1,10 +1,13 @@
-import axios from 'axios';
 import { accessTokenPassenger } from '../Components/Authentication/AuthHome';
-import useAuth from '../hooks/useAuth';
+import axios from 'axios';
+import useAuth from '../Components/hooks/useAuth';
 
+let accessToken
 
-export const base_url = 'http://localhost:5000/api';
+export const base_url = 'http://ec2-13-215-205-56.ap-southeast-1.compute.amazonaws.com/api';
 
+axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+axios.defaults.withCredentials=true;
 
 const axiosInstance = axios.create({
     baseURL: base_url,
@@ -16,31 +19,32 @@ const axiosInstance = axios.create({
 
 export const signInPassenger = (user) => axios.post(`${base_url}/auth/login/user`, user);
 export const signInPartner = (partner) => axios.post(`${base_url}/auth/login/carowner`, partner);
+export const signUpPassenger = (user) => axios.post(`${base_url}/auth/register/user`, user);
+export const signUpPartner = (partner) => axios.post(`${base_url}/auth/register/carowner`, partner);
 
-
+// const accessToken = accessTokenPassenger
 axiosInstance.interceptors.request.use(async config => {
-    const accessToken = accessTokenPassenger
     config.headers.Authorization = `Bearer ${accessToken}`;
     return config;
 });
 
 
-async function getAccessToken(data) {
-    const contactNumber = '017XX'
-    const password = 'xyz'
 
-    axios.post('/auth/login/user', data).then(res => {
-        const accessToken = res.data.accessToken
-        return accessToken
+export const getAccessToken=async(data)=> {
+
+    await axios.post(`${base_url}/auth/login/user`, data).then(res => {
+        accessToken=res.data.accessToken
+        console.log(accessToken);
+        // return accessToken
     }).catch(async (error) => {
-        if (error.message == 'jwt expired') {
+        // if (error.message == 'jwt expired') {
             const { data } = await axios.get('/refreshtoken')
-            const newAccessToken = data?.accessToken
-            return newAccessToken
-        }
+            accessToken = data?.accessToken
+            console.log(accessToken);
+            // return accessToken
+        // }
     });
 }
-
 
 axiosInstance.interceptors.response.use(
     (res) => {

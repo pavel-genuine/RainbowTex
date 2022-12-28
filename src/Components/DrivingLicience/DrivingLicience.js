@@ -34,14 +34,29 @@ const DrivingLicience = () => {
         console.log(name,'name');
       })
 
-
+{/* <Autocomplete
+        freeSolo
+        id="free-solo-2-demo"
+        disableClearable
+        options={['a']}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Search input"
+            InputProps={{
+              ...params.InputProps,
+              type: 'search',
+            }}
+          />
+        )}
+      /> */}
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
     return (
-        <div style={{width:'50%', margin:'auto'}}>
+        <div style={{width:'50%', margin:'auto'}} >
             {/* <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                 <Tab icon={<img style={{ width: '50%' }} src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,w_698,h_465/v1568070443/assets/82/6bf372-6016-492d-b20d-d81878a14752/original/Black.png" alt="" />
                 } label="Personal & Family" />
@@ -54,10 +69,10 @@ const DrivingLicience = () => {
            <div className="VideoInput relative">
                <input
                    id="file-upload"
-                   className="VideoInput_input hidden"
+                   className="VideoInput_input "
                    type="file"
                    onChange={handleFileChange}
-               />
+               /> input
 
            
                <div>
