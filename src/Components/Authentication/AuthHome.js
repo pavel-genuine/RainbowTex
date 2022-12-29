@@ -20,7 +20,7 @@ import {
 import parseMax from 'libphonenumber-js/max';
 import { MuiOtpInput } from 'mui-one-time-password-input';
 import { useReadOTP } from 'react-read-otp';
-import { getAccessToken, optVerifier, signInPartner, signInPassenger, signUpPartner, signUpPassenger } from '../../api/api';
+import { getAccessToken, otpVerifier, signInPartner, signInPassenger, signUpPartner, signUpPassenger } from '../../api/api';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import auth from '../../firebase.init';
@@ -236,7 +236,7 @@ export default function AuthHome() {
             const user = result.user;
             const idToken = await user?.getIdToken()
 
-            await optVerifier({uid:user?.uid,phoneNumber:phonePassenger,idToken:idToken,otpProvicer:'firebase',userType: 'user'})
+            await otpVerifier({uid:user?.uid,contractNumber:phonePassenger,idToken:idToken,otpProvider:'firebase',userType: 'user'})           
            
             // setTimeout(
             navigate(from, { replace: true })
@@ -267,7 +267,7 @@ export default function AuthHome() {
 
             const idToken = await user?.getIdToken()
 
-            await optVerifier({uid:user?.uid,phoneNumber:phonePassenger,idToken:idToken,otpProvicer:'firebase',userType: 'user'})
+            await otpVerifier({uid:user?.uid,phoneNumber:phonePassenger,idToken:idToken,otpProvicer:'firebase',userType: 'user'})
            
             // setTimeout(
             navigate(from, { replace: true })
