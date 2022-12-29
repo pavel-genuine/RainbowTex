@@ -22,7 +22,7 @@ import { MuiOtpInput } from 'mui-one-time-password-input';
 import { useReadOTP } from 'react-read-otp';
 import { getAccessToken, signInPartner, signInPassenger, signUpPartner, signUpPassenger } from '../../api/api';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { RecaptchaVerifier, signInWithPhoneNumber} from 'firebase/auth';
 import auth from '../../firebase.init';
 
 function TabPanel(props) {
@@ -124,52 +124,56 @@ export default function AuthHome() {
 
 
     const captchaPassenger = () => {
-        // window.recaptchaVerifier = new RecaptchaVerifier('passenger-sign',
-        //     {
-        //         size: 'normal',
-        //         'callback': (response) => {
-        //             // reCAPTCHA solved, allow signInWithPhoneNumber.
-        //             handleLoginPassenger()
-        //             console.log(response, 'recap resolved');
-        //         }
-        //     }, auth);
-            window.recaptchaVerifier = new RecaptchaVerifier('passenger-sign', {
-                'size': 'invisible',
-                'callback': (response) => {
-                  // reCAPTCHA solved, allow signInWithPhoneNumber.
-                  handleLoginPassenger()
-                  // ...
-                },
-              }, auth);
+        window.recaptchaVerifier = new RecaptchaVerifier('passenger-sign', {
+            'size': 'invisible',
+            'callback': (response) => {
+                // reCAPTCHA solved, allow signInWithPhoneNumber.
+                handleLoginPassenger()
+                // ...
+            },
+        }, auth);
     }
-
+    const captchaPartner = () => {
+        window.recaptchaVerifier = new RecaptchaVerifier('partner-sign', {
+            'size': 'invisible',
+            'callback': (response) => {
+                // reCAPTCHA solved, allow signInWithPhoneNumber.
+                handleLoginPartner()
+                // ...
+            },
+        }, auth);
+    }
 
     const handleLoginPassenger = () => {
 
-        phonePassenger && setLoginPassenger(() => !loginPassenger) && setEnabledPassenger(() => true)
+        phonePassenger && setEnabledPassenger(() => true)
         captchaPassenger()
         const appVerifier = window.recaptchaVerifier;
 
-        const res = signInWithPhoneNumber(auth, phonePassenger, appVerifier)
-
-        console.log(res, 'res');
-        console.log(appVerifier, 'recap verify');
-
+        signInWithPhoneNumber(auth, phonePassenger, appVerifier).then((confirmationResult) => {
+         
+            window.confirmationResult = confirmationResult;
+            // ...
+          }).catch((error) => {
+            // Error; SMS not sent
+          });
     };
 
     const handleLoginPartner = () => {
 
 
-        phonePartner && setLoginPartner(() => !loginPartner) && setEnabledPartner(() => true)
+        phonePartner && setEnabledPartner(() => true)
+        captchaPartner()
+        const appVerifier = window.recaptchaVerifier;
+
+        signInWithPhoneNumber(auth, phonePartner, appVerifier).then((confirmationResult) => {
+         
+            window.confirmationResult = confirmationResult;
+            // ...
+          }).catch((error) => {
+            // Error; SMS not sent
+          });
     };
-
-
-    const location = useLocation();
-    let from = location.state?.from?.pathname || "/";
-    const navigate = useNavigate();
-
-    // navigate(from, { replace: true });
-
 
     const handleCompleteOtpPassenger = (finalValue) => {
         // alert(finalValue);
@@ -180,6 +184,10 @@ export default function AuthHome() {
         setOtpPartnerFinal(finalValue)
     };
 
+    
+    const location = useLocation();
+    let from = location.state?.from?.pathname || "/";
+    const navigate = useNavigate();
 
     const onSubmitPassenger = async (datas) => {
 
@@ -194,7 +202,20 @@ export default function AuthHome() {
         // const accessToken = data?.accessToken
         // accessTokenPassenger = accessToken
 
+        const code = otpPasssengerFinal;
+        window.confirmationResult?.confirm(code).then((result) => {
+            // User signed in successfully.
+            const user = result.user;
+            console.log(user,'user');
 
+            // setTimeout(
+                navigate(from, { replace: true })
+                // , 500)
+
+        }).catch((error) => {
+            // User couldn't sign in (bad verification code?)
+            // ...
+        });
 
     }
 
@@ -204,22 +225,27 @@ export default function AuthHome() {
 
         const partnerData = { name: 'partner', contractNumber: phonePartner, password: otpPartnerFinal }
 
-        const { data } = await signUpPartner(partnerData)
-        const accessToken = data?.accessToken
+        // const { data } = await signUpPartner(partnerData)
+        // const accessToken = data?.accessToken
+
+
+        const code = otpPartnerFinal;
+        window.confirmationResult?.confirm(code).then((result) => {
+            // User signed in successfully.
+            const user = result.user;
+            console.log(user,'user');
+
+            // setTimeout(
+                // navigate(from, { replace: true })
+                // , 500)
+
+        }).catch((error) => {
+            // User couldn't sign in (bad verification code?)
+            // ...
+        });
 
 
     }
-
-    // .then((confirmationResult) => {
-    //     // SMS sent. Prompt user to type the code from the message, then sign the
-    //     // user in with confirmationResult.confirm(code).
-    //     window.confirmationResult = confirmationResult;
-    //     // ...
-    // }).catch((error) => {
-    //     // Error; SMS not sent
-    //     // ...
-    // });
-
 
 
     return (
@@ -278,7 +304,7 @@ export default function AuthHome() {
                                                             disabled={seconds > 0}
 
                                                             className={`${!seconds > 0 ? 'text-primary' : 'text-[grey]'}`}
-                                                            onClick={() => setSeconds(60)}
+                                                            onClick={() => { setSeconds(60); handleLoginPassenger() }}
                                                         >
                                                             Resend OTP
                                                         </button>
@@ -301,12 +327,12 @@ export default function AuthHome() {
                                         {
                                             loginPassenger ?
                                                 <div className='mt-10 flex justify-between'>
-                                                    <Button size='small' onClick={() => setLoginPassenger(() => !loginPassenger)} variant="text"><span className='font-normal flex items-center'> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon> <span className='ml-1'>Back</span></span></Button>
+                                                    <Button size='small' onClick={() => setLoginPassenger(() => !loginPassenger)} variant="text"><span className='font-normal flex items-center mr-34 md:mr-80'> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon> <span className='ml-1'>Back</span></span></Button>
                                                     <Button type='submit' size='small' variant="contained">Log In</Button>
                                                 </div>
                                                 :
                                                 <div className='mt-10 flex flex-row-reverse'>
-                                                    <Button id='passenger-sign' disabled={phonePassenger ? false : true} type='submit' size='small' onClick={() => handleLoginPassenger()} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
+                                                    <Button id='passenger-sign' disabled={phonePassenger ? false : true} type='submit' size='small' onClick={() => { handleLoginPassenger(); setLoginPassenger(() => !loginPassenger) }} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
                                                 </div>
                                         }
                                     </form>
@@ -371,7 +397,7 @@ export default function AuthHome() {
                                                 </div>
                                                 :
                                                 <div className='mt-10 flex flex-row-reverse'>
-                                                    <Button id='partner-sign' disabled={phonePartner ? false : true} type='submit' size='small' onClick={() => handleLoginPartner()} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
+                                                    <Button id='partner-sign' disabled={phonePartner ? false : true} type='submit' size='small' onClick={() => { handleLoginPartner(); setLoginPassenger(() => !loginPassenger) }} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
                                                 </div>
                                         }
                                     </form>
