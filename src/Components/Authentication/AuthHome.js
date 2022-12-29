@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { Button, createTheme, TextField, ThemeProvider } from '@mui/material';
+import { Alert, Button, createTheme, Snackbar, TextField, ThemeProvider } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CarRentalIcon from '@mui/icons-material/CarRental';
@@ -20,9 +20,9 @@ import {
 import parseMax from 'libphonenumber-js/max';
 import { MuiOtpInput } from 'mui-one-time-password-input';
 import { useReadOTP } from 'react-read-otp';
-import { getAccessToken, signInPartner, signInPassenger, signUpPartner, signUpPassenger } from '../../api/api';
+import { getAccessToken, optVerifier, signInPartner, signInPassenger, signUpPartner, signUpPassenger } from '../../api/api';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { RecaptchaVerifier, signInWithPhoneNumber} from 'firebase/auth';
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import auth from '../../firebase.init';
 
 function TabPanel(props) {
@@ -72,6 +72,22 @@ export default function AuthHome() {
     const [enabledPassenger, setEnabledPassenger] = React.useState(false);
     const [enabledPartner, setEnabledPartner] = React.useState(false);
     const [seconds, setSeconds] = React.useState(65);
+
+    const [state, setState] = React.useState({
+        open: false,
+        vertical: 'top',
+        horizontal: 'center',
+    });
+    const { vertical, horizontal, open } = state;
+
+    const handleToast = (newState) => () => {
+        setState({ open: true, ...newState });
+    };
+
+    const handleCloseToast = () => {
+        setState({ ...state, open: false });
+    };
+
 
     React.useEffect(() => {
         const interval = setInterval(() => {
@@ -151,12 +167,19 @@ export default function AuthHome() {
         const appVerifier = window.recaptchaVerifier;
 
         signInWithPhoneNumber(auth, phonePassenger, appVerifier).then((confirmationResult) => {
-         
+
             window.confirmationResult = confirmationResult;
-            // ...
-          }).catch((error) => {
+
+            setTimeout(
+                handleToast({
+                    vertical: 'top',
+                    horizontal: 'center',
+                })
+                , 1000)
+
+        }).catch((error) => {
             // Error; SMS not sent
-          });
+        });
     };
 
     const handleLoginPartner = () => {
@@ -167,12 +190,17 @@ export default function AuthHome() {
         const appVerifier = window.recaptchaVerifier;
 
         signInWithPhoneNumber(auth, phonePartner, appVerifier).then((confirmationResult) => {
-         
+
             window.confirmationResult = confirmationResult;
-            // ...
-          }).catch((error) => {
+            setTimeout(
+                handleToast({
+                    vertical: 'top',
+                    horizontal: 'center',
+                })
+                , 1000)
+        }).catch((error) => {
             // Error; SMS not sent
-          });
+        });
     };
 
     const handleCompleteOtpPassenger = (finalValue) => {
@@ -184,7 +212,7 @@ export default function AuthHome() {
         setOtpPartnerFinal(finalValue)
     };
 
-    
+
     const location = useLocation();
     let from = location.state?.from?.pathname || "/";
     const navigate = useNavigate();
@@ -203,19 +231,22 @@ export default function AuthHome() {
         // accessTokenPassenger = accessToken
 
         const code = otpPasssengerFinal;
-        window.confirmationResult?.confirm(code).then((result) => {
+        window.confirmationResult?.confirm(code).then(async (result) => {
             // User signed in successfully.
             const user = result.user;
-            console.log(user,'user');
+            const idToken = await user?.getIdToken()
 
+            await optVerifier({uid:user?.uid,phoneNumber:phonePassenger,idToken:idToken,otpProvicer:'firebase',userType: 'user'})
+           
             // setTimeout(
-                navigate(from, { replace: true })
-                // , 500)
+            navigate(from, { replace: true })
+            // , 500)
 
         }).catch((error) => {
             // User couldn't sign in (bad verification code?)
             // ...
         });
+
 
     }
 
@@ -230,14 +261,17 @@ export default function AuthHome() {
 
 
         const code = otpPartnerFinal;
-        window.confirmationResult?.confirm(code).then((result) => {
+        window.confirmationResult?.confirm(code).then(async(result) => {
             // User signed in successfully.
             const user = result.user;
-            console.log(user,'user');
 
+            const idToken = await user?.getIdToken()
+
+            await optVerifier({uid:user?.uid,phoneNumber:phonePassenger,idToken:idToken,otpProvicer:'firebase',userType: 'user'})
+           
             // setTimeout(
-                // navigate(from, { replace: true })
-                // , 500)
+            navigate(from, { replace: true })
+            // , 500)
 
         }).catch((error) => {
             // User couldn't sign in (bad verification code?)
@@ -248,10 +282,16 @@ export default function AuthHome() {
     }
 
 
+
+
     return (
         <div style={{ backgroundImage: `url(${'https://www.ligman.com/wp-content/uploads/2021/03/6.Project-Bangladesh-Street-Lighting-Installation-2-2048x1365.jpg'})`, backgroundSize: 'cover' }}
             className={`md:min-h-[700px] md:h-[94.5vh] h-[90vh]  w-[100%] bg-cover `}>
-
+            <Snackbar open={open} autoHideDuration={3000} onClose={handleCloseToast}>
+                <Alert onClose={handleCloseToast} severity="success" sx={{ width: '100%' }}>
+                    OTP sent Successfully !
+                </Alert>
+            </Snackbar>
 
             <div className=' md:pt-28 md:pl-40 bg-black bg-opacity-50 md:min-h-[700px] md:h-[94.5vh] h-[90vh] bg-cover w-[100%]  '>
 
