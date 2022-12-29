@@ -2,6 +2,9 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import React from 'react'
 import { Route, Routes } from 'react-router-dom';
 import AuthMain from './Components/Authentication/AuthMain';
+import AllCarResults from './Components/HomePage/CarResult/AllCarResults';
+import CarFinder from './Components/HomePage/FindCars/CarFinder';
+import FindCars from './Components/HomePage/FindCars/FindCars';
 import HomePage from './Components/HomePage/HomePage';
 import Navbar from './Components/Navbar/Navbar';
 
@@ -31,6 +34,7 @@ const App = () => {
       <Routes>
         <Route path={`/`} element={<HomePage></HomePage>}></Route>
         <Route path={`/auth`} element={<AuthMain></AuthMain>}></Route>
+        <Route path={`/find-cars`} element={<CarFinder></CarFinder>}></Route>
       </Routes>
     </ThemeProvider>
 

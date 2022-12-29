@@ -22,6 +22,8 @@ import { MuiOtpInput } from 'mui-one-time-password-input';
 import { useReadOTP } from 'react-read-otp';
 import { getAccessToken, signInPartner, signInPassenger, signUpPartner, signUpPassenger } from '../../api/api';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import auth from '../../firebase.init';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -120,9 +122,39 @@ export default function AuthHome() {
         setTabValue(newValue);
     };
 
+
+    const captchaPassenger = () => {
+        // window.recaptchaVerifier = new RecaptchaVerifier('passenger-sign',
+        //     {
+        //         size: 'normal',
+        //         'callback': (response) => {
+        //             // reCAPTCHA solved, allow signInWithPhoneNumber.
+        //             handleLoginPassenger()
+        //             console.log(response, 'recap resolved');
+        //         }
+        //     }, auth);
+            window.recaptchaVerifier = new RecaptchaVerifier('passenger-sign', {
+                'size': 'invisible',
+                'callback': (response) => {
+                  // reCAPTCHA solved, allow signInWithPhoneNumber.
+                  handleLoginPassenger()
+                  // ...
+                },
+              }, auth);
+    }
+
+
     const handleLoginPassenger = () => {
 
         phonePassenger && setLoginPassenger(() => !loginPassenger) && setEnabledPassenger(() => true)
+        captchaPassenger()
+        const appVerifier = window.recaptchaVerifier;
+
+        const res = signInWithPhoneNumber(auth, phonePassenger, appVerifier)
+
+        console.log(res, 'res');
+        console.log(appVerifier, 'recap verify');
+
     };
 
     const handleLoginPartner = () => {
@@ -131,13 +163,23 @@ export default function AuthHome() {
         phonePartner && setLoginPartner(() => !loginPartner) && setEnabledPartner(() => true)
     };
 
-    let name;
 
     const location = useLocation();
     let from = location.state?.from?.pathname || "/";
     const navigate = useNavigate();
 
     // navigate(from, { replace: true });
+
+
+    const handleCompleteOtpPassenger = (finalValue) => {
+        // alert(finalValue);
+        setOtpPasssengerFinal(finalValue)
+    };
+    const handleCompleteOtpPartner = (finalValue) => {
+        // alert(finalValue);
+        setOtpPartnerFinal(finalValue)
+    };
+
 
     const onSubmitPassenger = async (datas) => {
 
@@ -146,11 +188,14 @@ export default function AuthHome() {
         // const res = await signUpPassenger(passengerData)
         // const { data } = await signInPassenger()
         // console.log(passengerData,'pdta');
-        getAccessToken({ contractNumber: phonePassenger, password: otpPasssengerFinal })
+        // getAccessToken({ contractNumber: phonePassenger, password: otpPasssengerFinal })
 
         // console.log(getAccessToken({ contractNumber: phonePassenger, password: otpPasssengerFinal }),'ldata');
         // const accessToken = data?.accessToken
         // accessTokenPassenger = accessToken
+
+
+
     }
 
 
@@ -165,23 +210,24 @@ export default function AuthHome() {
 
     }
 
-    const handleCompleteOtpPassenger = (finalValue) => {
-        // alert(finalValue);
-        setOtpPasssengerFinal(finalValue)
-    };
-    const handleCompleteOtpPartner = (finalValue) => {
-        // alert(finalValue);
-        setOtpPartnerFinal(finalValue)
-    };
+    // .then((confirmationResult) => {
+    //     // SMS sent. Prompt user to type the code from the message, then sign the
+    //     // user in with confirmationResult.confirm(code).
+    //     window.confirmationResult = confirmationResult;
+    //     // ...
+    // }).catch((error) => {
+    //     // Error; SMS not sent
+    //     // ...
+    // });
 
 
 
     return (
         <div style={{ backgroundImage: `url(${'https://www.ligman.com/wp-content/uploads/2021/03/6.Project-Bangladesh-Street-Lighting-Installation-2-2048x1365.jpg'})`, backgroundSize: 'cover' }}
-            className={`md:h-[94.5vh] h-[90vh]  w-[100%] bg-cover `}>
+            className={`md:min-h-[700px] md:h-[94.5vh] h-[90vh]  w-[100%] bg-cover `}>
 
 
-            <div className=' md:pt-28 md:pl-40 bg-black bg-opacity-50 md:h-[94.5vh] h-[90vh] bg-cover w-[100%]  '>
+            <div className=' md:pt-28 md:pl-40 bg-black bg-opacity-50 md:min-h-[700px] md:h-[94.5vh] h-[90vh] bg-cover w-[100%]  '>
 
                 <div className='bg-white md:w-[500px]  md:h-[500px] h-[100%]'>
 
@@ -255,12 +301,12 @@ export default function AuthHome() {
                                         {
                                             loginPassenger ?
                                                 <div className='mt-10 flex justify-between'>
-                                                    <Button size='small' onClick={() => handleLoginPassenger()} variant="text"><span className='font-normal flex items-center'> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon> <span className='ml-1'>Back</span></span></Button>
+                                                    <Button size='small' onClick={() => setLoginPassenger(() => !loginPassenger)} variant="text"><span className='font-normal flex items-center'> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon> <span className='ml-1'>Back</span></span></Button>
                                                     <Button type='submit' size='small' variant="contained">Log In</Button>
                                                 </div>
                                                 :
                                                 <div className='mt-10 flex flex-row-reverse'>
-                                                    <Button disabled={phonePassenger ? false : true} type='submit' size='small' onClick={() => handleLoginPassenger()} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
+                                                    <Button id='passenger-sign' disabled={phonePassenger ? false : true} type='submit' size='small' onClick={() => handleLoginPassenger()} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
                                                 </div>
                                         }
                                     </form>
@@ -320,12 +366,12 @@ export default function AuthHome() {
                                         {
                                             loginPartner ?
                                                 <div className='mt-10 flex justify-between'>
-                                                    <Button size='small' onClick={() => handleLoginPartner()} variant="text"><span className='font-normal flex items-center'> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon> <span className='ml-1'>Back</span></span></Button>
+                                                    <Button size='small' onClick={() => setLoginPartner(() => !loginPassenger)} variant="text"><span className='font-normal flex items-center'> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon> <span className='ml-1'>Back</span></span></Button>
                                                     <Button type='submit' size='small' variant="contained">Log In</Button>
                                                 </div>
                                                 :
                                                 <div className='mt-10 flex flex-row-reverse'>
-                                                    <Button disabled={phonePartner ? false : true} type='submit' size='small' onClick={() => handleLoginPartner()} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
+                                                    <Button id='partner-sign' disabled={phonePartner ? false : true} type='submit' size='small' onClick={() => handleLoginPartner()} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
                                                 </div>
                                         }
                                     </form>

@@ -157,12 +157,12 @@ export default function Navbar({ open, setOpen }) {
                     </ListItemButton>
                 </Link>
 
-                <Link onClick={()=>setTabValue(3)} to={`/auth`}>
+                <Link className='active:bg-white' onClick={()=>setTabValue(3)} to={`/auth`}>
                     <ListItemButton >
                         <ListItemIcon>
                         <AccountCircleOutlinedIcon></AccountCircleOutlinedIcon>
                         </ListItemIcon>
-                        <span className='text-primary'>Login or Singup</span>
+                        <ListItemText primary={'Login or Signup'} />
                     </ListItemButton>
                 </Link>
 
@@ -184,11 +184,11 @@ export default function Navbar({ open, setOpen }) {
 
     return (
 
-        <Box className='z-20 w-[100%] fixed bg-white  md:bg-primary md:bg-gradient-to-r md:from-[#480626] md:to-[#7c2a52] md:backdrop-filter-none md:backdrop-blur-sm md:shadow md:h-[70px] h-[60px]    md:w-[100%]'>
+        <Box className='z-20 w-[100%] fixed bg-white  md:bg-primary md:bg-gradient-to-r md:from-[#480626] md:to-[#7c2a52] backdrop-filter-none backdrop-blur-sm shadow md:h-[70px] h-[60px]    md:w-[100%]'>
             <div className='md:hidden'>
                 <Tabs sx={{ boxShadow: 3, backgroundColor: '#f7f7f7' }} className='px-1 flex bottom-0 md:hidden z-20 mx-auto fixed space-x-14 w-[100vw] border border-t-[grey]' value={tabValue} onChange={handleChangeTab} aria-label="basic tabs example" >
                     <Tab to="/" component={Link} style={{ fontSize: '11px' }} className='normal-case' icon={<HouseOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} fontSize="medium"></HouseOutlinedIcon>} disableRipple label="Home" {...a11yProps(0)} />
-                    <Tab style={{ fontSize: '11px' }} className='normal-case' icon={<SearchOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} fontSize="medium"></SearchOutlinedIcon>} disableRipple label="Find" {...a11yProps(1)} />
+                    <Tab to="/find-cars" component={Link} style={{ fontSize: '11px' }} className='normal-case' icon={<SearchOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} fontSize="medium"></SearchOutlinedIcon>} disableRipple label="Find" {...a11yProps(1)} />
                     <Tab style={{ fontSize: '11px' }} className='normal-case' icon={<TimeToLeaveOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} fontSize="medium"></TimeToLeaveOutlinedIcon>} disableRipple label="Trip" {...a11yProps(2)} />
                     <Tab to="/auth" component={Link} style={{ fontSize: '11px' }} className='normal-case' icon={<AccountCircleOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} fontSize="medium"></AccountCircleOutlinedIcon>} disableRipple label="Profile" {...a11yProps(3)} />
                 </Tabs>
@@ -209,7 +209,6 @@ export default function Navbar({ open, setOpen }) {
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
 
                             </IconButton>
-                            {/* <ClickAwayListener onClickAway={() => toggleDrawer(false)}> */}
                             <SwipeableDrawer
                                 BackdropProps={{ style: { backgroundImage: 'linear-gradient(#5c0931, black)', opacity: .8 } }}
                                 transitionDuration={700}

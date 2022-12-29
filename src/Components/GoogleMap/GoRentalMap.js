@@ -45,9 +45,14 @@ function GoRentalMap(props) {
       setDirectionsResponse(results)
       setDistance(results.routes[0].legs[0].distance.text)
       setDuration(results.routes[0].legs[0].duration.text)
+
+      props.setMapData({ distance, duration })
     }
     calculateRoute()
+
+
   }, [distance, duration, props])
+
 
 
   function clearRoute() {
@@ -66,13 +71,7 @@ function GoRentalMap(props) {
 
   return (
 
-    <div >
-      {
-        <div>
-          {distance && <p className='bg-primary text-[grey] text-sm text-center p-1'>{distance} / {duration} </p>
-          }
-        </div>
-      }
+    <div className='relative'>
       <GoogleMap className='w-[100vw] mx-auto'
         center={center}
         // minZoom={5}

@@ -14,7 +14,7 @@ const HomePage = () => {
 
 
   return (
-    <div className='pb-40'>
+    <div className='pb-40 space-y-4'>
       <FindCars open={open} setOpen={setOpen}></FindCars>
       {/* <HomeSliders></HomeSliders>  */}   
       <SingleSliders></SingleSliders>       

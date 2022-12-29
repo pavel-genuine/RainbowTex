@@ -18,11 +18,7 @@ const AuthMain = () => {
         backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800],
     }));
 
-    // const location = useLocation();
-    // let from = location.state?.from?.pathname || "/";
-    // const navigate = useNavigate();
-
-    // navigate(from, { replace: true });
+  
 
     return (
         <div className='pt-20 min-h-[100vh] md:max-w-[300px] mx-auto px-5 '>

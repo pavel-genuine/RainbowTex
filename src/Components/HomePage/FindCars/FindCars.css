@@ -15,6 +15,7 @@
   #findCars::-webkit-scrollbar-thumb {
     background: #ffffff; 
     /* background: #bbfcff;  */
+    /* background: #e1dfe0;  */
     border-radius: 10px;
   }
   
