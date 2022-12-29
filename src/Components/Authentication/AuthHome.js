@@ -236,7 +236,7 @@ export default function AuthHome() {
             const user = result.user;
             const idToken = await user?.getIdToken()
 
-            await otpVerifier({uid:user?.uid,contractNumber:phonePassenger,idToken:idToken,otpProvider:'firebase',userType: 'user'})           
+            await otpVerifier({uid:user?.uid,contactNumber:phonePassenger,idToken:idToken,otpProvider:'firebase',userType: 'user'})           
            
             // setTimeout(
             navigate(from, { replace: true })
