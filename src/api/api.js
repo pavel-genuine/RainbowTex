@@ -13,7 +13,7 @@ export const signInPartner = (partner) => axios.post(`${base_url}/auth/login/car
 export const signUpPassenger = (user) => axios.post(`${base_url}/auth/register/user`, user);
 export const signUpPartner = (partner) => axios.post(`${base_url}/auth/register/carowner`, partner);
 export const getRefreshToken = () => axios.get('/refreshtoken')
-export const optVerifier = () => axios.post('/auth/otp-login')
+export const optVerifier = () => axios.post(`${base_url}/auth/otp-login`)
 
 
 export const getAccessToken = async (data) => {
