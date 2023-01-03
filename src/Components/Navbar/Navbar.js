@@ -22,17 +22,8 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import TimeToLeaveOutlinedIcon from '@mui/icons-material/TimeToLeaveOutlined';
 import HouseOutlinedIcon from '@mui/icons-material/HouseOutlined';
-import { width } from '@mui/system';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
 
-
-function a11yProps(index) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    };
-}
 
 export default function Navbar({ open, setOpen }) {
     const [state, setState] = React.useState({
@@ -43,8 +34,7 @@ export default function Navbar({ open, setOpen }) {
     });
     const [background, setBackground] = React.useState()
     const anchorRef = React.useRef(null);
-    const [tabValue, setTabValue] = React.useState(0);
-
+    // const [open, setOpen] = useState()
     const drawerWidth = window.outerWidth;
 
     const handleDrawerOpen = () => {
@@ -79,17 +69,8 @@ export default function Navbar({ open, setOpen }) {
 
         setState({ ...state, [anchor]: open });
     };
-    const toggleDrawer = (anchor, open) => (event) => {
+    const toggleDrawer = (open) => (event) => {
         setOpen(open);
-        if (
-            event &&
-            event.type === 'keydown' &&
-            (event.key === 'Tab' || event.key === 'Shift')
-        ) {
-            return;
-        }
-
-        setState({ ...state, [anchor]: open });
     };
 
     const handleToggle = () => {
@@ -148,23 +129,23 @@ export default function Navbar({ open, setOpen }) {
                     </svg>
 
                 </Box>
-                <Link onClick={()=>setTabValue(0)} to={`/`}>
+                <Link to={`/`}>
                     <ListItemButton >
                         <ListItemIcon>
-                        <HouseOutlinedIcon ></HouseOutlinedIcon>
+                            <HouseOutlinedIcon ></HouseOutlinedIcon>
                         </ListItemIcon>
                         <span className=''>Home</span>
                     </ListItemButton>
                 </Link>
 
-                <Link className='active:bg-white' onClick={()=>setTabValue(3)} to={`/auth`}>
-                    <ListItemButton >
+                {/* <Link className='text-primary' to={`/profile`}> */}
+                    <ListItemButton onClick={toggleDrawer(true)} >
                         <ListItemIcon>
-                        <AccountCircleOutlinedIcon></AccountCircleOutlinedIcon>
+                            <AccountCircleOutlinedIcon color='primary'></AccountCircleOutlinedIcon>
                         </ListItemIcon>
-                        <ListItemText primary={'Login or Signup'} />
+                        <ListItemText primary={'Log in'} />
                     </ListItemButton>
-                </Link>
+                {/* </Link> */}
 
                 <ListItemButton>
                     <ListItemIcon>
@@ -176,23 +157,9 @@ export default function Navbar({ open, setOpen }) {
         </Box>
     );
 
-    const handleChangeTab = (event, newValue) => {
-        setTabValue(newValue);
-
-        console.log(newValue,'vvv');
-    };
-
     return (
 
         <Box className='z-20 w-[100%] fixed bg-white  md:bg-primary md:bg-gradient-to-r md:from-[#480626] md:to-[#7c2a52] backdrop-filter-none backdrop-blur-sm shadow md:h-[70px] h-[60px]    md:w-[100%]'>
-            <div className='md:hidden'>
-                <Tabs sx={{ boxShadow: 3, backgroundColor: '#f7f7f7' }} className='px-1 flex bottom-0 md:hidden z-20 mx-auto fixed space-x-14 w-[100vw] border border-t-[grey]' value={tabValue} onChange={handleChangeTab} aria-label="basic tabs example" >
-                    <Tab to="/" component={Link} style={{ fontSize: '11px' }} className='normal-case' icon={<HouseOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} fontSize="medium"></HouseOutlinedIcon>} disableRipple label="Home" {...a11yProps(0)} />
-                    <Tab to="/find-cars" component={Link} style={{ fontSize: '11px' }} className='normal-case' icon={<SearchOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} fontSize="medium"></SearchOutlinedIcon>} disableRipple label="Find" {...a11yProps(1)} />
-                    <Tab style={{ fontSize: '11px' }} className='normal-case' icon={<TimeToLeaveOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} fontSize="medium"></TimeToLeaveOutlinedIcon>} disableRipple label="Trip" {...a11yProps(2)} />
-                    <Tab to="/auth" component={Link} style={{ fontSize: '11px' }} className='normal-case' icon={<AccountCircleOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} fontSize="medium"></AccountCircleOutlinedIcon>} disableRipple label="Profile" {...a11yProps(3)} />
-                </Tabs>
-            </div>
             <Box
                 className={`flex items-center justify-between md:h-[70px] h-[60px] w-[90%] mx-auto `}>
 
@@ -202,7 +169,7 @@ export default function Navbar({ open, setOpen }) {
                             <IconButton
                                 onClick={toggleDrawerSide(anchor, true)} onClose={toggleDrawer(anchor, false)}
                                 edge="start"
-                                sx={{ mx: {md:2} }}
+                                sx={{ mx: { md: 2 } }}
                                 color="inherit"
                                 aria-label="menu"
                             >
@@ -224,26 +191,44 @@ export default function Navbar({ open, setOpen }) {
                                 </button>
 
                                 {list(anchor)}
-                            
+
                             </SwipeableDrawer>
                             {/* </ClickAwayListener> */}
                         </React.Fragment>
                     ))}
-                    <Link onClick={()=>setTabValue(0)}  to={`/`}>
+                    <Link to={`/`}>
 
                         <Button ><span className='md:text-white text-primary md:text-xl text-lg'>GoRental</span></Button>
 
                     </Link>
                 </div>
                 <div className='md:mx-10 mx-2'>
-                    {
-                        <Link onClick={()=>setTabValue(3)} to={`/auth`}>
-                            <Button
-                                aria-label="open drawer"
-                            >
-                                <span className='md:text-white text-primary md:text-xl text-lg'>Sign in</span>
-                            </Button></Link>
-                    }
+
+                    {/* <Link  to={`/profile`}> */}
+                    <Button onClick={toggleDrawer(true)}
+                        aria-label="open drawer"
+                    >
+                        <span className='md:text-white text-primary md:text-xl text-lg'>Log in</span>
+                    </Button>
+                    {/* </Link> */}
+
+                    <SwipeableDrawer
+                        BackdropProps={{ style: { backgroundImage: 'linear-gradient(#5c0931, black)', opacity: .8 } }}
+                        transitionDuration={700}
+                        PaperProps={{ backgroundColor: 'black', square: false, sx: { borderRadius: '25px 25px 0 0' } }}
+                        open={open}
+                        anchor="bottom"
+                        onClose={toggleDrawer(false)}
+                        onOpen={toggleDrawer(true)}
+                    >
+                        <button onClick={toggleDrawerSide(false)} className='fixed right-0 top-[1%] z-[100%] p-3'>
+                            <CloseIcon className='text-white' />
+                        </button>
+
+                        <AuthHome></AuthHome>
+
+                    </SwipeableDrawer>
+
                 </div>
 
             </Box>

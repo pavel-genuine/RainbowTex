@@ -24,6 +24,9 @@ import { map } from '@firebase/util';
 import CloseIcon from '@mui/icons-material/Close';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import { ArrowIcon } from '../../Profile/CarOwner/CarOwnerAddCar';
+import AllCarResults from '../CarResult/AllCarResults';
+import EastIcon from '@mui/icons-material/East';
 
 export const darkTheme = createTheme({
     typography: {
@@ -337,7 +340,7 @@ const FindCars = ({ open, setOpen }) => {
         }
 
 
-        fetch({ input: inputValueOrigin }, (results) => {
+        fetch({ input: inputValueOrigin, componentRestrictions: { country: 'bd' } }, (results) => {
             if (active) {
                 let newOptions = [];
 
@@ -379,7 +382,7 @@ const FindCars = ({ open, setOpen }) => {
         }
 
 
-        fetch({ input: inputValueDestination }, (results) => {
+        fetch({ input: inputValueDestination, componentRestrictions: { country: 'bd' } }, (results) => {
             if (active) {
                 let newOptions = [];
 
@@ -403,6 +406,7 @@ const FindCars = ({ open, setOpen }) => {
 
     const onSubmit = async (data) => {
         setOpenSearch(true)
+        // setOpen(true) // open auth
     }
 
 
@@ -466,28 +470,30 @@ const FindCars = ({ open, setOpen }) => {
 
                                 {pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap)}
 
+
                                 <Dialog
-                                    style={{ zIndex: 16100 }}
+                                    // style={openSearch? { zIndex: 16100 }:{ zIndex: 15100 }}
                                     className=' bg-primary min-h-[1000px] '
                                     fullScreen
                                     open={openMap}
-                                    TransitionComponent={Transition}
-                                    keepMounted
+                                    transitionDuration={1}
+                                    // TransitionComponent={Transition}
+                                    // keepMounted
                                     onClose={() => setOpenMap(false)}
                                     aria-describedby="alert-dialog-slide-description"
                                 >
                                     <ThemeProvider theme={darkTheme}>
                                         <div className='fixed z-20 w-[100vw]'>
-                                            <div className='bg-primary md:pt-4 md:mb-7 pb-4'>
+                                            <div className='bg-primary md:pt-4 md:mb-7 pb-5'>
                                                 <div className=' md:flex items-center '>
-                                                    <button onClick={() => setOpenMap(false)}>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className=" text-white w-6 h-6 ml-2 my-2   ">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-                                                        </svg>
-                                                    </button>
-                                                    { !showdestination ? <KeyboardDoubleArrowDownIcon onClick={() => setShowDestination(() =>true)}  className='md:hidden md:text-primary absolute top-12 right-0 text-white mr-1'></KeyboardDoubleArrowDownIcon> : <KeyboardDoubleArrowUpIcon onClick={() => setShowDestination(() => false)} className='md:hidden md:text-primary absolute top-12 right-0 text-white mr-1'></KeyboardDoubleArrowUpIcon>}
-                                                    
-                                                    <div onMouseLeave={() => setShowDestination(() => false)} className='md:space-x-5 md:space-y-0 w-[80vw]  md:w-[50%] mx-auto '>
+                                                    <Box>
+                                                        <IconButton onClick={() => setOpenMap(false)}>
+                                                            <ArrowIcon></ArrowIcon>
+                                                        </IconButton>
+                                                    </Box>
+                                                    {!showdestination ? <KeyboardDoubleArrowDownIcon onClick={() => setShowDestination(() => true)} className='md:hidden md:text-primary absolute top-12 right-0 text-white mr-1'></KeyboardDoubleArrowDownIcon> : <KeyboardDoubleArrowUpIcon onClick={() => setShowDestination(() => false)} className='md:hidden md:text-primary absolute top-12 right-0 text-white mr-1'></KeyboardDoubleArrowUpIcon>}
+
+                                                    <div className='md:space-x-5 md:space-y-0 w-[80vw]  md:w-[50%] mx-auto '>
 
 
                                                         <div onFocus={() => setShowDestination(() => true)} className='md:hidden'>
@@ -526,7 +532,7 @@ const FindCars = ({ open, setOpen }) => {
                                                                 }
                                                             </div>
                                                             <div className='lg:w-[31%] md:w-[40%] mt-5 md:mt-0'>
-                                                                {schedule(setTime, time)}
+                                                                {/* {schedule(setTime, time)} */}
                                                             </div>
 
                                                         </div>
@@ -535,7 +541,7 @@ const FindCars = ({ open, setOpen }) => {
 
                                                 </div>
                                                 {mapData?.distance &&
-                                                    <p className='text-xs text-[grey] text-center pt-2'>
+                                                    <p className='text-sm text-white text-center mt-2'>
                                                         {mapData?.distance} / {mapData?.duration}
 
                                                     </p>
@@ -543,12 +549,25 @@ const FindCars = ({ open, setOpen }) => {
 
                                             </div>
                                         </div>
+
                                     </ThemeProvider>
 
-                                    <div className={` ${showdestination ? ' pt-[73%]' : 'pt-[30%]'} md:pt-[5%]`}>
+
+
+                                    <div className={` ${showdestination ? ' pt-[65%]' : 'pt-[30%]'} relative md:pt-[5%] `}>
+
                                         <GoRentalMap setMapData={setMapData} origin={valueOrigin?.description} destination={valueDestination?.description}>
 
                                         </GoRentalMap>
+                                        <div className='flex justify-center items-center'>
+                                            {
+                                                !openSearch ?
+                                                    <button className=' rounded-md w-[200px] bg-primary h-[40px] text-white absolute top-[90vh]' onClick={() => setOpenSearch(true)}>Find Cars</button>
+                                                    :
+                                                    <button className=' rounded-md w-[200px] bg-primary h-[40px] text-white absolute top-[90vh]' onClick={() => setOpenMap(false)}>Find Cars</button>
+
+                                            }
+                                        </div>
                                     </div>
 
                                 </Dialog>
@@ -570,26 +589,23 @@ const FindCars = ({ open, setOpen }) => {
 
             <Dialog
                 className='bg-primary'
+                transitionDuration={1}
                 open={openSearch}
                 onClose={() => setOpenSearch(false)}
                 onOpen={() => setOpenSearch(true)}
                 fullScreen
-                TransitionComponent={Transition}
-                keepMounted
                 aria-describedby="alert-dialog-slide-description"
             >
                 <ThemeProvider theme={darkTheme}>
                     <div className='fixed z-20 w-[100vw]'>
                         <div className='bg-primary md:pt-5 md:mb-7 pb-4'>
                             <div className=' md:flex items-center '>
-                                <button onClick={() => setOpenSearch(false)}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className=" text-white w-6 h-6 ml-2 my-2   ">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-                                    </svg>
-                                </button>
-                                { !showdestination ? <KeyboardDoubleArrowDownIcon onClick={() => setShowDestination(() =>true)}  className='md:hidden md:text-primary absolute top-12 right-0 text-white mr-1'></KeyboardDoubleArrowDownIcon> : <KeyboardDoubleArrowUpIcon onClick={() => setShowDestination(() => false)} className='md:hidden md:text-primary absolute top-12 right-0 text-white mr-1'></KeyboardDoubleArrowUpIcon>}
+                                <IconButton onClick={() => setOpenSearch(false)}>
+                                    <ArrowIcon></ArrowIcon>
+                                </IconButton>
+                                {!showdestination ? <KeyboardDoubleArrowDownIcon onClick={() => setShowDestination(() => true)} className='md:hidden md:text-primary absolute top-12 right-0 text-white mr-1'></KeyboardDoubleArrowDownIcon> : <KeyboardDoubleArrowUpIcon onClick={() => setShowDestination(() => false)} className='md:hidden md:text-primary absolute top-12 right-0 text-white mr-1'></KeyboardDoubleArrowUpIcon>}
 
-                                <div onMouseLeave={() => setShowDestination(() => false)} className='md:space-x-5 md:space-y-0 w-[80vw]  md:w-[50%] mx-auto pb-2 '>
+                                <div className='md:space-x-5 md:space-y-0 w-[80vw]  md:w-[50%] mx-auto pb-2 '>
 
                                     <div onFocus={() => setShowDestination(() => true)} className='md:hidden'>
                                         {
@@ -604,17 +620,19 @@ const FindCars = ({ open, setOpen }) => {
                                         </div>
                                         <span className='md:inline hidden'>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-white">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
                                             </svg>
+
                                         </span>
 
 
                                         {
                                             showdestination &&
                                             <p className={`block md:hidden w-[5%] mx-auto my-2`}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5  text-white">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5" />
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-white ">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75" />
                                                 </svg>
+
 
                                             </p>
 
@@ -631,52 +649,30 @@ const FindCars = ({ open, setOpen }) => {
                                     </div>
 
                                 </div>
+                                {mapData?.distance &&
+                                    <p className='text-sm text-white text-center pt-2'>
+                                        {mapData?.distance} / {mapData?.duration}
+
+                                    </p>
+                                }
 
                             </div>
-                            {mapData?.distance &&
-                                <p className='text-xs text-[grey] text-center pt-2'>
-                                    {mapData?.distance} / {mapData?.duration}
-
-                                </p>
-                            }
 
                         </div>
                     </div>
                 </ThemeProvider>
 
-                <Box
-                    className={`${showdestination ? ' pt-[90%]' : 'pt-[40%]'} md:pt-[10%] pb-10  grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-6 space-y-3 md:space-y-0  md:w-[90%] w-[95%] mx-auto `}>
+                <div className={` ${showdestination ? ' pt-[73%]' : 'pt-[30%]'} md:pt-[5%] hidden`}>
+                    <GoRentalMap setMapData={setMapData} origin={valueOrigin?.description} destination={valueDestination?.description}>
 
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
-                    <CarResult></CarResult>
+                    </GoRentalMap>
+                </div>
+
+                <Box
+                    className={`${showdestination ? ' pt-[90%]' : 'pt-[45%]'} md:pt-[10%] pb-10`}>
+
+                    <AllCarResults></AllCarResults>
+
                 </Box>
             </Dialog>
 

@@ -6,11 +6,7 @@ import SingleSliders from '../HomeSliders/SingleSide'
 import Navbar from '../Navbar/Navbar'
 import FindCars from './FindCars/FindCars'
 
-const HomePage = () => {
-
-  const [open, setOpen] = React.useState(false);
-
-  // console.log(open,'open');
+const HomePage = ({open,setOpen}) => {
 
 
   return (

@@ -72,23 +72,11 @@ export default function AuthHome() {
     const [enabledPassenger, setEnabledPassenger] = React.useState(false);
     const [enabledPartner, setEnabledPartner] = React.useState(false);
     const [seconds, setSeconds] = React.useState(65);
+    const [error, setError] = React.useState('');
+    const [toastOTP, setToastOTP] = React.useState(false);
+    const [toastLogin, setToastLogin] = React.useState(false);
 
-    const [state, setState] = React.useState({
-        open: false,
-        vertical: 'top',
-        horizontal: 'center',
-    });
-    const { vertical, horizontal, open } = state;
-
-    const handleToast = (newState) => () => {
-        setState({ open: true, ...newState });
-    };
-
-    const handleCloseToast = () => {
-        setState({ ...state, open: false });
-    };
-
-
+ 
     React.useEffect(() => {
         const interval = setInterval(() => {
             if (seconds > 0) {
@@ -171,14 +159,12 @@ export default function AuthHome() {
             window.confirmationResult = confirmationResult;
 
             setTimeout(
-                handleToast({
-                    vertical: 'top',
-                    horizontal: 'center',
-                })
+                setToastOTP(()=>true)
                 , 1000)
 
         }).catch((error) => {
-            // Error; SMS not sent
+            // console.log(error);
+            setError('Error! Please Resend')
         });
     };
 
@@ -193,13 +179,12 @@ export default function AuthHome() {
 
             window.confirmationResult = confirmationResult;
             setTimeout(
-                handleToast({
-                    vertical: 'top',
-                    horizontal: 'center',
-                })
+                setToastOTP(()=>true)
                 , 1000)
         }).catch((error) => {
-            // Error; SMS not sent
+            // console.log(error);
+            // console.log(error?.message);
+            setError('Error! Please Resend')
         });
     };
 
@@ -214,6 +199,7 @@ export default function AuthHome() {
 
 
     const location = useLocation();
+
     let from = location.state?.from?.pathname || "/";
     const navigate = useNavigate();
 
@@ -229,22 +215,32 @@ export default function AuthHome() {
         // console.log(getAccessToken({ contractNumber: phonePassenger, password: otpPasssengerFinal }),'ldata');
         // const accessToken = data?.accessToken
         // accessTokenPassenger = accessToken
-
         const code = otpPasssengerFinal;
+
         window.confirmationResult?.confirm(code).then(async (result) => {
             // User signed in successfully.
             const user = result.user;
             const idToken = await user?.getIdToken()
 
-            await otpVerifier({uid:user?.uid,contactNumber:phonePassenger,idToken:idToken,otpProvider:'firebase',userType: 'user'})           
-           
-            // setTimeout(
+            await otpVerifier({ uid: user?.uid, contactNumber: phonePassenger, idToken: idToken, otpProvider: 'firebase', userType: 'user' })
+
+            setTimeout(
+                setToastLogin(()=>true)
+                , 500)
+
+            setTimeout(
             navigate(from, { replace: true })
-            // , 500)
+            , 1000)
 
         }).catch((error) => {
-            // User couldn't sign in (bad verification code?)
-            // ...
+           
+            if (error?.message.includes('invalid')) {
+                setError("OTP not matched")
+            }
+            if (error?.message.includes('expired')) {
+                setError("OTP expired")
+            }
+            else setError('Error! Please Resend')
         });
 
 
@@ -261,21 +257,31 @@ export default function AuthHome() {
 
 
         const code = otpPartnerFinal;
-        window.confirmationResult?.confirm(code).then(async(result) => {
+
+        window.confirmationResult?.confirm(code).then(async (result) => {
             // User signed in successfully.
             const user = result.user;
 
             const idToken = await user?.getIdToken()
 
-            await otpVerifier({uid:user?.uid,phoneNumber:phonePassenger,idToken:idToken,otpProvicer:'firebase',userType: 'user'})
-           
-            // setTimeout(
+            await otpVerifier({ uid: user?.uid, phoneNumber: phonePassenger, idToken: idToken, otpProvicer: 'firebase', userType: 'user' })
+
+            setTimeout(
+                setToastLogin(()=>true)
+                , 500)
+
+            setTimeout(
             navigate(from, { replace: true })
-            // , 500)
+            , 1000)
 
         }).catch((error) => {
-            // User couldn't sign in (bad verification code?)
-            // ...
+             if (error?.message.includes('invalid')) {
+                setError("OTP not matched")
+            }
+            if (error?.message.includes('expired')) {
+                setError("OTP expired")
+            }
+            else setError('Error! Please Resend')
         });
 
 
@@ -287,9 +293,14 @@ export default function AuthHome() {
     return (
         <div style={{ backgroundImage: `url(${'https://www.ligman.com/wp-content/uploads/2021/03/6.Project-Bangladesh-Street-Lighting-Installation-2-2048x1365.jpg'})`, backgroundSize: 'cover' }}
             className={`md:min-h-[700px] md:h-[94.5vh] h-[90vh]  w-[100%] bg-cover `}>
-            <Snackbar open={open} autoHideDuration={3000} onClose={handleCloseToast}>
-                <Alert onClose={handleCloseToast} severity="success" sx={{ width: '100%' }}>
+            <Snackbar open={toastOTP} autoHideDuration={3000}>
+                <Alert severity="success" sx={{ width: '100%' }}>
                     OTP sent Successfully !
+                </Alert>
+            </Snackbar>
+            <Snackbar open={toastLogin} autoHideDuration={3000}>
+                <Alert severity="success" sx={{ width: '100%' }}>
+                    Login Successfull!
                 </Alert>
             </Snackbar>
 
@@ -330,24 +341,30 @@ export default function AuthHome() {
                                                             setOtpPasssenger(val)
                                                         }}
                                                     />
-                                                    <Box className="countdown-text mt-2 text-xs">
-                                                        {seconds > 0 ? (
-                                                            <p>
-                                                                Time Remaining: {`00`}:
-                                                                {seconds < 10 ? `0${seconds}` : seconds}
-                                                            </p>
-                                                        ) : (
-                                                            <p>Didn't recieve code?</p>
-                                                        )}
+                                                    <Box className='flex justify-between'>
+                                                        <Box className="countdown-text mt-2 text-xs">
 
-                                                        <button
-                                                            disabled={seconds > 0}
+                                                            {seconds > 0 ? (
+                                                                <p>
+                                                                    Time Remaining: {`00`}:
+                                                                    {seconds < 10 ? `0${seconds}` : seconds}
+                                                                </p>
+                                                            ) : (
+                                                                <p>Didn't recieve code?</p>
+                                                            )}
 
-                                                            className={`${!seconds > 0 ? 'text-primary' : 'text-[grey]'}`}
-                                                            onClick={() => { setSeconds(60); handleLoginPassenger() }}
-                                                        >
-                                                            Resend OTP
-                                                        </button>
+                                                            <button
+                                                                disabled={seconds > 0}
+
+                                                                className={`${!seconds > 0 ? 'text-primary' : 'text-[grey]'}`}
+                                                                onClick={() => { setSeconds(60); handleLoginPassenger() }}
+                                                            >
+                                                                Resend OTP
+                                                            </button>
+                                                        </Box>
+                                                        {
+                                                            error && <p className='mt-2 text-xs text-[brown]'>{error}</p>
+                                                        }
                                                     </Box>
                                                 </Box>
                                                 :

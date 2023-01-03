@@ -11,7 +11,9 @@ module.exports = withMT({
       // 'primary': '#ff4500', //orange
       // 'primary': 'black',
       // 'primary': '#020267',//navy
-      'primary': '#5c0931', //qatar
+      // 'primary': '#5c0931', //qatar
+      // 'primary': '#8d0434', //qatar-light
+      'primary': '#8e2158', //qatar-light2
     }
   },
   plugins: [],
