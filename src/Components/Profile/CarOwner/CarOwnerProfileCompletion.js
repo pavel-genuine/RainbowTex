@@ -8,40 +8,18 @@ import { useState } from 'react';
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
-import { submitCarOwnerNID } from '../../../api/api';
+import { carOwnerProfileUpdate, submitCarOwnerNID } from '../../../api/api';
 
 const GeneralInfo = ({ handleNext }) => {
   const { register, formState: { errors }, handleSubmit } = useForm();
 
   const [name, setName] = useState('')
   const [location, setLocation] = useState('')
-  const [nidFront, setNidFront] = useState('')
-  const [nidBack, setNidBack] = useState('')
 
   const onSubmit = async (data) => {
     handleNext()
-
-  }
-
-  const uploadNidFront = (e) => {
-    const image = e.target.files[0];
-    setNidFront(() => image)
-    const nidfront = URL.createObjectURL(image)
-
-  }
-  const uploadNidBack = (e) => {
-    const image = e.target.files[0];
-    setNidBack(() => image)
-    const nidback = URL.createObjectURL(image)
-
-  }
-
-  const submitNid = async() => {
-    const formData = new FormData();
-    formData.append('nid', nidFront);
-    formData.append('nid', nidBack);
-    await submitCarOwnerNID(formData)
-
+    const {data:res}=await carOwnerProfileUpdate(data)
+console.log(res,'res comple');
   }
 
 

@@ -76,9 +76,9 @@ export default function CarOwnerAddDriver() {
 
     const onSubmit = async (data) => {
 
-      const{data:res} = await addDriver({name:data?.name,contactNumber:phoneDriver})
+        const { data: res } = await addDriver({ name: data?.name, contactNumber: phoneDriver })
 
-      console.log(res,'drvr');
+        //   console.log(res,'drvr');
     }
 
 
@@ -95,33 +95,33 @@ export default function CarOwnerAddDriver() {
                 open={open}
             >
                 <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-                    <p className='text-lg md:text-center text-primary'>Add driver phone number</p>
+                    <p className='text-lg text-center text-primary'>Driver information</p>
                 </BootstrapDialogTitle>
                 <DialogContent dividers>
                     <form className="flex  space-y-10 my-5 justify-center items-center flex-col relative  mx-auto" onSubmit={handleSubmit(onSubmit)}>
                         <p className='text-sm text-justify md:px-28'>Add an active phone number of the driver. We'll create an account for him & connect with your profile.</p>
-    
+
                         <div className="form-control flex flex-col w-[100%] md:px-28">
-                        <TextField
-                        className='w-[100%] md:w-[350px] mx-auto'
-                            type="text"
-                            placeholder="Name"
-                            {...register("name", {
-                                // required: {
-                                //     value: true,
-                                //     message: 'Brand is Required'
-                                // }
-                            })}
-                            variant="standard"
-                        />
+                            <TextField
+                                className='w-[100%] md:w-[350px] mx-auto'
+                                type="text"
+                                placeholder="Name"
+                                {...register("name", {
+                                    // required: {
+                                    //     value: true,
+                                    //     message: 'Brand is Required'
+                                    // }
+                                })}
+                                variant="standard"
+                            />
 
-                        <label className="label">
-                            {/* {errors?.name?.type === 'required' && <span className="label-text-alt text-xs text-[brown]">{errors?.name.message}</span>} */}
-                        </label>
-                    </div>
+                            <label className="label">
+                                {/* {errors?.name?.type === 'required' && <span className="label-text-alt text-xs text-[brown]">{errors?.name.message}</span>} */}
+                            </label>
+                        </div>
 
 
-                        
+
                         <MuiPhoneNumber
                             className='w-[100%] md:w-[350px]'
                             defaultCountry={'bd'}
@@ -132,13 +132,13 @@ export default function CarOwnerAddDriver() {
                                 isValidPhoneNumber(c) && setPhoneDriver(c)
 
                             }}
-                        />
 
+                        />
                         {/* <DialogActions> */}
-                            <button className='rounded-md px-4 text-sm py-2 text-white bg-primary' variant='outlined' autoFocus 
-                            >
-                                Submit
-                            </button>
+                        <Button disabled={phoneDriver ? false : true} className='rounded-md px-4 text-sm py-2 text-white bg-primary' variant='contained' autoFocus
+                        >
+                            Submit
+                        </Button>
                         {/* </DialogActions> */}
                     </form>
                 </DialogContent>

@@ -11,14 +11,16 @@ import AddIcon from '@mui/icons-material/Add';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CloseIcon from '@mui/icons-material/Close';
 import { useEffect } from 'react';
-import { addCar, uploadCarFitnessPaper, uploadCarImage } from '../../../api/api';
+import { addCar, uploadCarFitnessPaper, uploadCarImage, uploadCarTaxToken } from '../../../api/api';
 
 let carId;
 
 export const ArrowIcon = () => {
     return (
         <span>
-            <ArrowBackIcon />
+            <IconButton className='w-10 h-10' style={{ color: 'white' }} aria-label="back">
+                <ArrowBackIcon />
+            </IconButton>
         </span>
     )
 
@@ -33,7 +35,7 @@ const GeneralInfo = ({ handleNext }) => {
         const { data } = await addCar(carData)
         carId = data?.id
 
-        // console.log(data,'car')
+        console.log(data, 'car')
     }
 
     return (
@@ -179,9 +181,9 @@ const UploadCarImages = ({ handleNext, handleBack }) => {
         image4 && formData.append('carpicture', image4);
 
         if (formData.has('carpicture')) {
-            const{data}=await uploadCarImage(formData)
+            const { data } = await uploadCarImage(formData)
 
-            console.log(data,'img');
+            console.log(data, 'img');
         }
 
     }
@@ -216,7 +218,7 @@ const UploadCarImages = ({ handleNext, handleBack }) => {
                                     </div>
                                 </div>
                                 :
-                                
+
                                 <div>
                                     <img className='absolute right-[0%] w-[160px] h-[120px] rounded-md' src={vehicleImage} alt="" srcset="" />
 
@@ -261,7 +263,7 @@ const UploadCarImages = ({ handleNext, handleBack }) => {
                                     <img className='absolute right-[0%] w-[160px] h-[120px]  rounded-md' src={vehicleImage2} alt="" srcset="" />
 
                                     <div className='relative'>
-                                        <IconButton onClick={() => setVehicleIamge2(sessionStorage.removeItem('vehicleImage2'))} className='w-6 h-6 absolute md:left-[20%]' style={{ color: 'white'}} aria-label="back">
+                                        <IconButton onClick={() => setVehicleIamge2(sessionStorage.removeItem('vehicleImage2'))} className='w-6 h-6 absolute md:left-[20%]' style={{ color: 'white' }} aria-label="back">
                                             <CloseIcon />
                                         </IconButton>
                                     </div>
@@ -301,7 +303,7 @@ const UploadCarImages = ({ handleNext, handleBack }) => {
                                     <img className='absolute right-[0%] w-[160px] h-[120px]  rounded-md' src={vehicleImage3} alt="" srcset="" />
 
                                     <div className='relative'>
-                                        <IconButton onClick={() => setVehicleIamge3(sessionStorage.removeItem('vehicleImage3'))} className='w-6 h-6 absolute md:left-[20%]' style={{ color: 'white'}} aria-label="back">
+                                        <IconButton onClick={() => setVehicleIamge3(sessionStorage.removeItem('vehicleImage3'))} className='w-6 h-6 absolute md:left-[20%]' style={{ color: 'white' }} aria-label="back">
                                             <CloseIcon />
                                         </IconButton>
                                     </div>
@@ -340,7 +342,7 @@ const UploadCarImages = ({ handleNext, handleBack }) => {
                                     <img className='absolute right-[0%] w-[160px] h-[120px]  rounded-md' src={vehicleImage4} alt="" srcset="" />
 
                                     <div className='relative'>
-                                        <IconButton onClick={() => setVehicleIamge4(sessionStorage.removeItem('vehicleImage4'))} className='w-6 h-6 absolute md:left-[20%]' style={{ color: 'white'}} aria-label="back">
+                                        <IconButton onClick={() => setVehicleIamge4(sessionStorage.removeItem('vehicleImage4'))} className='w-6 h-6 absolute md:left-[20%]' style={{ color: 'white' }} aria-label="back">
                                             <CloseIcon />
                                         </IconButton>
                                     </div>
@@ -475,10 +477,10 @@ const FitnessPaper = ({ handleBack, handleNext }) => {
         const formData = new FormData();
         fitnessPaper && formData.append('carId', carId);
         fitnessPaper && formData.append('fitnesspaper', fitnessPaper);
-        if (fitnessPaper) {
-            const {data}=await uploadCarFitnessPaper(formData)
-            // console.log(data,'ft');
-        }
+        // if (fitnessPaper) {
+        //     const { data } = await uploadCarFitnessPaper(formData)
+        //     // console.log(data,'ft');
+        // }
         fitnessPaperRender && handleNext()
         !fitnessPaperRender && setError('Fitness Paper is required')
 
@@ -500,7 +502,7 @@ const FitnessPaper = ({ handleBack, handleNext }) => {
 
                     {!fitnessPaperRender ?
 
-                        <div className="flex justify-center  items-center  px-6 pt-5 pb-6">
+                        <div className="flex justify-center  items-center  px-6 pt-5 pb-6 mb-20">
                             <div className="space-y-1 text-center">
                                 <div className="flex text-sm text-gray-600">
                                     <label htmlFor="fitnessPaper" className="relative cursor-pointer rounded-md font-medium hover:text-primary">
@@ -511,32 +513,36 @@ const FitnessPaper = ({ handleBack, handleNext }) => {
                             </div>
                         </div>
                         :
-                        <div className="flex justify-center  items-center pb-5 ">
+                        <div className="flex justify-center  items-center pb-2 ">
                             <div>
-                            <ImageListItem >
-                                <img
-                                    src={fitnessPaperRender}
-                                    loading="lazy"
-                                    alt='fitness'
-                                />
-                                <ImageListItemBar
-                                    sx={{
-                                        background:
-                                            'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
-                                            'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-                                    }}
-                                    position="top"
-                                    actionIcon={
-                                        <IconButton
-                                        onClick={() => setFitnessPaperRender(sessionStorage.removeItem('fitnessPaper'))}
-                                            sx={{ color: 'white' }}
-                                        >
-                                            <CloseIcon />
-                                        </IconButton>
-                                    }
-                                    actionPosition="left"
-                                />
-                            </ImageListItem>
+                                <ImageListItem sx={{
+                                    width: 220,
+                                    height: 160,
+                                }}
+                                >
+                                    <img
+                                        src={fitnessPaperRender}
+                                        loading="lazy"
+                                        alt='fitness'
+                                    />
+                                    <ImageListItemBar
+                                        sx={{
+                                            background:
+                                                'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
+                                                'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+                                        }}
+                                        position="top"
+                                        actionIcon={
+                                            <IconButton
+                                                onClick={() => setFitnessPaperRender(sessionStorage.removeItem('fitnessPaper'))}
+                                                sx={{ color: 'white' }}
+                                            >
+                                                <CloseIcon />
+                                            </IconButton>
+                                        }
+                                        actionPosition="left"
+                                    />
+                                </ImageListItem>
                             </div>
                         </div>
                     }
@@ -557,7 +563,7 @@ const FitnessPaper = ({ handleBack, handleNext }) => {
                         variant="contained"
                         size='small'
                         onClick={() => { submitCarFitnessPaper() }}
-                        sx={{ mt: 1}}
+                        sx={{ mt: 1 }}
                     >
                         <span>
                             <span className=''>Save & Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon>
@@ -596,12 +602,12 @@ const TaxToken = ({ handleBack, handleNext }) => {
     const submitCarTaxToken = async () => {
         const formData = new FormData();
         taxToken && formData.append('carId', carId);
-        taxToken && formData.append('fitnesspaper', taxToken);
-        
-        if (taxToken) {
-            const {data}=  await uploadCarFitnessPaper(formData)
-            console.log(data,'tx');
-        }
+        taxToken && formData.append('taxtoken', taxToken);
+
+        // if (taxToken) {
+        //     const { data } = await uploadCarTaxToken(formData)
+        //     console.log(data, 'tx');
+        // }
         taxTokenRender && handleNext()
         !taxTokenRender && setError('Tax token is required')
 
@@ -625,7 +631,7 @@ const TaxToken = ({ handleBack, handleNext }) => {
 
                     {!taxTokenRender ?
 
-                        <div className="flex justify-center  items-center  px-6 pt-5 pb-6">
+                        <div className="flex justify-center  items-center  px-6 pt-5 pb-6 mb-20">
                             <div className="space-y-1 text-center">
                                 <div className="flex text-sm text-gray-600">
                                     <label htmlFor="taxToken" className="relative cursor-pointer rounded-md font-medium hover:text-primary">
@@ -637,31 +643,36 @@ const TaxToken = ({ handleBack, handleNext }) => {
                         </div>
                         :
                         <div className="flex justify-center  items-center pb-5 ">
-                        <ImageListItem>
-                            <img
-                                src={taxTokenRender}
-                                loading="lazy"
-                                alt='fitness'
-                            />
-                            <ImageListItemBar
-                                sx={{
-                                    background:
-                                        'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
-                                        'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-                                }}
-                                position="top"
-                                actionIcon={
-                                    <IconButton
-                                    onClick={() => setTaxTokenRender(sessionStorage.removeItem('fitnessPaper'))}
-                                        sx={{ color: 'white' }}
-                                    >
-                                        <CloseIcon />
-                                    </IconButton>
-                                }
-                                actionPosition="left"
-                            />
-                        </ImageListItem>
-                    </div>
+                            <ImageListItem
+                            sx={{
+                                width: 220,
+                                height: 160,
+                            }}
+                            >
+                                <img
+                                    src={taxTokenRender}
+                                    loading="lazy"
+                                    alt='fitness'
+                                />
+                                <ImageListItemBar
+                                    sx={{
+                                        background:
+                                            'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
+                                            'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+                                    }}
+                                    position="top"
+                                    actionIcon={
+                                        <IconButton
+                                            onClick={() => setTaxTokenRender(sessionStorage.removeItem('taxToken'))}
+                                            sx={{ color: 'white' }}
+                                        >
+                                            <CloseIcon />
+                                        </IconButton>
+                                    }
+                                    actionPosition="left"
+                                />
+                            </ImageListItem>
+                        </div>
                     }
 
                 </div>
@@ -670,7 +681,7 @@ const TaxToken = ({ handleBack, handleNext }) => {
                     <Button
                         size='small'
                         onClick={handleBack}
-                        sx={{ mt: 1}}
+                        sx={{ mt: 1 }}
                     >
                         <span>
                             <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon>  <span className=''>back</span>
@@ -680,7 +691,7 @@ const TaxToken = ({ handleBack, handleNext }) => {
                         variant="contained"
                         size='small'
                         onClick={() => { submitCarTaxToken() }}
-                        sx={{ mt: 1}}
+                        sx={{ mt: 1 }}
                     >
                         <span>
                             <span className=''>Save & Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon>

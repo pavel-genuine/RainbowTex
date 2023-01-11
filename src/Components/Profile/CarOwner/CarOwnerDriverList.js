@@ -6,6 +6,8 @@ import CarOwnerAddDriver from './CarOwnerAddDriver';
 import { Link } from 'react-router-dom';
 import { Divider, IconButton } from '@mui/material';
 import { ArrowIcon } from './CarOwnerAddCar';
+import { carOwnerAllDrivers } from '../../../api/api';
+import { useQuery } from '@tanstack/react-query';
 
 export default function CarOwnerDriverList() {
 
@@ -29,10 +31,19 @@ export default function CarOwnerDriverList() {
 
     ]
 
+    const fetcher = async () => {
+        const { data } = await carOwnerAllDrivers()
+        return data
+    }
+
+    let { data, isLoading } = useQuery(["drivers",], () => fetcher())
+
+    console.log('drivers',data);
+
 
     return (
         <Box className=' pt-16 md:pt-20 pb-40 mx-auto relative min-h-[100vh] md:w-[360px] w-[100vw]' sx={{ bgcolor: 'background.paper' }}>
-            <Box className='flex items-center py-1  bg-primary text-white w-[100vw] '>
+            <Box className='flex items-center py-1  bg-primary text-white  '>
                 <Link to='/profile'>
                     <IconButton className='w-10 h-10' style={{ color: 'white' }} aria-label="back">
                         <ArrowIcon />

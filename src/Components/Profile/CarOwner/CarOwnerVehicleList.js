@@ -5,6 +5,8 @@ import CarOwnerSingleVehicle from './CarOwnerSingleVehicle';
 import CarOwnerAddCar, { ArrowIcon } from './CarOwnerAddCar';
 import { Divider, IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { carOwnerAllCars } from '../../../api/api';
+import { useQuery } from '@tanstack/react-query';
 
 export default function CarOwnerVehicleList() {
 
@@ -32,6 +34,15 @@ export default function CarOwnerVehicleList() {
         },
 
     ]
+
+    const fetcher = async () => {
+        const { data } = await carOwnerAllCars()
+        return data
+    }
+
+    let { data, isLoading } = useQuery(["ownercars",], () => fetcher())
+
+    console.log('owner cars',data);
 
     return (
 

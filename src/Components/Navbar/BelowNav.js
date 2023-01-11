@@ -15,6 +15,7 @@ import {
     useLocation,
 } from 'react-router-dom';
 import { StaticRouter } from 'react-router-dom/server';
+import { Divider } from '@mui/material';
 
 function Router(props) {
     const { children } = props;
@@ -57,7 +58,8 @@ export default function BelowNav() {
 
     return (
       <div className='md:hidden'>
-          <Tabs sx={{ boxShadow: 3, backgroundColor: '#f7f7f7' }} centered={true}  allowScrollButtonsMobile={true}  scrollButtons={true} className='flex justify-between bottom-0 z-20 mx-auto fixed w-[100vw] overflow-x-scroll border border-t-[grey]' value={currentTab} aria-label="basic tabs example" >
+        {/* <Divider></Divider> */}
+          <Tabs sx={{ boxShadow: 3, backgroundColor: '#f7f7f7' }} centered={true}  allowScrollButtonsMobile={true}  scrollButtons={true} className='flex justify-between bottom-0 z-20 mx-auto fixed w-[100vw] overflow-x-scroll border' value={currentTab} aria-label="basic tabs example" >
             <Tab to="/" value={`/`} component={Link} style={{ fontSize: '10px' }} className='normal-case' icon={<HouseOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} fontSize="medium"></HouseOutlinedIcon>} disableRipple label="Home" />
             <Tab to="/find-cars" value={`/find-cars`} component={Link} style={{ fontSize: '10px' }} className='normal-case' icon={<SearchOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} fontSize="medium"></SearchOutlinedIcon>} disableRipple label="Find" />
             <Tab to="/trip" value={`/trip`} component={Link} style={{ fontSize: '10px' }} className='normal-case' icon={<TimeToLeaveOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} ffontSize="medium"></TimeToLeaveOutlinedIcon>} disableRipple label="Trip" />

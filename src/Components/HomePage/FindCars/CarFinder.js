@@ -11,7 +11,6 @@ import { type } from '@testing-library/user-event/dist/type';
 import MoreTimeIcon from "@mui/icons-material/MoreTime";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
-import useDrawerOpen from '../../hooks/useDrawerOpen';
 import { grey } from '@mui/material/colors';
 import CarResult from '../CarResult/CarResult';
 import GoRentalMap from '../../GoogleMap/GoRentalMap';

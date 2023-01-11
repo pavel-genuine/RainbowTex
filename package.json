@@ -50,6 +50,7 @@
     "react-swipeable-views-utils": "^0.14.0",
     "redux": "^4.2.0",
     "slick-carousel": "^1.8.1",
+    "socket.io-client": "^4.5.4",
     "swiper": "^8.4.5",
     "tesseract.js": "^4.0.2",
     "use-places-autocomplete": "^4.0.0",

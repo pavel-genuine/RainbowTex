@@ -9,7 +9,6 @@ import {
 } from '@react-google-maps/api'
 import { useEffect, useRef, useState } from 'react'
 
-const center = { lat: 23.810331, lng: 90.412521 }
 
 const options = {
   gestureHandling: "greedy",
@@ -308,6 +307,8 @@ function GoRentalMap(props) {
   const [directionsResponse, setDirectionsResponse] = useState(null)
   const [distance, setDistance] = useState('')
   const [duration, setDuration] = useState('')
+  const [lat, setLat] = useState('')
+  const [long, setLong] = useState('')
 
   /** @type React.MutableRefObject<HTMLInputElement> */
   const originRef = useRef()
@@ -336,7 +337,15 @@ function GoRentalMap(props) {
       props.setMapData({ distance, duration })
     }
     calculateRoute()
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition(function (position) {
+        console.log("Latitude is :", position.coords.latitude);
+        console.log("Longitude is :", position.coords.longitude);
 
+        setLat(() => position.coords.latitude)
+        setLong(() => position.coords.longitude)
+      })
+    }
 
   }, [distance, duration, props])
 
@@ -354,7 +363,13 @@ function GoRentalMap(props) {
     return <p>loading...</p>
   }
 
-
+  let center
+  if (lat && long) {
+    center = { lat: lat, lng: long }
+  }
+  else {
+    center = { lat: 23.810331, lng: 90.412521 }
+  }
 
   return (
 
@@ -374,11 +389,8 @@ function GoRentalMap(props) {
       >
 
 
-        <Marker 
-        icon={{
-            url: "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
-
-          }} 
+        <Marker
+         
           position={center} />
         {directionsResponse && (
           <DirectionsRenderer directions={directionsResponse} />

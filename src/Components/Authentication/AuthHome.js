@@ -20,10 +20,10 @@ import {
 import parseMax from 'libphonenumber-js/max';
 import { MuiOtpInput } from 'mui-one-time-password-input';
 import { useReadOTP } from 'react-read-otp';
-import { getAccessToken, otpVerifier, signInPartner, signInPassenger, signUpPartner, signUpPassenger } from '../../api/api';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import auth from '../../firebase.init';
+import { otpLogin } from '../../api/api';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -57,7 +57,7 @@ function a11yProps(index) {
         'aria-controls': `simple-tabpanel-${index}`,
     };
 }
-export default function AuthHome() {
+export default function AuthHome({ setOpen }) {
     const { register, formState: { errors }, handleSubmit } = useForm();
 
     const [tabValue, setTabValue] = React.useState(0);
@@ -76,7 +76,12 @@ export default function AuthHome() {
     const [toastOTP, setToastOTP] = React.useState(false);
     const [toastLogin, setToastLogin] = React.useState(false);
 
- 
+    const location = useLocation();
+
+    let from = location.state?.from?.pathname || "/";
+
+    const navigate = useNavigate();
+
     React.useEffect(() => {
         const interval = setInterval(() => {
             if (seconds > 0) {
@@ -149,7 +154,6 @@ export default function AuthHome() {
     }
 
     const handleLoginPassenger = () => {
-
         phonePassenger && setEnabledPassenger(() => true)
         captchaPassenger()
         const appVerifier = window.recaptchaVerifier;
@@ -159,18 +163,16 @@ export default function AuthHome() {
             window.confirmationResult = confirmationResult;
 
             setTimeout(
-                setToastOTP(()=>true)
+                setToastOTP(() => true)
                 , 1000)
 
         }).catch((error) => {
-            // console.log(error);
+            console.log(error.message);
             setError('Error! Please Resend')
         });
     };
 
     const handleLoginPartner = () => {
-
-
         phonePartner && setEnabledPartner(() => true)
         captchaPartner()
         const appVerifier = window.recaptchaVerifier;
@@ -179,12 +181,12 @@ export default function AuthHome() {
 
             window.confirmationResult = confirmationResult;
             setTimeout(
-                setToastOTP(()=>true)
+                setToastOTP(() => true)
                 , 1000)
         }).catch((error) => {
             // console.log(error);
-            // console.log(error?.message);
-            setError('Error! Please Resend')
+            console.log(error?.message);
+            setError('Unknown Error !')
         });
     };
 
@@ -198,49 +200,36 @@ export default function AuthHome() {
     };
 
 
-    const location = useLocation();
-
-    let from = location.state?.from?.pathname || "/";
-    const navigate = useNavigate();
-
     const onSubmitPassenger = async (datas) => {
-
-        const passengerData = { name: 'passenger', contractNumber: phonePassenger, password: otpPasssengerFinal }
-
-        // const res = await signUpPassenger(passengerData)
-        // const { data } = await signInPassenger()
-        // console.log(passengerData,'pdta');
-        // getAccessToken({ contractNumber: phonePassenger, password: otpPasssengerFinal })
-
-        // console.log(getAccessToken({ contractNumber: phonePassenger, password: otpPasssengerFinal }),'ldata');
-        // const accessToken = data?.accessToken
-        // accessTokenPassenger = accessToken
         const code = otpPasssengerFinal;
-
         window.confirmationResult?.confirm(code).then(async (result) => {
             // User signed in successfully.
-            const user = result.user;
+            const user = result?.user;
             const idToken = await user?.getIdToken()
 
-            await otpVerifier({ uid: user?.uid, contactNumber: phonePassenger, idToken: idToken, otpProvider: 'firebase', userType: 'user' })
+            const { data } = await otpLogin({ uid: user?.uid, contactNumber: phonePassenger, idToken: idToken, otpProvider: 'firebase', userType: 'user' })
+            console.log(data);
 
             setTimeout(
-                setToastLogin(()=>true)
+                setToastLogin(() => true)
                 , 500)
 
             setTimeout(
-            navigate(from, { replace: true })
-            , 1000)
+                setOpen(() => false)
+                , 800)
+            setTimeout(
+                navigate(from, { replace: true })
+                , 1000)
 
         }).catch((error) => {
-           
+
             if (error?.message.includes('invalid')) {
                 setError("OTP not matched")
             }
             if (error?.message.includes('expired')) {
                 setError("OTP expired")
             }
-            else setError('Error! Please Resend')
+            else setError('Unknown Error !')
         });
 
 
@@ -249,39 +238,34 @@ export default function AuthHome() {
 
 
     const onSubmitPartner = async (datas) => {
-
-        const partnerData = { name: 'partner', contractNumber: phonePartner, password: otpPartnerFinal }
-
-        // const { data } = await signUpPartner(partnerData)
-        // const accessToken = data?.accessToken
-
-
         const code = otpPartnerFinal;
-
         window.confirmationResult?.confirm(code).then(async (result) => {
             // User signed in successfully.
-            const user = result.user;
+            const user = result?.user;
 
             const idToken = await user?.getIdToken()
 
-            await otpVerifier({ uid: user?.uid, phoneNumber: phonePassenger, idToken: idToken, otpProvicer: 'firebase', userType: 'user' })
+            const { data: res } = await otpLogin({ uid: user?.uid, contactNumber: phonePartner, idToken: idToken, otpProvider: 'firebase', userType: 'carowner' })
 
             setTimeout(
-                setToastLogin(()=>true)
+                setToastLogin(() => true)
                 , 500)
 
             setTimeout(
-            navigate(from, { replace: true })
-            , 1000)
+                setOpen(() => false)
+                , 800)
+            setTimeout(
+                navigate(from, { replace: true })
+                , 1000)
 
         }).catch((error) => {
-             if (error?.message.includes('invalid')) {
+            if (error?.message.includes('invalid')) {
                 setError("OTP not matched")
             }
             if (error?.message.includes('expired')) {
                 setError("OTP expired")
             }
-            else setError('Error! Please Resend')
+            else setError('Unknown Error !')
         });
 
 
@@ -295,15 +279,14 @@ export default function AuthHome() {
             className={`md:min-h-[700px] md:h-[94.5vh] h-[90vh]  w-[100%] bg-cover `}>
             <Snackbar open={toastOTP} autoHideDuration={3000}>
                 <Alert severity="success" sx={{ width: '100%' }}>
-                    OTP sent Successfully !
+                    OTP sent Successfully!
                 </Alert>
             </Snackbar>
             <Snackbar open={toastLogin} autoHideDuration={3000}>
                 <Alert severity="success" sx={{ width: '100%' }}>
-                    Login Successfull!
+                    Login occured Successfully!
                 </Alert>
             </Snackbar>
-
             <div className=' md:pt-28 md:pl-40 bg-black bg-opacity-50 md:min-h-[700px] md:h-[94.5vh] h-[90vh] bg-cover w-[100%]  '>
 
                 <div className='bg-white md:w-[500px]  md:h-[500px] h-[100%]'>
@@ -412,26 +395,30 @@ export default function AuthHome() {
                                                         value={otpPartner}
                                                         onChange={(val) => setOtpPartner(val)}
                                                     />
-                                                    <Box className="countdown-text mt-2 text-xs">
-                                                        {seconds > 0 ? (
-                                                            <p>
-                                                                Time Remaining: {`00`}:
-                                                                {seconds < 10 ? `0${seconds}` : seconds}
-                                                            </p>
-                                                        ) : (
-                                                            <p>Didn't recieve code?</p>
-                                                        )}
+                                                    <Box className='flex justify-between'>
+                                                        <Box className="countdown-text mt-2 text-xs">
+                                                            {seconds > 0 ? (
+                                                                <p>
+                                                                    Time Remaining: {`00`}:
+                                                                    {seconds < 10 ? `0${seconds}` : seconds}
+                                                                </p>
+                                                            ) : (
+                                                                <p>Didn't recieve code?</p>
+                                                            )}
 
-                                                        <button
-                                                            disabled={seconds > 0}
+                                                            <button
+                                                                disabled={seconds > 0}
 
-                                                            className={`${!seconds > 0 ? 'text-primary' : 'text-[grey]'}`}
-                                                            onClick={() => setSeconds(60)}
-                                                        >
-                                                            Resend OTP
-                                                        </button>
+                                                                className={`${!seconds > 0 ? 'text-primary' : 'text-[grey]'}`}
+                                                                onClick={() => { setSeconds(60); handleLoginPartner() }}
+                                                            >
+                                                                Resend OTP
+                                                            </button>
+                                                        </Box>
+                                                        {
+                                                            error && <p className='mt-2 text-xs text-[brown]'>{error}</p>
+                                                        }
                                                     </Box>
-
                                                 </Box>
                                                 :
                                                 <MuiPhoneNumber
@@ -449,12 +436,12 @@ export default function AuthHome() {
                                         {
                                             loginPartner ?
                                                 <div className='mt-10 flex justify-between'>
-                                                    <Button size='small' onClick={() => setLoginPartner(() => !loginPassenger)} variant="text"><span className='font-normal flex items-center'> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon> <span className='ml-1'>Back</span></span></Button>
+                                                    <Button size='small' onClick={() => setLoginPartner(() => !loginPartner)} variant="text"><span className='font-normal flex items-center'> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon> <span className='ml-1'>Back</span></span></Button>
                                                     <Button type='submit' size='small' variant="contained">Log In</Button>
                                                 </div>
                                                 :
                                                 <div className='mt-10 flex flex-row-reverse'>
-                                                    <Button id='partner-sign' disabled={phonePartner ? false : true} type='submit' size='small' onClick={() => { handleLoginPartner(); setLoginPassenger(() => !loginPassenger) }} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
+                                                    <Button id='partner-sign' disabled={phonePartner ? false : true} type='submit' size='small' onClick={() => { handleLoginPartner(); setLoginPartner(() => !loginPartner) }} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
                                                 </div>
                                         }
                                     </form>

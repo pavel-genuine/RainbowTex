@@ -11,7 +11,6 @@ import { type } from '@testing-library/user-event/dist/type';
 import MoreTimeIcon from "@mui/icons-material/MoreTime";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
-import useDrawerOpen from '../../hooks/useDrawerOpen';
 import { grey } from '@mui/material/colors';
 import CarResult from '../CarResult/CarResult';
 import GoRentalMap from '../../GoogleMap/GoRentalMap';
@@ -27,6 +26,8 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 import { ArrowIcon } from '../../Profile/CarOwner/CarOwnerAddCar';
 import AllCarResults from '../CarResult/AllCarResults';
 import EastIcon from '@mui/icons-material/East';
+import { getRefreshToken } from '../../../api/api';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const darkTheme = createTheme({
     typography: {
@@ -403,28 +404,9 @@ const FindCars = ({ open, setOpen }) => {
         };
     }, [valueDestination, inputValueDestination, fetch]);
 
-
     const onSubmit = async (data) => {
         setOpenSearch(true)
-        // setOpen(true) // open auth
     }
-
-
-    const handleClickOpen = (param) => {
-        setOpenDialogParam(() => param)
-        setOpenDialog(true)
-
-    };
-
-    const handleClose = () => {
-        setOpenDialog(false);
-    };
-
-    const StyledBox = styled(Box)(({ theme }) => ({
-        backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800],
-    }));
-
-
 
     // const renderInput = (params) => {
     //     return (
@@ -441,6 +423,38 @@ const FindCars = ({ open, setOpen }) => {
     //         />
     //     );
     // };
+
+
+
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            console.log("Latitude is :", position.coords.latitude);
+            console.log("Longitude is :", position.coords.longitude);
+        });
+    }, [])
+
+    // let history = createBrowserHistory();
+    const location = useLocation();
+    const navigate = useNavigate()
+    let from = location.state?.from?.pathname
+    
+    React.useEffect(() => {
+        
+        // window.history.pushState({}, '', '/');
+        navigate(from, {push: true })
+        function handlePopState(event) {
+            setOpenSearch(false);
+            setOpenMap(false);
+            navigate(0)
+        }
+
+        window.addEventListener('popstate', handlePopState);
+        // window.addEventListener('popstate',  setOpenSearch(false));
+        return () => {
+            window.removeEventListener('popstate', handlePopState);
+        };
+    }, []);
+
 
     const myDefaultOption = {
         structured_formatting: {
@@ -473,7 +487,7 @@ const FindCars = ({ open, setOpen }) => {
 
                                 <Dialog
                                     // style={openSearch? { zIndex: 16100 }:{ zIndex: 15100 }}
-                                    className=' bg-primary min-h-[1000px] '
+                                    className=' bg-primary min-h-[1000px] relative '
                                     fullScreen
                                     open={openMap}
                                     transitionDuration={1}
@@ -484,22 +498,35 @@ const FindCars = ({ open, setOpen }) => {
                                 >
                                     <ThemeProvider theme={darkTheme}>
                                         <div className='fixed z-20 w-[100vw]'>
-                                            <div className='bg-primary md:pt-4 md:mb-7 pb-5'>
+                                            <div className='bg-primary md:pt-4 md:mb-7 md:pb-5'>
                                                 <div className=' md:flex items-center '>
-                                                    <Box>
-                                                        <IconButton onClick={() => setOpenMap(false)}>
+                                                    <Box className='md:block hidden'>
+                                                        <span onClick={() => setOpenMap(false)}>
                                                             <ArrowIcon></ArrowIcon>
-                                                        </IconButton>
+                                                        </span>
                                                     </Box>
-                                                    {!showdestination ? <KeyboardDoubleArrowDownIcon onClick={() => setShowDestination(() => true)} className='md:hidden md:text-primary absolute top-12 right-0 text-white mr-1'></KeyboardDoubleArrowDownIcon> : <KeyboardDoubleArrowUpIcon onClick={() => setShowDestination(() => false)} className='md:hidden md:text-primary absolute top-12 right-0 text-white mr-1'></KeyboardDoubleArrowUpIcon>}
+                                                    {/* {!showdestination ? <KeyboardDoubleArrowDownIcon onClick={() => setShowDestination(() => true)} className='md:hidden md:text-primary absolute top-12 right-0 text-white mr-1'></KeyboardDoubleArrowDownIcon>
+                                                        : <KeyboardDoubleArrowUpIcon onClick={() => setShowDestination(() => false)} className='md:hidden md:text-primary absolute top-12 right-0 text-white mr-1'></KeyboardDoubleArrowUpIcon>} */}
 
-                                                    <div className='md:space-x-5 md:space-y-0 w-[80vw]  md:w-[50%] mx-auto '>
+                                                    <div className='md:space-x-5 md:space-y-0 w-[100vw]  md:w-[50%] mx-auto tems-center justify-center '>
 
 
-                                                        <div onFocus={() => setShowDestination(() => true)} className='md:hidden'>
-                                                            {
-                                                                pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap)
-                                                            }
+                                                        <div onFocus={() => setShowDestination(() => true)} className='md:hidden flex items-center  h-[90px]  py-[15px]'>
+                                                            <Box>
+                                                                <span onClick={() => setOpenMap(false)}>
+                                                                    <ArrowIcon></ArrowIcon>
+                                                                </span>
+                                                            </Box>
+                                                            <div className='w-[80%] px-1'>
+                                                                {
+                                                                    pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap)
+                                                                }
+                                                            </div>
+                                                            <div>
+                                                                {!showdestination ? <KeyboardDoubleArrowDownIcon onClick={() => setShowDestination(() => true)} className='md:hidden md:text-primary  text-white pr-1'></KeyboardDoubleArrowDownIcon>
+                                                                    : <KeyboardDoubleArrowUpIcon onClick={() => setShowDestination(() => false)} className='md:hidden md:text-primary  text-white pr-1 '></KeyboardDoubleArrowUpIcon>}
+
+                                                            </div>
                                                         </div>
 
 
@@ -510,23 +537,25 @@ const FindCars = ({ open, setOpen }) => {
                                                                 }
                                                             </div>
                                                             <span className='md:inline hidden'>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-white">
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5" />
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
                                                                 </svg>
+
                                                             </span>
 
 
                                                             {
                                                                 showdestination &&
-                                                                <p className={`block md:hidden w-[5%] mx-auto my-2`}>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5  text-white">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5" />
+                                                                <p className={`block md:hidden w-[5%] mx-auto absolute top-[40%] right-[50%]`}>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75" />
                                                                     </svg>
+
 
                                                                 </p>
 
                                                             }
-                                                            <div className='lg:w-[30%] md:w-[40%]'>
+                                                            <div className='lg:w-[30%] md:w-[40%] w-[80%] mx-auto pl-1 pb-[15px] md:pb-0'>
                                                                 {
                                                                     destinationPoint(optionsDestination, valueDestination, setOptionsDestination, setValueDestination, setInputValueDestination, setOpenMap, openMap)
                                                                 }
@@ -541,7 +570,7 @@ const FindCars = ({ open, setOpen }) => {
 
                                                 </div>
                                                 {mapData?.distance &&
-                                                    <p className='text-sm text-white text-center mt-2'>
+                                                    <p className='text-sm text-white text-center md:mt-2 pb-2 md:pb-0 mt-[-2%]'>
                                                         {mapData?.distance} / {mapData?.duration}
 
                                                     </p>
@@ -552,9 +581,7 @@ const FindCars = ({ open, setOpen }) => {
 
                                     </ThemeProvider>
 
-
-
-                                    <div className={` ${showdestination ? ' pt-[65%]' : 'pt-[30%]'} relative md:pt-[5%] `}>
+                                    <div className={` ${showdestination ? ' pt-[0%]' : 'pt-[0%]'}  md:pt-[5%] `}>
 
                                         <GoRentalMap setMapData={setMapData} origin={valueOrigin?.description} destination={valueDestination?.description}>
 
@@ -562,9 +589,9 @@ const FindCars = ({ open, setOpen }) => {
                                         <div className='flex justify-center items-center'>
                                             {
                                                 !openSearch ?
-                                                    <button className=' rounded-md w-[200px] bg-primary h-[40px] text-white absolute top-[90vh]' onClick={() => setOpenSearch(true)}>Find Cars</button>
+                                                    <button className=' rounded-md w-[200px] bg-primary h-[40px] text-white absolute top-[80vh]' onClick={() => setOpenSearch(true)}>Find Cars</button>
                                                     :
-                                                    <button className=' rounded-md w-[200px] bg-primary h-[40px] text-white absolute top-[90vh]' onClick={() => setOpenMap(false)}>Find Cars</button>
+                                                    <button className=' rounded-md w-[200px] bg-primary h-[40px] text-white absolute top-[80vh]' onClick={() => setOpenMap(false)}>Find Cars</button>
 
                                             }
                                         </div>
@@ -598,28 +625,46 @@ const FindCars = ({ open, setOpen }) => {
             >
                 <ThemeProvider theme={darkTheme}>
                     <div className='fixed z-20 w-[100vw]'>
-                        <div className='bg-primary md:pt-5 md:mb-7 pb-4'>
+                        <div className='bg-primary md:pt-4 md:mb-7 md:pb-5'>
                             <div className=' md:flex items-center '>
-                                <IconButton onClick={() => setOpenSearch(false)}>
-                                    <ArrowIcon></ArrowIcon>
-                                </IconButton>
-                                {!showdestination ? <KeyboardDoubleArrowDownIcon onClick={() => setShowDestination(() => true)} className='md:hidden md:text-primary absolute top-12 right-0 text-white mr-1'></KeyboardDoubleArrowDownIcon> : <KeyboardDoubleArrowUpIcon onClick={() => setShowDestination(() => false)} className='md:hidden md:text-primary absolute top-12 right-0 text-white mr-1'></KeyboardDoubleArrowUpIcon>}
+                                <Box className='md:block hidden'>
+                                    <span onClick={() => setOpenSearch(false)}>
+                                        <ArrowIcon></ArrowIcon>
+                                    </span>
+                                </Box>
+                                {/* {!showdestination ? <KeyboardDoubleArrowDownIcon onClick={() => setShowDestination(() => true)} className='md:hidden md:text-primary absolute top-12 right-0 text-white mr-1'></KeyboardDoubleArrowDownIcon>
+                                                        : <KeyboardDoubleArrowUpIcon onClick={() => setShowDestination(() => false)} className='md:hidden md:text-primary absolute top-12 right-0 text-white mr-1'></KeyboardDoubleArrowUpIcon>} */}
 
-                                <div className='md:space-x-5 md:space-y-0 w-[80vw]  md:w-[50%] mx-auto pb-2 '>
+                                <div className='md:space-x-5 md:space-y-0 w-[100vw]  md:w-[50%] mx-auto tems-center justify-center '>
 
-                                    <div onFocus={() => setShowDestination(() => true)} className='md:hidden'>
-                                        {
-                                            pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap)
-                                        }
+
+                                    <div onFocus={() => setShowDestination(() => true)} className='md:hidden flex items-center  h-[90px]  py-[15px]'>
+                                        <Box>
+                                            <span onClick={() => { setOpenSearch(false) }}>
+                                                <ArrowIcon></ArrowIcon>
+                                            </span>
+                                        </Box>
+                                        <div className='w-[80%] px-1'>
+                                            {
+                                                pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap)
+                                            }
+                                        </div>
+                                        <div>
+                                            {!showdestination ? <KeyboardDoubleArrowDownIcon onClick={() => setShowDestination(() => true)} className='md:hidden md:text-primary  text-white pr-1'></KeyboardDoubleArrowDownIcon>
+                                                : <KeyboardDoubleArrowUpIcon onClick={() => setShowDestination(() => false)} className='md:hidden md:text-primary  text-white pr-1 '></KeyboardDoubleArrowUpIcon>}
+
+                                        </div>
                                     </div>
-                                    <div className={`${showdestination ? '' : 'hidden md:block'} md:flex md:space-x-4 items-center justify-center`}>
+
+
+                                    <div className={`${showdestination ? '' : 'hidden md:block'} md:flex md:space-x-4 items-center justify-center pt-2`}>
                                         <div className='lg:w-[30%] md:w-[40%] hidden md:block'>
                                             {
                                                 pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap)
                                             }
                                         </div>
                                         <span className='md:inline hidden'>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-white">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
                                             </svg>
 
@@ -628,8 +673,8 @@ const FindCars = ({ open, setOpen }) => {
 
                                         {
                                             showdestination &&
-                                            <p className={`block md:hidden w-[5%] mx-auto my-2`}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-white ">
+                                            <p className={`block md:hidden w-[5%] mx-auto absolute top-[30%] right-[50%]`}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75" />
                                                 </svg>
 
@@ -637,29 +682,30 @@ const FindCars = ({ open, setOpen }) => {
                                             </p>
 
                                         }
-                                        <div className='lg:w-[30%] md:w-[40%]'>
+                                        <div className='lg:w-[30%] md:w-[40%] w-[80%] mx-auto pl-1 pb-[15px] md:pb-0'>
                                             {
                                                 destinationPoint(optionsDestination, valueDestination, setOptionsDestination, setValueDestination, setInputValueDestination, setOpenMap, openMap)
                                             }
                                         </div>
-                                        <div className='lg:w-[31%] md:w-[40%] mt-5 md:mt-0'>
+                                        <div className='lg:w-[30%] md:w-[40%] w-[80%] mx-auto pl-1 pb-[15px] md:pb-0'>
                                             {schedule(setTime, time)}
                                         </div>
 
                                     </div>
 
                                 </div>
-                                {mapData?.distance &&
-                                    <p className='text-sm text-white text-center pt-2'>
-                                        {mapData?.distance} / {mapData?.duration}
-
-                                    </p>
-                                }
 
                             </div>
+                            {mapData?.distance &&
+                                <p className='text-sm text-white text-center md:mt-2 pb-2 md:pb-0 mt-[-2%]'>
+                                    {mapData?.distance} / {mapData?.duration}
+
+                                </p>
+                            }
 
                         </div>
                     </div>
+
                 </ThemeProvider>
 
                 <div className={` ${showdestination ? ' pt-[73%]' : 'pt-[30%]'} md:pt-[5%] hidden`}>
@@ -668,8 +714,7 @@ const FindCars = ({ open, setOpen }) => {
                     </GoRentalMap>
                 </div>
 
-                <Box
-                    className={`${showdestination ? ' pt-[90%]' : 'pt-[45%]'} md:pt-[10%] pb-10`}>
+                <Box className={`${showdestination ? ' pt-[35%]' : 'pt-[35%]'} md:pt-[10%] pb-10`}>
 
                     <AllCarResults></AllCarResults>
 
