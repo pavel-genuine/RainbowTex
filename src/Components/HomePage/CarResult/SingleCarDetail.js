@@ -10,7 +10,11 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import SwipeableViews from 'react-swipeable-views';
 import { Divider } from '@mui/material';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { getRefreshToken, refreshToken } from '../../../api/api';
+import { passengerBookingRequest } from '../../../api/api';
+import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
+import GoRentalMap from '../../GoogleMap/GoRentalMap';
+import { useEffect } from 'react';
 
 const images = [
     {
@@ -35,25 +39,40 @@ const images = [
     },
 ];
 
-export default function SingleCarDetail({ setOpen }) {
+export default function SingleCarDetail({ setOpen, tripData, car }) {
+
     const theme = useTheme();
     const [activeStep, setActiveStep] = React.useState(0);
+
     const maxSteps = images.length;
 
     const handleStepChange = (step) => {
         setActiveStep(step);
     };
 
-    const handleConfirm =  () => {
 
+    const handleConfirm = async () => {
+        const req = {
+            carId: car?.id,
+            carownerId: car?.ownerId,
+            serviceId: car?.serviceId,
+            startLocation: tripData[0]?.startLocation,
+            destination: tripData[0]?.destination,
+            distance: tripData[0]?.distance,
+            schedule: tripData[0]?.schedule
+        }
 
-        refreshToken()
-        console.log(refreshToken(),'ref fn');
+        // console.log(req, 'req');
+
+        const { data: res } = await passengerBookingRequest(req)
+
+        console.log(res, 'res sss');
 
     }
 
     return (
-        <Box className='pt-14 mx-auto w-[100vw] md:max-w-[360px]'>
+        <Box className='mx-auto w-[100vw] md:max-w-[360px]'>
+
             <Box>
                 <SwipeableViews
                     axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -92,17 +111,19 @@ export default function SingleCarDetail({ setOpen }) {
                     <Box className='grid grid-cols-4 '>
                         <Box className='pl-5 pb-1 col-span-2' >
                             <p className='text-sm text-primary font-semibold'>
-                                Toyota Camry 2021
+                                {car?.brand} {car?.model} {car?.year}
                             </p>
-                            <p className='text-[grey] text-[12px]'>
-                                5 Seats <FiberManualRecordIcon sx={{ width: 5, marginInline: .2 }}></FiberManualRecordIcon> AC
+                            <p className='text-[grey] text-[11px]'>
+                                {car?.seat} Seats <FiberManualRecordIcon sx={{ width: 5, marginInline: .2 }}></FiberManualRecordIcon> {car?.carType
+                                }
+                                <FiberManualRecordIcon sx={{ width: 5, marginInline: .2 }}></FiberManualRecordIcon> AC
                             </p>
                             <p className='text-[12px] flex'>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3 mr-1">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                                 </svg>
-                                Location
+                                {car?.pickupArea}
                             </p>
 
                             <p className='text-[12px] flex my-1'>
@@ -113,25 +134,22 @@ export default function SingleCarDetail({ setOpen }) {
                             </p>
                         </Box>
                         <Box className='col-span-2 px-6 ' >
-                            <p className=' mb-2'><span className='text-[10px] '>Approx. rent :</span> <span className=' font-semibold py-10 text-sm'> ৳ 3000</span></p>
+                            {tripData[0]?.distance &&
+                                <p className=' mb-2'><span className='text-[10px] '>Approx. rent :</span> <span className=' font-semibold py-10 text-sm'> ৳ {Math.ceil(parseFloat(tripData[0]?.distance?.substring(0,tripData[0]?.distance?.length-2))/10*400)}</span></p>
+                            }
 
                             <Button onClick={handleConfirm} className='h-8 w-[120px]  ' variant='contained'>Confirm</Button>
                         </Box>
                     </Box>
-
-                    {/* <Box className='mx-auto w-[50%] my-2 ' >
-                        <p className='text-center mb-4'><span className='text-[10px] '>Approx. rent :</span> <span className=' font-semibold py-10 text-sm'> ৳ 3000</span></p>
-
-                        <Button className='h-8 w-[200px]  ' variant='contained'>Confirm The Car</Button>
-                    </Box> */}
                     <Divider></Divider>
 
                     <Box className=' my-2 mx-5'>
                         <p><span className='text-[10px] '>Trip detail :</span></p>
-                        <p><span className='text-[10px] '>Pick-up point :</span> <span className=' py-10 text-xs'>Uttara, Dhaka</span></p>
-                        <p><span className='text-[10px] '>Destination :</span> <span className=' py-10 text-xs'> Sadar, Mymensingh</span></p>
-                        <p><span className='text-[10px] '>Approx. distance :</span> <span className=' py-10 text-xs'> 100 km.</span></p>
-                        <p><span className='text-[10px] '>Approx. time :</span> <span className=' py-10 text-xs'> 10 hrs.</span></p>
+                        <p><span className='text-[10px] '>Pick-up point :</span> <span className=' py-10 text-xs'>{tripData[0]?.startLocation ? tripData[0]?.startLocation : ''}</span></p>
+                        <p><span className='text-[10px] '>Destination :</span> <span className=' py-10 text-xs'> {tripData[0]?.destination ? tripData[0]?.destination : ''}</span></p>
+                        <p><span className='text-[10px] '>Approx. distance :</span> <span className=' py-10 text-xs'> {tripData[0]?.distance}</span></p>
+                        <p><span className='text-[10px] '>Approx. duration :</span> <span className=' py-10 text-xs'> {tripData[0]?.duration}</span></p>
+                        <p><span className='text-[10px] '>Schedule:</span> <span className=' py-10 text-xs'> {tripData[0]?.schedule}</span></p>
                     </Box>
                 </Box>
             </Box>

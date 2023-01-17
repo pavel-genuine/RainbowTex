@@ -1,6 +1,12 @@
+
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+
+import ('https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js');
+import ('https://www.gstatic.com/firebasejs/8.2.0/firebase-messaging.js');
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -16,8 +22,48 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
+
+export const messaging = getMessaging(app); 
+
+// export const getTokenfirebase = () => {
+//   return getToken(messaging, { vapidKey: "BBcbCAWfEk24LjPE3kqpFkRdRq257QfHpzFXPmMXV0QaWpDppATQCpeqKLjomdO_HbpYjLgNdQEl_sfatkkz0sc" }).then((currentToken) => {
+//   if (currentToken) {
+//     console.log('current token for client: ', currentToken);
+//     // Track the token -> client mapping, by sending to backend server
+//     // show on the UI that permission is secured
+//   } else {
+//     console.log('No registration token available. Request permission to generate one.');
+//     // shows on the UI that permission is required 
+//   }
+// }).catch((err) => {
+//   console.log('An error occurred while retrieving token. ', err);
+//   // catch error while creating client token
+// });
+// }
+
+
+export const onMessageListener = () =>
+  new Promise((resolve) => {
+    onMessage(messaging, (payload) => {
+      console.log("payload", payload)
+      resolve(payload);
+    });
+  });
+ 
+  // messaging.onBackgroundMessage(function(payload) {
+  //   console.log('Received background message ', payload);
+  //  // Customize notification here
+  //   const notificationTitle = payload.notification.title;
+  //   const notificationOptions = {
+  //     body: payload.notification.body,
+  //   };
+  
+  //   window.self.registration.showNotification(notificationTitle,
+  //     notificationOptions);
+  
+  // });
 
 export default auth;

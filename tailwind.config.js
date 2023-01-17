@@ -1,8 +1,8 @@
 
-const withMT = require("@material-tailwind/react/utils/withMT");
 
-module.exports = withMT({
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+
+module.exports = {
+  content: ["./src/**/*.{html,js}"],
   theme: {
     extend: {},
     colors: {
@@ -13,12 +13,11 @@ module.exports = withMT({
       // 'primary': '#020267',//navy
       // 'primary': '#5c0931', //qatar
       // 'primary': '#8d0434', //qatar-light
-      'primary': '#8e2158', //qatar-light2
+      'primary': '#8e2158', //qatar-light2,
+      transparent: 'transparent',
+      black: '#000',
+      white: '#fff',
     }
   },
   plugins: [],
-  corePlugins: {
-    // preflight: false,
-  }
-});
-
+}

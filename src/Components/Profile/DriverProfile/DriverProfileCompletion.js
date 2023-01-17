@@ -8,147 +8,37 @@ import { useState } from 'react';
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
-import { carOwnerProfileUpdate, submitCarOwnerNIDBack, submitCarOwnerNIDFront, } from '../../../api/api';
+import { carOwnerProfileUpdate, driverProfileUpdate, submitCarOwnerNID, submitCarOwnerNIDBack, submitCarOwnerNIDFront, submitDriverNIDBack, submitDriverNIDFront } from '../../../api/api';
 import { useEffect } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import { Link, useNavigate } from 'react-router-dom';
-import { pickUpPoint } from '../../HomePage/FindCars/FindCars';
-import throttle from 'lodash.throttle';
+import { useNavigate } from 'react-router-dom';
 
 const GeneralInfo = ({ handleNext }) => {
-
-  function loadScript(src, position, id) {
-    if (!position) {
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.setAttribute('async', '');
-    script.setAttribute('id', id);
-    script.src = src;
-    position.appendChild(script);
-  }
-
   const { register, formState: { errors }, handleSubmit } = useForm();
-  const [openMap, setOpenMap] = React.useState(false);
-  const [valueOrigin, setValueOrigin] = React.useState(null);
-  const [inputValueOrigin, setInputValueOrigin] = React.useState('');
-  const [optionsOrigin, setOptionsOrigin] = React.useState([]);
-  const [lat, setLat] = React.useState();
-  const [lng, setLng] = React.useState();
-  const [error, setError] = React.useState('');
 
-  const loaded = React.useRef(false);
-
-  const GOOGLE_MAPS_API_KEY = 'AIzaSyA7Hbtoc7jXPbTNZwdGRzkpt21M3l5YWwE';
-
-  if (typeof window !== 'undefined' && !loaded.current) {
-    if (!document.querySelector('#google-maps')) {
-      loadScript(
-        `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`,
-        document.querySelector('head'),
-        'google-maps',
-      );
-    }
-
-    loaded.current = true;
-  }
-
-  const fetch = React.useMemo(
-    () =>
-      throttle((request, callback) => {
-        new window.google.maps.places.AutocompleteService().getPlacePredictions(request, callback);
-      }, 200),
-    [],
-  );
-
-  React.useEffect(() => {
-    let active = true;
-
-    if (inputValueOrigin === '') {
-      setOptionsOrigin(valueOrigin ? [valueOrigin] : []);
-      return undefined;
-    }
-
-
-
-    fetch({ input: inputValueOrigin, componentRestrictions: { country: 'bd' } },
-      (results) => {
-        if (active) {
-          let newOptions = [];
-
-          if (valueOrigin) {
-            newOptions = [valueOrigin];
-          }
-
-          if (results) {
-            newOptions = [...newOptions, ...results];
-          }
-
-          setOptionsOrigin(newOptions);
-        }
-      });
-
-
-
-    function initializeGeoCodeOrigin() {
-      if (window.google) {
-        const geocoder = new window.google.maps.Geocoder();
-
-        geocoder.geocode({
-          address: valueOrigin?.description
-        }, (results, status) => {
-          if (status == window.google.maps.GeocoderStatus.OK) {
-            console.log(results[0].geometry.location.lat(), 'origin lat');
-            console.log(results[0].geometry.location.lng(), 'origin lng');
-          }
-        });
-      }
-
-
-    }
-
-    initializeGeoCodeOrigin()
-
-    valueOrigin && setError('')
-
-
-  }, [valueOrigin, inputValueOrigin, fetch]);
-
-
+  const [name, setName] = useState('')
+  const [location, setLocation] = useState('')
 
   const onSubmit = async (data) => {
-
-
-    const carOwnerData = {
-      name: data?.name,
-      officeLocatio: valueOrigin?.description,
-      latitude: lat,
-      longitude: lng
-    }
-
-    !valueOrigin && setError('Location is Required')
-    if (valueOrigin) {
-      const { data: res } = valueOrigin && await carOwnerProfileUpdate(carOwnerData)
-      console.log(res, 'res');
-      const ownerId = res?.id
-      sessionStorage.setItem('ownerId', ownerId)
-    }
-    valueOrigin && handleNext()
-
+    const formData = new FormData();
+    formData.append('name', data?.name);
+    const { data: res } = await driverProfileUpdate(formData)
+    const driverId = res?.id
+    sessionStorage.setItem('driverId', driverId)
+    handleNext()
   }
 
 
   return (
-    <form className="pt-5 pb-14 relative w-[100%]  mx-auto" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex h-[280px] justify-center items-center flex-col relative  mx-auto" onSubmit={handleSubmit(onSubmit)}>
 
       <div className=''>
         <div className='flex space-y-6 flex-col  '>
-          <div className="form-control flex flex-col md:px-1">
+          <div className="form-control flex flex-col">
             <TextField
               // value={name}
               type="text"
-              // className={`w-[100%]`}
+              // className={`w-[100%] md:w-[350px]`}
               placeholder="Name"
               {...register("name", {
                 required: {
@@ -156,35 +46,27 @@ const GeneralInfo = ({ handleNext }) => {
                   message: 'Name is Required'
                 }
               })}
-              variant="outlined"
+              variant="standard"
             />
 
             <label className="label">
               {errors?.name?.type === 'required' && <span className="label-text-alt text-xs text-[brown]">{errors?.name.message}</span>}
             </label>
           </div>
-
-          <div className="form-control flex flex-col">
-            {pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap, "outlined", "Location", "")}
-
-            <label className="label">
-              {error && <span className="label-text-alt text-xs text-[brown]">{error}</span>}
-            </label>
-          </div>
           <div className=''>
-            <h1 className='text-sm mb-2 text-justify'> Please take your NID (National Identity) card at your hand to complete your profile. </h1>
-            {/* <RadioGroup
+            <h1 className='text-sm  text-justify mb-2 mt-5'> Please take these documments  at your hand to complete your profile. </h1>
+            <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               defaultValue="doc"
               name="radio-buttons-group"
               className='text-sm'
             >
-              <FormControlLabel value="doc" control={<Radio size='5px' />} label={<Typography fontSize={'12px'}>NID</Typography>} />
+              <FormControlLabel value="doc" control={<Radio size='5px' />} label={<Typography fontSize={'12px'}>NID card</Typography>} />
               <FormControlLabel value="doc" control={<Radio size='5px' />} label={<Typography fontSize={'12px'}>Driving licence</Typography>} />
-              <FormControlLabel value="doc" control={<Radio size='5px' />} label={<Typography fontSize={'12px'}>Vehicle registration paper</Typography>} />
+              {/* <FormControlLabel value="doc" control={<Radio size='5px' />} label={<Typography fontSize={'12px'}>Vehicle registration paper</Typography>} />
               <FormControlLabel value="doc" control={<Radio size='5px' />} label={<Typography fontSize={'12px'}>Vehicle fitness paper</Typography>} />
-              <FormControlLabel value="doc" control={<Radio size='5px' />} label={<Typography fontSize={'12px'}>Vehicle tax token</Typography>} />
-            </RadioGroup> */}
+              <FormControlLabel value="doc" control={<Radio size='5px' />} label={<Typography fontSize={'12px'}>Vehicle tax token</Typography>} /> */}
+            </RadioGroup>
           </div>
         </div>
         <div className='absolute right-0 top-[100%]'>
@@ -222,6 +104,7 @@ const NIDUploaderFront = ({ handleBack, handleNext }) => {
 
 
   const handleNidFront = (e) => {
+
     const file = e.target.files[0];
     setNidFront(() => file)
     const image = URL.createObjectURL(file)
@@ -232,13 +115,12 @@ const NIDUploaderFront = ({ handleBack, handleNext }) => {
   }
 
   const submitNidFront = async () => {
-    const ownerId = sessionStorage.getItem('ownerId')
-    console.log(nidFront, 'nid f');
+    const driverId = sessionStorage.getItem('driverId')
     const formData = new FormData();
-    nidFront && formData.append('carownerId', ownerId);
+    nidFront && formData.append('driverId', driverId);
     nidFront && formData.append('nidfront', nidFront);
     if (nidFront) {
-      const { data } = await submitCarOwnerNIDFront(formData)
+      const { data } = await submitDriverNIDFront(formData)
       console.log(data, 'nid');
     }
     !nidFrontRender && setError('Nid card (front-side) is required')
@@ -363,14 +245,13 @@ const NIDUploaderBack = ({ handleBack, handleNext }) => {
 
   }
 
-  const submitNidBack = async () => {
-    const ownerId = sessionStorage.getItem('ownerId')
+  const submitNidFront = async () => {
+    const driverId = sessionStorage.getItem('driverId')
     const formData = new FormData();
-    nidBack && formData.append('carownerId', ownerId);
+    nidBack && formData.append('driverId', driverId);
     nidBack && formData.append('nidback', nidBack);
     if (nidBack) {
-      const { data } = await submitCarOwnerNIDBack(formData)
-      console.log(data, 'nid');
+      const { data } = await submitDriverNIDBack(formData)
     }
     !nidBackRender && setError('Nid card (back-side) is required')
     nidBackRender && handleNext()
@@ -453,7 +334,137 @@ const NIDUploaderBack = ({ handleBack, handleNext }) => {
           <Button
             variant="contained"
             size='small'
-            onClick={() => { submitNidBack() }}
+            onClick={() => { submitNidFront() }}
+            sx={{ mt: 1 }}
+          >
+            <span>
+              <span className=''>Save & Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon>
+            </span>
+          </Button>
+        </div>
+
+      </div>
+    </div>
+
+  )
+}
+const DrivingLicense = ({ handleBack, handleNext }) => {
+
+  const [licenseRender, setLicenseRender] = useState()
+
+  const [license, setLicense] = useState()
+
+  const [error, setError] = useState()
+
+
+  useEffect(() => {
+    setLicenseRender(() => sessionStorage.getItem('license'))
+
+  }, [setLicenseRender, licenseRender])
+
+
+  const handleLicense = (e) => {
+
+    const file = e.target.files[0];
+    setLicense(() => file)
+    const image = URL.createObjectURL(file)
+    sessionStorage.setItem('license', image)
+    setLicenseRender(() => sessionStorage.getItem('license'))
+    setError('')
+
+  }
+
+  const submitLicense = async () => {
+    const driverId = sessionStorage.getItem('driverId')
+    const formData = new FormData();
+    license && formData.append('id', driverId);
+    license && formData.append('license', license);
+    if (license) {
+      const { data } = await driverProfileUpdate(formData)
+      console.log(data, 'license');
+    }
+    !licenseRender && setError('License is required')
+    licenseRender && handleNext()
+
+  }
+
+
+  return (
+    <div className="h-[350px] ">
+      <h1 className='mt-3 mb-7 text-sm'>Upload a clear image of your NID card (back-side).</h1>
+      <div className='relative'>
+        <input
+          id="license"
+          className=" hidden"
+          type="file"
+          accept="image/*"
+          onChange={handleLicense}
+        />
+        <div>
+
+          {!licenseRender ?
+
+            <div className="flex justify-center  items-center  px-6 pt-5 pb-6 mb-20">
+              <div className="space-y-1 text-center">
+                <div className="flex text-sm text-gray-600">
+                  <label htmlFor="license" className="relative cursor-pointer rounded-md font-medium hover:text-primary">
+                    <AssignmentOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1.3, scale: "4" }} ></AssignmentOutlinedIcon>
+                    <p className=' cursor-pointer mt-10 border rounded border-primary hover:bg-primary text-primary hover:text-white text-xs px-2 py-1' >Upload document</p>
+                  </label>
+                </div>
+              </div>
+            </div>
+            :
+            <div className="flex justify-center  items-center pb-2 ">
+              <div>
+                <ImageListItem sx={{
+                  width: 220,
+                  height: 160,
+                }}
+                >
+                  <img
+                    src={licenseRender}
+                    loading="lazy"
+                    alt='license'
+                  />
+                  <ImageListItemBar
+                    sx={{
+                      background:
+                        'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
+                        'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+                    }}
+                    position="top"
+                    actionIcon={
+                      <IconButton
+                        onClick={() => setLicenseRender(sessionStorage.removeItem('license'))}
+                        sx={{ color: 'white' }}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    }
+                    actionPosition="left"
+                  />
+                </ImageListItem>
+              </div>
+            </div>
+          }
+
+        </div>
+        {error && <p className='text-sm text-[brown] text-center '>{error}</p>}
+        <div className='relative flex justify-between mt-5'>
+          <Button
+            size='small'
+            onClick={handleBack}
+            sx={{ mt: 1, mr: 1 }}
+          >
+            <span>
+              <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon>  <span className=''>back</span>
+            </span>
+          </Button>
+          <Button
+            variant="contained"
+            size='small'
+            onClick={() => { submitLicense() }}
             sx={{ mt: 1 }}
           >
             <span>
@@ -469,7 +480,7 @@ const NIDUploaderBack = ({ handleBack, handleNext }) => {
 }
 
 
-const CarOwnerProfileCompletion = () => {
+const DriverProfileCompletion = () => {
 
 
 
@@ -485,6 +496,11 @@ const CarOwnerProfileCompletion = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const handleReset = () => {
+    setActiveStep(0);
+  };
+
+
   const steps = [
     {
       label: 'General Information',
@@ -499,7 +515,12 @@ const CarOwnerProfileCompletion = () => {
       label: 'NID card (back-side)',
       description: <NIDUploaderBack handleNext={handleNext} handleBack={handleBack}></NIDUploaderBack>
 
-    }
+    },
+    {
+      label: 'Driving License',
+      description: <DrivingLicense handleNext={handleNext} handleBack={handleBack}></DrivingLicense>
+
+    },
   ]
 
 
@@ -523,13 +544,9 @@ const CarOwnerProfileCompletion = () => {
       </Stepper>
       {activeStep === steps.length && (
         <Box className='space-y-5 mt-10 pl-7' >
-
           <p className='text-[green] bg-[green] bg-opacity-20 w-[80%] text-center px-2 py-1 rounded-md' >
-            Your Profile is Ready ! </p>
-
-          <p className='text-sm' >
-            Now go to your Profile and add your cars & drivers. </p>
-
+            Your Profile is Ready !
+          </p>          
           <div className='relative flex justify-between w-[80%]'>
             <Button
               size='small'
@@ -540,8 +557,7 @@ const CarOwnerProfileCompletion = () => {
                 <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon>  <span className=''>back</span>
               </span>
             </Button>
-           <Link>
-           <Button to={`/profile`}
+            <Button
               variant="contained"
               size='small'
               onClick={() => { navigate(`/profile`); sessionStorage.clear() }}
@@ -551,7 +567,6 @@ const CarOwnerProfileCompletion = () => {
                 <span className=''>Your Profile</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon>
               </span>
             </Button>
-           </Link>
           </div>
 
         </Box>
@@ -560,4 +575,4 @@ const CarOwnerProfileCompletion = () => {
   )
 }
 
-export default CarOwnerProfileCompletion
+export default DriverProfileCompletion

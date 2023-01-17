@@ -6,9 +6,8 @@ import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import { Avatar, Box, IconButton, ImageListItem, ImageListItemBar, ListItemAvatar } from '@mui/material';
-import { ArrowIcon } from './CarOwnerAddCar';
-import { Link, useParams } from 'react-router-dom';
-import { carOwnerCarUpdate, carOwnerProfile, SingleCarDetail } from '../../../api/api';
+import { Link } from 'react-router-dom';
+import { carOwnerProfile, carOwnerProfileUpdate, driverProfile, driverProfileUpdate, submitCarOwnerNID, submitCarOwnerNIDBack, submitCarOwnerNIDFront, submitDriverNIDBack, submitDriverNIDFront } from '../../../api/api';
 import { useQuery } from '@tanstack/react-query';
 import EditIcon from '@mui/icons-material/Edit';
 import List from '@mui/material/List';
@@ -35,6 +34,8 @@ import {
     isValidPhoneNumber,
 } from 'libphonenumber-js';
 import { addDriver } from '../../../api/api';
+import { useEffect } from 'react';
+import { ArrowIcon } from '../CarOwner/CarOwnerAddCar';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -118,15 +119,22 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
     borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));
 
-export default function CarOwnerCarDetail() {
+export default function DriverInfoDoc() {
+    const [expanded, setExpanded] = React.useState('panel1');
 
-    const {id} =useParams()
 
     const { register, formState: { errors }, handleSubmit } = useForm();
-    const [expanded, setExpanded] = React.useState('panel1');
+
     const [openName, setOpenName] = React.useState(false);
     const [openPhone, setOpenPhone] = React.useState(false);
     const [openMail, setOpenMail] = React.useState(false);
+    const [openLocation, setOpenLocation] = React.useState(false);
+    const [nidFront, setNidFront] = React.useState('');
+    const [nidBack, setNidBack] = React.useState('');
+    const [license, setLicense] = React.useState('');
+
+    const [phoneDriver, setPhoneDriver] = React.useState(false);
+
 
 
     const handleChange = (panel) => (event, newExpanded) => {
@@ -134,95 +142,118 @@ export default function CarOwnerCarDetail() {
     };
 
     const fetcher = async () => {
-        const { data } = await SingleCarDetail(id)
+        const { data } = await driverProfile()
         return data
     }
 
-    let { data, isLoading } = useQuery(["ownercarDetail",], () => fetcher())
+    let { data, isLoading } = useQuery(["driverprofile"], () => fetcher())
 
-    console.log('owner car detail', data);
-
-    const handleClickOpenBrand = () => {
+    const handleClickOpenName = () => {
         setOpenName(true);
     };
-    const handleCloseBrand = () => {
+    const handleCloseName = () => {
         setOpenName(false);
     };
-    const handleClickOpenModel = () => {
+    const handleClickOpenPhone = () => {
         setOpenPhone(true);
     };
-    const handleCloseModel = () => {
+    const handleClosePhone = () => {
         setOpenPhone(false);
     };
-    const handleClickOpenYear = () => {
+    const handleClickOpenMail = () => {
         setOpenMail(true);
     };
-    const handleCloseYear = () => {
+    const handleCloseMail = () => {
         setOpenMail(false);
     };
+    const handleClickOpenLocation = () => {
+        setOpenLocation(true);
+    };
+    const handleCloseLocation = () => {
+        setOpenLocation(false);
+    };
+
 
     const onSubmit = async (data) => {
-        //   console.log(data,'drv');
-        // const {data:updatedeData}=await carOwnerCarUpdate(data,id)
 
+        const { data: uData } = await driverProfileUpdate(data)
     }
 
-
-    const handleNidFront = (e) => {
+    const handleNidFront = async (e) => {
         const file = e.target.files[0];
-        // setTaxToken(() => file)
         const image = URL.createObjectURL(file)
-        sessionStorage.setItem('taxToken', image)
-        // setTaxTokenRender(() => sessionStorage.getItem('taxToken'))
+        setNidFront(() => image)
         const formData = new FormData();
-        // taxToken && formData.append('carId', carId);
-        // setError(() => '')
-    }
-    const handleNidBack = (e) => {
-        const file = e.target.files[0];
-        // setTaxToken(() => file)
-        const image = URL.createObjectURL(file)
-        sessionStorage.setItem('taxToken', image)
-        // setTaxTokenRender(() => sessionStorage.getItem('taxToken'))
-        // setError(() => '')
-        const formData = new FormData();
-        // taxToken && formData.append('carId', carId);
-    }
+        file && formData.append('driverId', data?.id);
+        file && formData.append('nidfront', file);
+        if (file) {
+            const { data } = await submitDriverNIDFront(formData)
 
+            console.log(data, 'front');
+        }
+    }
+    const handleNidBack = async (e) => {
+        const file = e.target.files[0];
+        const image = URL.createObjectURL(file)
+        setNidBack(() => image)
+        const formData = new FormData();
+        file && formData.append('driverId', data?.id);
+        file && formData.append('nidback', file);
+        if (file) {
+            const { data } = await submitDriverNIDBack(formData)
+
+            console.log(data, 'back');
+        }
+
+
+    }
+    const handleLicense = async (e) => {
+        const file = e.target.files[0];
+        const image = URL.createObjectURL(file)
+        setLicense(() => image)
+        const formData = new FormData();
+        file && formData.append('driverId', data?.id);
+        file && formData.append('license', file);
+        if (file) {
+            const { data } = await driverProfileUpdate(formData)
+            console.log(data, 'updated data');
+        }
+
+    }
 
     return (
         <Box className='md:pt-20 pt-16 mx-auto relative min-h-[100vh] w-[100vw] md:w-[360px]' sx={{ bgcolor: 'background.paper' }}>
             <Box className='flex items-center py-1  bg-primary text-white '>
-                <Link to='/carowner-vehicle-list'>
+                <Link to='/profile'>
                     <IconButton className='w-10 h-10' style={{ color: 'white' }} aria-label="back">
                         <ArrowIcon />
                     </IconButton>
                 </Link>
-                <h1 className='md:text-lg mx-auto text-md pr-5 '>Car Detail </h1>
+                <h1 className='md:text-lg mx-auto text-md pr-5 '>Information & Documents </h1>
             </Box>
             <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                 <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
                     <Typography>General Information</Typography>
                 </AccordionSummary>
                 <AccordionDetails style={{ padding: 0 }}>
-                    <div className='active:bg-[#efeeef] cursor-pointer px-5 py-3 flex justify-between items-center'>
+                    <div className='active:bg-[#efeeef] cursor-pointer px-5 py-3  flex justify-between items-center'>
                         <div>
-                            <h1 className='text-sm font-semibold'>Brand :</h1>
-                            <h1 className=''>{data?.brand}</h1>
+                            <h1 className='text-sm font-semibold'>Name :</h1>
+                            <h1 className=''>{data?.name}</h1>
                         </div>
-                        <div onClick={handleClickOpenBrand}>
+                        <div onClick={handleClickOpenName}>
                             <IconEdit color={'black'}></IconEdit>
                         </div>
                     </div>
-<Divider></Divider>
+                    <Divider></Divider>
                     <BootstrapDialog
                         fullWidth={true}
-                        onClose={handleCloseBrand}
+                        onClose={handleCloseName}
                         aria-labelledby="customized-dialog-title"
                         open={openName}
                     >
-                        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleCloseBrand}>
-                            <p className='text-lg text-center text-primary'>Update Brand Name</p>
+                        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleCloseName}>
+                            <p className='text-lg text-center text-primary'>Update Your Name</p>
                         </BootstrapDialogTitle>
                         <DialogContent dividers>
                             <form className="flex  space-y-10  flex-col mt-5 mb-10 md:px-10" onSubmit={handleSubmit(onSubmit)}>
@@ -230,8 +261,8 @@ export default function CarOwnerCarDetail() {
                                     <TextField
                                         className='mx-auto w-[100%]'
                                         type="text"
-                                        placeholder="Brand"
-                                        {...register("brand", {
+                                        placeholder="Name"
+                                        {...register("name", {
                                             // required: {
                                             //     value: true,
                                             //     message: 'Brand is Required'
@@ -254,77 +285,71 @@ export default function CarOwnerCarDetail() {
                     </BootstrapDialog>
                     <div className='active:bg-[#efeeef] cursor-pointer px-5 py-3  flex justify-between items-center'>
                         <div>
-                            <h1 className='text-sm font-semibold'>Model :</h1>
-                            <h1 className=''>{data?.model}</h1>
+                            <h1 className='text-sm font-semibold'>Phone Number :</h1>
+                            <h1 className=''>{data?.contactNumber}</h1>
                         </div>
-                        <div onClick={handleClickOpenModel}>
+                        <div onClick={handleClickOpenPhone}>
+                            {/* <IconEdit color={'black'}></IconEdit> */}
+                        </div>
+                    </div>
+                    <Divider></Divider>
+                    <BootstrapDialog
+                        fullWidth={true}
+                        onClose={handleClosePhone}
+                        aria-labelledby="customized-dialog-title"
+                        open={openPhone}
+                    >
+                        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClosePhone}>
+                            <p className='text-lg text-center text-primary'>Update Your Phone Number</p>
+                        </BootstrapDialogTitle>
+                        <DialogContent dividers>
+                            <form className="flex  space-y-10  flex-col mt-5 mb-10 md:px-10" onSubmit={handleSubmit(onSubmit)}>
+
+                                <MuiPhoneNumber
+                                    className='w-[100%]'
+                                    defaultCountry={'bd'}
+                                    onlyCountries={['bd']}
+                                    value={phoneDriver}
+                                    onChange={(c, t) => {
+                                        //   console.log(c, t, isValidPhoneNumber(c));
+                                        isValidPhoneNumber(c) && setPhoneDriver(c)
+
+                                    }}
+                                />
+                                <Button type='submit' className='rounded-md px-4 text-sm py-2 text-white bg-primary' variant='contained' autoFocus
+                                >
+                                    Submit
+                                </Button>
+                            </form>
+                        </DialogContent>
+                    </BootstrapDialog>
+                    <div className='active:bg-[#efeeef] cursor-pointer px-5 py-3  flex justify-between items-center'>
+                        <div>
+                            <h1 className='text-sm font-semibold'>Email :</h1>
+                            <h1 className=''>{data?.mail}</h1>
+                        </div>
+                        <div onClick={handleClickOpenMail}>
                             <IconEdit color={'black'}></IconEdit>
                         </div>
                     </div>
                     <Divider></Divider>
                     <BootstrapDialog
                         fullWidth={true}
-                        onClose={handleCloseModel}
-                        aria-labelledby="customized-dialog-title"
-                        open={openPhone}
-                    >
-                        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleCloseModel}>
-                            <p className='text-lg text-center text-primary'>Update Model</p>
-                        </BootstrapDialogTitle>
-                        <DialogContent dividers>
-                        <form className="flex  space-y-10  flex-col mt-5 mb-10 md:px-10" onSubmit={handleSubmit(onSubmit)}>
-                                <div className="form-control flex flex-col">
-                                    <TextField
-                                        className='mx-auto w-[100%]'
-                                        type="text"
-                                        placeholder="Model"
-                                        {...register("model", {
-                                            // required: {
-                                            //     value: true,
-                                            //     message: 'Brand is Required'
-                                            // }
-                                        })}
-                                        variant="standard"
-                                    />
-
-                                    <label className="label">
-                                        {/* {errors?.name?.type === 'required' && <span className="label-text-alt text-xs text-[brown]">{errors?.name.message}</span>} */}
-                                    </label>
-                                </div>
-
-                                <Button type='submit' className='rounded-md px-4 text-sm py-2 text-white bg-primary' variant='contained' autoFocus
-                                >
-                                    Submit
-                                </Button>
-                            </form>
-                        </DialogContent>
-                    </BootstrapDialog>
-                    <div className='active:bg-[#efeeef] cursor-pointer px-5 py-3 flex justify-between items-center'>
-                        <div>
-                            <h1 className='text-sm font-semibold'>Year :</h1>
-                            <h1 className=''>{data?.year}</h1>
-                        </div>
-                        <div onClick={handleClickOpenYear}>
-                            <IconEdit color={'black'}></IconEdit>
-                        </div>
-                    </div>
-                    <BootstrapDialog
-                        fullWidth={true}
-                        onClose={handleCloseYear}
+                        onClose={handleCloseMail}
                         aria-labelledby="customized-dialog-title"
                         open={openMail}
                     >
-                        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleCloseYear}>
-                            <p className='text-lg text-center text-primary'>Update Year</p>
+                        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleCloseMail}>
+                            <p className='text-lg text-center text-primary'>Update Your Email</p>
                         </BootstrapDialogTitle>
                         <DialogContent dividers>
                             <form className="flex  space-y-10  flex-col mt-5 mb-10 md:px-10" onSubmit={handleSubmit(onSubmit)}>
                                 <div className="form-control flex flex-col">
                                     <TextField
                                         className='mx-auto w-[100%]'
-                                        type="number"
-                                        placeholder="Year"
-                                        {...register("year", {
+                                        type="email"
+                                        placeholder="Mail"
+                                        {...register("mail", {
                                             // required: {
                                             //     value: true,
                                             //     message: 'Brand is Required'
@@ -345,26 +370,72 @@ export default function CarOwnerCarDetail() {
                             </form>
                         </DialogContent>
                     </BootstrapDialog>
+                    <div className='active:bg-[#efeeef] cursor-pointer px-5 py-3  flex justify-between items-center'>
+                        <div>
+                            <h1 className='text-sm font-semibold'>Location :</h1>
+                            <h1 className=''>{data?.officeLocation}</h1>
+                        </div>
+                        <div onClick={handleClickOpenLocation}>
+                            <IconEdit color={'black'}></IconEdit>
+                        </div>
+                    </div>
+                    <Divider></Divider>
+                    <BootstrapDialog
+                        fullWidth={true}
+                        onClose={handleCloseLocation}
+                        aria-labelledby="customized-dialog-title"
+                        open={openLocation}
+                    >
+                        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleCloseLocation}>
+                            <p className='text-lg text-center text-primary'>Update Your Location</p>
+                        </BootstrapDialogTitle>
+                        <DialogContent dividers>
+                            <form className="flex  space-y-10  flex-col mt-5 mb-10 md:px-10" onSubmit={handleSubmit(onSubmit)}>
+                                <div className="form-control flex flex-col">
+                                    <TextField
+                                        className='mx-auto w-[100%]'
+                                        type="text"
+                                        placeholder="Location"
+                                        {...register("officeLocation", {
+                                            // required: {
+                                            //     value: true,
+                                            //     message: 'Brand is Required'
+                                            // }
+                                        })}
+                                        variant="standard"
+                                    />
 
+                                    <label className="label">
+                                        {/* {errors?.name?.type === 'required' && <span className="label-text-alt text-xs text-[brown]">{errors?.name.message}</span>} */}
+                                    </label>
+                                </div>
+
+                                <Button type='submit' className='rounded-md px-4 text-sm py-2 text-white bg-primary' variant='contained' autoFocus
+                                >
+                                    Submit
+                                </Button>
+                            </form>
+                        </DialogContent>
+                    </BootstrapDialog>
                 </AccordionDetails>
             </Accordion>
             <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
                 <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-                    <Typography>Car Images</Typography>
+                    <Typography>NID  card (front-side)</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <div className=' px-2 py-2 flex justify-between items-center'>
 
-                        <h1 className='text-sm font-semibold'>Car Images :</h1>
+                        <h1 className='text-sm font-semibold'>NID card (front-side) :</h1>
                         <div>
                             <input
-                                id="carImages"
+                                id="nid-front"
                                 className=" hidden"
                                 type="file"
                                 accept="image/*"
                                 onChange={handleNidFront}
                             />
-                            <label htmlFor="carImages" className="relative cursor-pointer rounded-md font-medium hover:text-primary">
+                            <label htmlFor="nid-front" className="relative cursor-pointer rounded-md font-medium hover:text-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                                 </svg>
@@ -381,10 +452,11 @@ export default function CarOwnerCarDetail() {
                                 }}
                             >
                                 <img
-                                    // src={taxTokenRender}
+                                    src={nidFront ? nidFront : data?.nidFront}
                                     loading="lazy"
-                                    alt='carImages'
+                                    alt='nid-front'
                                 />
+
                                 <ImageListItemBar
                                     sx={{
                                         background:
@@ -394,7 +466,7 @@ export default function CarOwnerCarDetail() {
                                     position="top"
                                     // actionIcon={
                                     //     <IconButton
-                                    //         onClick={() => setTaxTokenRender(sessionStorage.removeItem('taxToken'))}
+                                    //         onClick={() => setNidFront(sessionStorage.removeItem('nidFront'))}
                                     //         sx={{ color: 'white' }}
                                     //     >
                                     //         <CloseIcon />
@@ -408,23 +480,24 @@ export default function CarOwnerCarDetail() {
 
                 </AccordionDetails>
             </Accordion>
+
             <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
-                <AccordionSummary aria-controls="panel4d-content" id="panel3d-header">
-                    <Typography>Registration Paper</Typography>
+                <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
+                    <Typography>NID  card (back-side)</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <div className=' px-2 py-2 flex justify-between items-center'>
 
-                        <h1 className='text-sm font-semibold'>Registration Paper :</h1>
+                        <h1 className='text-sm font-semibold'>NID card (back-side) :</h1>
                         <div>
                             <input
-                                id="registration"
+                                id="nid-back"
                                 className=" hidden"
                                 type="file"
                                 accept="image/*"
                                 onChange={handleNidBack}
                             />
-                            <label htmlFor="registration" className="relative cursor-pointer rounded-md font-medium hover:text-primary">
+                            <label htmlFor="nid-back" className="relative cursor-pointer rounded-md font-medium hover:text-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                                 </svg>
@@ -441,9 +514,10 @@ export default function CarOwnerCarDetail() {
                                 }}
                             >
                                 <img
-                                    // src={taxTokenRender}
+                                    src={nidBack ? nidBack : data?.nidBack}
+
                                     loading="lazy"
-                                    alt='registration'
+                                    alt='nid-back'
                                 />
                                 <ImageListItemBar
                                     sx={{
@@ -454,7 +528,7 @@ export default function CarOwnerCarDetail() {
                                     position="top"
                                     // actionIcon={
                                     //     <IconButton
-                                    //         onClick={() => setTaxTokenRender(sessionStorage.removeItem('taxToken'))}
+                                    //         onClick={() => setNidBack(sessionStorage.removeItem('nidBack'))}
                                     //         sx={{ color: 'white' }}
                                     //     >
                                     //         <CloseIcon />
@@ -468,23 +542,24 @@ export default function CarOwnerCarDetail() {
 
                 </AccordionDetails>
             </Accordion>
+
             <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
-                <AccordionSummary aria-controls="panel4d-content" id="panel3d-header">
-                    <Typography>Fitness Paper</Typography>
+                <AccordionSummary aria-controls="panel4d-content" id="panel4d-header">
+                    <Typography>Driving License</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <div className=' px-2 py-2 flex justify-between items-center'>
 
-                        <h1 className='text-sm font-semibold'>Fitness Paper :</h1>
+                        <h1 className='text-sm font-semibold'>Driving License :</h1>
                         <div>
                             <input
-                                id="fitness"
+                                id="license"
                                 className=" hidden"
                                 type="file"
                                 accept="image/*"
-                                onChange={handleNidBack}
+                                onChange={handleLicense}
                             />
-                            <label htmlFor="fitness" className="relative cursor-pointer rounded-md font-medium hover:text-primary">
+                            <label htmlFor="license" className="relative cursor-pointer rounded-md font-medium hover:text-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                                 </svg>
@@ -501,9 +576,9 @@ export default function CarOwnerCarDetail() {
                                 }}
                             >
                                 <img
-                                    // src={taxTokenRender}
+                                    src={license ? license : data?.drivingLicense}
                                     loading="lazy"
-                                    alt='fitness'
+                                    alt='license'
                                 />
                                 <ImageListItemBar
                                     sx={{
@@ -513,71 +588,18 @@ export default function CarOwnerCarDetail() {
                                     }}
                                     position="top"
                                     // actionIcon={
-                                    //     <IconButton
-                                    //         onClick={() => setTaxTokenRender(sessionStorage.removeItem('taxToken'))}
-                                    //         sx={{ color: 'white' }}
-                                    //     >
-                                    //         <CloseIcon />
-                                    //     </IconButton>
-                                    // }
-                                    actionPosition="left"
-                                />
-                            </ImageListItem>
-                        </div>
-                    </div>
-
-                </AccordionDetails>
-            </Accordion>
-            <Accordion expanded={expanded === 'panel5'} onChange={handleChange('panel5')}>
-                <AccordionSummary aria-controls="panel5d-content" id="panel3d-header">
-                    <Typography>Tax Token</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <div className=' px-2 py-2 flex justify-between items-center'>
-
-                        <h1 className='text-sm font-semibold'>Tax Token :</h1>
-                        <div>
-                            <input
-                                id="taxToken"
-                                className=" hidden"
-                                type="file"
-                                accept="image/*"
-                                onChange={handleNidBack}
-                            />
-                            <label htmlFor="taxToken" className="relative cursor-pointer rounded-md font-medium hover:text-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                                </svg>
-
-                            </label>
-                        </div>
-                    </div>
-                    <div>
-                        <div className="flex justify-center  items-center pb-5 my-3 ">
-                            <ImageListItem
-                                sx={{
-                                    width: 220,
-                                    height: 160,
-                                }}
-                            >
-                                <img
-                                    // src={taxTokenRender}
-                                    loading="lazy"
-                                    alt='taxToken'
-                                />
-                                <ImageListItemBar
-                                    sx={{
-                                        background:
-                                            'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
-                                            'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-                                    }}
-                                    position="top"
-                                    // actionIcon={
-                                    //     <IconButton
-                                    //         onClick={() => setTaxTokenRender(sessionStorage.removeItem('taxToken'))}
-                                    //         sx={{ color: 'white' }}
-                                    //     >
-                                    //         <CloseIcon />
+                                    //     <IconButton>
+                                    //         {
+                                    //             !license ?
+                                    //                 ''
+                                    //                 :
+                                    //                 <IconButton
+                                    //                     onClick={() => { setLicense(sessionStorage.removeItem('nidBack')); }}
+                                    //                     sx={{ color: 'white' }}
+                                    //                 >
+                                    //                     <CloseIcon />
+                                    //                 </IconButton>
+                                    //         }
                                     //     </IconButton>
                                     // }
                                     actionPosition="left"

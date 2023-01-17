@@ -11,34 +11,14 @@ import { useQuery } from '@tanstack/react-query';
 
 export default function CarOwnerDriverList() {
 
-
-    const drivers = [
-        {
-            name: 'Abdullah',
-            phone: '0171XXXXXXX',
-            img: '2021',
-        },
-        {
-            name: 'Abdur Rahman',
-            phone: '0171XXXXXXX',
-            img: '2021',
-        },
-        {
-            name: 'Abdur Rahim',
-            phone: '0171XXXXXXX',
-            img: '2021',
-        },
-
-    ]
-
     const fetcher = async () => {
         const { data } = await carOwnerAllDrivers()
         return data
     }
 
-    let { data, isLoading } = useQuery(["drivers",], () => fetcher())
+    let { data, isLoading } = useQuery(["drivers"], () => fetcher())
 
-    console.log('drivers',data);
+    console.log('drivers', data);
 
 
     return (
@@ -58,7 +38,12 @@ export default function CarOwnerDriverList() {
             <Box className=''>
                 <List component="nav" aria-label="primary">
                     {
-                        drivers?.map(driver => <CarOwnerSingleDriver driver={driver}></CarOwnerSingleDriver>)
+                        data?.length > 0 &&
+                        <div>
+                            {
+                                data?.map(driver => <CarOwnerSingleDriver driver={driver}></CarOwnerSingleDriver>)
+                            }
+                        </div>
                     }
                 </List>
             </Box>

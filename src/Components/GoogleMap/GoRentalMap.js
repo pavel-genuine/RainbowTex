@@ -12,6 +12,8 @@ import { useEffect, useRef, useState } from 'react'
 
 const options = {
   gestureHandling: "greedy",
+  keyboardShortcuts: false,
+  termsOfUse:false,
   zoomControl: false,
   styles: [{
     "featureType": "administrative",
@@ -309,7 +311,7 @@ function GoRentalMap(props) {
   const [duration, setDuration] = useState('')
   const [lat, setLat] = useState('')
   const [long, setLong] = useState('')
-
+const {origin,gps,destination,setMapData}=props
   /** @type React.MutableRefObject<HTMLInputElement> */
   const originRef = useRef()
   /** @type React.MutableRefObject<HTMLInputElement> */
@@ -318,15 +320,19 @@ function GoRentalMap(props) {
 
 
   useEffect(() => {
+// console.log(origin,'map origin');
+// console.log(gps,'map gps');
     async function calculateRoute() {
-      if (props?.origin === '' || props?.destination === '') {
-        return
-      }
+      // if ((props?.gps===''&& props?.origin === '') || props?.destination === '') {
+      //   return
+      // }
+
+
       // eslint-disable-next-line no-undef
       const directionsService = new google.maps.DirectionsService()
       const results = await directionsService.route({
-        origin: props?.origin,
-        destination: props?.destination,
+        origin:origin?origin:gps,
+        destination: destination,
         // eslint-disable-next-line no-undef
         travelMode: google.maps.TravelMode.DRIVING,
       })
@@ -334,20 +340,21 @@ function GoRentalMap(props) {
       setDistance(results.routes[0].legs[0].distance.text)
       setDuration(results.routes[0].legs[0].duration.text)
 
-      props.setMapData({ distance, duration })
+     setMapData({ distance, duration })
     }
     calculateRoute()
+    
     if (navigator.geolocation) {
       navigator.geolocation.watchPosition(function (position) {
-        console.log("Latitude is :", position.coords.latitude);
-        console.log("Longitude is :", position.coords.longitude);
+        // console.log("map Latitude is :", position.coords.latitude);
+        // console.log("Longitude is :", position.coords.longitude);
 
         setLat(() => position.coords.latitude)
         setLong(() => position.coords.longitude)
       })
     }
 
-  }, [distance, duration, props])
+  }, [distance, duration,origin,destination,gps,setMapData])
 
 
 

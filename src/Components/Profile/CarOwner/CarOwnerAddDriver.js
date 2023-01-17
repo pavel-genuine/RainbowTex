@@ -78,7 +78,7 @@ export default function CarOwnerAddDriver() {
 
         const { data: res } = await addDriver({ name: data?.name, contactNumber: phoneDriver })
 
-        //   console.log(res,'drvr');
+          console.log(res,'drvr');
     }
 
 
@@ -135,7 +135,7 @@ export default function CarOwnerAddDriver() {
 
                         />
                         {/* <DialogActions> */}
-                        <Button disabled={phoneDriver ? false : true} className='rounded-md px-4 text-sm py-2 text-white bg-primary' variant='contained' autoFocus
+                        <Button type='submit' disabled={phoneDriver ? false : true} className='rounded-md px-4 text-sm py-2 text-white bg-primary' variant='contained' autoFocus
                         >
                             Submit
                         </Button>

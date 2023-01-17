@@ -11,14 +11,42 @@ import PaymentIcon from '@mui/icons-material/Payment';
 import FeedIcon from '@mui/icons-material/Feed';
 import LockIcon from '@mui/icons-material/Lock';
 import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { carOwnerProfile, logOut } from '../../../api/api';
+import { SwipeableDrawer } from '@mui/material';
 
 export default function CarOwnerProfile() {
+    const [openSettings, setOpenSettings] = useState(false)
+    const navigate = useNavigate()
 
+
+    const fetcher = async () => {
+        const { data } = await carOwnerProfile()
+        return data
+    }
+
+    let { data, isLoading } = useQuery(["ownerprofile",], () => fetcher())
+
+    //   console.log(data, 'driver');
+
+    const logoutHandler = async () => {
+
+        const { data } = await logOut()
+        localStorage.clear()
+        setTimeout(navigate('/auth'), 500)
+    }
 
     return (
         <Box className='md:pt-20 pt-16 mx-auto w-[100vw] md:w-[360px]' sx={{ bgcolor: 'background.paper' }}>
-            <p className=' text-center text-primary text-bold py-2'> Profile</p>
+            <Box className='flex justify-between items-center px-6'>
+                <p className=' text-primary text-bold py-2'>
+                    Name
+                </p>
+                <AccountCircleOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} ffontSize="medium"></AccountCircleOutlinedIcon>
+            </Box>
             <Divider ></Divider>
             <List component="nav" aria-label="primary">
                 <Link to={`/carowner-vehicle-list`}>
@@ -54,19 +82,48 @@ export default function CarOwnerProfile() {
                     </ListItemIcon >
                     <ListItemText primary="Payments" />
                 </ListItemButton>
-                <ListItemButton>
-                    <ListItemIcon>
-                        <LockIcon sx={{ scale: '1.3' }} />
-                    </ListItemIcon >
 
-                    <ListItemText primary="Privacy & Security" />
-                </ListItemButton>
-                <ListItemButton>
+
+                <ListItemButton onClick={() => setOpenSettings(true)}>
                     <ListItemIcon>
                         <SettingsApplicationsIcon sx={{ scale: '1.3' }} />
                     </ListItemIcon >
                     <ListItemText primary="Settings" />
                 </ListItemButton>
+
+                <Box className='md:mx-10 mx-2'>
+
+                    <SwipeableDrawer
+                        BackdropProps={{ style: { backgroundImage: 'linear-gradient(#5c0931, black)', opacity: .8 } }}
+                        transitionDuration={700}
+                        PaperProps={{ backgroundColor: 'black', square: false, sx: { borderRadius: '25px 25px 0 0', height: 300 } }}
+                        open={openSettings}
+                        anchor="bottom"
+                        onClose={() => setOpenSettings(false)}
+                        onOpen={() => setOpenSettings(true)}
+                    >
+
+                        <Box className='py-5'>
+                            <List>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <LockIcon sx={{ scale: '1.3' }} />
+                                    </ListItemIcon >
+                                    <ListItemText primary="Privacy & Security" />
+                                </ListItemButton>
+
+                                <Divider></Divider>
+
+                                <ListItemButton onClick={logoutHandler}>
+                                    <ListItemIcon>
+                                        <LockIcon sx={{ scale: '1.3' }} />
+                                    </ListItemIcon >
+                                    <ListItemText primary="Log Out" />
+                                </ListItemButton>
+                            </List>
+                        </Box>
+                    </SwipeableDrawer>
+                </Box>
             </List>
         </Box>
     );

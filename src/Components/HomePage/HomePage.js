@@ -1,19 +1,15 @@
 import React from 'react'
-import GoRentalMap from '../GoogleMap/GoRentalMap'
-
-import HomeSliders from '../HomeSliders/HomeSliders'
-import SingleSliders from '../HomeSliders/SingleSide'
-import Navbar from '../Navbar/Navbar'
+import { useState } from 'react'
 import FindCars from './FindCars/FindCars'
 
-const HomePage = ({open,setOpen}) => {
-
+const HomePage = ({open,setOpen,setTripData,setPickupPlace,setDestinationPlace}) => {
 
   return (
     <div className='pb-40 space-y-4'>
-      <FindCars open={open} setOpen={setOpen}></FindCars>
+      <FindCars setTripData={setTripData} open={open} setOpen={setOpen} setPickupPlace={setPickupPlace} setDestinationPlace={setDestinationPlace}></FindCars>
       {/* <HomeSliders></HomeSliders>  */}   
       {/* <SingleSliders></SingleSliders>        */}
+      {/* <PassengerProfile></PassengerProfile> */}
     </div>
   )
 }

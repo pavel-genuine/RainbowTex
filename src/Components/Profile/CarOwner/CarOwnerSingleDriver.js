@@ -8,7 +8,7 @@ import Divider from '@mui/material/Divider';
 import AirlineSeatReclineNormalIcon from '@mui/icons-material/AirlineSeatReclineNormal';
 
 
-export default function CarOwnerSingleDriver({driver}) {
+export default function CarOwnerSingleDriver({ driver }) {
     const [selectedIndex, setSelectedIndex] = React.useState(1);
 
     const handleListItemClick = (event, index) => {
@@ -17,16 +17,18 @@ export default function CarOwnerSingleDriver({driver}) {
 
     return (
         <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                <ListItemButton
-                    onClick={(event) => handleListItemClick(event, 0)}
-                >
-                    <ListItemIcon>
-                        <AirlineSeatReclineNormalIcon sx={{ scale: '1.3' }} />
-                    </ListItemIcon >
+            <ListItemButton
+                onClick={(event) => handleListItemClick(event, 0)}
+            >
+                <ListItemIcon>
+                    <AirlineSeatReclineNormalIcon sx={{ scale: '1.3' }} />
+                </ListItemIcon >
+                <Box className='flex flex-col'>
                     <ListItemText primary={`${driver?.name}`} />
-                    {driver?.phone}
-                </ListItemButton>
-                <Divider />
+                    <ListItemText secondary={`${driver?.contactNumber}`} />
+                </Box>
+            </ListItemButton>
+            <Divider />
         </Box>
     );
 }

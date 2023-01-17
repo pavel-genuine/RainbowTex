@@ -8,7 +8,7 @@ import Divider from '@mui/material/Divider';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import { Link } from 'react-router-dom';
 
-export default function CarOwnerSingleVehicle({car}) {
+export default function CarOwnerSingleVehicle({ car }) {
     const [selectedIndex, setSelectedIndex] = React.useState(1);
 
     const handleListItemClick = (event, index) => {
@@ -17,18 +17,20 @@ export default function CarOwnerSingleVehicle({car}) {
 
     return (
         <Link to={`/carowner-vehicle/${car?.id}`}>
-        <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+            <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                 <ListItemButton
                     onClick={(event) => handleListItemClick(event, 0)}
                 >
                     <ListItemIcon>
                         <DirectionsCarIcon sx={{ scale: '1.3' }} />
                     </ListItemIcon >
-                    <ListItemText primary={`${car?.brand} ${car?.model}`} />
-                    {car?.year}
+                    <Box className='flex flex-col'>
+                        <ListItemText primary={`${car?.brand} ${car?.model}`} />
+                        <ListItemText secondary={`${car?.year}`} />
+                    </Box>
                 </ListItemButton>
                 <Divider />
-        </Box>
+            </Box>
         </Link>
     );
 }

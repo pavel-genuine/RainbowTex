@@ -75,10 +75,9 @@ export default function AuthHome({ setOpen }) {
     const [error, setError] = React.useState('');
     const [toastOTP, setToastOTP] = React.useState(false);
     const [toastLogin, setToastLogin] = React.useState(false);
-
-    const location = useLocation();
-
-    let from = location.state?.from?.pathname || "/";
+    // const [partnerRole, setPartnerRole] = React.useState(false);
+    const [carOwnerRole, setCarOwnerRole] = React.useState(false);
+    const [driverRole, setDriverRole] = React.useState(false);
 
     const navigate = useNavigate();
 
@@ -130,6 +129,7 @@ export default function AuthHome({ setOpen }) {
     const handleChangeTab = (event, newValue) => {
         setTabValue(newValue);
     };
+
 
 
     const captchaPassenger = () => {
@@ -208,7 +208,9 @@ export default function AuthHome({ setOpen }) {
             const idToken = await user?.getIdToken()
 
             const { data } = await otpLogin({ uid: user?.uid, contactNumber: phonePassenger, idToken: idToken, otpProvider: 'firebase', userType: 'user' })
-            console.log(data);
+            console.log(idToken, 'idToken passenger');
+
+            localStorage.setItem('role', 'passenger')
 
             setTimeout(
                 setToastLogin(() => true)
@@ -218,7 +220,7 @@ export default function AuthHome({ setOpen }) {
                 setOpen(() => false)
                 , 800)
             setTimeout(
-                navigate(from, { replace: true })
+                navigate('/profile')
                 , 1000)
 
         }).catch((error) => {
@@ -244,8 +246,20 @@ export default function AuthHome({ setOpen }) {
             const user = result?.user;
 
             const idToken = await user?.getIdToken()
+            console.log(idToken, 'idToken owner');
 
-            const { data: res } = await otpLogin({ uid: user?.uid, contactNumber: phonePartner, idToken: idToken, otpProvider: 'firebase', userType: 'carowner' })
+            if (driverRole) {
+                const { data: res } = await otpLogin({ uid: user?.uid, contactNumber: phonePartner, idToken: idToken, otpProvider: 'firebase', userType: 'driver' })
+
+                localStorage.setItem('role', 'driver')
+            }
+            else {
+                const { data: res } = await otpLogin({ uid: user?.uid, contactNumber: phonePartner, idToken: idToken, otpProvider: 'firebase', userType: 'carOwner' })
+
+                localStorage.setItem('role', 'carOwner')
+            }
+
+
 
             setTimeout(
                 setToastLogin(() => true)
@@ -255,7 +269,7 @@ export default function AuthHome({ setOpen }) {
                 setOpen(() => false)
                 , 800)
             setTimeout(
-                navigate(from, { replace: true })
+                navigate('/profile')
                 , 1000)
 
         }).catch((error) => {
@@ -367,7 +381,8 @@ export default function AuthHome({ setOpen }) {
                                         {
                                             loginPassenger ?
                                                 <div className='mt-10 flex justify-between'>
-                                                    <Button size='small' onClick={() => setLoginPassenger(() => !loginPassenger)} variant="text"><span className='font-normal flex items-center mr-34 md:mr-80'> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon> <span className='ml-1'>Back</span></span></Button>
+                                                    <Button size='small' onClick={() => setLoginPassenger(() => !loginPassenger)} variant="text"><span className='font-normal items-center flex '> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon>
+                                                     <span className='ml-1'>Back</span></span></Button>
                                                     <Button type='submit' size='small' variant="contained">Log In</Button>
                                                 </div>
                                                 :
@@ -379,73 +394,90 @@ export default function AuthHome({ setOpen }) {
                                 </div>
                             </TabPanel>
                             <TabPanel value={tabValue} index={1} className='flex justify-center'>
-                                <div>
-                                    <form className="" onSubmit={handleSubmit(onSubmitPartner)}>
 
-                                        <p className='font-semibold my-10 text-primary'>
-                                            Continue to GoRental
-                                        </p>
-                                        {
-                                            loginPartner ?
-                                                <Box>
-                                                    <p className='text-primary my-2 text-xs'>Enter OTP</p>
-                                                    <MuiOtpInput
-                                                        length={6}
-                                                        onComplete={handleCompleteOtpPartner}
-                                                        value={otpPartner}
-                                                        onChange={(val) => setOtpPartner(val)}
-                                                    />
-                                                    <Box className='flex justify-between'>
-                                                        <Box className="countdown-text mt-2 text-xs">
-                                                            {seconds > 0 ? (
-                                                                <p>
-                                                                    Time Remaining: {`00`}:
-                                                                    {seconds < 10 ? `0${seconds}` : seconds}
-                                                                </p>
-                                                            ) : (
-                                                                <p>Didn't recieve code?</p>
-                                                            )}
+                                {
+                                    (!carOwnerRole && !driverRole) &&
+                                    <Box className='flex flex-col space-y-10 my-28 mx-auto'>
+                                        <Button className='w-[250px]' size='small' onClick={() => { setCarOwnerRole(() => true) }} variant="contained"> <span className=''>Car Owner</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
+                                        <Button className='w-[250px]' size='small' onClick={() => { setDriverRole(() => true) }} variant="contained"> <span className=''>Driver</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
+                                    </Box>
+                                }
 
-                                                            <button
-                                                                disabled={seconds > 0}
+                                {
+                                    (carOwnerRole || driverRole) &&
+                                    <div>
+                                        <form className="" >
 
-                                                                className={`${!seconds > 0 ? 'text-primary' : 'text-[grey]'}`}
-                                                                onClick={() => { setSeconds(60); handleLoginPartner() }}
-                                                            >
-                                                                Resend OTP
-                                                            </button>
+                                            <p className='font-semibold my-10 text-primary'>
+                                                Continue to GoRental
+                                            </p>
+                                            {
+                                                loginPartner ?
+                                                    <Box>
+                                                        <p className='text-primary my-2 text-xs'>Enter OTP</p>
+                                                        <MuiOtpInput
+                                                            length={6}
+                                                            onComplete={handleCompleteOtpPartner}
+                                                            value={otpPartner}
+                                                            onChange={(val) => setOtpPartner(val)}
+                                                        />
+                                                        <Box className='flex justify-between'>
+                                                            <Box className="countdown-text mt-2 text-xs">
+                                                                {seconds > 0 ? (
+                                                                    <p>
+                                                                        Time Remaining: {`00`}:
+                                                                        {seconds < 10 ? `0${seconds}` : seconds}
+                                                                    </p>
+                                                                ) : (
+                                                                    <p>Didn't recieve code?</p>
+                                                                )}
+
+                                                                <button
+                                                                    disabled={seconds > 0}
+
+                                                                    className={`${!seconds > 0 ? 'text-primary' : 'text-[grey]'}`}
+                                                                    onClick={() => { setSeconds(60); handleLoginPartner() }}
+                                                                >
+                                                                    Resend OTP
+                                                                </button>
+                                                            </Box>
+                                                            {
+                                                                error && <p className='mt-2 text-xs text-[brown]'>{error}</p>
+                                                            }
                                                         </Box>
-                                                        {
-                                                            error && <p className='mt-2 text-xs text-[brown]'>{error}</p>
-                                                        }
                                                     </Box>
-                                                </Box>
-                                                :
-                                                <MuiPhoneNumber
-                                                    className='w-[80vw] md:w-[350px]'
-                                                    defaultCountry={'bd'}
-                                                    onlyCountries={['bd']}
-                                                    value={phonePartner}
-                                                    onChange={(c, t) => {
-                                                        //   console.log(c, t, isValidPhoneNumber(c));
-                                                        isValidPhoneNumber(c) && setPhonePartner(c)
-                                                    }}
-                                                />
-                                        }
+                                                    :
+                                                    <MuiPhoneNumber
+                                                        className='w-[80vw] md:w-[350px]'
+                                                        defaultCountry={'bd'}
+                                                        onlyCountries={['bd']}
+                                                        value={phonePartner}
+                                                        onChange={(c, t) => {
+                                                            //   console.log(c, t, isValidPhoneNumber(c));
+                                                            isValidPhoneNumber(c) && setPhonePartner(c)
+                                                        }}
+                                                    />
+                                            }
 
-                                        {
-                                            loginPartner ?
-                                                <div className='mt-10 flex justify-between'>
-                                                    <Button size='small' onClick={() => setLoginPartner(() => !loginPartner)} variant="text"><span className='font-normal flex items-center'> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon> <span className='ml-1'>Back</span></span></Button>
-                                                    <Button type='submit' size='small' variant="contained">Log In</Button>
-                                                </div>
-                                                :
-                                                <div className='mt-10 flex flex-row-reverse'>
-                                                    <Button id='partner-sign' disabled={phonePartner ? false : true} type='submit' size='small' onClick={() => { handleLoginPartner(); setLoginPartner(() => !loginPartner) }} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
-                                                </div>
-                                        }
-                                    </form>
-                                </div>
+                                            {
+                                                loginPartner ?
+                                                    <div className='mt-10 flex justify-between'>
+                                                        <Button size='small' onClick={() => setLoginPartner(() => !loginPartner)} variant="text"> <span className='font-normal flex items-center'> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon>
+                                                                <span className='ml-1'>Back</span> </span>
+                                                        </Button>
+
+                                                        <Button onClick={onSubmitPartner} size='small' variant="contained">Log In</Button>
+                                                    </div>
+                                                    :
+                                                    <div className='mt-10 flex justify-between'>
+                                                        <Button size='small' onClick={() => { setDriverRole(() => false); setCarOwnerRole(() => false) }} variant="text"><span className='font-normal flex items-center'> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon> <span className='ml-1'>Back</span></span></Button>
+
+                                                        <Button id='partner-sign' disabled={phonePartner ? false : true} type='submit' size='small' onClick={() => { handleLoginPartner(); setLoginPartner(() => !loginPartner) }} variant="contained"> <span className=''>Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
+                                                    </div>
+                                            }
+                                        </form>
+                                    </div>
+                                }
                             </TabPanel>
                         </Box>
                     </Box>

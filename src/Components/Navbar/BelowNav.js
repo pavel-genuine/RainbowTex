@@ -59,11 +59,11 @@ export default function BelowNav() {
     return (
       <div className='md:hidden'>
         {/* <Divider></Divider> */}
-          <Tabs sx={{ boxShadow: 3, backgroundColor: '#f7f7f7' }} centered={true}  allowScrollButtonsMobile={true}  scrollButtons={true} className='flex justify-between bottom-0 z-20 mx-auto fixed w-[100vw] overflow-x-scroll border' value={currentTab} aria-label="basic tabs example" >
+          <Tabs sx={{ boxShadow: 3, backgroundColor: '#f7f7f7' }} centered={true}  allowScrollButtonsMobile={true}  scrollButtons={true} className='flex justify-between bottom-0 z-20 mx-auto fixed w-[100vw] overflow-x-scroll ' value={currentTab} aria-label="basic tabs example" >
             <Tab to="/" value={`/`} component={Link} style={{ fontSize: '10px' }} className='normal-case' icon={<HouseOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} fontSize="medium"></HouseOutlinedIcon>} disableRipple label="Home" />
             <Tab to="/find-cars" value={`/find-cars`} component={Link} style={{ fontSize: '10px' }} className='normal-case' icon={<SearchOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} fontSize="medium"></SearchOutlinedIcon>} disableRipple label="Find" />
-            <Tab to="/trip" value={`/trip`} component={Link} style={{ fontSize: '10px' }} className='normal-case' icon={<TimeToLeaveOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} ffontSize="medium"></TimeToLeaveOutlinedIcon>} disableRipple label="Trip" />
-            <Tab to="/profile" value={`/profile`} component={Link} style={{ fontSize: '10px' }} className='normal-case' icon={<AccountCircleOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} ffontSize="medium"></AccountCircleOutlinedIcon>} disableRipple label="Profile" />
+            <Tab to="/trip" value={`/trip`} component={Link} style={{ fontSize: '10px' }} className='normal-case' icon={<TimeToLeaveOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} fontSize="medium"></TimeToLeaveOutlinedIcon>} disableRipple label="Trip" />
+            <Tab to="/profile" value={`/profile`} component={Link} style={{ fontSize: '10px' }} className='normal-case' icon={<AccountCircleOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} fontSize="medium"></AccountCircleOutlinedIcon>} disableRipple label="Profile" />
         </Tabs>
       </div>
     );

@@ -101,12 +101,23 @@ export default function Navbar({ open, setOpen }) {
                 </Link>
 
                 {/* <Link className='text-primary' to={`/profile`}> */}
-                <ListItemButton onClick={toggleDrawer(true)} >
-                    <ListItemIcon>
-                        <AccountCircleOutlinedIcon color='primary'></AccountCircleOutlinedIcon>
-                    </ListItemIcon>
-                    <ListItemText className='text-primary' primary={'Log in'} />
-                </ListItemButton>
+                {localStorage.getItem('role') ?
+                    <Link to={`/profile`}>
+                        <ListItemButton >
+                            <ListItemIcon>
+                                <AccountCircleOutlinedIcon color='primary'></AccountCircleOutlinedIcon>
+                            </ListItemIcon>
+                            <ListItemText className='text-primary' primary={'Profile'} />
+                        </ListItemButton>
+                    </Link>
+                    :
+                    <ListItemButton onClick={toggleDrawer(true)} >
+                        <ListItemIcon>
+                            <AccountCircleOutlinedIcon color='primary'></AccountCircleOutlinedIcon>
+                        </ListItemIcon>
+                        <ListItemText className='text-primary' primary={'Log In'} />
+                    </ListItemButton>
+                }
                 {/* </Link> */}
 
                 <ListItemButton>
@@ -167,13 +178,18 @@ export default function Navbar({ open, setOpen }) {
                 </div>
                 <div className='md:mx-10 mx-2'>
 
-                    {/* <Link to={`/auth`}> */}
-                    <Button onClick={toggleDrawer(true)}
-                        aria-label="open drawer"
-                    >
-                        <span className='md:text-white text-black md:text-xl text-[15px]'>Log in</span>
-                    </Button>
-                    {/* </Link> */}
+                    {
+                        localStorage.getItem('role') ?
+                            " "
+                            :
+                            <Button onClick={toggleDrawer(true)}
+                                aria-label="open drawer"
+                            >
+                                <span className='md:text-white text-black md:text-xl text-[15px]'>Log in</span>
+                            </Button>
+                    }
+
+
 
                     <SwipeableDrawer
                         BackdropProps={{ style: { backgroundImage: 'linear-gradient(#5c0931, black)', opacity: .9 } }}

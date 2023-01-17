@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { Avatar, Box, IconButton, ImageListItem, ImageListItemBar, ListItemAvatar } from '@mui/material';
 import { ArrowIcon } from './CarOwnerAddCar';
 import { Link } from 'react-router-dom';
-import { carOwnerProfile, carOwnerProfileUpdate, submitCarOwnerNID } from '../../../api/api';
+import { carOwnerProfile, carOwnerProfileUpdate, submitCarOwnerNID, submitCarOwnerNIDBack, submitCarOwnerNIDFront } from '../../../api/api';
 import { useQuery } from '@tanstack/react-query';
 import EditIcon from '@mui/icons-material/Edit';
 import List from '@mui/material/List';
@@ -35,6 +35,7 @@ import {
     isValidPhoneNumber,
 } from 'libphonenumber-js';
 import { addDriver } from '../../../api/api';
+import { useEffect } from 'react';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -133,6 +134,8 @@ export default function CarOwnerInfoDoc() {
 
     const [phoneDriver, setPhoneDriver] = React.useState(false);
 
+  
+
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
     };
@@ -179,17 +182,15 @@ export default function CarOwnerInfoDoc() {
     const handleNidFront = async(e) => {
         const file = e.target.files[0];
         const image = URL.createObjectURL(file)
-        sessionStorage.setItem('nidFront', image)
-        setNidFront(() => sessionStorage.getItem('nidFront'))
+        setNidFront(() =>image)
         const formData = new FormData();
         file && formData.append('ownerId',data?.id);
-        file && formData.append('nid',file);
-        file && await submitCarOwnerNID(formData)
-        // if (formData.has('nid')) {
-        //     const { data } = await submitCarOwnerNID(formData)
+        file && formData.append('nidfront',file);
+        if (file) {
+            const { data } = await submitCarOwnerNIDFront(formData)
 
-        //     console.log(data, 'img');
-        // }
+            console.log(data, 'front');
+        }
     }
     const handleNidBack =async (e) => {
         const file = e.target.files[0];
@@ -198,8 +199,13 @@ export default function CarOwnerInfoDoc() {
         setNidBack(() => sessionStorage.getItem('nidBack'))
         const formData = new FormData();
         file && formData.append('ownerId',data?.id);
-        file && formData.append('nid',file);
-        file && await submitCarOwnerNID(formData)
+        file && formData.append('nidback',file);
+        
+        if (file) {
+            const { data } = await submitCarOwnerNIDBack(formData)
+
+            console.log(data, 'back');
+        }
 
     }
 
@@ -218,16 +224,16 @@ export default function CarOwnerInfoDoc() {
                     <Typography>General Information</Typography>
                 </AccordionSummary>
                 <AccordionDetails style={{ padding: 0 }}>
-                    <div className='active:bg-[#efeeef] cursor-pointer px-5 py-3 border-b flex justify-between items-center'>
+                    <div className='active:bg-[#efeeef] cursor-pointer px-5 py-3 flex justify-between items-center'>
                         <div>
                             <h1 className='text-sm font-semibold'>Name :</h1>
-                            <h1 className=''>Md Joynul Abedin</h1>
+                            <h1 className=''>{data?.name}</h1>
                         </div>
                         <div onClick={handleClickOpenName}>
                             <IconEdit color={'black'}></IconEdit>
                         </div>
                     </div>
-
+                    <Divider></Divider>
                     <BootstrapDialog
                         fullWidth={true}
                         onClose={handleCloseName}
@@ -265,15 +271,16 @@ export default function CarOwnerInfoDoc() {
                             </form>
                         </DialogContent>
                     </BootstrapDialog>
-                    <div className='active:bg-[#efeeef] cursor-pointer px-5 py-3 border-b flex justify-between items-center'>
+                    <div className='active:bg-[#efeeef] cursor-pointer px-5 py-3 flex justify-between items-center'>
                         <div>
                             <h1 className='text-sm font-semibold'>Phone Number :</h1>
-                            <h1 className=''>+8801711xxxxxx</h1>
+                            <h1 className=''>{data?.contactNumber}</h1>
                         </div>
                         <div onClick={handleClickOpenPhone}>
-                            <IconEdit color={'black'}></IconEdit>
+                            {/* <IconEdit color={'black'}></IconEdit> */}
                         </div>
                     </div>
+                    <Divider></Divider>
                     <BootstrapDialog
                         fullWidth={true}
                         onClose={handleClosePhone}
@@ -304,15 +311,16 @@ export default function CarOwnerInfoDoc() {
                             </form>
                         </DialogContent>
                     </BootstrapDialog>
-                    <div className='active:bg-[#efeeef] cursor-pointer px-5 py-3 border-b flex justify-between items-center'>
+                    <div className='active:bg-[#efeeef] cursor-pointer px-5 py-3  flex justify-between items-center'>
                         <div>
                             <h1 className='text-sm font-semibold'>Email :</h1>
-                            <h1 className=''>name@gmail.com</h1>
+                            <h1 className=''>{data?.mail}</h1>
                         </div>
                         <div onClick={handleClickOpenMail}>
                             <IconEdit color={'black'}></IconEdit>
                         </div>
                     </div>
+                    <Divider></Divider>
                     <BootstrapDialog
                         fullWidth={true}
                         onClose={handleCloseMail}
@@ -350,10 +358,10 @@ export default function CarOwnerInfoDoc() {
                             </form>
                         </DialogContent>
                     </BootstrapDialog>
-                    <div className='active:bg-[#efeeef] cursor-pointer px-5 py-3 border-b flex justify-between items-center'>
+                    <div className='active:bg-[#efeeef] cursor-pointer px-5 py-3 flex justify-between items-center'>
                         <div>
                             <h1 className='text-sm font-semibold'>Location :</h1>
-                            <h1 className=''>Uttara, Dhaka</h1>
+                            <h1 className=''>{data?.officeLocation}</h1>
                         </div>
                         <div onClick={handleClickOpenLocation}>
                             <IconEdit color={'black'}></IconEdit>
@@ -375,7 +383,7 @@ export default function CarOwnerInfoDoc() {
                                         className='mx-auto w-[100%]'
                                         type="text"
                                         placeholder="Location"
-                                        {...register("location", {
+                                        {...register("officeLocation", {
                                             // required: {
                                             //     value: true,
                                             //     message: 'Brand is Required'
@@ -431,7 +439,7 @@ export default function CarOwnerInfoDoc() {
                                 }}
                             >
                                 <img
-                                    src={nidFront}
+                                    src={nidFront?nidFront:data?.nidFront}
                                     loading="lazy"
                                     alt='nid-front'
                                 />
@@ -443,14 +451,14 @@ export default function CarOwnerInfoDoc() {
                                             'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
                                     }}
                                     position="top"
-                                    actionIcon={
-                                        <IconButton
-                                            onClick={() => setNidFront(sessionStorage.removeItem('nidFront'))}
-                                            sx={{ color: 'white' }}
-                                        >
-                                            <CloseIcon />
-                                        </IconButton>
-                                    }
+                                    // actionIcon={
+                                    //     <IconButton
+                                    //         onClick={() => setNidFront(sessionStorage.removeItem('nidFront'))}
+                                    //         sx={{ color: 'white' }}
+                                    //     >
+                                    //         <CloseIcon />
+                                    //     </IconButton>
+                                    // }
                                     actionPosition="left"
                                 />
                             </ImageListItem>
@@ -492,7 +500,7 @@ export default function CarOwnerInfoDoc() {
                                 }}
                             >
                                 <img
-                                    src={nidBack}
+                                    src={nidBack?nidBack:data?.nidBack}
                                     loading="lazy"
                                     alt='nid-back'
                                 />
@@ -503,14 +511,14 @@ export default function CarOwnerInfoDoc() {
                                             'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
                                     }}
                                     position="top"
-                                    actionIcon={
-                                        <IconButton
-                                            onClick={() => setNidBack(sessionStorage.removeItem('nidBack'))}
-                                            sx={{ color: 'white' }}
-                                        >
-                                            <CloseIcon />
-                                        </IconButton>
-                                    }
+                                    // actionIcon={
+                                    //     <IconButton
+                                    //         onClick={() => setNidBack(sessionStorage.removeItem('nidBack'))}
+                                    //         sx={{ color: 'white' }}
+                                    //     >
+                                    //         <CloseIcon />
+                                    //     </IconButton>
+                                    // }
                                     actionPosition="left"
                                 />
                             </ImageListItem>

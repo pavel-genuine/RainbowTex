@@ -27,7 +27,8 @@ import { ArrowIcon } from '../../Profile/CarOwner/CarOwnerAddCar';
 import AllCarResults from '../CarResult/AllCarResults';
 import EastIcon from '@mui/icons-material/East';
 import { getRefreshToken } from '../../../api/api';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export const darkTheme = createTheme({
     typography: {
@@ -53,7 +54,7 @@ export const darkTheme = createTheme({
 });
 
 
-export const pickUpPoint = (optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap) =>
+export const pickUpPoint = (optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap, variant = "outlined", placeholder = "", label = "Pick-up Point") =>
     <div className="relative form-control rounded   flex boder justify-center items-center">
 
         <Autocomplete
@@ -79,13 +80,16 @@ export const pickUpPoint = (optionsOrigin, valueOrigin, setOptionsOrigin, setVal
             }}
 
             renderInput={(params) => (
-                <TextField {...params} label="Pick-up Point" fullWidth />
+                <TextField {...params} label={label}
+
+                    placeholder={placeholder} variant={variant} fullWidth
+                />
             )}
             renderOption={(props, option) => {
-                const matches = option.structured_formatting.main_text_matched_substrings;
-                const parts = parse(
-                    option.structured_formatting.main_text,
-                    matches.map((match) => [match.offset, match.offset + match.length]),
+                const matches = option?.structured_formatting?.main_text_matched_substrings;
+                const parts = matches?.length > 0 && parse(
+                    option?.structured_formatting?.main_text,
+                    matches?.map((match) => [match?.offset, match?.offset + match?.length]),
                 );
 
                 return (
@@ -98,19 +102,19 @@ export const pickUpPoint = (optionsOrigin, valueOrigin, setOptionsOrigin, setVal
                                 />
                             </Grid>
                             <Grid item xs>
-                                {parts.map((part, index) => (
+                                {parts.length > 0 && parts?.map((part, index) => (
                                     <span
                                         key={index}
                                         style={{
-                                            fontWeight: part.highlight ? 700 : 400,
+                                            fontWeight: part?.highlight ? 700 : 400,
                                         }}
                                     >
-                                        {part.text}
+                                        {part?.text}
                                     </span>
                                 ))}
 
                                 <Typography variant="body2" color="text.secondary">
-                                    {option.structured_formatting.secondary_text}
+                                    {option?.structured_formatting?.secondary_text}
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -157,7 +161,7 @@ export const destinationPoint = (optionsDestination, valueDestination, setOption
             disablePortal
             id="google-map-demo"
             getOptionLabel={(option) =>
-                typeof option === 'string' ? option : option.description
+                typeof option === 'string' ? option : option?.description
             }
             filterOptions={(x) => x}
             options={optionsDestination}
@@ -177,10 +181,10 @@ export const destinationPoint = (optionsDestination, valueDestination, setOption
                     label="Destination" fullWidth />
             )}
             renderOption={(props, option) => {
-                const matches = option.structured_formatting.main_text_matched_substrings;
+                const matches = option?.structured_formatting?.main_text_matched_substrings;
                 const parts = parse(
-                    option.structured_formatting.main_text,
-                    matches.map((match) => [match.offset, match.offset + match.length]),
+                    option?.structured_formatting?.main_text,
+                    matches?.map((match) => [match?.offset, match?.offset + match?.length]),
                 );
 
                 return (
@@ -193,11 +197,11 @@ export const destinationPoint = (optionsDestination, valueDestination, setOption
                                 />
                             </Grid>
                             <Grid item xs>
-                                {parts.map((part, index) => (
+                                {parts?.map((part, index) => (
                                     <span
                                         key={index}
                                         style={{
-                                            fontWeight: part.highlight ? 700 : 400,
+                                            fontWeight: part?.highlight ? 700 : 400,
                                         }}
                                     >
                                         {part.text}
@@ -205,7 +209,7 @@ export const destinationPoint = (optionsDestination, valueDestination, setOption
                                 ))}
 
                                 <Typography variant="body2" color="text.secondary">
-                                    {option.structured_formatting.secondary_text}
+                                    {option?.structured_formatting?.secondary_text}
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -262,11 +266,6 @@ export const schedule = (setTime, time, w = '90vw') =>
     </div>
 
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
-
-
 function loadScript(src, position, id) {
     if (!position) {
         return;
@@ -279,20 +278,16 @@ function loadScript(src, position, id) {
     position.appendChild(script);
 }
 
-const autocompleteService = { current: null };
+
 
 const FindCars = ({ open, setOpen }) => {
 
     const { register, formState: { errors }, handleSubmit } = useForm();
-    const [time, setTime] = React.useState();
+    const [time, setTime] = React.useState(new Date());
+    const [tripData, setTripData] = React.useState(new Date());
     const [showdestination, setShowDestination] = React.useState(false);
-    const [pickUp, setPickUp] = React.useState();
-    const [destination, setDestination] = React.useState();
     const [openSearch, setOpenSearch] = React.useState(false);
     const [openMap, setOpenMap] = React.useState(false);
-    const [openDialog, setOpenDialog] = React.useState(false);
-    const [openDialogParam, setOpenDialogParam] = React.useState('');
-
     const [valueOrigin, setValueOrigin] = React.useState(null);
     const [valueDestination, setValueDestination] = React.useState(null);
     const [inputValueOrigin, setInputValueOrigin] = React.useState('');
@@ -300,6 +295,10 @@ const FindCars = ({ open, setOpen }) => {
     const [optionsOrigin, setOptionsOrigin] = React.useState([]);
     const [optionsDestination, setOptionsDestination] = React.useState([]);
     const [mapData, setMapData] = React.useState({});
+    const [gps, setGps] = React.useState({});
+    const [directionsResponse, setDirectionsResponse] = useState(null)
+    const [distance, setDistance] = useState('')
+    const [duration, setDuration] = useState('')
     const loaded = React.useRef(false);
 
     const GOOGLE_MAPS_API_KEY = 'AIzaSyA7Hbtoc7jXPbTNZwdGRzkpt21M3l5YWwE';
@@ -319,21 +318,19 @@ const FindCars = ({ open, setOpen }) => {
     const fetch = React.useMemo(
         () =>
             throttle((request, callback) => {
-                autocompleteService.current.getPlacePredictions(request, callback);
+
+                if (window?.google) {
+                    new window.google.maps.places.AutocompleteService().getPlacePredictions(request, callback);
+
+                }
             }, 200),
         [],
     );
 
     React.useEffect(() => {
-        let active = true;
 
-        if (!autocompleteService.current && window.google) {
-            autocompleteService.current =
-                new window.google.maps.places.AutocompleteService();
-        }
-        if (!autocompleteService.current) {
-            return undefined;
-        }
+
+        let active = true;
 
         if (inputValueOrigin === '') {
             setOptionsOrigin(valueOrigin ? [valueOrigin] : []);
@@ -341,41 +338,120 @@ const FindCars = ({ open, setOpen }) => {
         }
 
 
-        fetch({ input: inputValueOrigin, componentRestrictions: { country: 'bd' } }, (results) => {
-            if (active) {
-                let newOptions = [];
 
-                if (valueOrigin) {
-                    newOptions = [valueOrigin];
+        fetch({ input: inputValueOrigin, componentRestrictions: { country: 'bd' } },
+            (results) => {
+                if (active) {
+                    let newOptions = [];
+
+                    if (valueOrigin) {
+                        newOptions = [valueOrigin];
+                    }
+
+                    if (results) {
+                        newOptions = [...newOptions, ...results];
+                    }
+
+                    setOptionsOrigin(newOptions);
                 }
+            });
 
-                if (results) {
-                    newOptions = [...newOptions, ...results];
-                }
 
-                setOptionsOrigin(newOptions);
+
+        function initializeGeoCodeOrigin() {
+            if (window.google) {
+                const geocoder = new window.google.maps.Geocoder();
+
+                geocoder.geocode({
+                    address: valueOrigin?.description
+                }, (results, status) => {
+                    if (status == window.google.maps.GeocoderStatus.OK) {
+                        // console.log(results[0].geometry.location.lat(), 'origin lat');
+                        // console.log(results[0].geometry.location.lng(), 'origin lng');
+                    }
+                });
             }
-        });
 
 
-        return () => {
-            active = false;
-        };
-    }, [valueOrigin, inputValueOrigin, fetch]);
+        }
 
+        initializeGeoCodeOrigin()
+
+        navigator.geolocation.getCurrentPosition(function () { }, function () { }, {});
+
+
+
+
+
+    }, [valueOrigin, inputValueOrigin, fetch, gps]);
+
+    // console.log(mapData?.distance,'distance');
+
+    navigator.geolocation.getCurrentPosition(
+
+        function (position) {
+
+            // console.log("Latitude is :", position.coords.latitude);
+            // console.log("Longitude is :", position.coords.longitude);
+
+            function displayLocation(latitude, longitude) {
+                if (window?.google) {
+
+                    const geocoder = new window.google.maps.Geocoder();
+                    const latlng = new window.google.maps.LatLng(latitude, longitude);
+
+
+                    geocoder.geocode(
+                        { 'latLng': latlng },
+
+                        (results, status) => {
+                            if (status == window.google.maps.GeocoderStatus.OK) {
+                                if (results[3]) {
+                                    const add = results[3].formatted_address;
+                                    const value = add.split(",");
+                                    const count = value?.length;
+                                    const country = value[count - 1];
+                                    const state = value[count - 2];
+                                    const city = value[count - 3];
+
+                                    // console.log(results[3], 'add');
+
+                                    if (!valueOrigin) {
+                                        setValueOrigin(() => add);
+                                        setGps(() => add)
+                                    }
+
+                                }
+                                else if (results[0]) {
+                                    const add = results[0].formatted_address;
+                                    const value = add.split(",");
+                                    const count = value?.length;
+                                    const country = value[count - 1];
+                                    const state = value[count - 2];
+                                    const city = value[count - 3];
+
+                                    if (!valueOrigin) {
+                                        setValueOrigin(() => add);
+                                        setGps(() => add)
+                                    }
+                                }
+                            }
+                        }
+                    );
+                }
+            }
+
+            displayLocation(position.coords.latitude, position.coords.longitude)
+        },
+        function (e) {
+            // console.log(e, 'error');
+        },
+        { maximumAge: 60000, timeout: 2000 }
+    );
 
 
     React.useEffect(() => {
         let active = true;
-
-        if (!autocompleteService.current && window.google) {
-            autocompleteService.current =
-                new window.google.maps.places.AutocompleteService();
-        }
-        if (!autocompleteService.current) {
-            return undefined;
-        }
-
 
         if (inputValueDestination === '') {
             setOptionsDestination(valueDestination ? [valueDestination] : []);
@@ -399,13 +475,97 @@ const FindCars = ({ open, setOpen }) => {
             }
         });
 
+        function initializeGeoCodeDestination() {
+            if (window.google) {
+                const geocoder = new window.google.maps.Geocoder();
+
+                geocoder.geocode({
+                    address: valueDestination?.description
+                }, (results, status) => {
+                    if (status == window.google.maps.GeocoderStatus.OK) {
+                        // console.log(results[0].geometry.location.lat(), 'destination lat');
+                        // console.log(results[0].geometry.location.lng(), 'destination lng');
+                    }
+                });
+
+            }
+        }
+
+        initializeGeoCodeDestination()
+
+
         return () => {
             active = false;
         };
     }, [valueDestination, inputValueDestination, fetch]);
 
+    const navigate = useNavigate()
+
+    useEffect(() => 
+    {
+
+        window.history.pushState({}, '', '/');
+        window.history.pushState({}, '', '/');
+
+        window.addEventListener("popstate", () => {
+            navigate('/')
+        });
+
+
+        async function calculateRoute() {
+            // if ((props?.gps===''&& props?.origin === '') || props?.destination === '') {
+            //   return
+            // }
+      
+      
+            // eslint-disable-next-line no-undef
+            const directionsService = new google.maps.DirectionsService()
+            const results = await directionsService.route({
+              origin:valueOrigin?.description?valueOrigin?.description:gps,
+              destination: valueDestination?.description,
+              // eslint-disable-next-line no-undef
+              travelMode: google.maps.TravelMode.DRIVING,
+            })
+            setDirectionsResponse(results)
+            setDistance(results.routes[0].legs[0].distance.text)
+            setDuration(results.routes[0].legs[0].duration.text)     
+           setMapData({ distance, duration })
+          }
+          calculateRoute()
+
+        //   console.log(distance,duration,'dddd');
+
+        setTripData([
+            {
+                startLocation: valueOrigin?.description ? valueOrigin?.description : gps,
+                destination: valueDestination?.description,
+                distance: distance,
+                duration:duration,
+                schedule: time?.toString()?.slice(0, 21),
+                gps: gps,
+                setMapData: setMapData
+            }
+        ])      
+    }, [valueOrigin,valueDestination,mapData,time,gps,navigate,distance,duration])
+
+    // console.log(time,'time');
+    // console.log(typeof(time),'time type');
+
     const onSubmit = async (data) => {
-        setOpenSearch(true)
+
+        // setTripData([
+        //     {
+        //         startLocation: valueOrigin?.description ? valueOrigin?.description : gps,
+        //         destination: valueDestination?.description,
+        //         distance: mapData?.distance,
+        //         schedule: time?.toString()?.slice(0, 21),
+        //         gps: gps,
+        //         setMapData: setMapData
+        //     }
+        // ])
+
+        valueOrigin && valueDestination && setOpenSearch(true)
+
     }
 
     // const renderInput = (params) => {
@@ -426,34 +586,6 @@ const FindCars = ({ open, setOpen }) => {
 
 
 
-    useEffect(() => {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            console.log("Latitude is :", position.coords.latitude);
-            console.log("Longitude is :", position.coords.longitude);
-        });
-    }, [])
-
-    // let history = createBrowserHistory();
-    const location = useLocation();
-    const navigate = useNavigate()
-    let from = location.state?.from?.pathname
-    
-    React.useEffect(() => {
-        
-        // window.history.pushState({}, '', '/');
-        navigate(from, {push: true })
-        function handlePopState(event) {
-            setOpenSearch(false);
-            setOpenMap(false);
-            navigate(0)
-        }
-
-        window.addEventListener('popstate', handlePopState);
-        // window.addEventListener('popstate',  setOpenSearch(false));
-        return () => {
-            window.removeEventListener('popstate', handlePopState);
-        };
-    }, []);
 
 
     const myDefaultOption = {
@@ -519,7 +651,7 @@ const FindCars = ({ open, setOpen }) => {
                                                             </Box>
                                                             <div className='w-[80%] px-1'>
                                                                 {
-                                                                    pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap)
+                                                                    pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap, "outlined")
                                                                 }
                                                             </div>
                                                             <div>
@@ -583,7 +715,7 @@ const FindCars = ({ open, setOpen }) => {
 
                                     <div className={` ${showdestination ? ' pt-[0%]' : 'pt-[0%]'}  md:pt-[5%] `}>
 
-                                        <GoRentalMap setMapData={setMapData} origin={valueOrigin?.description} destination={valueDestination?.description}>
+                                        <GoRentalMap setMapData={setMapData} gps={gps} origin={valueOrigin?.description} destination={valueDestination?.description}>
 
                                         </GoRentalMap>
                                         <div className='flex justify-center items-center'>
@@ -698,7 +830,7 @@ const FindCars = ({ open, setOpen }) => {
                             </div>
                             {mapData?.distance &&
                                 <p className='text-sm text-white text-center md:mt-2 pb-2 md:pb-0 mt-[-2%]'>
-                                    {mapData?.distance} / {mapData?.duration}
+                                    {distance} / {duration}
 
                                 </p>
                             }
@@ -709,14 +841,14 @@ const FindCars = ({ open, setOpen }) => {
                 </ThemeProvider>
 
                 <div className={` ${showdestination ? ' pt-[73%]' : 'pt-[30%]'} md:pt-[5%] hidden`}>
-                    <GoRentalMap setMapData={setMapData} origin={valueOrigin?.description} destination={valueDestination?.description}>
+                    <GoRentalMap gps={gps} setMapData={setMapData} origin={valueOrigin?.description} destination={valueDestination?.description}>
 
                     </GoRentalMap>
                 </div>
 
                 <Box className={`${showdestination ? ' pt-[35%]' : 'pt-[35%]'} md:pt-[10%] pb-10`}>
 
-                    <AllCarResults></AllCarResults>
+                    <AllCarResults tripData={tripData} ></AllCarResults>
 
                 </Box>
             </Dialog>

@@ -11,9 +11,10 @@ import AddIcon from '@mui/icons-material/Add';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CloseIcon from '@mui/icons-material/Close';
 import { useEffect } from 'react';
-import { addCar, uploadCarFitnessPaper, uploadCarImage, uploadCarTaxToken } from '../../../api/api';
+import { addCar, uploadCarFitnessPaper, uploadCarImage, uploadCarRegistrationPaper, uploadCarTaxToken } from '../../../api/api';
+import throttle from 'lodash.throttle';
+import { pickUpPoint } from '../../HomePage/FindCars/FindCars';
 
-let carId;
 
 export const ArrowIcon = () => {
     return (
@@ -26,16 +27,132 @@ export const ArrowIcon = () => {
 
 }
 
-
 const GeneralInfo = ({ handleNext }) => {
     const { register, formState: { errors }, handleSubmit } = useForm();
 
-    const onSubmit = async (carData) => {
-        handleNext()
-        const { data } = await addCar(carData)
-        carId = data?.id
 
-        console.log(data, 'car')
+    function loadScript(src, position, id) {
+        if (!position) {
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.setAttribute('async', '');
+        script.setAttribute('id', id);
+        script.src = src;
+        position.appendChild(script);
+    }
+
+    const [openMap, setOpenMap] = React.useState(false);
+    const [valueOrigin, setValueOrigin] = React.useState(null);
+    const [inputValueOrigin, setInputValueOrigin] = React.useState('');
+    const [optionsOrigin, setOptionsOrigin] = React.useState([]);
+    const [lat, setLat] = React.useState();
+    const [lng, setLng] = React.useState();
+    const [error, setError] = React.useState();
+
+    const loaded = React.useRef(false);
+
+    const GOOGLE_MAPS_API_KEY = 'AIzaSyA7Hbtoc7jXPbTNZwdGRzkpt21M3l5YWwE';
+
+    if (typeof window !== 'undefined' && !loaded.current) {
+        if (!document.querySelector('#google-maps')) {
+            loadScript(
+                `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`,
+                document.querySelector('head'),
+                'google-maps',
+            );
+        }
+
+        loaded.current = true;
+    }
+
+    const fetch = React.useMemo(
+        () =>
+            throttle((request, callback) => {
+                new window.google.maps.places.AutocompleteService().getPlacePredictions(request, callback);
+            }, 200),
+        [],
+    );
+
+    React.useEffect(() => {
+        let active = true;
+
+        if (inputValueOrigin === '') {
+            setOptionsOrigin(valueOrigin ? [valueOrigin] : []);
+            return undefined;
+        }
+
+
+
+        fetch({ input: inputValueOrigin, componentRestrictions: { country: 'bd' } },
+            (results) => {
+                if (active) {
+                    let newOptions = [];
+
+                    if (valueOrigin) {
+                        newOptions = [valueOrigin];
+                    }
+
+                    if (results) {
+                        newOptions = [...newOptions, ...results];
+                    }
+
+                    setOptionsOrigin(newOptions);
+                }
+            });
+
+
+
+        function initializeGeoCodeOrigin() {
+            if (window.google) {
+                const geocoder = new window.google.maps.Geocoder();
+
+                geocoder.geocode({
+                    address: valueOrigin?.description
+                }, (results, status) => {
+                    if (status == window.google.maps.GeocoderStatus.OK) {
+                        console.log(results[0].geometry.location.lat(), 'origin lat');
+                        console.log(results[0].geometry.location.lng(), 'origin lng');
+                    }
+                });
+            }
+
+
+        }
+
+        initializeGeoCodeOrigin()
+
+        valueOrigin && setError('')
+
+    }, [valueOrigin, inputValueOrigin, fetch]);
+
+
+
+    const onSubmit = async (data) => {
+
+
+        const carData = {
+            brand: data?.brand,
+            model: data?.model,
+            pickupArea: valueOrigin?.description,
+            latitude: lat,
+            longitude: lng,
+            year: data?.year,
+            seat: data?.seat,
+            carType: data?.carType
+        }
+
+        !valueOrigin && setError('Location is Required')
+
+        if (valueOrigin) {
+            const { data: res } = await addCar(carData)
+            const carId = res?.id
+
+            sessionStorage.setItem('carId', carId)
+        }
+
+        valueOrigin && handleNext()
     }
 
     return (
@@ -53,7 +170,7 @@ const GeneralInfo = ({ handleNext }) => {
                                     message: 'Brand is Required'
                                 }
                             })}
-                            variant="standard"
+                            variant="outlined"
                         />
 
                         <label className="label">
@@ -72,7 +189,7 @@ const GeneralInfo = ({ handleNext }) => {
                                     message: 'Model is Required'
                                 }
                             })}
-                            variant="standard"
+                            variant="outlined"
                         />
 
                         <label className="label">
@@ -82,6 +199,7 @@ const GeneralInfo = ({ handleNext }) => {
                     <div className="form-control flex flex-col">
                         <TextField
                             type="text"
+                            // className={`w-[100%] md:w-[350px]`}
                             placeholder="Year"
                             {...register("year", {
                                 required: {
@@ -89,13 +207,52 @@ const GeneralInfo = ({ handleNext }) => {
                                     message: 'Year is Required'
                                 }
                             })}
-                            variant="standard"
+                            variant="outlined"
                         />
+
                         <label className="label">
                             {errors?.year?.type === 'required' && <span className="label-text-alt text-xs text-[brown]">{errors?.year?.message}</span>}
                         </label>
                     </div>
+                    <div className="form-control flex flex-col">
+                        <TextField
+                            type="text"
+                            placeholder="Seat"
+                            {...register("seat", {
+                                required: {
+                                    value: true,
+                                    message: 'Seat is Required'
+                                }
+                            })}
+                            variant="outlined"
+                        />
+                        <label className="label">
+                            {errors?.seat?.type === 'required' && <span className="label-text-alt text-xs text-[brown]">{errors?.seat?.message}</span>}
+                        </label>
+                    </div>
+                    <div className="form-control flex flex-col">
+                        {pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap, "outlined", "Location", "")}
 
+                        <label className="label">
+                            {error && <span className="label-text-alt text-xs text-[brown]">{error}</span>}
+                        </label>
+                    </div>
+                    <div className="form-control flex flex-col">
+                        <TextField
+                            type="text"
+                            placeholder="Car Type"
+                            {...register("carType", {
+                                required: {
+                                    value: true,
+                                    message: 'Car Type is Required'
+                                }
+                            })}
+                            variant="outlined"
+                        />
+                        <label className="label">
+                            {errors?.carType?.type === 'required' && <span className="label-text-alt text-xs text-[brown]">{errors?.carType?.message}</span>}
+                        </label>
+                    </div>
 
                 </div>
                 <div className='absolute right-0 top-[95%]'>
@@ -103,9 +260,7 @@ const GeneralInfo = ({ handleNext }) => {
                         type='submit' size='small'
                         variant="contained"> <span className=''>Save & Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon></Button>
                 </div>
-
             </div>
-
         </form>
 
     )
@@ -163,16 +318,17 @@ const UploadCarImages = ({ handleNext, handleBack }) => {
     }
 
     const handleVehicleImage4 = (e) => {
-
         const file = e.target.files[0];
         setIamge4(() => file)
-
         const image = URL.createObjectURL(file)
         sessionStorage.setItem('vehicleImage4', image)
         setVehicleIamge4(() => sessionStorage.getItem('vehicleImage4'))
     }
 
     const submitCarImages = async () => {
+
+        const carId = sessionStorage.getItem('carId')
+
         const formData = new FormData();
         image1 && formData.append('carId', carId);
         image1 && formData.append('carpicture', image1);
@@ -182,8 +338,6 @@ const UploadCarImages = ({ handleNext, handleBack }) => {
 
         if (formData.has('carpicture')) {
             const { data } = await uploadCarImage(formData)
-
-            console.log(data, 'img');
         }
 
     }
@@ -399,54 +553,134 @@ const UploadCarImages = ({ handleNext, handleBack }) => {
 
 const RegistrationPaper = ({ handleBack, handleNext }) => {
 
-    return (
-        <div className="h-[280px] ">
-            <h1 className='mt-3 mb-7 text-sm'>Upload a clear image of the vehicle registration paper.</h1>
-            <input
-                id="file-upload"
-                className="VideoInput_input hidden"
-                type="file"
-                accept="image/*"
-            />
-            <div>
-                <div className="flex justify-center items-center  px-6 pt-5 pb-6">
-                    <div className="space-y-1 text-center">
-                        <div className="flex text-sm text-gray-600">
-                            <label htmlFor="file-upload" className="relative cursor-pointer rounded-md font-medium hover:text-primary">
-                                <AssignmentOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1.3, scale: "4" }} ></AssignmentOutlinedIcon>
-                                <p className=' cursor-pointer mt-10 border rounded border-primary hover:bg-primary text-primary hover:text-white text-xs px-2 py-1' >Upload documnet</p>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    const [registrationPaperRender, setRegistrationPaperRender] = useState()
 
-            <div className='relative flex justify-between mt-5'>
-                <Button
-                    size='small'
-                    onClick={handleBack}
-                    sx={{ mt: 1, mr: 1 }}
-                >
-                    <span>
-                        <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon>  <span className=''>back</span>
-                    </span>
-                </Button>
-                <Button
-                    variant="contained"
-                    size='small'
-                    onClick={handleNext}
-                    sx={{ mt: 1, mr: 1 }}
-                >
-                    <span>
-                        <span className=''>Save & Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon>
-                    </span>
-                </Button>
+    const [registrationPaper, setRegistrationPaper] = useState()
+
+    const [error, setError] = useState()
+
+
+    useEffect(() => {
+        setRegistrationPaperRender(() => sessionStorage.getItem('registrationPaper'))
+
+    }, [setRegistrationPaperRender, registrationPaperRender])
+
+
+    const handleCarRegistrationPaper = (e) => {
+
+        const file = e.target.files[0];
+        setRegistrationPaper(() => file)
+        const image = URL.createObjectURL(file)
+        sessionStorage.setItem('registrationPaper', image)
+        setRegistrationPaperRender(() => sessionStorage.getItem('registrationPaper'))
+        setError('')
+
+    }
+
+    const submitCarRegistrationPaper = async () => {
+        const carId = sessionStorage.getItem('carId')
+        // console.log(fitnessPaper,'fitnessPaper');
+        const formData = new FormData();
+        if (registrationPaper) {
+            formData.append('carId', carId);
+            formData.append('registration', registrationPaper);
+            const { data } = await uploadCarRegistrationPaper(formData)
+        }
+        registrationPaperRender && handleNext()
+        !setRegistrationPaperRender && setError('Registration Paper is required')
+
+    }
+
+
+    return (
+        <div className="h-[350px] ">
+            <h1 className='mt-3 mb-7 text-sm'>Upload a clear image of the vehicle fitness paper.</h1>
+            <div className='relative'>
+                <input
+                    id="registrationPaper"
+                    className=" hidden"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleCarRegistrationPaper}
+                />
+                <div>
+
+                    {!registrationPaperRender ?
+
+                        <div className="flex justify-center  items-center  px-6 pt-5 pb-6 mb-20">
+                            <div className="space-y-1 text-center">
+                                <div className="flex text-sm text-gray-600">
+                                    <label htmlFor="registrationPaper" className="relative cursor-pointer rounded-md font-medium hover:text-primary">
+                                        <AssignmentOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1.3, scale: "4" }} ></AssignmentOutlinedIcon>
+                                        <p className=' cursor-pointer mt-10 border rounded border-primary hover:bg-primary text-primary hover:text-white text-xs px-2 py-1' >Upload document</p>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        :
+                        <div className="flex justify-center  items-center pb-2 ">
+                            <div>
+                                <ImageListItem sx={{
+                                    width: 220,
+                                    height: 160,
+                                }}
+                                >
+                                    <img
+                                        src={registrationPaperRender}
+                                        loading="lazy"
+                                        alt='registrationPaper'
+                                    />
+                                    <ImageListItemBar
+                                        sx={{
+                                            background:
+                                                'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
+                                                'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+                                        }}
+                                        position="top"
+                                        actionIcon={
+                                            <IconButton
+                                                onClick={() => setRegistrationPaperRender(sessionStorage.removeItem('registrationPaper'))}
+                                                sx={{ color: 'white' }}
+                                            >
+                                                <CloseIcon />
+                                            </IconButton>
+                                        }
+                                        actionPosition="left"
+                                    />
+                                </ImageListItem>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+                {error && <p className='text-sm text-[brown] pl-[20%]'>{error}</p>}
+                <div className='relative flex justify-between mt-5'>
+                    <Button
+                        size='small'
+                        onClick={handleBack}
+                        sx={{ mt: 1, mr: 1 }}
+                    >
+                        <span>
+                            <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon>  <span className=''>back</span>
+                        </span>
+                    </Button>
+                    <Button
+                        variant="contained"
+                        size='small'
+                        onClick={() => { submitCarRegistrationPaper() }}
+                        sx={{ mt: 1 }}
+                    >
+                        <span>
+                            <span className=''>Save & Next</span> <ArrowForwardIcon style={{ height: '17px' }}></ArrowForwardIcon>
+                        </span>
+                    </Button>
+                </div>
+
             </div>
         </div>
 
     )
 }
-
 const FitnessPaper = ({ handleBack, handleNext }) => {
 
     const [fitnessPaperRender, setFitnessPaperRender] = useState()
@@ -474,13 +708,14 @@ const FitnessPaper = ({ handleBack, handleNext }) => {
     }
 
     const submitCarFitnessPaper = async () => {
+        const carId = sessionStorage.getItem('carId')
+        // console.log(fitnessPaper,'fitnessPaper');
         const formData = new FormData();
-        fitnessPaper && formData.append('carId', carId);
-        fitnessPaper && formData.append('fitnesspaper', fitnessPaper);
-        // if (fitnessPaper) {
-        //     const { data } = await uploadCarFitnessPaper(formData)
-        //     // console.log(data,'ft');
-        // }
+        if (fitnessPaper) {
+            formData.append('carId', carId);
+            formData.append('fitnesspaper', fitnessPaper);
+            const { data } = await uploadCarFitnessPaper(formData)
+        }
         fitnessPaperRender && handleNext()
         !fitnessPaperRender && setError('Fitness Paper is required')
 
@@ -576,6 +811,7 @@ const FitnessPaper = ({ handleBack, handleNext }) => {
 
     )
 }
+
 const TaxToken = ({ handleBack, handleNext }) => {
 
     const [taxTokenRender, setTaxTokenRender] = useState()
@@ -600,14 +836,15 @@ const TaxToken = ({ handleBack, handleNext }) => {
     }
 
     const submitCarTaxToken = async () => {
+        const carId = sessionStorage.getItem('carId')
+
         const formData = new FormData();
         taxToken && formData.append('carId', carId);
         taxToken && formData.append('taxtoken', taxToken);
 
-        // if (taxToken) {
-        //     const { data } = await uploadCarTaxToken(formData)
-        //     console.log(data, 'tx');
-        // }
+        if (taxToken) {
+            const { data } = await uploadCarTaxToken(formData)
+        }
         taxTokenRender && handleNext()
         !taxTokenRender && setError('Tax token is required')
 
@@ -644,10 +881,10 @@ const TaxToken = ({ handleBack, handleNext }) => {
                         :
                         <div className="flex justify-center  items-center pb-5 ">
                             <ImageListItem
-                            sx={{
-                                width: 220,
-                                height: 160,
-                            }}
+                                sx={{
+                                    width: 220,
+                                    height: 160,
+                                }}
                             >
                                 <img
                                     src={taxTokenRender}
@@ -847,7 +1084,7 @@ const CarOwnerAddCar = () => {
                                     <Button
                                         variant="contained"
                                         size='small'
-                                        onClick={() => setOpenAddCar(false)}
+                                        onClick={() => { setOpenAddCar(false); sessionStorage.clear() }}
                                         sx={{ mt: 4 }}
                                     >
                                         <span>
