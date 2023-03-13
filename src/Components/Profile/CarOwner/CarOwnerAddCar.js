@@ -140,7 +140,8 @@ const GeneralInfo = ({ handleNext }) => {
             longitude: lng,
             year: data?.year,
             seat: data?.seat,
-            carType: data?.carType
+            carType: data?.carType,
+            unitPrice:data?.unitPrice
         }
 
         !valueOrigin && setError('Location is Required')
@@ -253,6 +254,22 @@ const GeneralInfo = ({ handleNext }) => {
                             {errors?.carType?.type === 'required' && <span className="label-text-alt text-xs text-[brown]">{errors?.carType?.message}</span>}
                         </label>
                     </div>
+                    <div className="form-control flex flex-col">
+                        <TextField
+                            type="text"
+                            placeholder="Unit Price"
+                            {...register("unitPrice", {
+                                required: {
+                                    value: true,
+                                    message: 'Unit price is Required'
+                                }
+                            })}
+                            variant="outlined"
+                        />
+                        <label className="label">
+                            {errors?.unitPrice?.type === 'required' && <span className="label-text-alt text-xs text-[brown]">{errors?.unitPrice?.message}</span>}
+                        </label>
+                    </div>
 
                 </div>
                 <div className='absolute right-0 top-[95%]'>
@@ -330,7 +347,7 @@ const UploadCarImages = ({ handleNext, handleBack }) => {
         const carId = sessionStorage.getItem('carId')
 
         const formData = new FormData();
-        image1 && formData.append('carId', carId);
+        formData.append('carId', carId);
         image1 && formData.append('carpicture', image1);
         image2 && formData.append('carpicture', image2);
         image3 && formData.append('carpicture', image3);

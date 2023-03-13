@@ -2,11 +2,10 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { Dialog, Divider, ThemeProvider } from '@mui/material';
-import { Link } from 'react-router-dom';
+
 import { useState } from 'react';
 import { ArrowIcon } from '../../Profile/CarOwner/CarOwnerAddCar';
 import SingleCarDetail from './SingleCarDetail';
-import { useEffect } from 'react';
 
 export default function SingleCarResult({ car, tripData }) {
     const [openCar, setOpenCar] = useState(false)
@@ -44,14 +43,14 @@ export default function SingleCarResult({ car, tripData }) {
                         </Box>
 
                         <Box>
-                            <img className='w-[160px] h-[115px]' src="https://cdni.autocarindia.com/utils/imageresizer.ashx?n=https://cms.haymarketindia.net/model/uploads/modelimages/CamryModelImage.jpg&w=350&h=251&q=90&c=1" alt="" />
+                            <img className='w-[160px] h-[95px]' src="https://cdni.autocarindia.com/utils/imageresizer.ashx?n=https://cms.haymarketindia.net/model/uploads/modelimages/CamryModelImage.jpg&w=350&h=251&q=90&c=1" alt="" />
 
                         </Box>
 
                     </Box>
                 </Box>
                 <Divider></Divider>
-                {tripData[0]?.distance && <p className=' mx-3 font-semibold py-4 text-sm '> ৳ {Math.ceil(parseFloat(tripData[0]?.distance?.substring(0,tripData[0]?.distance?.length-2))/10*400)}</p>}
+                {tripData[0]?.distance && <p className=' mx-3 font-semibold py-4 text-sm '> ৳ {Math.ceil(parseFloat(tripData[0]?.distance?.substring(0,tripData[0]?.distance?.length-2))/10*car?.unitPrice)}</p>}
             </Box>
 
 

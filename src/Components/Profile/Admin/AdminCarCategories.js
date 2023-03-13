@@ -1,17 +1,17 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
-import CarOwnerSingleVehicle from './CarOwnerSingleVehicle';
-import CarOwnerAddCar, { ArrowIcon } from './CarOwnerAddCar';
 import { Divider, IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { carOwnerAllCars } from '../../../api/api';
 import { useQuery } from '@tanstack/react-query';
+import AdminAddCarCategory from './AdminAddCarCategory';
+import { ArrowIcon } from '../CarOwner/CarOwnerAddCar';
+import CarOwnerSingleVehicle from '../CarOwner/CarOwnerSingleVehicle';
 
-export default function CarOwnerVehicleList() {
+export default function AdminCarCategories() {
 
     const fetcher = async () => {
-        const { data } = await carOwnerAllCars()
+        // const { data } = await carOwnerAllCars()
         return data
     }
 
@@ -31,7 +31,7 @@ export default function CarOwnerVehicleList() {
                 <h1 className='md:text-lg mx-auto text-md pr-5 '>Vehicles </h1>
             </Box>
             <div className='w-40 mx-auto my-5'>
-                <CarOwnerAddCar></CarOwnerAddCar>
+                <AdminAddCarCategory></AdminAddCarCategory>
             </div>
             <Divider></Divider>
             <Box className='pb-20'>

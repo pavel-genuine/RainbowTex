@@ -28,7 +28,7 @@ export default function CarOwnerProfile() {
         return data
     }
 
-    let { data, isLoading } = useQuery(["ownerprofile",], () => fetcher())
+    let { data:owner, isLoading } = useQuery(["ownerprofile",], () => fetcher())
 
     //   console.log(data, 'driver');
 
@@ -73,7 +73,7 @@ export default function CarOwnerProfile() {
                         <ListItemIcon>
                             <FeedIcon sx={{ scale: '1.3' }} />
                         </ListItemIcon >
-                        <ListItemText primary="Informations & Docummmens" />
+                        <ListItemText primary="Informations & Docummments" />
                     </ListItemButton>
                 </Link>
                 <ListItemButton>

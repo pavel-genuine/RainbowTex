@@ -20,7 +20,12 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import HouseOutlinedIcon from '@mui/icons-material/HouseOutlined';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { grey } from '@mui/material/colors';
 
+
+const StyledBox = styled(Box)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800],
+}));
 
 export default function Navbar({ open, setOpen }) {
     const [state, setState] = React.useState({
@@ -132,9 +137,9 @@ export default function Navbar({ open, setOpen }) {
 
     return (
 
-        <Box className='z-20 w-[100%] fixed bg-white  md:bg-primary md:bg-gradient-to-r md:from-[#480626] md:to-[#7c2a52] backdrop-filter-none backdrop-blur-sm shadow md:h-[70px] h-[60px]    md:w-[100%]'>
-            <Box className={`flex items-center justify-between md:h-[70px] h-[60px] w-[90%] mx-auto `}>
-
+        <Box className='z-40 w-[100%] fixed bg-white  md:bg-primary md:bg-gradient-to-r md:from-[#480626] md:to-[#7c2a52] backdrop-filter-none backdrop-blur-sm shadow md:h-[70px] h-[60px]    md:w-[100%]'>
+            <Box className={`flex items-center justify-between md:h-[80px] h-[60px] w-[90%] mx-auto `}>
+                <CssBaseline />
                 <div className='flex items-center'>
                     {['bottom'].map((anchor) => (
                         <React.Fragment key={anchor}>
@@ -146,7 +151,7 @@ export default function Navbar({ open, setOpen }) {
                                 color="inherit"
                                 aria-label="menu"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="md:h-7 md:w-7 h-5 w-5 md:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
 
                             </IconButton>
                             {/* </Link> */}
@@ -172,14 +177,23 @@ export default function Navbar({ open, setOpen }) {
                     ))}
                     <Link to={`/`}>
 
-                        <Button ><span className='md:text-white text-black  md:text-xl text-[15px]'>GoRental</span></Button>
+                        <Button >
+                            <p className='relative mb-[10px] md:mb-[20px]'>
+                                <span className='text-primary md:text-white text-2xl md:text-3xl  '>
+                                Goti</span> <br />
+
+                                <span className='font-Allura text-[orange] absolute top-[20px] md:top-[25px] left-[0px] text-xl  md:text-2xl'>
+                                    Rentals
+                                </span>
+                            </p>
+                        </Button>
 
                     </Link>
                 </div>
                 <div className='md:mx-10 mx-2'>
 
                     {
-                        localStorage.getItem('role') ?
+                        localStorage.getItem('userId') ?
                             " "
                             :
                             <Button onClick={toggleDrawer(true)}
@@ -188,8 +202,6 @@ export default function Navbar({ open, setOpen }) {
                                 <span className='md:text-white text-black md:text-xl text-[15px]'>Log in</span>
                             </Button>
                     }
-
-
 
                     <SwipeableDrawer
                         BackdropProps={{ style: { backgroundImage: 'linear-gradient(#5c0931, black)', opacity: .9 } }}
@@ -200,15 +212,14 @@ export default function Navbar({ open, setOpen }) {
                         onClose={toggleDrawer(false)}
                         onOpen={toggleDrawer(true)}
                     >
-                        <span onClick={toggleDrawer(false)} style={{ color: 'white' }} className='fixed right-0 top-[1%] z-[100%] p-3 cursor-pinter'>
-                            <CloseIcon className='text-white' />
-                        </span>
-                        <AuthHome setOpen={setOpen}></AuthHome>
-
+                        <StyledBox sx={{ height: '100%', overflow: 'hidden' }}>
+                            <span onClick={toggleDrawer(false)} style={{ color: 'white' }} className='fixed right-0 top-[1%] z-[100%] p-3 cursor-pinter'>
+                                <CloseIcon className='text-white' />
+                            </span>
+                            <AuthHome setOpen={setOpen}></AuthHome>
+                        </StyledBox>
                     </SwipeableDrawer>
-
                 </div>
-
             </Box>
         </Box>
 

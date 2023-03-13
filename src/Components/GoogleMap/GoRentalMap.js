@@ -13,7 +13,6 @@ import { useEffect, useRef, useState } from 'react'
 const options = {
   gestureHandling: "greedy",
   keyboardShortcuts: false,
-  termsOfUse:false,
   zoomControl: false,
   styles: [{
     "featureType": "administrative",
@@ -300,6 +299,7 @@ const options = {
 }
 
 function GoRentalMap(props) {
+  
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: 'AIzaSyA7Hbtoc7jXPbTNZwdGRzkpt21M3l5YWwE',
     libraries: ['places'],
@@ -390,7 +390,7 @@ const {origin,gps,destination,setMapData}=props
         minZoom={5}
         zoom={15}
 
-        mapContainerStyle={{ width: '100vw', height: '100vh' }}
+        mapContainerStyle={{ width: '100vw', height: '90vh' }}
 
         onLoad={map => setMap(map)}
       >

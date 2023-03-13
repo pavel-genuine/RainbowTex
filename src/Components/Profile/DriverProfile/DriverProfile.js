@@ -70,7 +70,7 @@ const DriverProfile = () => {
             <ListItemIcon>
               <FeedIcon sx={{ scale: '1.3' }} />
             </ListItemIcon >
-            <ListItemText primary="Informations" />
+            <ListItemText primary="Information" />
           </ListItemButton>
         </Link>
 

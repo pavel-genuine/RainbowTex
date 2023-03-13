@@ -30,6 +30,7 @@ import { getRefreshToken } from '../../../api/api';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+
 export const darkTheme = createTheme({
     typography: {
         fontFamily: 'Artifika',
@@ -80,10 +81,12 @@ export const pickUpPoint = (optionsOrigin, valueOrigin, setOptionsOrigin, setVal
             }}
 
             renderInput={(params) => (
-                <TextField {...params} label={label}
-
-                    placeholder={placeholder} variant={variant} fullWidth
-                />
+                <TextField {...params}
+                    style={{ border: 'solid 1px', borderColor: '#e1e1e1' }}
+                    className='rounded-md outline-none '
+                    autoFocus
+                    sx={{ border: 'none', "& fieldset": { border: 'none' }, }}
+                    placeholder="Pick-up Point" fullWidth />
             )}
             renderOption={(props, option) => {
                 const matches = option?.structured_formatting?.main_text_matched_substrings;
@@ -91,6 +94,7 @@ export const pickUpPoint = (optionsOrigin, valueOrigin, setOptionsOrigin, setVal
                     option?.structured_formatting?.main_text,
                     matches?.map((match) => [match?.offset, match?.offset + match?.length]),
                 );
+
 
                 return (
                     <li {...props}>
@@ -122,35 +126,7 @@ export const pickUpPoint = (optionsOrigin, valueOrigin, setOptionsOrigin, setVal
                 );
             }}
         />
-
-        {
-            openMap ? "" :
-                <span>
-                    {!valueOrigin &&
-                        <span onClick={() => setOpenMap(true)} className='absolute top-[15%] right-[25%] cursor-pointer bg-[#e1dfe0]  rounded-full flex flex-col justify-center items-center py-1 px-2'>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-primary ">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
-                            </svg>
-                            <span className='text-[11px] text-primary'>
-                                map
-                            </span>
-                        </span>
-                    }
-                </span>
-        }
-
-        {
-            !valueOrigin &&
-            <span onClick={() => setOpenMap(true)} className='absolute top-[15%] right-[10%] cursor-pointer bg-[#e1dfe0] rounded-full flex flex-col justify-center items-center py-1 px-2'>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-primary ">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                </svg>
-                <span className='text-[11px] text-primary'>
-                    GPS
-                </span>
-            </span>
-        }
+          
     </div>
 
 export const destinationPoint = (optionsDestination, valueDestination, setOptionsDestination, setValueDestination, setInputValueDestination, setOpenMap, openMap) =>
@@ -172,20 +148,28 @@ export const destinationPoint = (optionsDestination, valueDestination, setOption
             onChange={(event, newValue) => {
                 setOptionsDestination(newValue ? [newValue, ...optionsDestination] : optionsDestination);
                 setValueDestination(newValue);
+
             }}
             onInputChange={(event, newInputValue) => {
                 setInputValueDestination(newInputValue);
             }}
             renderInput={(params) => (
                 <TextField {...params}
-                    label="Destination" fullWidth />
+                    style={{ border: 'solid 1px', borderColor: '#e1e1e1' }}
+                    className='rounded-md outline-none '
+                    autoFocus
+                    sx={{ border: 'none', "& fieldset": { border: 'none' }, }}
+                    placeholder="Destination" fullWidth
+                />
             )}
             renderOption={(props, option) => {
                 const matches = option?.structured_formatting?.main_text_matched_substrings;
+
                 const parts = parse(
                     option?.structured_formatting?.main_text,
                     matches?.map((match) => [match?.offset, match?.offset + match?.length]),
                 );
+
 
                 return (
                     <li {...props}>
@@ -197,16 +181,21 @@ export const destinationPoint = (optionsDestination, valueDestination, setOption
                                 />
                             </Grid>
                             <Grid item xs>
-                                {parts?.map((part, index) => (
-                                    <span
-                                        key={index}
-                                        style={{
-                                            fontWeight: part?.highlight ? 700 : 400,
-                                        }}
-                                    >
-                                        {part.text}
-                                    </span>
-                                ))}
+                                {parts?.map((part, index) => {
+                                    // console.log(part?.text,'part text');
+                                    return (
+                                        <span
+                                            key={index}
+                                            style={{
+                                                fontWeight: part?.highlight ? 700 : 400,
+                                            }}
+                                        >
+                                            {part.text}
+                                        </span>
+                                    )
+                                }
+                                )
+                                }
 
                                 <Typography variant="body2" color="text.secondary">
                                     {option?.structured_formatting?.secondary_text}
@@ -217,48 +206,37 @@ export const destinationPoint = (optionsDestination, valueDestination, setOption
                 );
             }}
         />
-        {
-            openMap ? ''
-                :
-                <span>
-                    {!valueDestination
-                        && <span onClick={() => setOpenMap(true)} className='absolute top-[15%] right-[10%] cursor-pointer bg-[#e1dfe0] rounded-full flex flex-col justify-center items-center py-1 px-2'>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-primary ">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
-                            </svg>
-                            <span className='text-[11px] text-primary'>
-                                map
-                            </span>
-                        </span>
-                    }
-                </span>
-
-
-        }
     </div>
 
-export const schedule = (setTime, time, w = '90vw') =>
+export const schedule = (setTime, time) =>
     <div className='relative form-control  rounded flex boder justify-center items-center '>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
+                sx={{ border: 'none', "& fieldset": { border: 'none' }, }}
                 style={{ zIndex: 2100 }}
                 disablePortal
                 components={{
                     OpenPickerIcon: AccessTimeIcon,
                 }}
-                className={`w-[${w}] md:w-[350px] z-10`}
-                label="When To Trip"
+                className={`w-[90vw] md:w-[350px] z-10 rounded-md outline-none `}
+
+                // label="When To Trip"
                 value={time}
                 onChange={(newValue) => {
                     // console.log(newValue.$d,'newtttt');
                     setTime(newValue?.$d);
                 }}
-                renderInput={(params) => <TextField {...params} />}
+                renderInput={(params) =>
+                    <TextField {...params}
+                        style={{ border: 'solid 1px', borderColor: '#e1e1e1' }}
+                        sx={{ border: 'none', "& fieldset": { border: 'none' }, }}
+
+                    />}
             />
         </LocalizationProvider>
 
         <span className='absolute top-[15%] right-[10%] z-0'>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={.8} stroke="currentColor" className="w-8 h-8 text-primary bg-[#e1dfe0] rounded-full md:hidden p-1">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={.8} stroke="currentColor" className="w-8 h-8 text-[ash] rounded-full md:hidden p-1 mt-1">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
         </span>
@@ -275,7 +253,7 @@ function loadScript(src, position, id) {
     script.setAttribute('async', '');
     script.setAttribute('id', id);
     script.src = src;
-    position.appendChild(script);
+    position?.appendChild(script);
 }
 
 
@@ -289,16 +267,19 @@ const FindCars = ({ open, setOpen }) => {
     const [openSearch, setOpenSearch] = React.useState(false);
     const [openMap, setOpenMap] = React.useState(false);
     const [valueOrigin, setValueOrigin] = React.useState(null);
+    const [coordinatesPickup, setCoordinatesPickup] = React.useState('');
     const [valueDestination, setValueDestination] = React.useState(null);
+    const [coordinatesDestination, setCoordinatesDestination] = React.useState('');
     const [inputValueOrigin, setInputValueOrigin] = React.useState('');
     const [inputValueDestination, setInputValueDestination] = React.useState('');
     const [optionsOrigin, setOptionsOrigin] = React.useState([]);
     const [optionsDestination, setOptionsDestination] = React.useState([]);
     const [mapData, setMapData] = React.useState({});
-    const [gps, setGps] = React.useState({});
+    const [gps, setGps] = React.useState();
     const [directionsResponse, setDirectionsResponse] = useState(null)
     const [distance, setDistance] = useState('')
     const [duration, setDuration] = useState('')
+    const [autoFocus, setAutoFocus] = useState(false)
     const loaded = React.useRef(false);
 
     const GOOGLE_MAPS_API_KEY = 'AIzaSyA7Hbtoc7jXPbTNZwdGRzkpt21M3l5YWwE';
@@ -366,8 +347,11 @@ const FindCars = ({ open, setOpen }) => {
                     address: valueOrigin?.description
                 }, (results, status) => {
                     if (status == window.google.maps.GeocoderStatus.OK) {
-                        // console.log(results[0].geometry.location.lat(), 'origin lat');
-                        // console.log(results[0].geometry.location.lng(), 'origin lng');
+               
+                        const lat =results[0].geometry.location.lat()
+                        const lng =results[0].geometry.location.lng()
+
+                        // setCoordinatesPickup({lat,lng})
                     }
                 });
             }
@@ -379,8 +363,7 @@ const FindCars = ({ open, setOpen }) => {
 
         navigator.geolocation.getCurrentPosition(function () { }, function () { }, {});
 
-
-
+        (valueOrigin || gps) && setAutoFocus(() => true)
 
 
     }, [valueOrigin, inputValueOrigin, fetch, gps]);
@@ -393,6 +376,11 @@ const FindCars = ({ open, setOpen }) => {
 
             // console.log("Latitude is :", position.coords.latitude);
             // console.log("Longitude is :", position.coords.longitude);
+
+            const lat =position.coords.latitude
+            const lng =position.coords.longitude
+
+            // setCoordinatesPickup({lat,lng})
 
             function displayLocation(latitude, longitude) {
                 if (window?.google) {
@@ -407,7 +395,7 @@ const FindCars = ({ open, setOpen }) => {
                         (results, status) => {
                             if (status == window.google.maps.GeocoderStatus.OK) {
                                 if (results[3]) {
-                                    const add = results[3].formatted_address;
+                                    const add = results[0].formatted_address;
                                     const value = add.split(",");
                                     const count = value?.length;
                                     const country = value[count - 1];
@@ -475,24 +463,30 @@ const FindCars = ({ open, setOpen }) => {
             }
         });
 
+
         function initializeGeoCodeDestination() {
             if (window.google) {
+
                 const geocoder = new window.google.maps.Geocoder();
 
                 geocoder.geocode({
                     address: valueDestination?.description
                 }, (results, status) => {
                     if (status == window.google.maps.GeocoderStatus.OK) {
-                        // console.log(results[0].geometry.location.lat(), 'destination lat');
-                        // console.log(results[0].geometry.location.lng(), 'destination lng');
+                        const lat =results[0].geometry.location.lat()
+                        const lng =results[0].geometry.location.lng()
+
+                        // setCoordinatesDestination({lat,lng})
                     }
                 });
-
             }
+
+
         }
 
-        initializeGeoCodeDestination()
+       
 
+        initializeGeoCodeDestination()
 
         return () => {
             active = false;
@@ -501,8 +495,10 @@ const FindCars = ({ open, setOpen }) => {
 
     const navigate = useNavigate()
 
-    useEffect(() => 
-    {
+   
+
+    useEffect(() => {
+
 
         window.history.pushState({}, '', '/');
         window.history.pushState({}, '', '/');
@@ -516,40 +512,43 @@ const FindCars = ({ open, setOpen }) => {
             // if ((props?.gps===''&& props?.origin === '') || props?.destination === '') {
             //   return
             // }
-      
-      
+            
             // eslint-disable-next-line no-undef
             const directionsService = new google.maps.DirectionsService()
             const results = await directionsService.route({
-              origin:valueOrigin?.description?valueOrigin?.description:gps,
-              destination: valueDestination?.description,
-              // eslint-disable-next-line no-undef
-              travelMode: google.maps.TravelMode.DRIVING,
+                origin: valueOrigin?.description ? valueOrigin?.description : gps,
+                destination: valueDestination?.description,
+                // eslint-disable-next-line no-undef
+                travelMode: google.maps.TravelMode.DRIVING,
             })
             setDirectionsResponse(results)
-            setDistance(results.routes[0].legs[0].distance.text)
-            setDuration(results.routes[0].legs[0].duration.text)     
-           setMapData({ distance, duration })
-          }
-          calculateRoute()
+            const distance = results.routes[0].legs[0].distance.text.split(" ");
+            setDistance(Number(distance[0]))
+            setDuration(results.routes[0].legs[0].duration.text)
+            setMapData({ distance, duration })
+
+        }
+        calculateRoute()
 
         //   console.log(distance,duration,'dddd');
 
-        setTripData([
+        setTripData(
             {
                 startLocation: valueOrigin?.description ? valueOrigin?.description : gps,
                 destination: valueDestination?.description,
                 distance: distance,
-                duration:duration,
+                duration: duration,
                 schedule: time?.toString()?.slice(0, 21),
                 gps: gps,
-                setMapData: setMapData
+                setMapData: setMapData,
+                coordinatesPickup,
+                // coordinatesDestination
+               
             }
-        ])      
+        )
     }, [valueOrigin,valueDestination,mapData,time,gps,navigate,distance,duration])
 
-    // console.log(time,'time');
-    // console.log(typeof(time),'time type');
+
 
     const onSubmit = async (data) => {
 
@@ -608,10 +607,35 @@ const FindCars = ({ open, setOpen }) => {
         <div style={{ backgroundImage: `url(${'https://new-media.dhakatribune.com/en/uploads/2021/10/26/zakir-hossain.jpeg'})`, backgroundSize: 'cover' }}
             className='h-[65vh] md:h-[100vh]'>
             <div className=' md:pt-28 md:pl-40 bg-black bg-opacity-50 h-[65vh] md:h-[100vh] w-[100%]'>
-                <div className='bg-white md:bg-transparent p-2 pt-20 md:pt-0 h-[65vh]'>
-                    <Box className='md:bg-white md:bg-gradient-to-r md:from-white md:to-white  backdrop-filter-none backdrop-blur-sm shadow rounded-xl md:w-[500px] md:pt-0 md:h-[450px] pb-5 md:pb-0 mb-5'>
+                <div className='bg-white md:bg-transparent p-2 pt-16 md:pt-0 h-[65vh]'>
+                    <Box className='md:bg-white relative md:bg-gradient-to-r md:from-white md:to-white  backdrop-filter-none backdrop-blur-sm shadow rounded-xl md:w-[500px] md:pt-0 md:h-[450px] pb-5 md:pb-0 mb-5'>
+                        <div className='flex items-center absolute top-0 right-0 space-x-6 m-4 md:m-0 md:mt-10 md:mr-20'>
+                            {
+                                <span onClick={() => setOpenMap(true)} className=' z-20 cursor-pointer bg-[#e1dfe0] rounded-full flex flex-col justify-center items-center py-1 px-2'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-primary ">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
+                                    </svg>
+                                    <span className='text-[11px] text-primary'>
+                                        map
+                                    </span>
+                                </span>
 
-                        <form className="flex  justify-center items-center flex-col relative " onSubmit={handleSubmit(onSubmit)}>
+                            }
+
+                            {
+
+                                <span onClick={() => setOpenMap(true)} className=' z-20 cursor-pointer bg-[#e1dfe0] rounded-full flex flex-col justify-center items-center py-1 px-2'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-primary ">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                    </svg>
+                                    <span className='text-[11px] text-primary'>
+                                        GPS
+                                    </span>
+                                </span>
+                            }
+                        </div>
+                        <form className="flex  justify-center items-center flex-col relative pt-14 md:pt-8" onSubmit={handleSubmit(onSubmit)}>
                             <div className='flex md:mt-16 mt-5  justify-center items-center flex-col space-y-8 w-[100%] '>
 
                                 {pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap)}
@@ -645,13 +669,13 @@ const FindCars = ({ open, setOpen }) => {
 
                                                         <div onFocus={() => setShowDestination(() => true)} className='md:hidden flex items-center  h-[90px]  py-[15px]'>
                                                             <Box>
-                                                                <span onClick={() => setOpenMap(false)}>
+                                                                <span onClick={() => { setOpenMap(false) }}>
                                                                     <ArrowIcon></ArrowIcon>
                                                                 </span>
                                                             </Box>
                                                             <div className='w-[80%] px-1'>
                                                                 {
-                                                                    pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap, "outlined")
+                                                                    pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap)
                                                                 }
                                                             </div>
                                                             <div>
@@ -665,7 +689,7 @@ const FindCars = ({ open, setOpen }) => {
                                                         <div className={`${showdestination ? '' : 'hidden md:block'} md:flex md:space-x-4 items-center justify-center pt-2`}>
                                                             <div className='lg:w-[30%] md:w-[40%] hidden md:block'>
                                                                 {
-                                                                    pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap)
+                                                                    pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin)
                                                                 }
                                                             </div>
                                                             <span className='md:inline hidden'>
@@ -678,7 +702,7 @@ const FindCars = ({ open, setOpen }) => {
 
                                                             {
                                                                 showdestination &&
-                                                                <p className={`block md:hidden w-[5%] mx-auto absolute top-[40%] right-[50%]`}>
+                                                                <p className={`block md:hidden w-[5%] mx-auto absolute top-[30%] right-[50%]`}>
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white">
                                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75" />
                                                                     </svg>
@@ -689,11 +713,11 @@ const FindCars = ({ open, setOpen }) => {
                                                             }
                                                             <div className='lg:w-[30%] md:w-[40%] w-[80%] mx-auto pl-1 pb-[15px] md:pb-0'>
                                                                 {
-                                                                    destinationPoint(optionsDestination, valueDestination, setOptionsDestination, setValueDestination, setInputValueDestination, setOpenMap, openMap)
+                                                                    destinationPoint(optionsDestination, valueDestination, setOptionsDestination, setValueDestination, setInputValueDestination, autoFocus)
                                                                 }
                                                             </div>
-                                                            <div className='lg:w-[31%] md:w-[40%] mt-5 md:mt-0'>
-                                                                {/* {schedule(setTime, time)} */}
+                                                            <div className='lg:w-[30%] md:w-[40%] w-[80%] mx-auto pl-1 pb-[15px] md:pb-0'>
+                                                                {schedule(setTime, time)}
                                                             </div>
 
                                                         </div>
@@ -703,7 +727,7 @@ const FindCars = ({ open, setOpen }) => {
                                                 </div>
                                                 {mapData?.distance &&
                                                     <p className='text-sm text-white text-center md:mt-2 pb-2 md:pb-0 mt-[-2%]'>
-                                                        {mapData?.distance} / {mapData?.duration}
+                                                        {distance} / {duration}
 
                                                     </p>
                                                 }
@@ -713,6 +737,7 @@ const FindCars = ({ open, setOpen }) => {
 
                                     </ThemeProvider>
 
+
                                     <div className={` ${showdestination ? ' pt-[0%]' : 'pt-[0%]'}  md:pt-[5%] `}>
 
                                         <GoRentalMap setMapData={setMapData} gps={gps} origin={valueOrigin?.description} destination={valueDestination?.description}>
@@ -721,7 +746,7 @@ const FindCars = ({ open, setOpen }) => {
                                         <div className='flex justify-center items-center'>
                                             {
                                                 !openSearch ?
-                                                    <button className=' rounded-md w-[200px] bg-primary h-[40px] text-white absolute top-[80vh]' onClick={() => setOpenSearch(true)}>Find Cars</button>
+                                                    <button className=' rounded-md w-[200px] bg-primary h-[40px] text-white absolute top-[80vh]' onClick={() => { valueOrigin && valueDestination && setOpenSearch(true) }}>  Find Cars</button>
                                                     :
                                                     <button className=' rounded-md w-[200px] bg-primary h-[40px] text-white absolute top-[80vh]' onClick={() => setOpenMap(false)}>Find Cars</button>
 
@@ -731,10 +756,12 @@ const FindCars = ({ open, setOpen }) => {
 
                                 </Dialog>
 
-                                {destinationPoint(optionsDestination, valueDestination, setOptionsDestination, setValueDestination, setInputValueDestination, setOpenMap, openMap)}
+                                {destinationPoint(optionsDestination, valueDestination, setOptionsDestination, setValueDestination, setInputValueDestination, autoFocus)}
+
                                 {schedule(setTime, time)}
 
-                                <Button className='w-[90vw] md:w-[350px] h-[50px]' type='submit' variant="contained"> <span >Find Cars</span> </Button>
+                                <Button className='w-[90vw] md:w-[350px] h-[50px]' type='submit' variant="contained">
+                                    <span >Find Cars</span> </Button>
 
                             </div>
 
@@ -778,7 +805,7 @@ const FindCars = ({ open, setOpen }) => {
                                         </Box>
                                         <div className='w-[80%] px-1'>
                                             {
-                                                pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap)
+                                                pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin)
                                             }
                                         </div>
                                         <div>
@@ -792,7 +819,7 @@ const FindCars = ({ open, setOpen }) => {
                                     <div className={`${showdestination ? '' : 'hidden md:block'} md:flex md:space-x-4 items-center justify-center pt-2`}>
                                         <div className='lg:w-[30%] md:w-[40%] hidden md:block'>
                                             {
-                                                pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap)
+                                                pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin)
                                             }
                                         </div>
                                         <span className='md:inline hidden'>
@@ -816,7 +843,7 @@ const FindCars = ({ open, setOpen }) => {
                                         }
                                         <div className='lg:w-[30%] md:w-[40%] w-[80%] mx-auto pl-1 pb-[15px] md:pb-0'>
                                             {
-                                                destinationPoint(optionsDestination, valueDestination, setOptionsDestination, setValueDestination, setInputValueDestination, setOpenMap, openMap)
+                                                destinationPoint(optionsDestination, valueDestination, setOptionsDestination, setValueDestination, setInputValueDestination, setOpenMap, autoFocus)
                                             }
                                         </div>
                                         <div className='lg:w-[30%] md:w-[40%] w-[80%] mx-auto pl-1 pb-[15px] md:pb-0'>
@@ -826,7 +853,6 @@ const FindCars = ({ open, setOpen }) => {
                                     </div>
 
                                 </div>
-
                             </div>
                             {mapData?.distance &&
                                 <p className='text-sm text-white text-center md:mt-2 pb-2 md:pb-0 mt-[-2%]'>
@@ -839,12 +865,6 @@ const FindCars = ({ open, setOpen }) => {
                     </div>
 
                 </ThemeProvider>
-
-                <div className={` ${showdestination ? ' pt-[73%]' : 'pt-[30%]'} md:pt-[5%] hidden`}>
-                    <GoRentalMap gps={gps} setMapData={setMapData} origin={valueOrigin?.description} destination={valueDestination?.description}>
-
-                    </GoRentalMap>
-                </div>
 
                 <Box className={`${showdestination ? ' pt-[35%]' : 'pt-[35%]'} md:pt-[10%] pb-10`}>
 

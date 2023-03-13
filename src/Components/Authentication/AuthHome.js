@@ -168,7 +168,7 @@ export default function AuthHome({ setOpen }) {
 
         }).catch((error) => {
             console.log(error.message);
-            setError('Error! Please Resend')
+            setError('Unknown Error !')
         });
     };
 
@@ -185,7 +185,7 @@ export default function AuthHome({ setOpen }) {
                 , 1000)
         }).catch((error) => {
             // console.log(error);
-            console.log(error?.message);
+            console.log(error?.message,'error message');
             setError('Unknown Error !')
         });
     };
@@ -208,22 +208,23 @@ export default function AuthHome({ setOpen }) {
             const idToken = await user?.getIdToken()
 
             const { data } = await otpLogin({ uid: user?.uid, contactNumber: phonePassenger, idToken: idToken, otpProvider: 'firebase', userType: 'user' })
-            console.log(idToken, 'idToken passenger');
 
-            localStorage.setItem('role', 'passenger')
+            localStorage.setItem('role', 'user')
+            localStorage.setItem('userId', data?.userId)
 
             setTimeout(
                 setToastLogin(() => true)
                 , 500)
 
             setTimeout(
-                setOpen(() => false)
+               setOpen && setOpen(() => false)
                 , 800)
             setTimeout(
                 navigate('/profile')
                 , 1000)
 
         }).catch((error) => {
+            console.log(error, 'error');
 
             if (error?.message.includes('invalid')) {
                 setError("OTP not matched")
@@ -246,33 +247,37 @@ export default function AuthHome({ setOpen }) {
             const user = result?.user;
 
             const idToken = await user?.getIdToken()
-            console.log(idToken, 'idToken owner');
 
             if (driverRole) {
                 const { data: res } = await otpLogin({ uid: user?.uid, contactNumber: phonePartner, idToken: idToken, otpProvider: 'firebase', userType: 'driver' })
 
                 localStorage.setItem('role', 'driver')
+                localStorage.setItem('userId', res?.userId)
+
             }
             else {
-                const { data: res } = await otpLogin({ uid: user?.uid, contactNumber: phonePartner, idToken: idToken, otpProvider: 'firebase', userType: 'carOwner' })
+                const { data: res } = await otpLogin({ uid: user?.uid, contactNumber: phonePartner, idToken: idToken, otpProvider: 'firebase', userType: 'carowner' })
 
-                localStorage.setItem('role', 'carOwner')
+                localStorage.setItem('role', 'carowner')
+                localStorage.setItem('userId', res?.userId)
+
             }
-
-
 
             setTimeout(
                 setToastLogin(() => true)
                 , 500)
 
             setTimeout(
-                setOpen(() => false)
+                setOpen && setOpen(() => false)
                 , 800)
             setTimeout(
                 navigate('/profile')
                 , 1000)
 
         }).catch((error) => {
+
+            console.log(error, 'error');
+
             if (error?.message.includes('invalid')) {
                 setError("OTP not matched")
             }
@@ -314,7 +319,7 @@ export default function AuthHome({ setOpen }) {
                     <Box>
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <Tabs value={tabValue} onChange={handleChangeTab} aria-label="basic tabs example" sx={{ backgroundColor: '#f7f7f7' }}>
-                                <Tab className='normal-case' icon={<AirlineSeatLegroomExtraIcon />} disableRipple label="Guest" {...a11yProps(0)} />
+                                <Tab className='normal-case' icon={<AirlineSeatLegroomExtraIcon />} disableRipple label="Passenger" {...a11yProps(0)} />
                                 <Tab className='normal-case' icon={<CarRentalIcon />} disableRipple label="Partner" {...a11yProps(1)} />
                             </Tabs>
                         </Box>
@@ -382,7 +387,7 @@ export default function AuthHome({ setOpen }) {
                                             loginPassenger ?
                                                 <div className='mt-10 flex justify-between'>
                                                     <Button size='small' onClick={() => setLoginPassenger(() => !loginPassenger)} variant="text"><span className='font-normal items-center flex '> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon>
-                                                     <span className='ml-1'>Back</span></span></Button>
+                                                        <span className='ml-1'>Back</span></span></Button>
                                                     <Button type='submit' size='small' variant="contained">Log In</Button>
                                                 </div>
                                                 :
@@ -463,7 +468,7 @@ export default function AuthHome({ setOpen }) {
                                                 loginPartner ?
                                                     <div className='mt-10 flex justify-between'>
                                                         <Button size='small' onClick={() => setLoginPartner(() => !loginPartner)} variant="text"> <span className='font-normal flex items-center'> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon>
-                                                                <span className='ml-1'>Back</span> </span>
+                                                            <span className='ml-1'>Back</span> </span>
                                                         </Button>
 
                                                         <Button onClick={onSubmitPartner} size='small' variant="contained">Log In</Button>

@@ -2,9 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Artifika&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Allura&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Mynerve&display=swap');
+
+
+
 body {
   margin: 0;
-  font-family:'Artifika', serif;
+  font-family:'Artifika', serif,'Allura','Mynerve';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

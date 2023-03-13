@@ -24,7 +24,8 @@ import AdminAuth from './Components/Authentication/AdminAuth';
 import { getToken } from 'firebase/messaging';
 import { messaging, onMessageListener } from './firebase.init';
 import DriverInfoDoc from './Components/Profile/DriverProfile/DriverInfoDoc';
-
+import AdminCarCategories from './Components/Profile/Admin/AdminCarCategories';
+import {BOOKING_CANCELLED,BOOKING_FAILURE,BOOKING_REQUEST,BOOKING_SUCCESS} from './constants/constants'
 
 const socket = io.connect(base_url);
 const queryClient = new QueryClient()
@@ -32,6 +33,8 @@ const queryClient = new QueryClient()
 const App = () => {
 
   const [open, setOpen] = useState(false)
+  const [userId, setUserId] = useState('');
+  const [userType, setUserType] = useState('');
 
   const theme = createTheme({
     typography: {
@@ -64,24 +67,61 @@ const App = () => {
         vapidKey:
           "BBcbCAWfEk24LjPE3kqpFkRdRq257QfHpzFXPmMXV0QaWpDppATQCpeqKLjomdO_HbpYjLgNdQEl_sfatkkz0sc",
       });
-      console.log("Token: ", token);
+      // console.log("FCM Token: ", token);
       // Send this token  to server ( db)
     } else if (permission === "denied") {
       alert("You denied for the notification");
     }
   }
 
+  const getLocalStorage = async () => {
+    
+    const userid = localStorage.getItem('userId')
+    const usertype = localStorage.getItem('role')
+    setUserId(userid)
+    setUserType(usertype)
+
+    console.log(usertype, 'utype', userid, 'userid')
+
+    socket.auth = {
+      userInfo: { userId: userid, userType: usertype },
+    }
+
+    console.log(socket, 'socket')
+
+  }
+
 
   useEffect(() => {
 
     requestPermission()
+    getLocalStorage()
+
+    socket.on(BOOKING_REQUEST, (msg) => {
+      console.log(msg)
+    })
+
+    socket.on(BOOKING_CANCELLED, (msg) => {
+      console.log(msg)
+    })
+
+    socket.on(BOOKING_FAILURE, (msg) => {
+      console.log(msg, 'msg')
+    })
+
+    socket.on(BOOKING_SUCCESS, (msg) => {
+      console.log(msg, 'msg')
+    })
+
+
+
 
     socket.on("ownerId1", (data) => {
       console.log("some data: ", data);
       setNotification(data);
     });
 
-  });
+  },[userId,userType]);
 
 
   onMessageListener()
@@ -100,7 +140,7 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <Navbar open={open} setOpen={setOpen} ></Navbar>
         <Routes >
-          <Route path={`/`} element={<HomePage  open={open} setOpen={setOpen}></HomePage>}></Route>
+          <Route path={`/`} element={<HomePage open={open} setOpen={setOpen}></HomePage>}></Route>
           {carOwner &&
             <Route path={`/carowner-profile-completion`} element={<CarOwnerProfileCompletion></CarOwnerProfileCompletion>}></Route>
           }
@@ -119,16 +159,16 @@ const App = () => {
           <Route path={`/carowner-info`} element={<CarOwnerInfoDoc></CarOwnerInfoDoc>}></Route>
           <Route path={`/driver-info`} element={<DriverInfoDoc></DriverInfoDoc>}></Route>
 
-
           <Route path={`/car-detail`} element={<SingleCarDetail ></SingleCarDetail>}></Route>
           <Route path={`/auth`} element={<AuthHome></AuthHome>}></Route>
-          <Route path={`/profile`} element={<Profile></Profile>}></Route>
+          <Route path={`/profile`} element={<Profile open={open} setOpen={setOpen}></Profile>}></Route>
           <Route path={`/driver-profile-completion`} element={<DriverProfileCompletion></DriverProfileCompletion>}></Route>
           <Route path={`/admin-auth`} element={<AdminAuth></AdminAuth>}></Route>
+          <Route path={`/admin-add-car`} element={<AdminCarCategories></AdminCarCategories>}></Route>
 
         </Routes>
 
-        <BelowNav></BelowNav>
+        <BelowNav ></BelowNav>
       </ThemeProvider>
     </QueryClientProvider>
 

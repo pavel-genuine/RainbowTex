@@ -48,7 +48,7 @@ function useRouteMatch(patterns) {
     return null;
 }
 
-export default function BelowNav() {
+export default function BelowNav({open,setOpen}) {
     // You need to provide the routes in descendant order.
     // This means that if you have nested routes like:
     // users, users/new, users/edit.

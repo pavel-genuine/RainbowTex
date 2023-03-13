@@ -27,9 +27,7 @@ const PassengerProfile = () => {
     return data
   }
 
-  let { data, isLoading } = useQuery(["passengerprofile",], () => fetcher())
-
-  // console.log(data, 'passpro');
+  let { data:passenger, isLoading } = useQuery(["passengerprofile",], () => fetcher())
 
   const logoutHandler =async()=>{
     
@@ -42,7 +40,7 @@ const PassengerProfile = () => {
     <Box className='md:pt-20 pt-16 mx-auto w-[100vw] md:w-[360px]' sx={{ bgcolor: 'background.paper' }}>
       <Box className='flex justify-between items-center px-6'>
         <p className=' text-primary text-bold py-2'>
-          Name
+          Name : {passenger?.name}
         </p>
         <AccountCircleOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} ffontSize="medium"></AccountCircleOutlinedIcon>
       </Box>

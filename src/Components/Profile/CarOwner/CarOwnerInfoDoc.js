@@ -184,21 +184,19 @@ export default function CarOwnerInfoDoc() {
         const image = URL.createObjectURL(file)
         setNidFront(() =>image)
         const formData = new FormData();
-        file && formData.append('ownerId',data?.id);
+        file && formData.append('carownerId',data?.id);
         file && formData.append('nidfront',file);
         if (file) {
             const { data } = await submitCarOwnerNIDFront(formData)
 
-            console.log(data, 'front');
         }
     }
     const handleNidBack =async (e) => {
         const file = e.target.files[0];
         const image = URL.createObjectURL(file)
-        sessionStorage.setItem('nidBack', image)
-        setNidBack(() => sessionStorage.getItem('nidBack'))
+        setNidBack(() => image)
         const formData = new FormData();
-        file && formData.append('ownerId',data?.id);
+        file && formData.append('carownerId',data?.id);
         file && formData.append('nidback',file);
         
         if (file) {

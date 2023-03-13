@@ -4,7 +4,12 @@
 module.exports = {
   content: ["./src/**/*.{html,js}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        Allura: ["Allura", "cursive"],
+        Mynerve: ["'Mynerve'", "cursive"],
+       },
+    },
     colors: {
       // 'primary': '#000040', //navy
       // 'primary': '#10a310', //green

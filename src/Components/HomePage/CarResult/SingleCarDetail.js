@@ -43,7 +43,6 @@ export default function SingleCarDetail({ setOpen, tripData, car }) {
 
     const theme = useTheme();
     const [activeStep, setActiveStep] = React.useState(0);
-
     const maxSteps = images.length;
 
     const handleStepChange = (step) => {
@@ -53,21 +52,22 @@ export default function SingleCarDetail({ setOpen, tripData, car }) {
 
     const handleConfirm = async () => {
         const req = {
-            carId: car?.id,
-            carownerId: car?.ownerId,
+            carId: 11||car?.id,
+            carownerId: 1 ||car?.ownerId,
             serviceId: car?.serviceId,
-            startLocation: tripData[0]?.startLocation,
-            destination: tripData[0]?.destination,
-            distance: tripData[0]?.distance,
-            schedule: tripData[0]?.schedule
+            startLocation: tripData?.startLocation,
+            destination: tripData?.destination,
+            distance: tripData?.distance,
+            schedule: tripData?.schedule,
+            // startLat: tripData?.coordinatesPickup?.lat,
+            // startLng: tripData?.coordinatesPickup?.lng,
+            // destLat:tripData?.coordinatesDestination?.lat,
+            // destLng:tripData?.coordinatesDestination?.lng,
         }
+        
+        const { data } = await passengerBookingRequest(req)
 
-        // console.log(req, 'req');
-
-        const { data: res } = await passengerBookingRequest(req)
-
-        console.log(res, 'res sss');
-
+        console.log(data,'res')
     }
 
     return (
@@ -99,6 +99,7 @@ export default function SingleCarDetail({ setOpen, tripData, car }) {
                         </div>
                     ))}
                 </SwipeableViews>
+
                 <MobileStepper
                     className='mx-auto w-[20%] my-1'
                     steps={maxSteps}
@@ -135,7 +136,7 @@ export default function SingleCarDetail({ setOpen, tripData, car }) {
                         </Box>
                         <Box className='col-span-2 px-6 ' >
                             {tripData[0]?.distance &&
-                                <p className=' mb-2'><span className='text-[10px] '>Approx. rent :</span> <span className=' font-semibold py-10 text-sm'> ৳ {Math.ceil(parseFloat(tripData[0]?.distance?.substring(0,tripData[0]?.distance?.length-2))/10*400)}</span></p>
+                                <p className=' mb-2'><span className='text-[10px] '>Approx. rent :</span> <span className=' font-semibold py-10 text-sm'> ৳ {Math.ceil(parseFloat(tripData[0]?.distance?.substring(0, tripData[0]?.distance?.length - 2)) / 10 * 400)}</span></p>
                             }
 
                             <Button onClick={handleConfirm} className='h-8 w-[120px]  ' variant='contained'>Confirm</Button>
@@ -145,11 +146,11 @@ export default function SingleCarDetail({ setOpen, tripData, car }) {
 
                     <Box className=' my-2 mx-5'>
                         <p><span className='text-[10px] '>Trip detail :</span></p>
-                        <p><span className='text-[10px] '>Pick-up point :</span> <span className=' py-10 text-xs'>{tripData[0]?.startLocation ? tripData[0]?.startLocation : ''}</span></p>
-                        <p><span className='text-[10px] '>Destination :</span> <span className=' py-10 text-xs'> {tripData[0]?.destination ? tripData[0]?.destination : ''}</span></p>
-                        <p><span className='text-[10px] '>Approx. distance :</span> <span className=' py-10 text-xs'> {tripData[0]?.distance}</span></p>
-                        <p><span className='text-[10px] '>Approx. duration :</span> <span className=' py-10 text-xs'> {tripData[0]?.duration}</span></p>
-                        <p><span className='text-[10px] '>Schedule:</span> <span className=' py-10 text-xs'> {tripData[0]?.schedule}</span></p>
+                        <p><span className='text-[10px] '>Pick-up point :</span> <span className=' py-10 text-xs'>{tripData?.startLocation ? tripData?.startLocation : ''}</span></p>
+                        <p><span className='text-[10px] '>Destination :</span> <span className=' py-10 text-xs'> {tripData?.destination ? tripData?.destination : ''}</span></p>
+                        <p><span className='text-[10px] '>Approx. distance :</span> <span className=' py-10 text-xs'> {tripData?.distance}</span></p>
+                        <p><span className='text-[10px] '>Approx. duration :</span> <span className=' py-10 text-xs'> {tripData?.duration}</span></p>
+                        <p><span className='text-[10px] '>Schedule:</span> <span className=' py-10 text-xs'> {tripData?.schedule}</span></p>
                     </Box>
                 </Box>
             </Box>
