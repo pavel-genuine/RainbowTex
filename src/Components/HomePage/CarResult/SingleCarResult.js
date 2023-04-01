@@ -7,9 +7,11 @@ import { useState } from 'react';
 import { ArrowIcon } from '../../Profile/CarOwner/CarOwnerAddCar';
 import SingleCarDetail from './SingleCarDetail';
 
-export default function SingleCarResult({ car, tripData }) {
+export default function SingleCarResult({ coordinatesDestination,
+    coordinatesPickup, car, tripData,
+    distance, duration }) {
     const [openCar, setOpenCar] = useState(false)
-
+ 
     return (
         <Box>
 
@@ -50,7 +52,7 @@ export default function SingleCarResult({ car, tripData }) {
                     </Box>
                 </Box>
                 <Divider></Divider>
-                {tripData[0]?.distance && <p className=' mx-3 font-semibold py-4 text-sm '> ৳ {Math.ceil(parseFloat(tripData[0]?.distance?.substring(0,tripData[0]?.distance?.length-2))/10*car?.unitPrice)}</p>}
+                {tripData[0]?.distance && <p className=' mx-3 font-semibold py-4 text-sm '> ৳ {Math.ceil(parseFloat(tripData[0]?.distance?.substring(0, tripData[0]?.distance?.length - 2)) / 10 * car?.unitPrice)}</p>}
             </Box>
 
 
@@ -82,7 +84,14 @@ export default function SingleCarResult({ car, tripData }) {
 
                 </Box>
 
-                <SingleCarDetail tripData={tripData} car={car}></SingleCarDetail>
+                <SingleCarDetail coordinatesDestination={coordinatesDestination}
+                    coordinatesPickup={coordinatesPickup}
+                    tripData={tripData} car={car}
+                    
+                    distance={distance}
+                    duration={duration}
+
+                    ></SingleCarDetail>
 
             </Dialog>
         </Box>

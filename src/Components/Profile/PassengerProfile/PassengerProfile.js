@@ -41,7 +41,11 @@ const PassengerProfile = () => {
       <Box className='flex justify-between items-center px-6'>
         <p className=' text-primary text-bold py-2'>
           Name : {passenger?.name}
+          <p className=' py-2 text-black text-normal'>
+          Phone : {passenger?.contactNumber}
         </p>
+        </p>
+        
         <AccountCircleOutlinedIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} ffontSize="medium"></AccountCircleOutlinedIcon>
       </Box>
       <Divider ></Divider>
@@ -102,12 +106,12 @@ const PassengerProfile = () => {
 
                 <Divider></Divider>
 
-                <ListItemButton onClick={logoutHandler}>
+                {/* <ListItemButton onClick={logoutHandler}>
                   <ListItemIcon>
                     <LockIcon sx={{ scale: '1.3' }} />
                   </ListItemIcon >
                   <ListItemText primary="Log Out" />
-                </ListItemButton>
+                </ListItemButton> */}
               </List>
             </Box>
           </SwipeableDrawer>

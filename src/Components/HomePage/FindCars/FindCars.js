@@ -256,13 +256,14 @@ function loadScript(src, position, id) {
     position?.appendChild(script);
 }
 
+export const GOOGLE_MAPS_API_KEY = 'AIzaSyA7Hbtoc7jXPbTNZwdGRzkpt21M3l5YWwE';
 
 
 const FindCars = ({ open, setOpen }) => {
 
     const { register, formState: { errors }, handleSubmit } = useForm();
     const [time, setTime] = React.useState(new Date());
-    const [tripData, setTripData] = React.useState(new Date());
+    const [tripData, setTripData] = React.useState({});
     const [showdestination, setShowDestination] = React.useState(false);
     const [openSearch, setOpenSearch] = React.useState(false);
     const [openMap, setOpenMap] = React.useState(false);
@@ -282,7 +283,6 @@ const FindCars = ({ open, setOpen }) => {
     const [autoFocus, setAutoFocus] = useState(false)
     const loaded = React.useRef(false);
 
-    const GOOGLE_MAPS_API_KEY = 'AIzaSyA7Hbtoc7jXPbTNZwdGRzkpt21M3l5YWwE';
 
     if (typeof window !== 'undefined' && !loaded.current) {
         if (!document.querySelector('#google-maps')) {
@@ -359,7 +359,7 @@ const FindCars = ({ open, setOpen }) => {
 
         }
 
-        initializeGeoCodeOrigin()
+        // initializeGeoCodeOrigin()
 
         navigator.geolocation.getCurrentPosition(function () { }, function () { }, {});
 
@@ -368,7 +368,7 @@ const FindCars = ({ open, setOpen }) => {
 
     }, [valueOrigin, inputValueOrigin, fetch, gps]);
 
-    // console.log(mapData?.distance,'distance');
+
 
     navigator.geolocation.getCurrentPosition(
 
@@ -486,16 +486,17 @@ const FindCars = ({ open, setOpen }) => {
 
        
 
-        initializeGeoCodeDestination()
+        // initializeGeoCodeDestination()
 
+        
         return () => {
             active = false;
         };
     }, [valueDestination, inputValueDestination, fetch]);
 
-    const navigate = useNavigate()
 
-   
+
+    const navigate = useNavigate()
 
     useEffect(() => {
 
@@ -528,7 +529,7 @@ const FindCars = ({ open, setOpen }) => {
             setMapData({ distance, duration })
 
         }
-        calculateRoute()
+        // calculateRoute()
 
         //   console.log(distance,duration,'dddd');
 
@@ -541,8 +542,7 @@ const FindCars = ({ open, setOpen }) => {
                 schedule: time?.toString()?.slice(0, 21),
                 gps: gps,
                 setMapData: setMapData,
-                coordinatesPickup,
-                // coordinatesDestination
+         
                
             }
         )
@@ -868,7 +868,7 @@ const FindCars = ({ open, setOpen }) => {
 
                 <Box className={`${showdestination ? ' pt-[35%]' : 'pt-[35%]'} md:pt-[10%] pb-10`}>
 
-                    <AllCarResults tripData={tripData} ></AllCarResults>
+                    <AllCarResults setTripData={setTripData} tripData={tripData} ></AllCarResults>
 
                 </Box>
             </Dialog>

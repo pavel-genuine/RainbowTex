@@ -36,10 +36,10 @@ const HomePage = ({ open, setOpen, setTripData, setPickupPlace, setDestinationPl
         </div>
       </div> */}
 
-      {/* <div className=' bg-[#fcfcfc]  h-[1800px] flex justify-center items-center'>
+      <div className=' bg-[#fcfcfc]  h-[1800px] flex justify-center items-center'>
         <img className='w-[25%]' src="https://i.ibb.co/1XZmRXM/Screenshot-2023-03-08-144015.png" alt="" srcset="" />
 
-      </div> */}
+      </div>
     </div>
   )
 }

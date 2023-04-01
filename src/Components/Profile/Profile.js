@@ -5,6 +5,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { carOwnerProfile, driverProfile, passengerProfile, passengerProfileUpdate } from '../../api/api'
+import { CAR_OWNER, DRIVER, PASSENGER } from '../../constants/constants'
 import AuthMain from '../Authentication/AuthMain'
 import CarOwnerProfile from './CarOwner/CarOwnerProfile'
 import CarOwnerProfileCompletion from './CarOwner/CarOwnerProfileCompletion'
@@ -46,10 +47,10 @@ const Profile = ({ open, setOpen }) => {
   return (
     <Box>
       {
-        localStorage.getItem('role') == 'user' || localStorage.getItem('role') == 'carOwner' || localStorage.getItem('role') == 'driver' ?
+        localStorage.getItem('role') == PASSENGER || localStorage.getItem('role') == CAR_OWNER || localStorage.getItem('role') == DRIVER ?
           <Box>
             {
-              localStorage.getItem('role') == 'user' &&
+              localStorage.getItem('role') ==PASSENGER &&
               <Box>
                 {
                   passenger?.name ?
@@ -61,7 +62,7 @@ const Profile = ({ open, setOpen }) => {
               </Box>
             }
             {
-              localStorage.getItem('role') == 'carOwner' &&
+              localStorage.getItem('role') == CAR_OWNER &&
               <Box>
                 {
                   carOwner?.nidBack ?
@@ -72,7 +73,7 @@ const Profile = ({ open, setOpen }) => {
               </Box>
             }
             {
-              localStorage.getItem('role') == 'driver' &&
+              localStorage.getItem('role') ==DRIVER &&
               <Box>
                 {
                   driver?.drivingLicense ?

@@ -16,58 +16,76 @@ import { useParams } from 'react-router-dom';
 import GoRentalMap from '../../GoogleMap/GoRentalMap';
 import { useEffect } from 'react';
 
-const images = [
-    {
-        label: 'San Francisco – Oakland Bay Bridge, United States',
-        imgPath:
-            'https://www.motortrend.com/uploads/2022/05/2023-Toyota_Camry_XLE_Blueprint_014.jpg?fit=around%7C875:492.1875',
-    },
-    {
-        label: 'Bird',
-        imgPath:
-            'https://www.motortrend.com/uploads/2022/05/2023-Toyota_Camry_XLE_Blueprint_009.jpg?fit=around%7C1000:625',
-    },
-    {
-        label: 'Bali, Indonesia',
-        imgPath:
-            'https://www.motortrend.com/uploads/sites/10/2022/09/2023-toyota-camry-se-sedan-front-seat.png?fit=around%7C1000:625',
-    },
-    {
-        label: 'Goč, Serbia',
-        imgPath:
-            'https://www.motortrend.com/uploads/sites/10/2022/09/2023-toyota-camry-se-sedan-rear-seat.png?fit=around%7C1000:625',
-    },
-];
 
-export default function SingleCarDetail({ setOpen, tripData, car }) {
+export default function SingleCarDetail({ coordinatesDestination,
+    coordinatesPickup, setOpen, tripData, car, distance, duration }) {
 
     const theme = useTheme();
     const [activeStep, setActiveStep] = React.useState(0);
+    const [confirmed, setConfirmed] = React.useState(false);
+
+
+    const images = [
+        {
+            label: 'img1',
+            imgPath: car?.img1
+        },
+        {
+            label: 'img2',
+            imgPath: car?.img2
+        },
+        {
+            label: 'img3',
+            imgPath: car?.img3
+        },
+        {
+            label: 'img4',
+            imgPath: car?.img4
+        },
+    ];
+
     const maxSteps = images.length;
+
+
+
 
     const handleStepChange = (step) => {
         setActiveStep(step);
     };
 
 
+
+
     const handleConfirm = async () => {
+
+
+        
+
+        setTimeout(() => {
+            setConfirmed(true)
+        }, 1000);
+        setTimeout(() => {
+            setConfirmed(false) 
+        }, 3000);
+
         const req = {
-            carId: 11||car?.id,
-            carownerId: 1 ||car?.ownerId,
+            carId: car?.id,
+            carownerId: car?.ownerId,
             serviceId: car?.serviceId,
             startLocation: tripData?.startLocation,
             destination: tripData?.destination,
-            distance: tripData?.distance,
+            distance: distance,
             schedule: tripData?.schedule,
-            // startLat: tripData?.coordinatesPickup?.lat,
-            // startLng: tripData?.coordinatesPickup?.lng,
-            // destLat:tripData?.coordinatesDestination?.lat,
-            // destLng:tripData?.coordinatesDestination?.lng,
+            startLat: coordinatesPickup?.lat,
+            startLng: coordinatesPickup?.lng,
+            destLat: coordinatesDestination?.lat,
+            destLng: coordinatesDestination?.lng,
         }
-        
+
+
         const { data } = await passengerBookingRequest(req)
 
-        console.log(data,'res')
+        console.log(data, 'res')
     }
 
     return (
@@ -148,13 +166,21 @@ export default function SingleCarDetail({ setOpen, tripData, car }) {
                         <p><span className='text-[10px] '>Trip detail :</span></p>
                         <p><span className='text-[10px] '>Pick-up point :</span> <span className=' py-10 text-xs'>{tripData?.startLocation ? tripData?.startLocation : ''}</span></p>
                         <p><span className='text-[10px] '>Destination :</span> <span className=' py-10 text-xs'> {tripData?.destination ? tripData?.destination : ''}</span></p>
-                        <p><span className='text-[10px] '>Approx. distance :</span> <span className=' py-10 text-xs'> {tripData?.distance}</span></p>
-                        <p><span className='text-[10px] '>Approx. duration :</span> <span className=' py-10 text-xs'> {tripData?.duration}</span></p>
+                        <p><span className='text-[10px] '>Approx. distance :</span> <span className=' py-10 text-xs'> {distance} km</span> </p>
+                        <p><span className='text-[10px] '>Approx. duration :</span> <span className=' py-10 text-xs'> {duration}</span></p>
                         <p><span className='text-[10px] '>Schedule:</span> <span className=' py-10 text-xs'> {tripData?.schedule}</span></p>
+                        {/* <p><span className='text-[10px] '>Schedule:</span> <span className=' py-10 text-xs'> {coordinatesDestination?.lat}</span></p> */}
+                        {/* <p><span className='text-[10px] '>Schedule:</span> <span className=' py-10 text-xs'> {coordinatesPickup?.lat}</span></p> */}
+
                     </Box>
                 </Box>
             </Box>
-        </Box>
+
+            {
+                confirmed &&
+                <p className='text-[13px] bg-[grey] mx-5 text-white text-center mt-10 p-2 rounded'>Booking request sent, soon you'll get the response</p>
+
+            }        </Box>
     );
 }
 

@@ -25,9 +25,9 @@ import { getToken } from 'firebase/messaging';
 import { messaging, onMessageListener } from './firebase.init';
 import DriverInfoDoc from './Components/Profile/DriverProfile/DriverInfoDoc';
 import AdminCarCategories from './Components/Profile/Admin/AdminCarCategories';
-import {BOOKING_CANCELLED,BOOKING_FAILURE,BOOKING_REQUEST,BOOKING_SUCCESS} from './constants/constants'
+import {BOOKING_CANCELLED,BOOKING_FAILURE,BOOKING_REQUEST,BOOKING_SUCCESS, RIDE_ENDS, RIDE_STARTS} from './constants/constants'
 
-const socket = io.connect(base_url);
+const socket = io.connect('https://api.gotirentals.com');
 const queryClient = new QueryClient()
 
 const App = () => {
@@ -55,8 +55,9 @@ const App = () => {
     },
   });
 
-  const [pushNotification, setPushNotification] = useState({ title: '', body: '' });
+  const [newNotification, setNewNotification] = useState();
   const [notification, setNotification] = useState('Empty Notification');
+  const [notificationData, setNotificationData] = useState({});
 
 
   async function requestPermission() {
@@ -67,7 +68,8 @@ const App = () => {
         vapidKey:
           "BBcbCAWfEk24LjPE3kqpFkRdRq257QfHpzFXPmMXV0QaWpDppATQCpeqKLjomdO_HbpYjLgNdQEl_sfatkkz0sc",
       });
-      // console.log("FCM Token: ", token);
+      console.log("FCM Token: ", token);
+      localStorage.setItem('fcmToken',token)
       // Send this token  to server ( db)
     } else if (permission === "denied") {
       alert("You denied for the notification");
@@ -97,31 +99,52 @@ const App = () => {
     requestPermission()
     getLocalStorage()
 
-    socket.on(BOOKING_REQUEST, (msg) => {
-      console.log(msg)
+    socket.on(BOOKING_REQUEST, async (msg) => {
+      setNewNotification(true)
+      console.log(JSON.parse(msg), 'msg req json')
+
+      setNotificationData(JSON.parse(msg))
     })
 
     socket.on(BOOKING_CANCELLED, (msg) => {
-      console.log(msg)
+      setNewNotification(true)
+      console.log(JSON.parse(msg), 'msg cancel json')
+
     })
 
     socket.on(BOOKING_FAILURE, (msg) => {
-      console.log(msg, 'msg')
+      setNewNotification(true)
+      console.log(JSON.parse(msg), 'msg failur json')
+
+
     })
 
-    socket.on(BOOKING_SUCCESS, (msg) => {
-      console.log(msg, 'msg')
+    socket.on(BOOKING_SUCCESS, async (msg) => {
+      setNewNotification(true)
+      console.log(JSON.parse(msg), 'msg success json')
+
+      setNotificationData(JSON.parse(msg))
+
     })
 
+    socket.on(RIDE_STARTS, async (msg) => {
+      setNewNotification(true)
+      console.log(JSON.parse(msg), 'msg ride starts json')
 
 
+      setNotificationData(JSON.parse(msg))
+    })
+    socket.on(RIDE_ENDS, async (msg) => {
+      setNewNotification(true)
+      console.log(JSON.parse(msg), 'msg ride ends json')
 
-    socket.on("ownerId1", (data) => {
-      console.log("some data: ", data);
-      setNotification(data);
-    });
+
+      setNotificationData(JSON.parse(msg))
+    })
 
   },[userId,userType]);
+
+
 
 
   onMessageListener()
@@ -133,6 +156,8 @@ const App = () => {
   let location = useLocation();
   const carOwner = 1
   const profile = 1
+
+  console.log(notificationData,'nnnn');
 
 
   return (

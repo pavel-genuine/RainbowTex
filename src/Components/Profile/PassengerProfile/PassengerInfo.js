@@ -58,10 +58,10 @@ const PassengerInfo = ({passengerId}) => {
       </label>
     </div>
 
-    <Button type='submit' className='rounded-md px-4 text-sm py-2 text-white bg-primary' variant='contained' autoFocus
+    {/* <Button type='submit' className='rounded-md px-4 text-sm py-2 text-white bg-primary' variant='contained' autoFocus
     >
       Submit
-    </Button>
+    </Button> */}
   </form></div>
   )
 }

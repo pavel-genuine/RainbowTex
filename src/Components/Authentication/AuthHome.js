@@ -24,6 +24,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import auth from '../../firebase.init';
 import { otpLogin } from '../../api/api';
+import { CAR_OWNER, DRIVER, PASSENGER } from '../../constants/constants';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -199,6 +200,8 @@ export default function AuthHome({ setOpen }) {
         setOtpPartnerFinal(finalValue)
     };
 
+    const fcmToken=localStorage.getItem('fcmToken')
+
 
     const onSubmitPassenger = async (datas) => {
         const code = otpPasssengerFinal;
@@ -207,7 +210,10 @@ export default function AuthHome({ setOpen }) {
             const user = result?.user;
             const idToken = await user?.getIdToken()
 
-            const { data } = await otpLogin({ uid: user?.uid, contactNumber: phonePassenger, idToken: idToken, otpProvider: 'firebase', userType: 'user' })
+            console.log(idToken,'idtoken passnger');
+
+            const { data } = await otpLogin({ uid: user?.uid, contactNumber: phonePassenger,
+                 idToken: idToken, otpProvider: 'firebase', userType: PASSENGER,firebaseDeviceToken:fcmToken })
 
             localStorage.setItem('role', 'user')
             localStorage.setItem('userId', data?.userId)
@@ -248,15 +254,19 @@ export default function AuthHome({ setOpen }) {
 
             const idToken = await user?.getIdToken()
 
+            console.log(idToken,'idtoken partner');
+
             if (driverRole) {
-                const { data: res } = await otpLogin({ uid: user?.uid, contactNumber: phonePartner, idToken: idToken, otpProvider: 'firebase', userType: 'driver' })
+                const { data: res } = await otpLogin({ uid: user?.uid, contactNumber: phonePartner, 
+                    idToken: idToken, otpProvider: 'firebase', userType:DRIVER,firebaseDeviceToken:fcmToken })
 
                 localStorage.setItem('role', 'driver')
                 localStorage.setItem('userId', res?.userId)
 
             }
             else {
-                const { data: res } = await otpLogin({ uid: user?.uid, contactNumber: phonePartner, idToken: idToken, otpProvider: 'firebase', userType: 'carowner' })
+                const { data: res } = await otpLogin({ uid: user?.uid, contactNumber: phonePartner,
+                     idToken: idToken, otpProvider: 'firebase', userType:CAR_OWNER,firebaseDeviceToken:fcmToken })
 
                 localStorage.setItem('role', 'carowner')
                 localStorage.setItem('userId', res?.userId)
@@ -388,7 +398,7 @@ export default function AuthHome({ setOpen }) {
                                                 <div className='mt-10 flex justify-between'>
                                                     <Button size='small' onClick={() => setLoginPassenger(() => !loginPassenger)} variant="text"><span className='font-normal items-center flex '> <ArrowBackIcon style={{ height: '17px' }}></ArrowBackIcon>
                                                         <span className='ml-1'>Back</span></span></Button>
-                                                    <Button type='submit' size='small' variant="contained">Log In</Button>
+                                                    <Button onClick={onSubmitPassenger} type='submit' size='small' variant="contained">Log In</Button>
                                                 </div>
                                                 :
                                                 <div className='mt-10 flex flex-row-reverse'>

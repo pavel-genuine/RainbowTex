@@ -21,7 +21,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(async config => {
     const { data } = await getRefreshToken()
     const newAccessToken = data?.accessToken
-    console.log(newAccessToken,'token req')
+    console.log(newAccessToken,'refresh token req')
 
     config.headers.Authorization = `Bearer ${newAccessToken}`;
     return config;
@@ -38,7 +38,7 @@ axiosInstance.interceptors.response.use(
             originalConfig.sent = true;
             const { data } = await getRefreshToken()
             const newAccessToken = data?.accessToken
-            console.log(newAccessToken,'token res')
+            console.log(newAccessToken,'refresh token res')
             originalConfig.headers.Authorization = `Bearer ${newAccessToken}`;
             return axiosInstance(originalConfig)
         }
