@@ -182,7 +182,7 @@ export default function Navbar({ open, setOpen }) {
                                 <span className='text-primary md:text-white text-2xl md:text-3xl  '>
                                 Goti</span> <br />
 
-                                <span className='font-Allura text-[orange] absolute top-[20px] md:top-[25px] left-[0px] text-xl  md:text-2xl'>
+                                <span className='font-Allura text-[white] absolute top-[20px] md:top-[25px] left-[0px] text-xl  md:text-2xl'>
                                     Rentals
                                 </span>
                             </p>
