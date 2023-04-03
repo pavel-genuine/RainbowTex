@@ -624,15 +624,15 @@ const FindCars = ({ open, setOpen }) => {
 
                             {
 
-                                <span onClick={() => setOpenMap(true)} className=' z-20 cursor-pointer bg-[#e1dfe0] rounded-full flex flex-col justify-center items-center py-1 px-2'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-primary ">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                                    </svg>
-                                    <span className='text-[11px] text-primary'>
-                                        GPS
-                                    </span>
-                                </span>
+                                // <span onClick={() => setOpenMap(true)} className=' z-20 cursor-pointer bg-[#e1dfe0] rounded-full flex flex-col justify-center items-center py-1 px-2'>
+                                //     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-primary ">
+                                //         <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                //         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                //     </svg>
+                                //     <span className='text-[11px] text-primary'>
+                                //         GPS
+                                //     </span>
+                                // </span>
                             }
                         </div>
                         <form className="flex  justify-center items-center flex-col relative pt-14 md:pt-8" onSubmit={handleSubmit(onSubmit)}>

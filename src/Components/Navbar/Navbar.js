@@ -140,7 +140,7 @@ export default function Navbar({ open, setOpen }) {
         <Box className='z-40 w-[100%] fixed bg-white  md:bg-primary md:bg-gradient-to-r md:from-[#480626] md:to-[#7c2a52] backdrop-filter-none backdrop-blur-sm shadow md:h-[70px] h-[60px]    md:w-[100%]'>
             <Box className={`flex items-center justify-between md:h-[80px] h-[60px] w-[90%] mx-auto `}>
                 <CssBaseline />
-                <div className='flex items-center'>
+                <div className='flex items-center justify-between'>
                     {['bottom'].map((anchor) => (
                         <React.Fragment key={anchor}>
                             {/* <Link to={ `/side-nav`}> */}
@@ -176,17 +176,22 @@ export default function Navbar({ open, setOpen }) {
                         </React.Fragment>
                     ))}
                     <Link to={`/`}>
-
-                        <Button >
+                        
+                  <div className='hidden md:block'>
+                  <Button  >
                             <p className='relative mb-[10px] md:mb-[20px]'>
                                 <span className='text-primary md:text-white text-2xl md:text-3xl  '>
                                 Goti</span> <br />
 
-                                <span className='font-Allura text-[white] absolute top-[20px] md:top-[25px] left-[0px] text-xl  md:text-2xl'>
+                                <span className=' md:text-[white]   absolute top-[20px] md:top-[25px] left-[0px] text-xl  md:text-2xl'>
                                     Rentals
                                 </span>
                             </p>
                         </Button>
+                  </div>
+
+                        <img className='w-[55px] mx-3 md:hidden' src="https://i.ibb.co/1XZmRXM/Screenshot-2023-03-08-144015.png" alt="" srcset="" />
+
 
                     </Link>
                 </div>
