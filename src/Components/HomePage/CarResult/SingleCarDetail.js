@@ -15,6 +15,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import GoRentalMap from '../../GoogleMap/GoRentalMap';
 import { useEffect } from 'react';
+import CarSlider from './CarSlider';
 
 
 export default function SingleCarDetail({ coordinatesDestination,
@@ -59,13 +60,13 @@ export default function SingleCarDetail({ coordinatesDestination,
     const handleConfirm = async () => {
 
 
-        
+
 
         setTimeout(() => {
             setConfirmed(true)
         }, 1000);
         setTimeout(() => {
-            setConfirmed(false) 
+            setConfirmed(false)
         }, 3000);
 
         const req = {
@@ -90,41 +91,8 @@ export default function SingleCarDetail({ coordinatesDestination,
 
     return (
         <Box className='mx-auto w-[100vw] md:max-w-[360px]'>
+            <CarSlider car={car}></CarSlider>
 
-            <Box>
-                <SwipeableViews
-                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                    index={activeStep}
-                    onChangeIndex={handleStepChange}
-                    enableMouseEvents
-                >
-                    {images.map((step, index) => (
-                        <div key={step.label}>
-                            {Math.abs(activeStep - index) <= 2 ? (
-                                <Box
-                                    component="img"
-                                    sx={{
-                                        height: 255,
-                                        display: 'block',
-                                        maxWidth: 400,
-                                        overflow: 'hidden',
-                                        width: '100%',
-                                    }}
-                                    src={step.imgPath}
-                                    alt={step.label}
-                                />
-                            ) : null}
-                        </div>
-                    ))}
-                </SwipeableViews>
-
-                <MobileStepper
-                    className='mx-auto w-[20%] my-1'
-                    steps={maxSteps}
-                    position="static"
-                    activeStep={activeStep}
-                />
-            </Box>
             <Box>
                 <Box>
                     <Box className='grid grid-cols-4 '>
@@ -153,8 +121,8 @@ export default function SingleCarDetail({ coordinatesDestination,
                             </p>
                         </Box>
                         <Box className='col-span-2 px-6 ' >
-                            {tripData[0]?.distance &&
-                                <p className=' mb-2'><span className='text-[10px] '>Approx. rent :</span> <span className=' font-semibold py-10 text-sm'> ৳ {Math.ceil(parseFloat(tripData[0]?.distance?.substring(0, tripData[0]?.distance?.length - 2)) / 10 * 400)}</span></p>
+                            {
+                                <p className=' mb-2'><span className='text-[10px] '>Approx. rent :</span> <span className=' font-semibold py-10 text-sm'> ৳ {Math.ceil(parseFloat(distance) / 10 * car?.unitPrice)}</span></p>
                             }
 
                             <Button onClick={handleConfirm} className='h-8 w-[120px]  ' variant='contained'>Confirm</Button>
