@@ -6,7 +6,7 @@ import img from '../../assets/doc.jpg'
 const HomePage = ({ open, setOpen, setTripData, setPickupPlace, setDestinationPlace }) => {
 
   return (
-    <div className='pb-40 space-y-4'>
+    <div className=''>
       <FindCars setTripData={setTripData} open={open} setOpen={setOpen} setPickupPlace={setPickupPlace} setDestinationPlace={setDestinationPlace}></FindCars>
       {/* <HomeSliders></HomeSliders>  */}
       {/* <SingleSliders></SingleSliders>        */}
@@ -36,10 +36,10 @@ const HomePage = ({ open, setOpen, setTripData, setPickupPlace, setDestinationPl
         </div>
       </div> */}
 
-      <div className=' bg-[#fcfcfc]  h-[1800px] flex justify-center items-center'>
+      {/* <div className=' bg-[#fcfcfc]  h-[1800px] flex justify-center items-center'>
         <img className='w-[25%]' src="https://i.ibb.co/1XZmRXM/Screenshot-2023-03-08-144015.png" alt="" srcset="" />
 
-      </div>
+      </div> */}
     </div>
   )
 }
