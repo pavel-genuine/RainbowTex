@@ -84,7 +84,7 @@ export const pickUpPoint = (optionsOrigin, valueOrigin, setOptionsOrigin, setVal
                 <TextField {...params}
                     style={{ border: 'solid 1px', borderColor: '#e1e1e1' }}
                     className='rounded-md outline-none '
-                    autoFocus
+                    // autoFocus
                     sx={{ border: 'none', "& fieldset": { border: 'none' }, }}
                     placeholder="Pick-up Point" fullWidth />
             )}
@@ -126,7 +126,7 @@ export const pickUpPoint = (optionsOrigin, valueOrigin, setOptionsOrigin, setVal
                 );
             }}
         />
-          
+
     </div>
 
 export const destinationPoint = (optionsDestination, valueDestination, setOptionsDestination, setValueDestination, setInputValueDestination, setOpenMap, openMap) =>
@@ -157,7 +157,7 @@ export const destinationPoint = (optionsDestination, valueDestination, setOption
                 <TextField {...params}
                     style={{ border: 'solid 1px', borderColor: '#e1e1e1' }}
                     className='rounded-md outline-none '
-                    autoFocus
+                    // autoFocus
                     sx={{ border: 'none', "& fieldset": { border: 'none' }, }}
                     placeholder="Destination" fullWidth
                 />
@@ -347,9 +347,9 @@ const FindCars = ({ open, setOpen }) => {
                     address: valueOrigin?.description
                 }, (results, status) => {
                     if (status == window.google.maps.GeocoderStatus.OK) {
-               
-                        const lat =results[0].geometry.location.lat()
-                        const lng =results[0].geometry.location.lng()
+
+                        const lat = results[0].geometry.location.lat()
+                        const lng = results[0].geometry.location.lng()
 
                         // setCoordinatesPickup({lat,lng})
                     }
@@ -377,8 +377,8 @@ const FindCars = ({ open, setOpen }) => {
             // console.log("Latitude is :", position.coords.latitude);
             // console.log("Longitude is :", position.coords.longitude);
 
-            const lat =position.coords.latitude
-            const lng =position.coords.longitude
+            const lat = position.coords.latitude
+            const lng = position.coords.longitude
 
             // setCoordinatesPickup({lat,lng})
 
@@ -473,8 +473,8 @@ const FindCars = ({ open, setOpen }) => {
                     address: valueDestination?.description
                 }, (results, status) => {
                     if (status == window.google.maps.GeocoderStatus.OK) {
-                        const lat =results[0].geometry.location.lat()
-                        const lng =results[0].geometry.location.lng()
+                        const lat = results[0].geometry.location.lat()
+                        const lng = results[0].geometry.location.lng()
 
                         // setCoordinatesDestination({lat,lng})
                     }
@@ -484,11 +484,11 @@ const FindCars = ({ open, setOpen }) => {
 
         }
 
-       
+
 
         // initializeGeoCodeDestination()
 
-        
+
         return () => {
             active = false;
         };
@@ -513,7 +513,7 @@ const FindCars = ({ open, setOpen }) => {
             // if ((props?.gps===''&& props?.origin === '') || props?.destination === '') {
             //   return
             // }
-            
+
             // eslint-disable-next-line no-undef
             const directionsService = new google.maps.DirectionsService()
             const results = await directionsService.route({
@@ -542,11 +542,11 @@ const FindCars = ({ open, setOpen }) => {
                 schedule: time?.toString()?.slice(0, 21),
                 gps: gps,
                 setMapData: setMapData,
-         
-               
+
+
             }
         )
-    }, [valueOrigin,valueDestination,mapData,time,gps,navigate,distance,duration])
+    }, [valueOrigin, valueDestination, mapData, time, gps, navigate, distance, duration])
 
 
 
@@ -605,11 +605,18 @@ const FindCars = ({ open, setOpen }) => {
 
     return (
         <div style={{ backgroundImage: `url(${'https://new-media.dhakatribune.com/en/uploads/2021/10/26/zakir-hossain.jpeg'})`, backgroundSize: 'cover' }}
-            className='h-[65vh] md:h-[100vh]'>
-            <div className=' md:pt-28 md:pl-40 bg-black bg-opacity-50 h-[65vh] md:h-[100vh] w-[100%]'>
-                <div className='bg-white md:bg-transparent p-2 pt-16 md:pt-0 h-[65vh]'>
-                    <Box className='md:bg-white relative md:bg-gradient-to-r md:from-white md:to-white  backdrop-filter-none backdrop-blur-sm shadow rounded-xl md:w-[500px] md:pt-0 md:h-[450px] pb-5 md:pb-0 mb-5'>
-                        <div className='flex items-center absolute top-0 right-0 space-x-6 m-4 md:m-0 md:mt-10 md:mr-20'>
+            className='h-auto md:h-[100vh]'>
+            <div className=' md:pt-28 md:pl-40 bg-black bg-opacity-50  md:h-[100vh] w-[100%]'>
+                <div className='bg-white md:bg-transparent  pt-14 md:pt-0 '>
+                    <div className='md:hidden'>
+                        <GoRentalMap small={true} setMapData={setMapData} gps={gps} origin={valueOrigin?.description} destination={valueDestination?.description}>
+
+                        </GoRentalMap>
+                    </div>
+
+                    <Box className=' md:bg-white relative md:bg-gradient-to-r md:from-white md:to-white  backdrop-filter-none backdrop-blur-sm shadow rounded-xl md:w-[500px] md:pt-0 md:h-[450px] pb-5 md:pb-0 mb-5'>
+
+                        <div className='hidden md:block flex items-center absolute top-0 right-0 space-x-6 m-4 md:m-0 md:mt-10 md:mr-20'>
                             {
                                 <span onClick={() => setOpenMap(true)} className=' z-20 cursor-pointer bg-[#e1dfe0] rounded-full flex flex-col justify-center items-center py-1 px-2'>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-primary ">
@@ -619,6 +626,7 @@ const FindCars = ({ open, setOpen }) => {
                                         map
                                     </span>
                                 </span>
+
 
                             }
 
@@ -635,8 +643,8 @@ const FindCars = ({ open, setOpen }) => {
                                 // </span>
                             }
                         </div>
-                        <form className="flex  justify-center items-center flex-col relative pt-14 md:pt-8" onSubmit={handleSubmit(onSubmit)}>
-                            <div className='flex md:mt-16 mt-5  justify-center items-center flex-col space-y-8 w-[100%] '>
+                        <form className="flex  justify-center items-center flex-col relative pt-8 md:pt-8" onSubmit={handleSubmit(onSubmit)}>
+                            <div className='flex md:mt-16  justify-center items-center flex-col md:space-y-8 space-y-4  w-[100%] '>
 
                                 {pickUpPoint(optionsOrigin, valueOrigin, setOptionsOrigin, setValueOrigin, setInputValueOrigin, setOpenMap, openMap)}
 
@@ -768,7 +776,12 @@ const FindCars = ({ open, setOpen }) => {
 
                         </form>
 
+
+
+
                     </Box>
+
+
                 </div>
             </div>
 

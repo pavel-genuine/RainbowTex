@@ -390,7 +390,7 @@ const {origin,gps,destination,setMapData}=props
         minZoom={5}
         zoom={15}
 
-        mapContainerStyle={{ width: '100vw', height: '90vh' }}
+        mapContainerStyle={{ width: '100vw', height: props?.small ?'400px': '90vh' }}
 
         onLoad={map => setMap(map)}
       >

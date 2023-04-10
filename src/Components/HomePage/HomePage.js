@@ -1,13 +1,21 @@
 import React from 'react'
 import { useState } from 'react'
 import FindCars from './FindCars/FindCars'
-import img from '../../assets/doc.jpg'
+import { motion } from "framer-motion"
+
 
 const HomePage = ({ open, setOpen, setTripData, setPickupPlace, setDestinationPlace }) => {
 
   return (
     <div className=''>
+      <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, delay: 0.3 }}
+            >
       <FindCars setTripData={setTripData} open={open} setOpen={setOpen} setPickupPlace={setPickupPlace} setDestinationPlace={setDestinationPlace}></FindCars>
+      </motion.div>
+      
       {/* <HomeSliders></HomeSliders>  */}
       {/* <SingleSliders></SingleSliders>        */}
       {/* <PassengerProfile></PassengerProfile> */}

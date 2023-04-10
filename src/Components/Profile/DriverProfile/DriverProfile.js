@@ -37,7 +37,6 @@ const DriverProfile = () => {
     localStorage.clear()
     setTimeout(navigate('/auth'),500)
   }
-console.log(driver,'dr');
   return (
     <Box className='md:pt-20 pt-16 mx-auto w-[100vw] md:w-[360px]' sx={{ bgcolor: 'background.paper' }}>
       <Box className='flex justify-between items-center px-6'>

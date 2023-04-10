@@ -157,7 +157,6 @@ const App = () => {
   const carOwner = 1
   const profile = 1
 
-  console.log(notificationData,'nnnn');
 
 
   return (
