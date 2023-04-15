@@ -6,8 +6,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        Allura: ["Allura", "cursive"],
-        Mynerve: ["'Mynerve'", "cursive"],
+        // Allura: ["Allura", "cursive"],
+        // Mynerve: ["'Mynerve'", "cursive"],
        },
     },
     colors: {
@@ -18,7 +18,10 @@ module.exports = {
       // 'primary': '#020267',//navy
       // 'primary': '#5c0931', //qatar
       // 'primary': '#8d0434', //qatar-light
-      'primary': '#8e2158', //qatar-light2,
+      'primary': '#5b6d1a', //
+      'textPrimary':'#80a10a',
+      'nav': 'red', //
+      'navBg': '#030314', //
       transparent: 'transparent',
       black: '#000',
       white: '#fff',
