@@ -47,7 +47,7 @@ export default function Commitments() {
     };
 
     return (
-        <Box sx={{ marginTop: 5, position: 'relative' }}>
+        <Box sx={{ marginTop: 10, position: 'relative' }}>
 
 
             {

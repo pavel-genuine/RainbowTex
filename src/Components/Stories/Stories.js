@@ -11,7 +11,7 @@ const Stories = () => {
 
 
     return (
-        <div className='pt-20 bg-navBg'>
+        <div className='pt-20 bg-navBg pb-10'>
             <VerticalTimeline>
                 <VerticalTimelineElement
                     className="vertical-timeline-element--work"

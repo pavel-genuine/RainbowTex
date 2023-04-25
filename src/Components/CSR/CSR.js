@@ -13,30 +13,35 @@ const CSR = () => {
 
     return (
         <div>
-            <motion.div
+  <motion.div
                 viewport={{ once: true }}
                 initial={{ y: 300, opacity: .5 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 transition={{ duration: 1, delay: .2, }}
             >
                 <motion.div
-                    className=' text-[black] absolute top-[3vh] lg:top-60 px-2  lg:left-[25vw] font-bold'
+                    className=' text-[white] absolute  font-bold'
                     viewport={{ once: true }}
                     initial={{ y: 300, opacity: .5 }}
                     whileInView={{ y: 0, opacity: 1 }}
                     transition={{ duration: 1, delay: 0, }}
                 >
-                    <h1 className='lg:text-5xl text-3xl  mt-40 mb-5 text-center'>
+                  <div className='flex justify-center items-center h-[100vh] w-[99.5vw] bg-[black] bg-opacity-40'>
+                  <div>
+                  <h1 className='lg:text-5xl text-3xl   text-center mb-4'>
                         Corporate Social Responsibility
 
                     </h1>
-                    <p className='text-xl lg:text-2xl text-center'>
+                    <p className='text-xl lg:text-2xl text-center px-7'>
                         A socially responsible organisation with the aim to serve the communities we work in.                    </p>
 
+                    </div>
+                  </div>
+
                 </motion.div>
-                <img className='w-[100vw] h-[70vh] lg:h-[100vh]'
-                    src="https://i.ibb.co/S6yvBy7/Screenshot-2023-04-15-001158.png" alt="" />
+            <img className='w-[100vw] h-[100vh] ' src="https://i.ibb.co/S6yvBy7/Screenshot-2023-04-15-001158.png" alt="" />
             </motion.div>
+
             <Passion csr={true}></Passion>
 
         </div>

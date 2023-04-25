@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom'
 
 const Footer = () => {
     return (
-        <div className='py-10 bg-navBg text-[white] px-4 '>
+        <div className='py-10 bg-navBg text-[white] px-4 border-t'>
             <div className='lg:w-[82%] w-[90%] mx-auto lg:flex justify-around  '>
-                <div className='lg:border-r lg:pr-[16%] '>
+                <div className='lg:border-r lg:pr-[18.5%] '>
                     <motion.div
                         initial={{ y: 40 }}
                         whileInView={{ y: 0 }}
@@ -60,9 +60,11 @@ const Footer = () => {
 
                             Dhaka-1230, Bangladesh,
                             <br />
-                            <a href="tel:+880 1711813933" className='text-[white] font-bold cursor-pointer bg-[grey] px-2 rounded-lg'>  Call Now</a> : +880 1711813933 
                             <br />
-                            <a href="mailto:info@rainbowtexbd.com" className='text-[white]  font-bold cursor-pointer bg-[grey] px-2 rounded-lg'> Mail Us</a> : info@rainbowtexbd.com 
+                            <a  className='underline' href="tel:+880 1711813933"> <span className='text-[white] font-bold cursor-pointer bg-[grey] px-2 rounded-lg '>  Call Now </span> : +880 1711813933 </a>
+                            <br />
+                            <br />
+                            <a className='underline' href="mailto:info@rainbowtexbd.com"> <span className='text-[white]  font-bold cursor-pointer bg-[grey] px-2 rounded-lg '> Mail Us</span> : info@rainbowtexbd.com </a>
                         </ul>
                     </motion.div>
                 </div>

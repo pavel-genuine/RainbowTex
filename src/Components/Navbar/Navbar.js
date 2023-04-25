@@ -14,8 +14,8 @@ export const menuItems =
     <CustomLink class=" md:p-3 md:m-5 hover:text-textPrimary" to='/csr'>CSR</CustomLink>
     <CustomLink class=" md:p-3 md:m-5 hover:text-textPrimary" to='/career'>CAREER</CustomLink>
 
-    <CustomLink class="md:p-3 md:m-5 hover:text-textPrimary" to='/about'> ABOUT US</CustomLink>
-    <CustomLink class="md:p-3 md:m-5 hover:text-textPrimary" to='/contact'>CONTACT US</CustomLink>
+    <CustomLink class="md:p-3 md:m-5 hover:text-textPrimary" to='/about'> ABOUT </CustomLink>
+    <CustomLink class="md:p-3 md:m-5 hover:text-textPrimary" to='/contact'>CONTACT </CustomLink>
 </>
 
 const Navbar = () => {

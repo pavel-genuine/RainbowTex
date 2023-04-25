@@ -12,8 +12,6 @@ const FeaturedBrands = () => {
             transition={{ duration: .7, delay: 0 }}
         >
             <div className="lg:w-[82.5vw] h-[50vh]  mx-auto text-navBg">
-                <div className=" hidden lg:block"></div>
-
 
                 <div class="max-w-[100vw] mx-auto px-2 mt-[5vh] lg:mt-10">
                     <div class="">

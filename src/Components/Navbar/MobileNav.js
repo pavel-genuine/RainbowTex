@@ -52,12 +52,12 @@ export function Menu ({ toggle }) {
                 </li>
 
                 <li onClick={toggle}>
-                    <CustomLink class="md:p-3 md:m-5 hover:text-nav" to='/about'>About Us</CustomLink>
+                    <CustomLink class="md:p-3 md:m-5 hover:text-nav" to='/about'>About </CustomLink>
 
                 </li>
                 
                 <li onClick={toggle}>
-                    <CustomLink class="md:p-3 md:m-5 hover:text-nav" to='/contact'>Contact Us</CustomLink>
+                    <CustomLink class="md:p-3 md:m-5 hover:text-nav" to='/contact'>Contact </CustomLink>
 
                 </li>
             </ul>

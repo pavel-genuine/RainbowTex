@@ -173,7 +173,7 @@ const SinglePost = ({ post }) => {
           </p>
         </motion.div>
       </div>
-      <img className='h-[94.5vh] lg:h-[100vh] w-[100%]' src={post?.url} alt="" />
+      <img className='h-[94.5vh] lg:h-[100vh] w-[100%] object-cover' src={post?.url} alt="" />
     </div>
   )
 }
