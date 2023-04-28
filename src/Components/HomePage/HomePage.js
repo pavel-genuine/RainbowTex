@@ -179,24 +179,22 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    setIsOpen(true)
-
 
     setTimeout(() => {
-      setIsOpen(false)
+      setIsOpen(true)
     }, 1000)
 
   }, [])
 
   return (
     <div className=' '>
-      <div className='w-[100%] mx-auto h-[100vh]  '>
+      <div className='w-[100%] mx-auto lg:h-[100vh] h-[93vh]  '>
 
         {
           <div className='relative'>
             <div className='flex justify-center items-center'>
               {
-                isOpen ?
+                !isOpen ?
                   <div className=' h-[100vh] w-[99] flex justify-center items-center'>
                     <div className='scale-[.8] lg:scale-[1.5] '>
 
@@ -217,7 +215,7 @@ const HomePage = () => {
 
             <div className='cursor-pointer' onClick={()=>handleScroll()}>
               <motion.div
-                className=' text-[white] absolute  font-bold z-10 bottom-[50px] left-[45.5%]  '
+                className=' text-[white] absolute  font-bold z-10 top-[85%] lg:left-[45.5%] left-[40%]  '
                 initial={{ y: 40, opacity: .5 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 transition={{ duration: .2, delay: 0, }}
