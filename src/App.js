@@ -30,8 +30,6 @@ const App = () => {
     },
     palette: {
       primary: {
-        // main: "#5c0931",//qtr
-        // main: "#8d0434",//lgt
         main: "#80a10a",//lgt2
         light: "#5b6d1a",
         dark: "#5b6d1a",
@@ -61,7 +59,7 @@ const [isHome,setIsHome]=useState(false)
               <Route path={`/career`} element={<Career setIsHome={setIsHome}></Career>}></Route>
               <Route path={`/stories`} element={<Stories setIsHome={setIsHome}></Stories>}></Route>
             </Routes>
-            {/* <Footer></Footer> */}
+            <Footer></Footer>
             <WhatsApp></WhatsApp>
           </ThemeProvider>
 
