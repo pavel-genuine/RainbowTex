@@ -6,8 +6,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        // Allura: ["Allura", "cursive"],
+        Allura: ["Allura", "cursive"],
         // Mynerve: ["'Mynerve'", "cursive"],
+        Calibre:["Calibre","cursive"]
        },
     },
     colors: {

@@ -4,9 +4,10 @@ import { motion } from "framer-motion"
 import { Button } from '@mui/material'
 import MissionVision from '../MissionVision/MissionVision'
 
-const About = () => {
+const About =  ({setIsHome}) => {
 
     useEffect(() => {
+        setIsHome(false)
         window.scrollTo(0, 0)
     }, [])
 

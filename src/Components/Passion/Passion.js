@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 
 const Passion = ({ career, csr }) => {
     return (
-        <div>
+        <div >
             <div className='w-[100vw] lg:hidden  h-[5vh]  bg-textPrimary'>
 
             </div>
@@ -17,7 +17,7 @@ const Passion = ({ career, csr }) => {
                     transition={{ duration: .7, delay: 0 }}
                 >
                     <div className='bg-textPrimary opacity-80 text-[white] w-[80%] mx-auto mt-[-40px] lg:mt-0 lg:w-[50vw]  lg:h-[70vh] p-4 lg:p-10 text-center '>
-                        <h1 className='lg:text-5xl text-2xl font-bold mb-5 mt-5 lg:mt-20'>
+                        <h1 className='smoke lg:text-5xl text-2xl font-bold mb-5 mt-5 lg:mt-20'>
                             Consistant  production that is driven by passion and brilliantly crafted for the future
                         </h1>
                         <div className='w-[100px] h-[3px] bg-[white] mb-10 lg:mb-16 mx-auto'>

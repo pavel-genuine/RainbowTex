@@ -44,12 +44,12 @@ const Global = () => {
                     <div className='lg:my-8 my-[5vh] h-[12.5vh] lg:h-auto'>
                         <div className='flex text-textPrimary justify-center items-center space-x-16 lg:mb-4 lg:text-5xl text-3xl  font-semibold'>
                             <div className='flex'>
-                                <motion.h1 className='lg:text-5xl text-3xl   font-semibold'>{rounded}</motion.h1>{'.'}
-                                <motion.h1 className='lg:text-5xl text-3xl  font-semibold'>{rounded4}</motion.h1>{'%'}
+                                <motion.h2 className='lg:text-5xl text-3xl   font-semibold'>{rounded}</motion.h2>{'.'}
+                                <motion.h2 className='lg:text-5xl text-3xl  font-semibold'>{rounded4}</motion.h2>{'%'}
                             </div>
                             <div className='flex'>
-                                <motion.h1 className='lg:text-5xl text-3xl  font-semibold'>{rounded2}</motion.h1>{'  X'}
-                                <motion.h1 className='lg:text-5xl text-3xl  font-semibold'>{rounded3}</motion.h1>
+                                <motion.h2 className='lg:text-5xl text-3xl  font-semibold'>{rounded2}</motion.h2>{'  X'}
+                                <motion.h2 className='lg:text-5xl text-3xl  font-semibold'>{rounded3}</motion.h2>
                             </div>
                         </div>
                         <div className='flex justify-center items-center space-x-10 lg:space-x-12'>

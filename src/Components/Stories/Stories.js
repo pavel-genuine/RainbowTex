@@ -3,9 +3,10 @@ import 'react-vertical-timeline-component/style.min.css';
 import React, { useEffect } from 'react'
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 
-const Stories = () => {
+const Stories =  ({setIsHome}) => {
 
     useEffect(() => {
+        setIsHome(false)
         window.scrollTo(0, 0)
     }, [])
 

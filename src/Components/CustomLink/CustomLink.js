@@ -25,7 +25,7 @@ function CustomLink({ children, to, ...props }) {
     return (
       <div>
         <Link className='customLink'
-          style= {{ textDecoration: "none", borderBottom:match? bg?"2px solid #80a10a":"2px solid #80a10a":'', color:match? !bg?'#80a10a': "#80a10a":"white",
+          style= {{ textDecoration: "none", borderBottom:match? bg?"2px solid #80a10a":"2px solid #80a10a":'', color:match? !bg?'#80a10a': "#80a10a":"black",
            fontWeight:'bold' ,}}
           to={to}
           {...props}

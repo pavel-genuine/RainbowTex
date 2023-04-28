@@ -5,9 +5,10 @@ import { Button } from '@mui/material'
 import MissionVision from '../MissionVision/MissionVision'
 import Passion from '../Passion/Passion'
 
-const CSR = () => {
+const CSR =  ({setIsHome}) => {
 
     useEffect(() => {
+        setIsHome(false)
         window.scrollTo(0, 0)
     }, [])
 

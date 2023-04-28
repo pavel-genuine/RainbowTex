@@ -40,21 +40,7 @@ const App = () => {
     },
   });
 
-  const [loading, setLoading] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
-
-  useEffect(() => {
-    setLoading(true)
-    setIsOpen(true)
-
-    setTimeout(() => {
-      setLoading(false)
-    }, 2000)
-    setTimeout(() => {
-      setIsOpen(false)
-    }, 2500)
-
-  }, [])
+const [isHome,setIsHome]=useState(false)
 
 
 
@@ -64,28 +50,18 @@ const App = () => {
 
     <div>
       {
-        isOpen ?
-          <div
-            style={{
-              opacity: !loading ? "0" : "1",
-              transition: "all .7s",
-              visibility: !loading ? "hidden" : "visible",
-            }}
-            className=' bg-[white] h-[100vh] flex justify-center items-center mx-auto'>
-            <Landing></Landing>
-          </div>
-          :
+     
           <ThemeProvider theme={theme}>
-            <Navbar></Navbar>
+            <Navbar isHome={isHome}></Navbar>
             <Routes >
-              <Route path={`/`} element={!isOpen &&<Home></Home>}></Route>
-              <Route path={`/contact`} element={<Contact></Contact>}></Route>
-              <Route path={`/about`} element={<About></About>}></Route>
-              <Route path={`/csr`} element={<CSR></CSR>}></Route>
-              <Route path={`/career`} element={<Career></Career>}></Route>
-              <Route path={`/stories`} element={<Stories></Stories>}></Route>
+              <Route path={`/`} element={<Home setIsHome={setIsHome}></Home>}></Route>
+              <Route path={`/contact`} element={<Contact setIsHome={setIsHome}></Contact>}></Route>
+              <Route path={`/about`} element={<About setIsHome={setIsHome}></About>}></Route>
+              <Route path={`/csr`} element={<CSR setIsHome={setIsHome}></CSR>}></Route>
+              <Route path={`/career`} element={<Career setIsHome={setIsHome}></Career>}></Route>
+              <Route path={`/stories`} element={<Stories setIsHome={setIsHome}></Stories>}></Route>
             </Routes>
-            <Footer></Footer>
+            {/* <Footer></Footer> */}
             <WhatsApp></WhatsApp>
           </ThemeProvider>
 

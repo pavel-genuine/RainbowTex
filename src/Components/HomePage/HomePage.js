@@ -1,104 +1,56 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Slider from 'react-slick';
 
 import { motion } from "framer-motion"
 import { useCallback } from "react";
 import Particles from "react-particles";
 import { loadFull } from "tsparticles";
+import './HomePage.css'
+import { GreatThings, BeautifulQuestions, SignalNoise, Thursday, ReadySetGo, SunnyMorning } from 'moving-letters'
 
-const ParticlesDiv = () => {
-  const particlesInit = useCallback(async engine => {
-    console.log(engine);
-    // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
-    // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-    // starting from v2 you can add only the features you need reducing the bundle size
-    await loadFull(engine);
-  }, []);
 
-  const particlesLoaded = useCallback(async container => {
-    await console.log(container);
-  }, []);
+
+
+export const Text = () => {
 
   return (
-    <Particles
-      id="tsparticles"
-      init={particlesInit}
-      loaded={particlesLoaded}
-      options={{
-        background: {
-          color: {
-            value: "#0d47a1",
-          },
-        },
-        fpsLimit: 120,
-        interactivity: {
-          events: {
-            onClick: {
-              enable: true,
-              mode: "push",
-            },
-            onHover: {
-              enable: true,
-              mode: "repulse",
-            },
-            resize: true,
-          },
-          modes: {
-            push: {
-              quantity: 4,
-            },
-            repulse: {
-              distance: 200,
-              duration: 0.4,
-            },
-          },
-        },
-        particles: {
-          color: {
-            value: "#ffffff",
-          },
-          links: {
-            color: "#ffffff",
-            distance: 150,
-            enable: true,
-            opacity: 0.5,
-            width: 1,
-          },
-          collisions: {
-            enable: true,
-          },
-          move: {
-            direction: "none",
-            enable: true,
-            outModes: {
-              default: "bounce",
-            },
-            random: false,
-            speed: 6,
-            straight: false,
-          },
-          number: {
-            density: {
-              enable: true,
-              area: 800,
-            },
-            value: 80,
-          },
-          opacity: {
-            value: 0.5,
-          },
-          shape: {
-            type: "circle",
-          },
-          size: {
-            value: { min: 1, max: 5 },
-          },
-        },
-        detectRetina: true,
-      }}
-    />
+    <div className='flex'>
+      <SunnyMorning text='Rainbow ' />
+      <div className='ml-5'>
+        <SunnyMorning text='Tex' />
+      </div>
+
+    </div>
+  )
+}
+
+
+
+
+export const Demo = () => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    setIsOpen(true)
+
+
+    setTimeout(() => {
+      setIsOpen(false)
+    }, 2000)
+
+  }, [])
+
+
+  return (
+    <div className='container'>
+      
+      <div className='pic' id='pic3' />
+      <div className='pic' id='pic2' />
+      <div className='pic' id='pic1' />
+    </div>
   );
 };
+
 
 const posts = [
 
@@ -133,7 +85,7 @@ const posts = [
     _id: 7
   },
   {
-    text:'The fabric is durable, comfortable, and have a good drape.',
+    text: 'The fabric is durable, comfortable, and have a good drape.',
     url: 'https://i.ibb.co/k1gCrtx/Screenshot-2023-04-15-133548.png',
     _id: 77
   },
@@ -173,7 +125,13 @@ const SinglePost = ({ post }) => {
           </p>
         </motion.div>
       </div>
-      <img className='h-[94.5vh] lg:h-[100vh] w-[100%] object-cover' src={post?.url} alt="" />
+      <motion.div className=''
+        initial={{ opacity: 1, scale: 2 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 5, delay: .2 }}
+      >
+        <img className='h-[94.5vh] lg:h-[100vh] w-[100%] object-cover' src={post?.url} alt="" />
+      </motion.div>
     </div>
   )
 }
@@ -183,47 +141,104 @@ const HomePage = () => {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 2000,
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 5000,
     pauseOnHover: false,
-    speed: 1500,
     dotsClass: 'absolute bottom-3  slick-dots'
 
   };
 
+  const [isOpen, setIsOpen] = useState(false)
+  const [background, setBackground] = useState(false)
+
+  const changeBackground = () => {
+
+    if (window.scrollY >=20) {
+      setBackground(true)
+      // handleScroll()
+
+    } else {
+      setBackground(false)
+
+    }
+  }
+
+  window.addEventListener('scroll', changeBackground)
+
+  const handleScroll = () => {
+    const element = document.getElementById('section');
+
+    if (element) {
+      // 👇 Will scroll smoothly to the top of the next section
+      element.scrollIntoView({behavior:'smooth'});
+    }
+  };
+
+  useEffect(() => {
+    setIsOpen(true)
+
+
+    setTimeout(() => {
+      setIsOpen(false)
+    }, 1000)
+
+  }, [])
+
   return (
     <div className=' '>
-      <div className='w-[100%] mx-auto  '>
-        <motion.div className=''
-        //  initial={{
-        //   y: -300
-        // }}
-        //  whileInView={{
-        //   y: 0,
-        //   // rotate: -10,
-        //   transition: {
-        //     type: "spring",
-        //     bounce: 0.1,
-        //     duration: 0.5
-        //   }}}
-        //   viewport={{ once: true, amount: 0.5 }}
-        >
-          <Slider {...settings}>
-            {/* <div className='relative '>
-           
-            <ParticlesDiv></ParticlesDiv>
-          </div> */}
+      <div className='w-[100%] mx-auto h-[100vh]  '>
 
-            {
-              posts.map((post) => <SinglePost key={post?._id} post={post} ></SinglePost>)
+        {
+          <div className='relative'>
+            <div className='flex justify-center items-center'>
+              {
+                isOpen ?
+                  <div className=' h-[100vh] w-[99] flex justify-center items-center'>
+                    <div className='scale-[.8] lg:scale-[1.5] '>
 
-            }
-          </Slider>
-        </motion.div>
+                      <Text></Text>
+                    </div>
+                  </div>
+
+                  :
+                  <div className='absolute  z-10 top-[46.5%]  lg:top-[45%] '>
+
+                    <h1 style={{ fontWeight: '800' }} className='scale-[.8] lg:scale-[1.5] text-6xl animate-charcter'>
+                      Rainbow Tex
+                    </h1>
+                  </div>
+
+              }
+            </div>
+
+            <div className='cursor-pointer' onClick={()=>handleScroll()}>
+              <motion.div
+                className=' text-[white] absolute  font-bold z-10 bottom-[50px] left-[45.5%]  '
+                initial={{ y: 40, opacity: .5 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ duration: .2, delay: 0, }}
+              >
+                <p className='  text-lg font-bold text-[black] text-center mb-[-12px]'>
+                  scroll
+                </p>
+                <marquee direction='right'><div className=' bg-[black] h-[2px] w-[75px]'>
+
+                </div></marquee>
+
+
+              </motion.div>
+
+            </div>
+            <div className='z-0'>
+              <Demo></Demo>
+            </div>
+          </div>
+        }
+
       </div>
 
     </div>

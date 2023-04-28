@@ -28,7 +28,7 @@ const MissionVision = () => {
                         Vision
                     </span>
                     <p className='mb-5 lg:mb-14 mt-3 text-[16px] lg:text-[18px] '>
-                        To become a reliable global organization that provides excellence and quality through innovation with a forward-looking approach
+                        To become a reliable global organization that provides excellence and quality through innovation with a forward-looking approach.
                     </p>
                 </motion.h2>
 

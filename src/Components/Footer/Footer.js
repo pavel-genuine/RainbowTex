@@ -61,7 +61,7 @@ const Footer = () => {
                             Dhaka-1230, Bangladesh,
                             <br />
                             <br />
-                            <a  className='underline' href="tel:+880 1711813933"> <span className='text-[white] font-bold cursor-pointer bg-[grey] px-2 rounded-lg '>  Call Now </span> : +880 1711813933 </a>
+                            <a className='underline' href="tel:+880 1711813933"> <span className='text-[white] font-bold cursor-pointer bg-[grey] px-2 rounded-lg '>  Call Now </span> : +880 1711813933 </a>
                             <br />
                             <br />
                             <a className='underline' href="mailto:info@rainbowtexbd.com"> <span className='text-[white]  font-bold cursor-pointer bg-[grey] px-2 rounded-lg '> Mail Us</span> : info@rainbowtexbd.com </a>
@@ -69,18 +69,23 @@ const Footer = () => {
                     </motion.div>
                 </div>
 
-
             </div>
 
             <div className='text-[grey] lg:text-center mt-10 px-4  '>
                 <p className='mb-2'>
                     © 2023 Rainbow Tex all rights reserved.
                 </p>
-                <p>
-                    Made by Torque360
-                </p>
-            </div>
+                
+                <a href="https://joynulabedin.vercel.app/" target="_blank" rel="noopener noreferrer">
+                    <p>
+                        Made by Torque360
+                    </p>
+                </a>
 
+
+
+
+            </div>
         </div>
     )
 }

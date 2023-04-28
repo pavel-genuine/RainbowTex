@@ -32,7 +32,7 @@ export const MenuToggle = ({ toggle,isOpen }) => {
 
 export function Menu ({ toggle }) {
     return (
-        <nav className="menuItem bg-navBg text-white opacity-[97%] w-[100vw]">
+        <nav className="menuItem bg-[white]  opacity-[97%] w-[100vw]">
             <ul className="ulItem">
                 <li onClick={toggle}>
                     <CustomLink class=" md:p-3 md:m-5 hover:text-nav" to='/'>Home</CustomLink>
@@ -129,7 +129,7 @@ export default function MobileMenu() {
 
 
     return (
-        <div ref={scope} className="lg:hidden">
+        <div ref={scope} className="">
             <Menu  toggle={() => setIsOpen(!isOpen)}/>
             <MenuToggle toggle={() => setIsOpen(!isOpen)} isOpen={isOpen} />
         </div>

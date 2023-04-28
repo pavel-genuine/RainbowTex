@@ -3,9 +3,10 @@ import React, { useEffect } from 'react'
 import { motion } from "framer-motion"
 import { Button } from '@mui/material'
 
-const Contact = () => {
+const Contact = ({setIsHome}) => {
 
     useEffect(() => {
+        setIsHome(false)
         window.scrollTo(0, 0)
     }, [])
 
