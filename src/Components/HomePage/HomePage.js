@@ -7,6 +7,7 @@ import Particles from "react-particles";
 import { loadFull } from "tsparticles";
 import './HomePage.css'
 import { GreatThings, BeautifulQuestions, SignalNoise, Thursday, ReadySetGo, SunnyMorning } from 'moving-letters'
+import ParticlesAnim from '../Particles/Particle';
 
 
 
@@ -43,7 +44,7 @@ export const Demo = () => {
 
   return (
     <div className='container'>
-      
+
       <div className='pic' id='pic3' />
       <div className='pic' id='pic2' />
       <div className='pic' id='pic1' />
@@ -157,7 +158,7 @@ const HomePage = () => {
 
   const changeBackground = () => {
 
-    if (window.scrollY >=20) {
+    if (window.scrollY >= 20) {
       setBackground(true)
       // handleScroll()
 
@@ -174,7 +175,7 @@ const HomePage = () => {
 
     if (element) {
       // 👇 Will scroll smoothly to the top of the next section
-      element.scrollIntoView({behavior:'smooth'});
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -189,7 +190,9 @@ const HomePage = () => {
   return (
     <div className=' '>
       <div className='w-[100%] mx-auto lg:h-[100vh] h-[93vh]  '>
-
+        <div className='absolute z-10'>
+          <ParticlesAnim></ParticlesAnim>
+        </div>
         {
           <div className='relative'>
             <div className='flex justify-center items-center'>
@@ -213,7 +216,7 @@ const HomePage = () => {
               }
             </div>
 
-            <div className='cursor-pointer' onClick={()=>handleScroll()}>
+            <div className='cursor-pointer' onClick={() => handleScroll()}>
               <motion.div
                 className=' text-[white] absolute  font-bold z-10 lg:top-[90%] top-[85%] lg:left-[47.3%] left-[40%]  '
                 initial={{ y: 40, opacity: .5 }}
