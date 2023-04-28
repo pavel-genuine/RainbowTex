@@ -182,7 +182,7 @@ const HomePage = () => {
 
     setTimeout(() => {
       setIsOpen(true)
-    }, 1000)
+    }, 1300)
 
   }, [])
 
@@ -215,7 +215,7 @@ const HomePage = () => {
 
             <div className='cursor-pointer' onClick={()=>handleScroll()}>
               <motion.div
-                className=' text-[white] absolute  font-bold z-10 lg:top-[92%] top-[85%] lg:left-[45.5%] left-[40%]  '
+                className=' text-[white] absolute  font-bold z-10 lg:top-[90%] top-[85%] lg:left-[47.3%] left-[40%]  '
                 initial={{ y: 40, opacity: .5 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 transition={{ duration: .2, delay: 0, }}

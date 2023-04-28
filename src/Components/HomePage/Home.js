@@ -27,11 +27,12 @@ const Home = ({setIsHome}) => {
         <div>
           
             <HomePage></HomePage>
-            <Tiles></Tiles>
             <div id='section'>
+            <Tiles></Tiles>
+            </div>
             <Passion></Passion>
 
-            </div>
+         
             <MissionVision></MissionVision>
             <Global></Global>
           
