@@ -137,7 +137,7 @@ const SinglePost = ({ post }) => {
   )
 }
 
-const HomePage = () => {
+const HomePage = ({setIsHome}) => {
 
   const settings = {
     dots: true,
@@ -158,7 +158,7 @@ const HomePage = () => {
 
   const changeBackground = () => {
 
-    if (window.scrollY >= 20) {
+    if (window.scrollY >= 200) {
       setBackground(true)
       // handleScroll()
 
@@ -181,6 +181,8 @@ const HomePage = () => {
 
   useEffect(() => {
 
+    setIsHome(true)
+
     setTimeout(() => {
       setIsOpen(true)
     }, 1300)
@@ -190,9 +192,10 @@ const HomePage = () => {
   return (
     <div className=' '>
       <div className='w-[100%] mx-auto lg:h-[100vh] h-[93vh]  '>
-        <div className='absolute z-10'>
-          <ParticlesAnim></ParticlesAnim>
-        </div>
+       {!background &&
+        <div className='absolute z-10 h-[100vh] overflow-hidden'>
+        <ParticlesAnim></ParticlesAnim>
+      </div>}
         {
           <div className='relative'>
             <div className='flex justify-center items-center'>

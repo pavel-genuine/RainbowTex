@@ -17,7 +17,6 @@ const Home = ({setIsHome}) => {
 
     useEffect(()=>{
 
-        setIsHome(true)
 
         window.scrollTo(0, 0)
     },[])
@@ -26,11 +25,11 @@ const Home = ({setIsHome}) => {
     return (
         <div>
           
-            <HomePage></HomePage>
+            <HomePage  setIsHome={setIsHome}></HomePage>
             <div id='section'>
-            <Tiles></Tiles>
+            <Tiles setIsHome={setIsHome}></Tiles>
             </div>
-            <Passion></Passion>
+            <Passion setIsHome={setIsHome}></Passion>
 
          
             <MissionVision></MissionVision>
